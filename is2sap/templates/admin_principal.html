@@ -12,20 +12,15 @@
 </head>
 
 <body>
-<!--
-    ${sidebar_top()}
--->
-
-	
-<div id="Bienvenida">
-    <h2>Template para la bienvenida</h2>
-</div>
+    <div style="height:0px;"> &nbsp; </div>
+    <h2>SAP Admin</h2>
     
+	Zona del Administrador
 
-  <div class="clearingdiv" />
-<!--
-  <div class="notice"> Gracias por usar SAP.
-  </div>
--->
+    <table class="admin_grid">
+      <tr py:for="model in models">
+        <td><a href='${model.lower()}s/'>${model}s</a></td>
+      </tr>
+    </table>
 </body>
 </html>

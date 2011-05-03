@@ -56,7 +56,10 @@ def init_model(engine):
     #    autoload=True, autoload_with=engine)
 
     #mapper(Reflected, t_reflected)
-
-
 # Import your model modules here.
-from is2sap.model.auth import User, Group, Permission
+from is2sap.model.model import Usuario, Group, Permission
+#from is2sap.model.model import Proyecto, Rol, Atributo, EstadoFase, Fase
+#from is2sap.model.model import HistorialItem, Item, ItemDetalle, LineaBase, Permiso, Relacion, TipoItem
+
+
+

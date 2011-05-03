@@ -45,9 +45,11 @@ base_config.DBSession = is2sap.model.DBSession
 base_config.sa_auth.cookie_secret = "ChangeME" 
 
 base_config.auth_backend = 'sqlalchemy'
+base_config.sa_auth.translations.user_name = 'nombre_usuario'
+#base_config.sa_auth.translations.group_name = 
 base_config.sa_auth.dbsession = model.DBSession
 # what is the class you want to use to search for users in the database
-base_config.sa_auth.user_class = model.User
+base_config.sa_auth.user_class = model.Usuario
 # what is the class you want to use to search for groups in the database
 base_config.sa_auth.group_class = model.Group
 # what is the class you want to use to search for permissions in the database

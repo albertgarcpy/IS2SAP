@@ -25,7 +25,13 @@ from sqlalchemy.orm import relation, synonym
 
 from is2sap.model import DeclarativeBase, metadata, DBSession
 
-__all__ = ['User', 'Group', 'Permission']
+
+try:
+    from sqlalchemy.dialects.postgresql import *
+except ImportError:
+    from sqlalchemy.databases.postgres import *
+
+__all__ = ['Usuario', 'Group', 'Permission']
 
 
 #{ Association tables
@@ -43,7 +49,7 @@ group_permission_table = Table('tg_group_permission', metadata,
 # This is the association table for the many-to-many relationship between
 # groups and members - this is, the memberships. It's required by repoze.what.
 user_group_table = Table('tg_user_group', metadata,
-    Column('user_id', Integer, ForeignKey('tg_user.user_id',
+    Column('user_id', Integer, ForeignKey('Usuario.id',
         onupdate="CASCADE", ondelete="CASCADE"), primary_key=True),
     Column('group_id', Integer, ForeignKey('tg_group.group_id',
         onupdate="CASCADE", ondelete="CASCADE"), primary_key=True)
@@ -75,7 +81,7 @@ class Group(DeclarativeBase):
 
     #{ Relations
 
-    users = relation('User', secondary=user_group_table, backref='groups')
+    users = relation('Usuario', secondary=user_group_table, backref='groups')
 
     #{ Special methods
 
@@ -91,40 +97,30 @@ class Group(DeclarativeBase):
 # The 'info' argument we're passing to the email_address and password columns
 # contain metadata that Rum (http://python-rum.org/) can use generate an
 # admin interface for your models.
-class User(DeclarativeBase):
-    """
-    User definition.
 
-    This is the user definition used by :mod:`repoze.who`, which requires at
-    least the ``user_name`` column.
+class Usuario(DeclarativeBase):
 
-    """
-    __tablename__ = 'tg_user'
+    __tablename__ = 'Usuario'
 
-    #{ Columns
+    #column definitions
+    id = Column(u'id', INTEGER(), primary_key=True, nullable=False)
+    nombre = Column(u'nombre', VARCHAR(length=None, convert_unicode=False, assert_unicode=None, unicode_error=None, _warn_on_bytestring=False), nullable=False)
+    apellido = Column(u'apellido', VARCHAR(length=None, convert_unicode=False, assert_unicode=None, unicode_error=None,    _warn_on_bytestring=False), nullable=False)
+    nombre_usuario = Column(u'nombre_usuario', VARCHAR(length=None, convert_unicode=False, assert_unicode=None, 
+unicode_error=None, _warn_on_bytestring=False),unique=True, nullable=False)
+    _password = Column(u'password', VARCHAR(length=None, convert_unicode=False, assert_unicode=None, unicode_error=None, _warn_on_bytestring=False), nullable=False)
+    direccion = Column(u'direccion', VARCHAR(length=None, convert_unicode=False, assert_unicode=None, unicode_error=None, _warn_on_bytestring=False))
+    telefono = Column(u'telefono', VARCHAR(length=None, convert_unicode=False, assert_unicode=None, unicode_error=None, _warn_on_bytestring=False))
+    email = Column(u'e-mail', VARCHAR(length=None, convert_unicode=False, assert_unicode=None, unicode_error=None, _warn_on_bytestring=False))
 
-    user_id = Column(Integer, autoincrement=True, primary_key=True)
-
-    user_name = Column(Unicode(16), unique=True, nullable=False)
-
-    email_address = Column(Unicode(255), unique=True, nullable=False,
-                           info={'rum': {'field':'Email'}})
-
-    display_name = Column(Unicode(255))
-
-    _password = Column('password', Unicode(80),
-                       info={'rum': {'field':'Password'}})
-
-    created = Column(DateTime, default=datetime.now)
 
     #{ Special methods
-
     def __repr__(self):
-        return ('<User: name=%r, email=%r, display=%r>' % (
-                self.user_name, self.email_address, self.display_name)).encode('utf-8')
+        return ('<Usuario: nombre=%r, email=%r, nombre_usuario=%r>' % (
+                self.nombre, self.email, self.nombre_usuario)).encode('utf-8')
 
     def __unicode__(self):
-        return self.display_name or self.user_name
+        return self.nombre_usuario or self.nombre
 
     #{ Getters and setters
 
@@ -139,12 +135,12 @@ class User(DeclarativeBase):
     @classmethod
     def by_email_address(cls, email):
         """Return the user object whose email address is ``email``."""
-        return DBSession.query(cls).filter_by(email_address=email).first()
+        return DBSession.query(cls).filter_by(email=email).first()
 
     @classmethod
     def by_user_name(cls, username):
         """Return the user object whose user name is ``username``."""
-        return DBSession.query(cls).filter_by(user_name=username).first()
+        return DBSession.query(cls).filter_by(nombre_usuario=username).first()
 
     def _set_password(self, password):
         """Hash ``password`` on the fly and store its hashed version."""

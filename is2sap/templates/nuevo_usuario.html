@@ -8,24 +8,15 @@
 
 <head>
   <meta content="text/html; charset=UTF-8" http-equiv="content-type" py:replace="''"/>
-  <title>Bienvenidos a SAP, 2011</title>
+  <title>Nuevo ${nombre_modelo}</title>
 </head>
 
 <body>
+   <h1>Nuevo ${nombre_modelo}</h1>
+   <div py:replace="tmpl_context.form(value)">Input Form</div>
 <!--
-    ${sidebar_top()}
--->
-
-	
-<div id="Bienvenida">
-    <h2>Template para la bienvenida</h2>
-</div>
-    
-
-  <div class="clearingdiv" />
-<!--
-  <div class="notice"> Gracias por usar SAP.
-  </div>
+   <form id="crear_usuario_form" action="create" method="post" class="required movieform">
+   </form>
 -->
 </body>
 </html>

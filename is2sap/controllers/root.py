@@ -4,19 +4,25 @@
 from tg import expose, flash, require, url, request, redirect
 from pylons.i18n import ugettext as _, lazy_ugettext as l_
 from tgext.admin.tgadminconfig import TGAdminConfig
-from tgext.admin.controller import AdminController
+from tgext.admin.controller import AdminController, AdminConfig
 from repoze.what import predicates
 
 from is2sap.lib.base import BaseController
-from is2sap.model import DBSession, metadata
+from is2sap.model import DBSession, metadata, Usuario
 from is2sap import model
 from is2sap.controllers.secure import SecureController
-
 from is2sap.controllers.error import ErrorController
+
+from tg import tmpl_context, validate
+from is2sap.widgets.usuario_form import crear_usuario_form
+from webhelpers import paginate
+
 
 __all__ = ['RootController']
 
-#Holaaaaaaaa
+class MyAdminConfig(AdminConfig):
+    default_index_template = "genshi:is2sap.templates.admin_principal"
+
 
 class RootController(BaseController):
     """
@@ -34,7 +40,7 @@ class RootController(BaseController):
     """
     secc = SecureController()
 
-    admin = AdminController(model, DBSession, config_type=TGAdminConfig)
+    admin = AdminController(model, DBSession, config_type=MyAdminConfig)
 
     error = ErrorController()
 
@@ -43,10 +49,48 @@ class RootController(BaseController):
         """Handle the front-page."""
         return dict(page='index')
 
-    @expose('is2sap.templates.about')
-    def about(self):
+    @expose('is2sap.templates.nuevo_usuario')
+    def nuevo_usuario(self, **kw):
+        """Show form to add new movie data record."""
+        tmpl_context.form = crear_usuario_form
+
+        return dict(nombre_modelo='Usuario', page='nuevo_usuario', value=kw)
+
+    @validate(crear_usuario_form, error_handler=nuevo_usuario)
+    @expose()
+    def crear_usuario(self, **kw):
+        usuario = Usuario()
+        usuario.nombre = kw['nombre']
+        usuario.apellido = kw['apellido']
+        usuario.nombre_usuario = kw['nombre_usuario']
+        usuario.password = kw['password']
+        usuario.direccion = kw['direccion']
+        usuario.telefono = kw['telefono']
+        usuario.email = kw['email']
+
+        DBSession.add(usuario)
+        DBSession.flush()
+    
+        flash("Usuario creado exitosamente.")
+        redirect("lista_usuarios")
+
+    @expose("is2sap.templates.lista_usuarios")
+    def lista_usuarios(self,page=1):
+        """List all movies in the database"""
+        usuarios = DBSession.query(Usuario)
+        currentPage = paginate.Page(usuarios, page, items_per_page=5)
+        return dict(usuarios=currentPage.items,
+           page='lista_usuarios', currentPage=currentPage)
+
+    @expose('is2sap.templates.configura')
+    def configura(self):
         """Handle the 'about' page."""
-        return dict(page='about')
+        return dict(page='config')
+
+    @expose('is2sap.templates.desa')
+    def desa(self):
+        """Display some information about auth* on this application."""
+        return dict(page='desa')
 
     @expose('is2sap.templates.environ')
     def environ(self):
@@ -59,13 +103,9 @@ class RootController(BaseController):
         """This method showcases how you can use the same controller for a data page and a display page"""
         return dict(params=kw)
 
-    @expose('is2sap.templates.authentication')
-    def auth(self):
-        """Display some information about auth* on this application."""
-        return dict(page='auth')
-
     @expose('is2sap.templates.index')
-    @require(predicates.has_permission('manage', msg=l_('Only for managers')))
+    @require(predicates.has_permission('administrador', msg=l_('Solo para el Administrador')))
+    #@require(predicates.in_group('Administrador', msg=l_('Solo para el administrador')))
     def manage_permission_only(self, **kw):
         """Illustrate how a page for managers only works."""
         return dict(page='managers stuff')
@@ -96,7 +136,7 @@ class RootController(BaseController):
             login_counter = request.environ['repoze.who.logins'] + 1
             redirect('/login', came_from=came_from, __logins=login_counter)
         userid = request.identity['repoze.who.userid']
-        flash(_('Welcome back, %s!') % userid)
+        flash(_('Bienvenido, %s!') % userid)
         redirect(came_from)
 
     @expose()
