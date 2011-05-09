@@ -16,7 +16,7 @@ class SecureController(BaseController):
     """Sample controller-wide authorization"""
     
     # The predicate that must be met for all the actions in this controller:
-    allow_only = has_permission('administrador',
+    allow_only = has_permission('administracion',
                                 msg=l_('Only for people with the "administrador" permission'))
     
     @expose('is2sap.templates.index')

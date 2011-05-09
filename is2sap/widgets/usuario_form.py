@@ -1,7 +1,9 @@
 """Usuario Form"""
 
-from tw.forms import TableForm, Spacer, TextField
-from tw.forms.validators import NotEmpty
+from tw.forms import TableForm, Spacer, TextField, PasswordField
+from tw.forms.fields import Button, SubmitButton, HiddenField
+from tw.forms.validators import *
+from is2sap.widgets.mi_validador.mi_validador import *
 
 
 class UsuarioForm(TableForm):
@@ -10,28 +12,62 @@ class UsuarioForm(TableForm):
     show_errors = True
 
     fields = [
-        TextField('nombre', validator=NotEmpty, label_text='Nombre',
+        HiddenField('id', label_text='Id',
+            help_text='Id del usuario'),
+        TextField('nombre', validator=String(min=2, max=30), label_text='Nombre', size=30,
             help_text='Introduzca su nombre completo.'),
         Spacer(),
-        TextField('apellido', validator=NotEmpty, label_text='Apellido',
+        TextField('apellido', validator=NotEmpty_Text, label_text='Apellido', size=30,
             help_text='Introduzca su apellido completo.'),
         Spacer(),
-        TextField('nombre_usuario', validator=NotEmpty, label_text='Nombre de usuario',
+        TextField('nombre_usuario', validator=UniqueUsername, label_text='Nombre de usuario',
             help_text='Introduzca un nombre de usuario para el login.'),
         Spacer(),
-        TextField('password', validator=NotEmpty, label_text='Password',
+        PasswordField('password', validator=NotEmpty, label_text='Password',
             help_text='Introduzca su password.'),
         Spacer(),
-        TextField('direccion', label_text='Direccion',
+        TextField('direccion', validator=PlainText, label_text='Direccion',
             help_text='Introduzca su direccion de domicilio.'),
         Spacer(),
-        TextField('telefono', label_text='Telefono',
+        TextField('telefono', validator=PlainText, label_text='Telefono',
             help_text='Introduzca un numero de telefono.'),
         Spacer(),
-        TextField('email', label_text='E-mail',
+        TextField('email', validator=Email, label_text='E-mail',
+            help_text='Introduzca un nombre de e-mail.'),
+        Spacer()]
+
+    submit_text = 'Guardar Usuario'
+
+class EditUsuarioForm(TableForm):
+
+    hover_help = True
+    show_errors = True
+
+    fields = [
+        HiddenField('id', label_text='Id',
+            help_text='Id del usuario'),
+        TextField('nombre', validator=String(min=2, max=30), label_text='Nombre', size=30,
+            help_text='Introduzca su nombre completo.'),
+        Spacer(),
+        TextField('apellido', validator=NotEmpty_Text, label_text='Apellido', size=30,
+            help_text='Introduzca su apellido completo.'),
+        Spacer(),
+        TextField('nombre_usuario', validator=UniqueUsername, label_text='Nombre de usuario',
+            help_text='Introduzca un nombre de usuario para el login.'),
+        Spacer(),
+        HiddenField('password', validator=NotEmpty, label_text='Password',
+            help_text='Introduzca su password.'),
+        TextField('direccion', validator=PlainText, label_text='Direccion',
+            help_text='Introduzca su direccion de domicilio.'),
+        Spacer(),
+        TextField('telefono', validator=PlainText, label_text='Telefono',
+            help_text='Introduzca un numero de telefono.'),
+        Spacer(),
+        TextField('email', validator=Email, label_text='E-mail',
             help_text='Introduzca un nombre de e-mail.'),
         Spacer()]
 
     submit_text = 'Guardar Usuario'
     
-crear_usuario_form = UsuarioForm("Instancia_de_UsuarioForm",action='crear_usuario')
+crear_usuario_form = UsuarioForm("CrearUsuario",action='add')
+editar_usuario_form = EditUsuarioForm("EditarUsuario", action='update')

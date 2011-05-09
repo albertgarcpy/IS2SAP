@@ -17,9 +17,9 @@ def bootstrap(command, conf, vars):
         u = model.Usuario()
         u.nombre = u'Raul Alberto'
         u.apellido = u'Benitez Martinez'
-        u.nombre_usuario = u'admin'
+        u.nombre_usuario = u'raul'
         u.email = u'raul_kvd@hotmail.com'
-        u.password = u'admin'
+        u.password = u'raul'
         u.direccion = u'Espanha c/ 10 de Agosto'
         u.telefono = u'021-574543'
         model.DBSession.add(u)
@@ -27,31 +27,36 @@ def bootstrap(command, conf, vars):
         v = model.Usuario()
         v.nombre = u'Elias Rene'
         v.apellido = u'Benitez Martinez'
-        v.nombre_usuario = u'editor'
+        v.nombre_usuario = u'elias'
         v.email = u'elias_rene@hotmail.com'
-        v.password = u'editor'
+        v.password = u'elias'
         v.direccion = u'Espanha c/ 10 de Agosto'
         v.telefono = u'021-574543'
         model.DBSession.add(v)
     
         g = model.Group()
-        g.group_name = u'managers'
+        g.group_name = u'administrador'
         g.display_name = u'Grupo Administrador'
         g.users.append(u)
         model.DBSession.add(g)
     
-#        h = model.Group()
-#        h.group_name = u'managers'
-#        h.display_name = u'Grupo Managers'
-#        h.users.append(u)
-#        model.DBSession.add(h)
+        h = model.Group()
+        h.group_name = u'editor'
+        h.display_name = u'Grupo Edicion'
+        h.users.append(v)
+        model.DBSession.add(h)
 
         p = model.Permission()
-        p.permission_name = u'administrador'
+        p.permission_name = u'administracion'
         p.description = u'Este permiso dara un derecho administrativo al portador'
         p.groups.append(g)
-#        p.groups.append(h)
         model.DBSession.add(p)
+
+        q = model.Permission()
+        q.permission_name = u'edicion'
+        q.description = u'Este permiso dara un derecho de edicion al portador'
+        q.groups.append(h)
+        model.DBSession.add(q)
     
         model.DBSession.flush()
         transaction.commit()

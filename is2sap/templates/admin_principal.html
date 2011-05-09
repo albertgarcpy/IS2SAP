@@ -8,19 +8,13 @@
 
 <head>
   <meta content="text/html; charset=UTF-8" http-equiv="content-type" py:replace="''"/>
-  <title>Bienvenidos a SAP, 2011</title>
+  <title>Administracion de SAP</title>
 </head>
 
 <body>
-    <div style="height:0px;"> &nbsp; </div>
-    <h2>SAP Admin</h2>
-    
-	Zona del Administrador
 
-    <table class="admin_grid">
-      <tr py:for="model in models">
-        <td><a href='${model.lower()}s/'>${model}s</a></td>
-      </tr>
-    </table>
+    ${sidebar_top()}
+    <div style="height:0px;"> &nbsp; </div>
+
 </body>
 </html>

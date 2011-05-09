@@ -5,18 +5,15 @@
       xmlns:xi="http://www.w3.org/2001/XInclude">
 
   <xi:include href="master.html" />
+  <xi:include href="menus.html" />
 
 <head>
   <meta content="text/html; charset=UTF-8" http-equiv="content-type" py:replace="''"/>
-  <title>Nuevo ${nombre_modelo}</title>
+  <title>Sistema de Administracion de Proyectos</title>
 </head>
 
 <body>
-   <h1>Nuevo ${nombre_modelo}</h1>
-   <div py:replace="tmpl_context.form(value)">Input Form</div>
-<!--
-   <form id="crear_usuario_form" action="create" method="post" class="required movieform">
-   </form>
--->
+<h1>Menu Usuarios</h1>
+${menu_superior()}
 </body>
 </html>

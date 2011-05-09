@@ -31,7 +31,7 @@ try:
 except ImportError:
     from sqlalchemy.databases.postgres import *
 
-__all__ = ['Usuario', 'Group', 'Permission']
+__all__ = ['Proyecto', 'Fase', 'TipoItem', 'Atributo', 'EstadoFase', 'Rol', 'Usuario', 'Group', 'Permission']
 
 
 #{ Association tables
@@ -46,6 +46,7 @@ group_permission_table = Table('tg_group_permission', metadata,
         onupdate="CASCADE", ondelete="CASCADE"), primary_key=True)
 )
 
+
 # This is the association table for the many-to-many relationship between
 # groups and members - this is, the memberships. It's required by repoze.what.
 user_group_table = Table('tg_user_group', metadata,
@@ -56,7 +57,112 @@ user_group_table = Table('tg_user_group', metadata,
 )
 
 
+# Relacion entre mucho a mucho Proyecto Usuario
+Proyecto_Usuario = Table('Proyecto_Usuario', metadata,
+    Column('id_proyecto', INTEGER(), ForeignKey('Proyecto.id_proyecto', 
+        onupdate="CASCADE", ondelete="CASCADE"), primary_key=True, nullable=False),
+    Column('id_usuario', INTEGER(), ForeignKey('Usuario.id',
+        onupdate="CASCADE", ondelete="CASCADE"), primary_key=True, nullable=False),
+)
+
+# Relacion entre mucho a mucho Proyecto Rol
+Proyecto_Rol = Table('Proyecto_Rol', metadata,
+    Column('id_proyecto', INTEGER(), ForeignKey('Proyecto.id_proyecto',
+        onupdate="CASCADE", ondelete="CASCADE"), primary_key=True, nullable=False),
+    Column('id_rol', INTEGER(), ForeignKey('Rol.id_rol',
+        onupdate="CASCADE", ondelete="CASCADE"), primary_key=True, nullable=False)
+)
+
+Fase = Table('Fase', metadata,
+    Column('id_fase', INTEGER(), primary_key=True, nullable=False),
+    Column('id_estado_fase', INTEGER(), ForeignKey('Estado_Fase.id_estado_fase'), nullable=False),
+    Column('id_proyecto', INTEGER(), ForeignKey('Proyecto.id_proyecto'), nullable=False),
+    Column('nombre', VARCHAR(length=None, convert_unicode=False, assert_unicode=None, unicode_error=None, _warn_on_bytestring=False), nullable=False),
+    Column('descripcion', VARCHAR(length=None, convert_unicode=False, assert_unicode=None, unicode_error=None, _warn_on_bytestring=False)),
+    Column('numero_fase', INTEGER(), nullable=False),
+)
+
+
+
+
 #{ The auth* model itself
+
+
+
+class Proyecto(DeclarativeBase):
+    __tablename__ = 'Proyecto'
+
+    #column definitions
+    descripcion = Column('descripcion', VARCHAR(length=None, convert_unicode=False, assert_unicode=None, unicode_error=None, _warn_on_bytestring=False), nullable=False)
+    fecha = Column('fecha', DATE(), nullable=False)
+    id_proyecto = Column('id_proyecto', INTEGER(), primary_key=True, nullable=False)
+    id_usuario = Column('id_usuario', INTEGER(), ForeignKey('Usuario.id'), nullable=False)
+    iniciado = Column('iniciado', BOOLEAN(create_constraint=True, name=None), nullable=False)
+    nombre = Column('nombre', VARCHAR(length=None, convert_unicode=False, assert_unicode=None, unicode_error=None, _warn_on_bytestring=False), nullable=False)
+
+    #Tiene una relacion con la tabla Usuario
+    relacion_usuario = relation('Usuario', secondary=Proyecto_Usuario, backref='proyectos')
+
+
+class Fase(DeclarativeBase):
+    __table__ = Fase
+
+
+    #relation definitions
+    relacion_estado_fase = relation('EstadoFase', backref='fases')
+    relacion_proyecto = relation('Proyecto', backref='fases')
+
+
+
+class TipoItem(DeclarativeBase):
+    __tablename__ = 'Tipo_Item'
+
+    #column definitions
+    id_tipo_item = Column('id_tipo_item', INTEGER(), primary_key=True, nullable=False)
+    id_fase = Column('id_fase', INTEGER(), ForeignKey('Fase.id_fase'), nullable=False)
+    nombre = Column('nombre', VARCHAR(length=None, convert_unicode=False, assert_unicode=None, unicode_error=None, _warn_on_bytestring=False), nullable=False)
+    descripcion = Column('descripcion', VARCHAR(length=None, convert_unicode=False, assert_unicode=None, unicode_error=None, _warn_on_bytestring=False))
+
+    #relation definitions
+    relacion_fase = relation('Fase', backref='tipoitems')
+
+
+
+class Atributo(DeclarativeBase):
+    __tablename__ = 'Atributos'
+
+    #column definitions
+    descripcion = Column('descripcion', VARCHAR(length=None, convert_unicode=False, assert_unicode=None, unicode_error=None, _warn_on_bytestring=False))
+    id_atributo = Column('id_atributo', INTEGER(), primary_key=True, nullable=False)
+    id_tipo_item = Column('id_tipo_item', INTEGER(), ForeignKey('Tipo_Item.id_tipo_item'), nullable=False)
+    nombre = Column('nombre', VARCHAR(length=None, convert_unicode=False, assert_unicode=None, unicode_error=None, _warn_on_bytestring=False), nullable=False)
+    tipo = Column('tipo', VARCHAR(length=None, convert_unicode=False, assert_unicode=None, unicode_error=None, _warn_on_bytestring=False), nullable=False)
+
+    #relation definitions
+    relacion_tipo_item = relation('TipoItem', backref='atributos')
+
+
+
+
+class EstadoFase(DeclarativeBase):
+    __tablename__ = 'Estado_Fase'
+
+    #column definitions
+    id_estado_fase = Column('id_estado_fase', INTEGER(), primary_key=True, nullable=False)
+    nombre_estado = Column('nombre_estado', VARCHAR(length=None, convert_unicode=False, assert_unicode=None, unicode_error=None, _warn_on_bytestring=False), nullable=False)
+
+    #relation definitions
+
+
+
+class Rol(DeclarativeBase):
+    __tablename__ = 'Rol'
+
+    #column definitions
+    descripcion = Column('descripcion', VARCHAR(length=None, convert_unicode=False, assert_unicode=None, unicode_error=None, _warn_on_bytestring=False))
+    id_rol = Column('id_rol', INTEGER(), primary_key=True, nullable=False)
+    nombre = Column('nombre', VARCHAR(length=None, convert_unicode=False, assert_unicode=None, unicode_error=None, _warn_on_bytestring=False), nullable=False)
+
 
 
 class Group(DeclarativeBase):
@@ -98,6 +204,8 @@ class Group(DeclarativeBase):
 # contain metadata that Rum (http://python-rum.org/) can use generate an
 # admin interface for your models.
 
+
+
 class Usuario(DeclarativeBase):
 
     __tablename__ = 'Usuario'
@@ -107,7 +215,7 @@ class Usuario(DeclarativeBase):
     nombre = Column(u'nombre', VARCHAR(length=None, convert_unicode=False, assert_unicode=None, unicode_error=None, _warn_on_bytestring=False), nullable=False)
     apellido = Column(u'apellido', VARCHAR(length=None, convert_unicode=False, assert_unicode=None, unicode_error=None,    _warn_on_bytestring=False), nullable=False)
     nombre_usuario = Column(u'nombre_usuario', VARCHAR(length=None, convert_unicode=False, assert_unicode=None, 
-unicode_error=None, _warn_on_bytestring=False),unique=True, nullable=False)
+unicode_error=None, _warn_on_bytestring=False), unique=True, nullable=False)
     _password = Column(u'password', VARCHAR(length=None, convert_unicode=False, assert_unicode=None, unicode_error=None, _warn_on_bytestring=False), nullable=False)
     direccion = Column(u'direccion', VARCHAR(length=None, convert_unicode=False, assert_unicode=None, unicode_error=None, _warn_on_bytestring=False))
     telefono = Column(u'telefono', VARCHAR(length=None, convert_unicode=False, assert_unicode=None, unicode_error=None, _warn_on_bytestring=False))
@@ -184,6 +292,7 @@ unicode_error=None, _warn_on_bytestring=False),unique=True, nullable=False)
             password = password.encode('utf-8')
         hash.update(password + str(self.password[:40]))
         return self.password[40:] == hash.hexdigest()
+
 
 
 class Permission(DeclarativeBase):

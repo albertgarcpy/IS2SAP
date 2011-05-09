@@ -57,6 +57,7 @@ ul#mainmenu li {
 	float: left;
 }
 
+
 ul#mainmenu li a {
 	color: #fff;
 	float: left;
@@ -103,6 +104,20 @@ ul#mainmenu li.loginlogout a:hover
 #content .currentpage {
 	margin-top: 0;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 /* Login form*/
 
@@ -212,17 +227,46 @@ form.loginfields input#submit
     margin-left: -10px;
 }
 
+/* Botones */
+.alignEditar {
+	background: #CCFFCC url('../images/pencil.png') top center no-repeat;
+	width: 50px
+}
+
+.alignEliminar {
+	background: #CCFFCC url('../images/delete.png') top center no-repeat;
+	width: 50px
+}
+.botones {
+	background: #CCFFCC;
+	height: 30px;
+	width: 100px
+}
+
+
 /* Sidebar */
+.menu_superior {
+  border: 1px solid #cce;
+  background-color: #eff;
+  margin: 0.5em;
+  margin-left: 0.5em;
+  padding: 0.3em;
+  float: top;
+  width: 102px;
+  font-size: 88%;
+}
 .sidebar {
   border: 1px solid #cce;
   background-color: #eee;
   margin: 0.5em;
   margin-left: 1.5em;
   padding: 1em;
-  float: right;
-  width: 200px;
+  float: center;
+  width: 500px;
+  height: 300px;
   font-size: 88%;
 }
+
 
 .sidebar h2 {
   margin-top: 0;
