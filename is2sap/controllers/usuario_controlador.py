@@ -6,6 +6,8 @@ from pylons.i18n import ugettext as _, lazy_ugettext as l_
 from tgext.admin.tgadminconfig import TGAdminConfig
 from tgext.admin.controller import AdminController, AdminConfig
 from repoze.what import predicates
+from tg import tmpl_context, validate
+from webhelpers import paginate
 
 from is2sap.lib.base import BaseController
 from is2sap.model import DBSession, metadata
@@ -14,19 +16,19 @@ from is2sap import model
 from is2sap.controllers.secure import SecureController
 from is2sap.controllers.error import ErrorController
 
-from tg import tmpl_context, validate
+
 from is2sap.widgets.usuario_form import crear_usuario_form, editar_usuario_form
-from webhelpers import paginate
+
 
 
 __all__ = ['UsuarioController']
 
 class UsuarioController(BaseController):
 
-    @expose('is2sap.templates.usuario.index')
+    @expose()
     def index(self):
         """Muestra la pantalla de bienvenida"""
-        return dict(nombre_modelo='Usuario')
+        redirect("/admin/usuario/listado")        
 
 
     @expose('is2sap.templates.usuario.nuevo')
@@ -49,7 +51,7 @@ class UsuarioController(BaseController):
         usuario.email = kw['email']
         DBSession.add(usuario)
         DBSession.flush()    
-        redirect("listado")
+        redirect("/admin/usuario/listado")
 
     @expose("is2sap.templates.usuario.listado")
     def listado(self,page=1):
@@ -90,7 +92,7 @@ class UsuarioController(BaseController):
         usuario.telefono = kw['telefono']
         usuario.email =kw['email']
         DBSession.flush()
-        redirect("listado")
+        redirect("/admin/usuario/listado")
 
 
     @expose('is2sap.templates.usuario.confirmar_eliminar')
@@ -104,4 +106,4 @@ class UsuarioController(BaseController):
     def delete(self, id_usuario, **kw):
         """Metodo que elimina un registro de la base de datos"""
         DBSession.delete(DBSession.query(Usuario).get(id_usuario))
-        redirect("listado")
+        redirect("/admin/usuario/listado")

@@ -19,14 +19,7 @@ except ImportError:
     from sqlalchemy.databases.postgres import *
 
 
-Fase = Table(u'Fase', metadata,
-    Column(u'id_fase', INTEGER(), primary_key=True, nullable=False),
-    Column(u'id_estado_fase', INTEGER(), ForeignKey('Estado_Fase.id_estado_fase'), nullable=False),
-    Column(u'id_proyecto', INTEGER(), ForeignKey('Proyecto.id_proyecto'), nullable=False),
-    Column(u'nombre', VARCHAR(length=None, convert_unicode=False, assert_unicode=None, unicode_error=None, _warn_on_bytestring=False), nullable=False),
-    Column(u'descripcion', VARCHAR(length=None, convert_unicode=False, assert_unicode=None, unicode_error=None, _warn_on_bytestring=False)),
-    Column(u'numero_fase', INTEGER(), nullable=False),
-)
+
 
 Item = Table(u'Item', metadata,
     Column(u'id_item', INTEGER(), primary_key=True, nullable=False),
@@ -44,15 +37,6 @@ Item = Table(u'Item', metadata,
     Column(u'vivo', BOOLEAN(create_constraint=True, name=None), nullable=False),
 )
 
-Proyecto_Rol = Table(u'Proyecto_Rol', metadata,
-    Column(u'id_proyecto', INTEGER(), ForeignKey('Proyecto.id_proyecto'), primary_key=True, nullable=False),
-    Column(u'id_rol', INTEGER(), ForeignKey('Rol.id_rol'), primary_key=True, nullable=False),
-)
-
-Proyecto_Usuario = Table(u'Proyecto_Usuario', metadata,
-    Column(u'id_proyecto', INTEGER(), ForeignKey('Proyecto.id_proyecto'), primary_key=True, nullable=False),
-    Column(u'id_usuario', INTEGER(), ForeignKey('Usuario.id_usuario'), primary_key=True, nullable=False),
-)
 
 Rol_Permiso = Table(u'Rol_Permiso', metadata,
     Column(u'id_rol', INTEGER(), ForeignKey('Rol.id_rol'), primary_key=True, nullable=False),
@@ -69,57 +53,15 @@ Usuario_Item = Table(u'Usuario_Item', metadata,
     Column(u'id_item', INTEGER(), ForeignKey('Item.id_item'), primary_key=True, nullable=False),
 )
 
-class Proyecto(DeclarativeBase):
-    __tablename__ = 'Proyecto'
-
-    #column definitions
-    descripcion = Column(u'descripcion', VARCHAR(length=None, convert_unicode=False, assert_unicode=None, unicode_error=None, _warn_on_bytestring=False), nullable=False)
-    fecha = Column(u'fecha', DATE(), nullable=False)
-    id_proyecto = Column(u'id_proyecto', INTEGER(), primary_key=True, nullable=False)
-    id_usuario = Column(u'id_usuario', INTEGER(), ForeignKey('Usuario.id_usuario'), nullable=False)
-    iniciado = Column(u'iniciado', BOOLEAN(create_constraint=True, name=None), nullable=False)
-    nombre = Column(u'nombre', VARCHAR(length=None, convert_unicode=False, assert_unicode=None, unicode_error=None, _warn_on_bytestring=False), nullable=False)
-
-    #relation definitions
-
-class Rol(DeclarativeBase):
-    __tablename__ = 'Rol'
-
-    #column definitions
-    descripcion = Column(u'descripcion', VARCHAR(length=None, convert_unicode=False, assert_unicode=None, unicode_error=None, _warn_on_bytestring=False))
-    id_rol = Column(u'id_rol', INTEGER(), primary_key=True, nullable=False)
-    nombre = Column(u'nombre', VARCHAR(length=None, convert_unicode=False, assert_unicode=None, unicode_error=None, _warn_on_bytestring=False), nullable=False)
-
-    #relation definitions
-
-class Atributo(DeclarativeBase):
-    __tablename__ = 'Atributos'
-
-    #column definitions
-    descripcion = Column(u'descripcion', VARCHAR(length=None, convert_unicode=False, assert_unicode=None, unicode_error=None, _warn_on_bytestring=False))
-    id_atributo = Column(u'id_atributo', INTEGER(), primary_key=True, nullable=False)
-    id_tipo_item = Column(u'id_tipo_item', INTEGER(), ForeignKey('Tipo_Item.id_tipo_item'), nullable=False)
-    nombre = Column(u'nombre', VARCHAR(length=None, convert_unicode=False, assert_unicode=None, unicode_error=None, _warn_on_bytestring=False), nullable=False)
-    tipo = Column(u'tipo', VARCHAR(length=None, convert_unicode=False, assert_unicode=None, unicode_error=None, _warn_on_bytestring=False), nullable=False)
-
-    #relation definitions
-
-
-class EstadoFase(DeclarativeBase):
-    __tablename__ = 'Estado_Fase'
-
-    #column definitions
-    id_estado_fase = Column(u'id_estado_fase', INTEGER(), primary_key=True, nullable=False)
-    nombre_estado = Column(u'nombre_estado', VARCHAR(length=None, convert_unicode=False, assert_unicode=None, unicode_error=None, _warn_on_bytestring=False), nullable=False)
-
-    #relation definitions
-
-
-class Fase(DeclarativeBase):
-    __table__ = Fase
 
 
     #relation definitions
+
+
+
+
+
+
 
 
 class HistorialItem(DeclarativeBase):
@@ -190,16 +132,7 @@ class Relacion(DeclarativeBase):
 
     #relation definitions
 
-class TipoItem(DeclarativeBase):
-    __tablename__ = 'Tipo_Item'
 
-    #column definitions
-    descripcion = Column(u'descripcion', VARCHAR(length=None, convert_unicode=False, assert_unicode=None, unicode_error=None, _warn_on_bytestring=False))
-    id_fase = Column(u'id_fase', INTEGER(), ForeignKey('Fase.id_fase'), nullable=False)
-    id_tipo_item = Column(u'id_tipo_item', INTEGER(), primary_key=True, nullable=False)
-    nombre = Column(u'nombre', VARCHAR(length=None, convert_unicode=False, assert_unicode=None, unicode_error=None, _warn_on_bytestring=False), nullable=False)
-
-    #relation definitions
 
 
 
