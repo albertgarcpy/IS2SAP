@@ -33,6 +33,7 @@ from is2sap import model
 from is2sap.controllers.secure import SecureController
 #from is2sap.controllers.error import ErrorController
 from is2sap.controllers.usuario_controlador import UsuarioController
+from is2sap.controllers.proyecto_controlador import ProyectoController
 
 
 from tg import tmpl_context, validate
@@ -44,6 +45,7 @@ from repoze.what.predicates import has_permission
 class AdminController(TGController):
 
     usuario = UsuarioController()
+    proyecto = ProyectoController()
     """
     A basic controller that handles User Groups and Permissions for a TG application.
     """
