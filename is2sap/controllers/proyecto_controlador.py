@@ -21,7 +21,7 @@ from is2sap.widgets.proyecto_form import crear_proyecto_form, editar_proyecto_fo
 
 
 
-__all__ = ['UsuarioController']
+__all__ = ['ProyectoController']
 
 class ProyectoController(BaseController):
 

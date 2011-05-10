@@ -211,12 +211,12 @@ class Proyecto(DeclarativeBase):
     __tablename__ = 'Proyecto'
 
     #column definitions
+    id_usuario = Column('id_usuario', INTEGER(), ForeignKey('Usuario.id_usuario'), nullable=False)
+    id_proyecto = Column('id_proyecto', INTEGER(), primary_key=True, nullable=False)
+    nombre = Column('nombre', VARCHAR(length=None, convert_unicode=False, assert_unicode=None, unicode_error=None, _warn_on_bytestring=False), nullable=False)
     descripcion = Column('descripcion', VARCHAR(length=None, convert_unicode=False, assert_unicode=None, unicode_error=None, _warn_on_bytestring=False), nullable=False)
     fecha = Column('fecha', DATE(), nullable=False)
-    id_proyecto = Column('id_proyecto', INTEGER(), primary_key=True, nullable=False)
-    id_usuario = Column('id_usuario', INTEGER(), ForeignKey('Usuario.id_usuario'), nullable=False)
     iniciado = Column('iniciado', BOOLEAN(create_constraint=True, name=None), nullable=False)
-    nombre = Column('nombre', VARCHAR(length=None, convert_unicode=False, assert_unicode=None, unicode_error=None, _warn_on_bytestring=False), nullable=False)
 
     #Tiene una relacion con la tabla Usuario
     relacion_usuario = relation('Usuario', secondary=Proyecto_Usuario, backref='proyectos')
