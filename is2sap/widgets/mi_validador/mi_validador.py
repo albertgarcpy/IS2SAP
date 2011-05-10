@@ -1,6 +1,8 @@
 from formencode import *
 from is2sap.model import *
 from is2sap.model import DBSession, metadata, Usuario
+from tw.forms.validators import *
+
 
 class UniqueUsername(FancyValidator):
 

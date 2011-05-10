@@ -46,14 +46,19 @@ base_config.sa_auth.cookie_secret = "ChangeME"
 
 base_config.auth_backend = 'sqlalchemy'
 base_config.sa_auth.translations.user_name = 'nombre_usuario'
+base_config.sa_auth.translations.group_name = 'nombre_rol'
+base_config.sa_auth.translations.permission_name = 'nombre_permiso'
+base_config.sa_auth.translations.users = 'usuarios'
+base_config.sa_auth.translations.groups = 'roles'
+base_config.sa_auth.translations.permissions = 'permisos'
 #base_config.sa_auth.translations.group_name = 
 base_config.sa_auth.dbsession = model.DBSession
 # what is the class you want to use to search for users in the database
 base_config.sa_auth.user_class = model.Usuario
 # what is the class you want to use to search for groups in the database
-base_config.sa_auth.group_class = model.Group
+base_config.sa_auth.group_class = model.Rol
 # what is the class you want to use to search for permissions in the database
-base_config.sa_auth.permission_class = model.Permission
+base_config.sa_auth.permission_class = model.Permiso
 
 # override this if you would like to provide a different who plugin for
 # managing login and logout of your application

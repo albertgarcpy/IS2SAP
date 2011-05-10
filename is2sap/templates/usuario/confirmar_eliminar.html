@@ -25,7 +25,7 @@
 		  <th>E-mail</th>		  
           </tr>
         <tr>
-            <td>${value.id}</td>
+            <td>${value.id_usuario}</td>
             <td>${value.nombre}</td>
             <td>${value.apellido}</td>
             <td>${value.nombre_usuario}</td>
@@ -37,7 +37,7 @@
 
 <div class="menu bubplastic horizontal aqua">
 	<ul>
-		<li><span class="menu_r"><a href="${tg.url('/admin/usuario/delete', id_usuario=value.id)}"><span class="menu_ar">Eliminar</span></a></span></li>
+		<li><span class="menu_r"><a href="${tg.url('/admin/usuario/delete', id_usuario=value.id_usuario)}"><span class="menu_ar">Eliminar</span></a></span></li>
 		<li><span class="menu_r"><a href="${tg.url('/admin/usuario/listado')}"><span class="menu_ar">Cancelar</span></a></span></li>
 	</ul>
 	<br class="clearit" />

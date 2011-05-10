@@ -4,6 +4,7 @@ from tw.forms import TableForm, Spacer, TextField, PasswordField
 from tw.forms.fields import Button, SubmitButton, HiddenField
 from tw.forms.validators import *
 from is2sap.widgets.mi_validador.mi_validador import *
+from formencode import *
 
 
 class UsuarioForm(TableForm):
@@ -12,18 +13,18 @@ class UsuarioForm(TableForm):
     show_errors = True
 
     fields = [
-        HiddenField('id', label_text='Id',
+        HiddenField('id_usuario', label_text='Id',
             help_text='Id del usuario'),
-        TextField('nombre', validator=NotEmpty, label_text='Nombre',
+        TextField('nombre', validator=NotEmpty_Text, label_text='Nombre',
             help_text='Introduzca su nombre completo.'),
         Spacer(),
-        TextField('apellido', validator=NotEmpty, label_text='Apellido',
+        TextField('apellido', validator=NotEmpty_Text, label_text='Apellido',
             help_text='Introduzca su apellido completo.'),
         Spacer(),
         TextField('nombre_usuario', validator=UniqueUsername, label_text='Nombre de usuario',
             help_text='Introduzca un nombre de usuario para el login.'),
         Spacer(),
-        PasswordField('password', validator=NotEmpty, label_text='Password',
+        PasswordField('password', validator=NotEmpty_PlainText, label_text='Password',
             help_text='Introduzca su password.'),
         Spacer(),
         TextField('direccion', validator=PlainText, label_text='Direccion',
@@ -44,19 +45,19 @@ class EditUsuarioForm(TableForm):
     show_errors = True
 
     fields = [
-        HiddenField('id', label_text='Id',
+        HiddenField('id_usuario', label_text='Id',
             help_text='Id del usuario'),
-        TextField('nombre', validator=NotEmpty, label_text='Nombre',
+        TextField('nombre', validator=NotEmpty_Text, label_text='Nombre',
             help_text='Introduzca su nombre completo.'),
         Spacer(),
-        TextField('apellido', validator=NotEmpty, label_text='Apellido',
+        TextField('apellido', validator=NotEmpty_Text, label_text='Apellido',
             help_text='Introduzca su apellido completo.'),
         Spacer(),
-        TextField('nombre_usuario', validator=NotEmpty, label_text='Nombre de usuario',
+        TextField('nombre_usuario', validator=NotEmpty_PlainText, label_text='Nombre de usuario',
             help_text='Introduzca un nombre de usuario para el login.'),
         Spacer(),
-        PasswordField('password', validator=NotEmpty, label_text='Password',
-            help_text='Introduzca su password.'),
+        #PasswordField('password', validator=NotEmpty, label_text='Password',
+        #    help_text='Introduzca su password.'),
         TextField('direccion', validator=PlainText, label_text='Direccion',
             help_text='Introduzca su direccion de domicilio.'),
         Spacer(),
