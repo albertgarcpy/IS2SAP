@@ -38,7 +38,7 @@ from is2sap.controllers.usuario_controlador import UsuarioController
 from is2sap.controllers.tipo_de_item_controlador import TipoItemController
 from is2sap.controllers.atributo_controlador import AtributoController
 from is2sap.controllers.proyecto_controlador import ProyectoController
-
+from is2sap.controllers.rol_controlador import RolController
 
 from tg import tmpl_context, validate
 
@@ -59,6 +59,7 @@ class AdminController(TGController):
     proyecto = ProyectoController()
     atributo = AtributoController()
     tipo_item = TipoItemController()
+    rol = RolController()
 
     def __init__(self, models, session, config_type=None, translations=None):
         super(AdminController, self).__init__()

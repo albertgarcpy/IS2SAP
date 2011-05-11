@@ -18,31 +18,11 @@ class UniqueUsername(FancyValidator):
 
 class NotEmpty_PlainText(Regex):
 
-    """
-    Test that the field contains only letters, numbers, underscore,
-    and the hyphen.  Subclasses Regex.
-
-    Examples::
-
-        >>> PlainText.to_python('_this9_')
-        '_this9_'
-        >>> PlainText.from_python('  this  ')
-        '  this  '
-        >>> PlainText(accept_python=False).from_python('  this  ')
-        Traceback (most recent call last):
-          ...
-        Invalid: Enter only letters, numbers, or _ (underscore)
-        >>> PlainText(strip=True).to_python('  this  ')
-        'this'
-        >>> PlainText(strip=True).from_python('  this  ')
-        'this'
-    """
-
-    regex = r"^[a-zA-Z_\-0-9]*$"
+    regex = r"^[a-zA-Z_\-0-9\s]*$"
 
     messages = {
-        'invalid': _('Enter only letters, numbers, or _ (underscore)'),
-        'empty': _("Please enter a value"),
+        'invalid': _('Introduzca solo "letras", o "numeros", o "_", o "-")'),
+        'empty': _("Rellene el campo"),
         }
 
     not_empty = True
@@ -64,31 +44,11 @@ class NotEmpty_PlainText(Regex):
 
 class NotEmpty_Text(Regex):
 
-    """
-    Test that the field contains only letters, numbers, underscore,
-    and the hyphen.  Subclasses Regex.
-
-    Examples::
-
-        >>> PlainText.to_python('_this9_')
-        '_this9_'
-        >>> PlainText.from_python('  this  ')
-        '  this  '
-        >>> PlainText(accept_python=False).from_python('  this  ')
-        Traceback (most recent call last):
-          ...
-        Invalid: Enter only letters, numbers, or _ (underscore)
-        >>> PlainText(strip=True).to_python('  this  ')
-        'this'
-        >>> PlainText(strip=True).from_python('  this  ')
-        'this'
-    """
-
-    regex = r"^[a-zA-Z_\s]*$"
+    regex = r"^[a-zA-Z\s]*$"
 
     messages = {
-        'invalid': _('Enter only letters'),
-        'empty': _("Please enter a value"),
+        'invalid': _('Introducir solo letras'),
+        'empty': _("Rellene el campo"),
         }
 
     not_empty = True
@@ -105,6 +65,42 @@ class NotEmpty_Text(Regex):
             return value
         if not value:
             raise Invalid(self.message('empty', state),
+                          value, state)
+
+
+class MiPlainText(Regex):
+
+    regex = r"^[a-zA-Z_/\-0-9\s]*$"
+
+    messages = {
+        'invalid': _('Introduzca solo "letras", o "numeros", o "_", o "/", o "-")'),
+        }
+
+
+    def validate_python(self, value, state):
+        self.assert_string(value, state)
+        if self.strip and isinstance(value, basestring):
+            value = value.strip()
+        if not self.regex.search(value):
+            raise Invalid(self.message('invalid', state),
+                          value, state)
+
+
+class NumerosTelefono(Regex):
+
+    regex = r"^[-\0-9]*$"
+
+    messages = {
+        'invalid': _('Introduzca solo "numeros", o "-")'),
+        }
+
+
+    def validate_python(self, value, state):
+        self.assert_string(value, state)
+        if self.strip and isinstance(value, basestring):
+            value = value.strip()
+        if not self.regex.search(value):
+            raise Invalid(self.message('invalid', state),
                           value, state)
 
 
