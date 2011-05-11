@@ -12,7 +12,7 @@ class AtributoForm(TableForm):
     show_errors = True
 
     fields = [
-        HiddenField('id', label_text='Id',
+        HiddenField('id_atributo', label_text='Id',
             help_text='Id del atributo'),
         TextField('tipo_de_item', validator=NotEmpty, label_text='Tipo de Item',
             help_text='Introduzca el tipo de item asociado al atributo'),
@@ -20,7 +20,7 @@ class AtributoForm(TableForm):
         TextField('nombre', validator=NotEmpty, label_text='Nombre',
             help_text='Introduzca el nombre del atributo'),
         Spacer(),
-        TextField('descripcion', label_text='Descripción'),
+        TextField('descripcion', label_text='Descripcion'),
         Spacer(),
         TextField('tipo', label_text='Tipo',
             help_text='Introduzca el tipo del atributo'),
@@ -42,7 +42,7 @@ class EditAtributoForm(TableForm):
         TextField('nombre', validator=NotEmpty, label_text='Nombre',
             help_text='Introduzca el nombre del atributo'),
         Spacer(),
-        TextField('descripcion', label_text='Descripción'),
+        TextField('descripcion', label_text='Descripcion'),
         Spacer(),
         TextField('tipo', validator=NotEmpty, label_text='Tipo',
             help_text='Introduzca el tipo del atributo'),

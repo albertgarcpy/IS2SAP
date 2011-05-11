@@ -12,12 +12,12 @@ class TipoItemForm(TableForm):
     show_errors = True
 
     fields = [
-        HiddenField('id', label_text='Id',
+        HiddenField('id_tipo_item', label_text='Id',
             help_text='Id del tipo_item'),
         TextField('nombre', validator=NotEmpty, label_text='Nombre',
             help_text='Introduzca el nombre del tipo de Item correcto'),
         Spacer(),
-        TextField('descripcion', label_text='Descripción',
+        TextField('descripcion', label_text='Descripcion'),
         Spacer(),
         TextField('id_fase', label_text='Fase',validator=NotEmpty,
             help_text='Introduzca un id de fase'),
@@ -25,7 +25,7 @@ class TipoItemForm(TableForm):
 
     submit_text = 'Guardar Tipo_item'
 
-class Edittipo_itemForm(TableForm):
+class EditTipoItemForm(TableForm):
 
     hover_help = True
     show_errors = True
@@ -36,7 +36,7 @@ class Edittipo_itemForm(TableForm):
         TextField('nombre', validator=NotEmpty, label_text='Nombre',
             help_text='Introduzca el nombre del tipo de Item correcto'),
         Spacer(),
-        TextField('descripcion', label_text='Descripción'),
+        TextField('descripcion', label_text='Descripcion'),
         Spacer(),
         TextField('id_fase', validator=NotEmpty, label_text='Fase',
             help_text='Introduzca un id de fase'),
@@ -44,5 +44,5 @@ class Edittipo_itemForm(TableForm):
 
     submit_text = 'Guardar Tipo_item'
     
-crear_tipo_item_form = tipo_itemForm("Crear_tipo_item",action='add')
-editar_tipo_item_form = Edittipo_itemForm("Editar_tipo_item", action='update')
+crear_tipo_item_form = TipoItemForm("Crear_tipo_item",action='add')
+editar_tipo_item_form = EditTipoItemForm("Editar_tipo_item", action='update')

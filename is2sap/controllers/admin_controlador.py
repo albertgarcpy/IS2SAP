@@ -32,14 +32,13 @@ from is2sap.lib.base import BaseController
 from is2sap import model
 from is2sap.controllers.secure import SecureController
 #from is2sap.controllers.error import ErrorController
+
+
 from is2sap.controllers.usuario_controlador import UsuarioController
-<<<<<<< HEAD
 from is2sap.controllers.tipo_de_item_controlador import TipoItemController
 from is2sap.controllers.atributo_controlador import AtributoController
-=======
 from is2sap.controllers.proyecto_controlador import ProyectoController
 
->>>>>>> 7e5789098555ddf6c6bebcef1f565252e15b5231
 
 from tg import tmpl_context, validate
 
@@ -48,13 +47,6 @@ from repoze.what.predicates import has_permission
 
 
 class AdminController(TGController):
-
-<<<<<<< HEAD
-    usuario = UsuarioController()
-    atributo = AtributoController()
-    tipo_item = TipoItemController()
-=======
->>>>>>> 7e5789098555ddf6c6bebcef1f565252e15b5231
     """
     A basic controller that handles User Groups and Permissions for a TG application.
     """
@@ -65,6 +57,8 @@ class AdminController(TGController):
 
     usuario = UsuarioController()
     proyecto = ProyectoController()
+    atributo = AtributoController()
+    tipo_item = TipoItemController()
 
     def __init__(self, models, session, config_type=None, translations=None):
         super(AdminController, self).__init__()
