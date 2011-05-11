@@ -99,7 +99,7 @@ class UsuarioController(BaseController):
     def confirmar_eliminar(self, id_usuario, **kw):
         """Despliega confirmacion de eliminacion"""
         usuario=DBSession.query(Usuario).get(id_usuario)
-        return dict(nombre_modelo='Usuario', page='editar', value=usuario)
+        return dict(nombre_modelo='Usuario', page='eliminar_usuario', value=usuario)
 
 
     @expose()

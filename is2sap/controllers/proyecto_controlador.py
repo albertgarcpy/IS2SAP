@@ -72,7 +72,7 @@ class ProyectoController(BaseController):
         kw['descripcion']=traerProyecto.descripcion
         kw['fecha']=traerProyecto.fecha
         kw['iniciado']=traerProyecto.iniciado
-        return dict(nombre_modelo='Proyecto', page='editar', value=kw)
+        return dict(nombre_modelo='Proyecto', page='editar_proyecto', value=kw)
 
 
     @validate(editar_proyecto_form, error_handler=editar)
@@ -93,7 +93,7 @@ class ProyectoController(BaseController):
     def confirmar_eliminar(self, id_proyecto, **kw):
         """Despliega confirmacion de eliminacion"""
         proyecto=DBSession.query(Proyecto).get(id_proyecto)
-        return dict(nombre_modelo='Proyecto', page='editar', value=proyecto)
+        return dict(nombre_modelo='Proyecto', page='eliminar_proyecto', value=proyecto)
 
 
     @expose()
