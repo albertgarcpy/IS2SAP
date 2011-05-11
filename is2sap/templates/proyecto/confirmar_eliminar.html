@@ -18,15 +18,15 @@
 <table border="1">        
    <tr style="color: purple; font-size: 11pt" >
           <th>ID</th>
-          <th>Usuario</th>
+<!--      <th>Usuario</th>      -->
           <th>Nombre</th>
           <th>Descripcion</th>
           <th>Fecha</th>
-	  <th>Iniciado</th>		  
+	      <th>Iniciado</th>		  
           </tr>
    <tr>
             <td>${value.id_proyecto}</td>
-            <td>${value.id_usuario}</td>
+<!--        <td>${value.id_usuario}</td>-->
             <td>${value.nombre}</td>
             <td>${value.descripcion}</td>
             <td>${value.fecha}</td>
@@ -36,8 +36,20 @@
 
 <div class="menu bubplastic horizontal aqua">
 	<ul>
-		<li><span class="menu_r"><a href="${tg.url('/admin/proyecto/delete', id_proyecto=value.id_proyecto)}"><span class="menu_ar">Eliminar</span></a></span></li>
-		<li><span class="menu_r"><a href="${tg.url('/admin/proyecto/listado')}"><span class="menu_ar">Cancelar</span></a></span></li>
+		<li>
+            <span class="menu_r">
+                 <a href="${tg.url('/admin/proyecto/delete', id_proyecto=value.id_proyecto)}">
+                   <span class="menu_ar">Eliminar</span>
+                 </a>
+            </span>
+        </li>
+		<li>
+            <span class="menu_r">
+                 <a href="${tg.url('/admin/proyecto/listado')}">
+                      <span class="menu_ar">Cancelar</span>
+                 </a>
+            </span>
+        </li>
 	</ul>
 	<br class="clearit" />
 </div>
