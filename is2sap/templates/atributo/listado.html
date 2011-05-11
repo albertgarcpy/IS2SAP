@@ -1,0 +1,47 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:py="http://genshi.edgewall.org/"
+  xmlns:xi="http://www.w3.org/2001/XInclude">
+
+<xi:include href="master.html" />
+<xi:include href="menusatributo.html" />
+
+<head>
+  <meta content="text/html; charset=UTF-8" http-equiv="content-type" py:replace="''"/>
+  <title>Lista de Atributos</title>
+</head>
+
+<body>
+	<h1>Lista de Atributos</h1>
+${menu_superior()}
+    <table border="1">
+		  <tr style="color: purple; font-size: 11pt" align="center" >
+          <th>ID</th>
+          <th>Tipo de Item</th>
+          <th>Nombre</th>
+          <th>Descripcion</th>
+          <th>Tipo</th>
+	</tr>
+
+        <py:for each="atributo in atributos">
+        <tr>
+            <td>${atributo.id_atributo}</td>
+            <td>${atributo.id_tipo_item}</td>
+            <td>${atributo.nombre}</td>
+            <td>${atributo.descripcion}</td>
+            <td>${atributo.tipo}</td>
+            <td><a href="${tg.url('/admin/atributo/editar', id_atributo=atributo.id)}"> <input class="alignEditar" name="editar" type="button" value="" /></a>			<a href="${tg.url('/admin/atributo/confirmar_eliminar', id_atributo=atributo.id)}"> <input class="alignEliminar" name="eliminar" type="button" value=""/></a></td>
+
+        </tr>
+        </py:for>
+    </table>
+
+	<p class="pagelist">
+		<a class="prevPage" href="/list?page=${currentPage.previous_page}">&nbsp;</a>
+		${currentPage.pager(format='~3~', page_param='page', show_if_single_page=True)}
+		<a class="nextPage" href="/list?page=${currentPage.next_page}">&nbsp;</a>
+	</p>
+
+</body>
+</html>

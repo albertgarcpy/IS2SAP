@@ -1,0 +1,98 @@
+# -*- coding: utf-8 -*-
+"""Controlador de Usuario"""
+
+from tg import expose, flash, require, url, request, redirect
+from pylons.i18n import ugettext as _, lazy_ugettext as l_
+from tgext.admin.tgadminconfig import TGAdminConfig
+from tgext.admin.controller import AdminController, AdminConfig
+from repoze.what import predicates
+from tg import tmpl_context, validate
+from webhelpers import paginate
+
+from is2sap.lib.base import BaseController
+from is2sap.model import DBSession, metadata
+from is2sap.model.model import TipoItem
+from is2sap import model
+from is2sap.controllers.secure import SecureController
+from is2sap.controllers.error import ErrorController
+
+
+from is2sap.widgets.tipo_item_form import crear_tipo_item_form, editar_tipo_item_form
+
+
+
+__all__ = ['TipoItemController']
+
+class TipoItemController(BaseController):
+
+    @expose()
+    def index(self):
+        """Muestra la pantalla de bienvenida"""
+        redirect("/admin/tipo_item/listado")        
+
+
+    @expose('is2sap.templates.tipo_item.nuevo')
+    def nuevo(self, **kw):
+        """Despliega el formulario para añadir un nuevo tipo_item."""
+        tmpl_context.form = crear_tipo_item_form
+        return dict(nombre_modelo='TipoItem', page='nuevo', value=kw)
+
+    @validate(crear_tipo_item_form, error_handler=nuevo)
+    @expose()
+    def add(self, **kw):
+        """Metodo para agregar un registro a la base de datos """
+        tipo_item = TipoItem()
+        tipo_item.nombre = kw['nombre']
+        tipo_item.descripcion = kw['descripcion']
+        tipo_item.id_fase = kw['id_fase']
+        DBSession.add(tipo_item)
+        DBSession.flush()    
+        redirect("/admin/tipo_item/listado")
+
+    @expose("is2sap.templates.tipo_item.listado")
+    def listado(self,page=1):
+        """Metodo para listar todos los tipo_items de la base de datos"""
+        tipo_items = DBSession.query(TipoItem)#.order_by(Usuario.id)
+        currentPage = paginate.Page(tipo_items, page, items_per_page=5)
+        return dict(tipo_items=currentPage.items,
+           page='listado', currentPage=currentPage)
+
+
+
+    @expose('is2sap.templates.tipo_item.editar')
+    def editar(self, id_tipo_item, **kw):
+        """Metodo que rellena el formulario para editar los datos de un usuario"""
+        tmpl_context.form = editar_tipo_item_form
+        traertipo_item=DBSession.query(TipoItem).get(id_tipo_item)
+        kw['id']=traertipo_item.id
+        kw['nombre']=traertipo_item.nombre
+        kw['descripcion']=traertipo_item.descripcion
+        kw['id_fase']=traertipo_item.id_fase
+        
+        return dict(nombre_modelo='tipo_item', page='editar', value=kw)
+
+
+    @validate(editar_tipo_item_form, error_handler=editar)
+    @expose()
+    def update(self, **kw):        
+        """Metodo que actualiza la base de datos"""
+        tipo_item = DBSession.query(TipoItem).get(kw['id'])   
+        tipo_item.nombre = kw['nombre']
+        tipo_item.descripcion=kw['descripcion']
+        tipo_item.id_fase = kw['id_fase']
+        DBSession.flush()
+        redirect("/admin/tipo_item/listado")
+
+
+    @expose('is2sap.templates.tipo_item.confirmar_eliminar')
+    def confirmar_eliminar(self, id_tipo_item, **kw):
+        """Despliega confirmacion de eliminacion"""
+        usuario=DBSession.query(TipoItem).get(id_tipo_item)
+        return dict(nombre_modelo='TipoItem', page='editar', value=tipo_item)
+
+
+    @expose()
+    def delete(self, id_tipo_item, **kw):
+        """Metodo que elimina un registro de la base de datos"""
+        DBSession.delete(DBSession.query(TipoItem).get(id_tipo_item))
+        redirect("/admin/tipo_item/listado")
