@@ -230,6 +230,7 @@ form.loginfields input#submit
 }
 
 
+
 /* Sidebar */
 .menu_superior {
   border: 1px solid #cce;
@@ -248,9 +249,9 @@ form.loginfields input#submit
   margin-left: 1.5em;
   padding: 1em;
   float: center;
-  width: 250px;
+  width: 300px;
   height: 100px;
-  font-size: 100%;
+  font-size: 110%;
   
 }
 

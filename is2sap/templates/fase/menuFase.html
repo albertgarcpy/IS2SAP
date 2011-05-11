@@ -1,0 +1,42 @@
+<html xmlns:py="http://genshi.edgewall.org/"
+      xmlns:xi="http://www.w3.org/2001/XInclude"
+      py:strip="">
+
+<py:def function="menu_superior">
+  
+<div class="menu bubplastic horizontal aqua">
+	<ul>
+		<li><span class="menu_r"><a href="${tg.url('/admin/fase/nuevo')}" class="${('', 'active')[defined('page') and page=='about']}"><span class="menu_ar">Nuevo</span></a></span></li>
+	</ul>
+	<br class="clearit" />
+</div>
+
+</py:def>
+
+
+
+<py:def function="menu_superior_nuevo">
+
+<div class="menu bubplastic horizontal aqua">
+	<ul>
+		<li><span class="menu_r"><a href="${tg.url('/admin/fase/listado')}" class="${('', 'active')[defined('page') and page=='about']}"><span class="menu_ar">Cancelar</span></a></span></li>
+	</ul>
+	<br class="clearit" />
+</div>
+
+</py:def>
+
+
+
+<py:def function="menu_superior_editar">
+
+<div class="menu bubplastic horizontal aqua">
+	<ul>
+		<li><span class="menu_r"><a href="${tg.url('/admin/fase/listado')}" class="${('', 'active')[defined('page') and page=='about']}"><span class="menu_ar">Cancelar</span></a></span></li>
+	</ul>
+	<br class="clearit" />
+</div>
+
+</py:def>
+
+</html>

@@ -11,7 +11,7 @@ from webhelpers import paginate
 
 from is2sap.lib.base import BaseController
 from is2sap.model import DBSession, metadata
-from is2sap.model.model import Proyecto
+from is2sap.model.model import Proyecto, Usuario
 from is2sap import model
 from is2sap.controllers.secure import SecureController
 from is2sap.controllers.error import ErrorController
@@ -35,6 +35,8 @@ class ProyectoController(BaseController):
     def nuevo(self, **kw):
         """Despliega el formulario para añadir un nuevo Proyecto."""
         tmpl_context.form = crear_proyecto_form
+        usuario_id= DBSession.query(Usuario.id_usuario).filter_by(nombre_usuario=request.identity['repoze.who.userid']).first()
+        kw['id_usuario']=usuario_id
         return dict(nombre_modelo='Proyecto', page='nuevo', value=kw)
 
     @validate(crear_proyecto_form, error_handler=nuevo)
@@ -42,7 +44,7 @@ class ProyectoController(BaseController):
     def add(self, **kw):
         """Metodo para agregar un registro a la base de datos """
         proyecto = Proyecto()
-        proyecto.id_usuario = kw['id_usuario']
+        proyecto.id_usuario=kw['id_usuario']
         proyecto.nombre = kw['nombre']
         proyecto.descripcion = kw['descripcion']
         proyecto.fecha = kw['fecha']
