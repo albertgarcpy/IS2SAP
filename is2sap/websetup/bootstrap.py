@@ -34,28 +34,28 @@ def bootstrap(command, conf, vars):
         v.telefono = u'021-574543'
         model.DBSession.add(v)
     
-        g = model.Group()
-        g.group_name = u'administrador'
-        g.display_name = u'Grupo Administrador'
-        g.users.append(u)
+        g = model.Rol()
+        g.nombre_rol = u'administrador'
+        g.descripcion = u'Grupo Administrador'
+        g.usuarios.append(u)
         model.DBSession.add(g)
     
-        h = model.Group()
-        h.group_name = u'editor'
-        h.display_name = u'Grupo Edicion'
-        h.users.append(v)
+        h = model.Rol()
+        h.nombre_rol = u'editor'
+        h.descripcion = u'Grupo Edicion'
+        h.usuarios.append(v)
         model.DBSession.add(h)
 
-        p = model.Permission()
-        p.permission_name = u'administracion'
-        p.description = u'Este permiso dara un derecho administrativo al portador'
-        p.groups.append(g)
+        p = model.Permiso()
+        p.nombre_permiso = u'administracion'
+        p.descripcion = u'Este permiso dara un derecho administrativo al portador'
+        p.roles.append(g)
         model.DBSession.add(p)
 
-        q = model.Permission()
-        q.permission_name = u'edicion'
-        q.description = u'Este permiso dara un derecho de edicion al portador'
-        q.groups.append(h)
+        q = model.Permiso()
+        q.nombre_permiso = u'edicion'
+        q.descripcion = u'Este permiso dara un derecho de edicion al portador'
+        q.roles.append(h)
         model.DBSession.add(q)
     
         model.DBSession.flush()

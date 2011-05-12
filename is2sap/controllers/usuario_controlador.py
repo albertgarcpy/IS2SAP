@@ -56,7 +56,7 @@ class UsuarioController(BaseController):
     @expose("is2sap.templates.usuario.listado")
     def listado(self,page=1):
         """Metodo para listar todos los usuarios de la base de datos"""
-        usuarios = DBSession.query(Usuario)#.order_by(Usuario.id)
+        usuarios = DBSession.query(Usuario).order_by(Usuario.apellido)
         currentPage = paginate.Page(usuarios, page, items_per_page=5)
         return dict(usuarios=currentPage.items,
            page='listado', currentPage=currentPage)
@@ -68,11 +68,11 @@ class UsuarioController(BaseController):
         """Metodo que rellena el formulario para editar los datos de un usuario"""
         tmpl_context.form = editar_usuario_form
         traerUsuario=DBSession.query(Usuario).get(id_usuario)
-        kw['id']=traerUsuario.id
+        kw['id_usuario']=traerUsuario.id_usuario
         kw['nombre']=traerUsuario.nombre
         kw['apellido']=traerUsuario.apellido
         kw['nombre_usuario']=traerUsuario.nombre_usuario
-        kw['password']=traerUsuario.password
+        #kw['password']=traerUsuario.password
         kw['direccion']=traerUsuario.direccion
         kw['telefono']=traerUsuario.telefono 
         kw['email']=traerUsuario.email
@@ -83,11 +83,11 @@ class UsuarioController(BaseController):
     @expose()
     def update(self, **kw):        
         """Metodo que actualiza la base de datos"""
-        usuario = DBSession.query(Usuario).get(kw['id'])   
+        usuario = DBSession.query(Usuario).get(kw['id_usuario'])   
         usuario.nombre = kw['nombre']
         usuario.apellido=kw['apellido']
         usuario.nombre_usuario = kw['nombre_usuario']
-        usuario.password = kw['password']
+        #usuario.password = kw['password']
         usuario.direccion =kw['direccion']
         usuario.telefono = kw['telefono']
         usuario.email =kw['email']
