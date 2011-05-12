@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Controlador de Usuario"""
+"""Controlador de Rol"""
 
 from tg import expose, flash, require, url, request, redirect
 from pylons.i18n import ugettext as _, lazy_ugettext as l_
@@ -25,12 +25,12 @@ class RolController(BaseController):
 
     @expose()
     def index(self):
-        """Muestra la pantalla de bienvenida"""
-        redirect("/admin/proyecto/listado")        
+        """Muestra la pantalla inicial"""
+        return dict(nombre_modelo='Rol', page='index_rol')      
 
     @expose('is2sap.templates.rol.nuevo')
     def nuevo(self, **kw):
-        """Despliega el formulario para añadir un nuevo Proyecto."""
+        """Despliega el formulario para añadir un nuevo Rol."""
         tmpl_context.form = crear_rol_form
         return dict(nombre_modelo='Rol', page='nuevo_rol', value=kw)
 
@@ -47,7 +47,7 @@ class RolController(BaseController):
 
     @expose("is2sap.templates.rol.listado")
     def listado(self,page=1):
-        """Metodo para listar todos los Proyectos existentes de la base de datos"""
+        """Metodo para listar todos los Roles existentes de la base de datos"""
         roles = DBSession.query(Rol).order_by(Rol.id_rol)
         currentPage = paginate.Page(roles, page, items_per_page=5)
         return dict(roles=currentPage.items,
@@ -55,7 +55,7 @@ class RolController(BaseController):
 
     @expose('is2sap.templates.rol.editar')
     def editar(self, id_rol, **kw):
-        """Metodo que rellena el formulario para editar los datos de un Proyecto"""
+        """Metodo que rellena el formulario para editar los datos de un Rol"""
         tmpl_context.form = editar_rol_form
         traerRol=DBSession.query(Rol).get(id_rol)
         kw['id_rol']=traerRol.id_rol
@@ -67,7 +67,7 @@ class RolController(BaseController):
     @validate(editar_rol_form, error_handler=editar)
     @expose()
     def update(self, **kw):        
-        """Metodo que actualiza la base de datos"""
+        """Metodo que actualizar la base de datos"""
         rol = DBSession.query(Rol).get(kw['id_rol'])   
         rol.nombre_rol=kw['nombre_rol']
         rol.descripcion = kw['descripcion']

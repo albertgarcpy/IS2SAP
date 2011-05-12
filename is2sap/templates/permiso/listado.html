@@ -6,16 +6,16 @@
       xmlns:xi="http://www.w3.org/2001/XInclude">
 
       <xi:include href="master.html"/>
-      <xi:include href="menuRol.html"/>
+      <xi:include href="menuPermiso.html"/>
 
     <head>
           <meta content="text/html; charset=UTF-8" http-equiv="content-type" py:replace="''"/>
-          <title>Lista de Roles</title>
+          <title>Lista de Permisos</title>
     </head>
 
     <body>
 
-            <h1>Lista de Roles</h1>
+            <h1>Lista de Permisos</h1>
             ${menu_superior()}
 
 	    <table border="1">
@@ -26,15 +26,15 @@
 		    <th>Acciones</th>		
 		</tr>
 
-		<py:for each="rol in roles">
+		<py:for each="permiso in permisos">
 			<tr>
-			    <td>${rol.id_rol}</td>
-			    <td>${rol.nombre_rol}</td>
-			    <td>${rol.descripcion}</td>
-			    <td> <a href="${tg.url('/admin/rol/editar', id_rol=rol.id_rol)}"> 
+			    <td>${permiso.id_permiso}</td>
+			    <td>${permiso.nombre_permiso}</td>
+			    <td>${permiso.descripcion}</td>
+			    <td> <a href="${tg.url('/admin/permiso/editar', id_permiso=permiso.id_permiso)}"> 
 				    <input class="alignEditar" name="editar" type="button" value="" />
 				 </a>
-				 <a href="${tg.url('/admin/rol/confirmar_eliminar', id_rol=rol.id_rol)}">
+				 <a href="${tg.url('/admin/permiso/confirmar_eliminar', id_permiso=permiso.id_permiso)}">
 				    <input class="alignEliminar" name="eliminar" type="button" value=""/>
 				 </a>
 			    </td>
