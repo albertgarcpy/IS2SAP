@@ -45,7 +45,6 @@ from repoze.what.predicates import has_permission
 class AdminController(TGController):
 
     usuario = UsuarioController()
-    atributo = AtributoController()
     tipo_item = TipoItemController()
     """
     A basic controller that handles User Groups and Permissions for a TG application.

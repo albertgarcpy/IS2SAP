@@ -1,0 +1,48 @@
+"""TipoItem Form"""
+
+from tw.forms import TableForm, Spacer, TextField, PasswordField
+from tw.forms.fields import Button, SubmitButton, HiddenField
+from tw.forms.validators import *
+from is2sap.widgets.mi_validador.mi_validador import *
+
+
+class TipoItemForm(TableForm):
+
+    hover_help = True
+    show_errors = True
+
+    fields = [
+        HiddenField('id', label_text='Id',
+            help_text='Id del tipo_item'),
+        TextField('nombre', validator=NotEmpty, label_text='Nombre',
+            help_text='Introduzca el nombre del tipo de Item correcto'),
+        Spacer(),
+        TextField('descripcion', label_text='Descripción',
+        Spacer(),
+        TextField('id_fase', label_text='Fase',validator=NotEmpty,
+            help_text='Introduzca un id de fase'),
+        Spacer()]
+
+    submit_text = 'Guardar Tipo_item'
+
+class Edittipo_itemForm(TableForm):
+
+    hover_help = True
+    show_errors = True
+
+    fields = [
+        HiddenField('id', label_text='Id',
+            help_text='Id del tipo_item'),
+        TextField('nombre', validator=NotEmpty, label_text='Nombre',
+            help_text='Introduzca el nombre del tipo de Item correcto'),
+        Spacer(),
+        TextField('descripcion', label_text='Descripción'),
+        Spacer(),
+        TextField('id_fase', validator=NotEmpty, label_text='Fase',
+            help_text='Introduzca un id de fase'),
+        Spacer()]
+
+    submit_text = 'Guardar Tipo_item'
+    
+crear_tipo_item_form = tipo_itemForm("Crear_tipo_item",action='add')
+editar_tipo_item_form = Edittipo_itemForm("Editar_tipo_item", action='update')
