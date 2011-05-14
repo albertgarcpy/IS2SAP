@@ -8,7 +8,7 @@
 
 <head>
   <meta content="text/html; charset=UTF-8" http-equiv="content-type" py:replace="''"/>
-  <title>Estoy tratando de borrar un archivo papacho</title>
+  <title>Tipo de Item</title>
 </head>
 
 <body>
@@ -17,24 +17,26 @@
 <table border="1">        
 <tr style="color: purple; font-size: 11pt" >
           <th>ID</th>
+          <th>Fase</th>
           <th>Nombre</th>
           <th>Descripción</th>
-          <th>Fase</th>
+
           	  
           </tr>
         <tr>
             <td>${value.id_tipo_item}</td>
+            <td>${value.id_fase}</td>
             <td>${value.nombre}</td>
             <td>${value.descripcion}</td>
-            <td>${value.id_fase}</td>
+
             
         </tr>        
     </table>
 
 <div class="menu bubplastic horizontal aqua">
 	<ul>
-		<li><span class="menu_r"><a href="${tg.url('/admin/tipo_item/delete', id_tipo_item=value.id)}"><span class="menu_ar">Eliminar</span></a></span></li>
-		<li><span class="menu_r"><a href="${tg.url('/admin/tipo_item/listado')}"><span class="menu_ar">Cancelar</span></a></span></li>
+		<li><span class="menu_r"><a href="${tg.url('/admin/tipo_item/delete', id_tipo_item=value.id_tipo_item, id_fase=value.id_fase)}"><span class="menu_ar">Eliminar</span></a></span></li>
+		<li><span class="menu_r"><a href="${tg.url('/admin/tipo_item/listadoTipoItemPorFase', id_fase=value.id_fase)}"><span class="menu_ar">Cancelar</span></a></span></li>
 	</ul>
 	<br class="clearit" />
 </div>

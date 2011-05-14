@@ -56,7 +56,7 @@ class ProyectoController(BaseController):
     @expose("is2sap.templates.proyecto.listado")
     def listado(self,page=1):
         """Metodo para listar todos los Proyectos existentes de la base de datos"""
-        proyectos = DBSession.query(Proyecto)
+        proyectos = DBSession.query(Proyecto).order_by(Proyecto.id_proyecto)
         currentPage = paginate.Page(proyectos, page, items_per_page=5)
         return dict(proyectos=currentPage.items,
            page='listado', currentPage=currentPage)

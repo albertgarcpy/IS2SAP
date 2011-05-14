@@ -36,8 +36,8 @@
 
 <div class="menu bubplastic horizontal aqua">
 	<ul>
-		<li><span class="menu_r"><a href="${tg.url('/admin/fase/delete', id_fase=value.id_fase)}"><span class="menu_ar">Eliminar</span></a></span></li>
-		<li><span class="menu_r"><a href="${tg.url('/admin/fase/listado')}"><span class="menu_ar">Cancelar</span></a></span></li>
+		<li><span class="menu_r"><a href="${tg.url('/admin/fase/delete', id_fase=value.id_fase, id_proyecto=value.id_proyecto)}"><span class="menu_ar">Eliminar</span></a></span></li>
+		<li><span class="menu_r"><a href="${tg.url('/admin/fase/listadoFasesPorProyecto', id_proyecto=value.id_proyecto)}"><span class="menu_ar">Cancelar</span></a></span></li>
 	</ul>
 	<br class="clearit" />
 </div>

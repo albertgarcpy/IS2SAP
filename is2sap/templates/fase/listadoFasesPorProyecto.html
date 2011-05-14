@@ -9,35 +9,38 @@
 
 <head>
   <meta content="text/html; charset=UTF-8" http-equiv="content-type" py:replace="''"/>
-  <title>Lista de Fases</title>
+  <title>Fases de: ${nombreProyecto}</title>
 </head>
 
 <body>
-	<h1>Lista de Fases</h1>
-${menu_superior()}
+	<h1>Fases de: ${nombreProyecto}</h1>
+${menu_superior(idProyecto)}
+
     <table border="1" width="100%">
-	 <tr style="color: purple; font-size: 11pt" align="center" >
-          <th>ID</th>
-          <th>Estado</th>
-          <th>Proyecto</th>
+	 <tr style="color: purple; font-size: 11pt" align="center">
+          <th>ID</th>          
+		  <th>Numero de Fase</th>
           <th>Nombre</th>
           <th>Descripcion</th>
-		  <th>Numero de Fase</th>		  
+          <th>Estado</th>
 		  <th>Acciones</th>		
+		  <th>Tipos de Items</th>
           </tr>
 
-        <py:for each="fase in fases">
+        <py:for each="fase in fasesPorProyecto">
         <tr>
             <td width="25">${fase.id_fase}</td>
-            <td width="50">${fase.id_estado_fase}</td>
-            <td>${fase.id_proyecto}</td>
-            <td>${fase.nombre}</td>
+            <td width="50">${fase.numero_fase}</td>
+            <td width="150">${fase.nombre}</td>
             <td>${fase.descripcion}</td>
-            <td>${fase.numero_fase}</td>
-            <td width="105"><a href="${tg.url('/admin/fase/editar', id_fase=fase.id_fase)}"><input class="alignEditar" name="editar" type="button" value="" /></a>
+            <td width="70">${fase.relacion_estado_fase.nombre_estado}</td>
+            <td width="105"><a href="${tg.url('/admin/fase/editar', id_fase=fase.id_fase)}"><input class="alignEditar" name="editar" type="button" 		value="" /></a>
 			<a href="${tg.url('/admin/fase/confirmar_eliminar', id_fase=fase.id_fase)}"> <input class="alignEliminar" name="eliminar" type="button" value=""/></a>
-        </td>
 
+        </td>
+		<td width="55">
+			<a href="${tg.url('/admin/tipo_item/listadoTipoItemPorFase', id_fase=fase.id_fase)}"> <input class="alignaddTipoItem" name="tipoItem" type="button" value=""/></a>
+		</td>
         </tr>
         </py:for>
     </table>

@@ -51,7 +51,7 @@ class EditProyectoForm(TableForm):
         CalendarDatePicker('fecha',
             help_text='Seleccione la fecha de Creacion del Proyecto'),
         Spacer(),
-        CheckBox('iniciado', label_text='Iniciado',
+        CheckBox('iniciado', disabled='False', label_text='Iniciado',
             help_text='Indica si el proyecto se ha iniciado')]
 
     submit_text = 'Guardar Proyecto'
