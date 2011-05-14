@@ -6,7 +6,7 @@ from pylons.i18n import ugettext as _, lazy_ugettext as l_
 from tgext.admin.tgadminconfig import TGAdminConfig
 #from tgext.admin.controller import AdminController, AdminConfig
 from is2sap.controllers.admin_controlador import AdminController
-
+from is2sap.controllers.desarrollo_controlador import DesarrolloController
 from repoze.what import predicates
 
 from is2sap.lib.base import BaseController
@@ -44,7 +44,7 @@ class RootController(BaseController):
     """
     #secc = SecureController()
     admin = AdminController(model, DBSession)
-    
+    desa = DesarrolloController(model, DBSession)
     error = ErrorController()
 
     @expose('is2sap.templates.index')
