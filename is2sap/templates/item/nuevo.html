@@ -5,26 +5,16 @@
       xmlns:xi="http://www.w3.org/2001/XInclude">
 
   <xi:include href="master.html" />
-
+  <xi:include href="menuItems.html" />
 <head>
   <meta content="text/html; charset=UTF-8" http-equiv="content-type" py:replace="''"/>
-  <title>Configuracion de SAP, 2011</title>
+  <title>Nuevo ${nombre_modelo}</title>
 </head>
 
 <body>
+   <h1>Nuevo ${nombre_modelo}</h1>
+${menu_superior_nuevo()}
 
-    ${sidebarsconfiguracion_top()}
-
-
-  <div id="gestion_config">
-
-    <h2>Template para Gestion de configuracion</h2>
-    
-  </div>
-  <div class="clearingdiv" />
-<!--
-  <div class="notice"> Gracias por usar SAP.
-  </div>
--->
+   <div py:replace="tmpl_context.form(value)">Input Form</div>
 </body>
 </html>
