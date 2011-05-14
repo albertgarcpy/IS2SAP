@@ -6,7 +6,7 @@
       xmlns:xi="http://www.w3.org/2001/XInclude">
 
       <xi:include href="master.html"/>
-      <xi:include href="menuRol.html"/>
+      <xi:include href="menuUsuario.html"/>
 
     <head>
           <meta content="text/html; charset=UTF-8" http-equiv="content-type" py:replace="''"/>
@@ -15,15 +15,14 @@
 
     <body>
 
-            <h1>Lista de Roles</h1>
-            ${menu_superior()}
+            <h1>Roles de ${usuario.nombre_usuario}</h1>
 
 	    <table border="1">
 		<tr style="color: purple; font-size: 11pt" align="center" >
 		    <th>ID</th>
 		    <th>Nombre</th>
 		    <th>Descripcion</th>
-		    <th>Acciones</th>		
+		    <th>Accion</th>		
 		</tr>
 
 		<py:for each="rol in roles">
@@ -31,13 +30,13 @@
 			    <td>${rol.id_rol}</td>
 			    <td>${rol.nombre_rol}</td>
 			    <td>${rol.descripcion}</td>
-			    <td> <a href="${tg.url('/admin/rol/editar', id_rol=rol.id_rol)}"> 
-				    <input class="alignEditar" name="editar" type="button" value="" />
-				 </a>
-				 <a href="${tg.url('/admin/rol/confirmar_eliminar', id_rol=rol.id_rol)}">
+
+			    <td> 
+				 <a href="${tg.url('/admin/usuario/eliminar_rol_usuario', id_rol=rol.id_rol, id_usuario=usuario.id_usuario)}">
 				    <input class="alignEliminar" name="eliminar" type="button" value=""/>
 				 </a>
 			    </td>
+
 			</tr>
 		</py:for>
 	    </table>

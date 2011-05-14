@@ -19,7 +19,6 @@ from is2sap import model
 from is2sap.controllers.secure import SecureController
 from is2sap.controllers.error import ErrorController
 
-
 from is2sap.widgets.fase_form import crear_fase_form, editar_fase_form
 
 

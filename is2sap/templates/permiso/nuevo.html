@@ -6,7 +6,7 @@
       xmlns:xi="http://www.w3.org/2001/XInclude">
 
       <xi:include href="master.html"/>
-      <xi:include href="menuUsuario.html"/>
+      <xi:include href="menuPermiso.html"/>
 
      <head>
 	   <meta content="text/html; charset=UTF-8" http-equiv="content-type" py:replace="''"/>
@@ -16,6 +16,6 @@
      <body>
 	   <h1>Nuevo ${nombre_modelo}</h1>
 	   ${menu_superior_nuevo()}
-	   <div py:replace="tmpl_context.form(value)">Form para crear usuario</div>
+	   <div py:replace="tmpl_context.form(value)">Form para crear permiso</div>
      </body>
 </html>

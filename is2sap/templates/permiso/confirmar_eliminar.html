@@ -17,22 +17,14 @@
 
 	  <table border="1">        
 	        <tr style="color: purple; font-size: 11pt" >
-                    <th>ID</th>
-                    <th>Nombre</th>
-                    <th>Apellido</th>
-                    <th>Nombre de Usuario</th>
-                    <th>Direccion</th>
-		    <th>Telefono</th>
-		    <th>E-mail</th>
+		   <th>ID</th>
+		   <th>Nombre</th>
+		   <th>Descripcion</th>
 		</tr>
 	        <tr>
-                    <td>${value.id_usuario}</td>
-                    <td>${value.nombre}</td>
-                    <td>${value.apellido}</td>
-                    <td>${value.nombre_usuario}</td>
-                    <td>${value.direccion}</td>
-                    <td>${value.telefono}</td>
-                    <td>${value.email}</td>
+		   <td>${value.id_permiso}</td>
+		   <td>${value.nombre_permiso}</td>
+		   <td>${value.descripcion}</td>
 	        </tr>        
 	  </table>
 
@@ -40,14 +32,14 @@
 	      <ul>
 		   <li>
                         <span class="menu_r">
-                             <a href="${tg.url('/admin/usuario/delete', id_usuario=value.id_usuario)}">
+                             <a href="${tg.url('/admin/permiso/delete', id_permiso=value.id_permiso)}">
                                 <span class="menu_ar">Eliminar</span>
                              </a>
                         </span>
                    </li>
 		   <li>
                         <span class="menu_r">
-                             <a href="${tg.url('/admin/usuario/listado')}">
+                             <a href="${tg.url('/admin/permiso/listado')}">
                                 <span class="menu_ar">Cancelar</span>
                              </a>
                         </span>

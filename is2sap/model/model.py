@@ -21,7 +21,7 @@ except ImportError:
 
 from sqlalchemy import Table, ForeignKey, Column
 from sqlalchemy.types import Unicode, Integer, DateTime
-from sqlalchemy.orm import relation, synonym
+from sqlalchemy.orm import relationship, synonym, mapper
 
 from is2sap.model import DeclarativeBase, metadata, DBSession
 
@@ -31,7 +31,7 @@ try:
 except ImportError:
     from sqlalchemy.databases.postgres import *
 
-__all__ = ['Usuario','Rol','Permiso','Proyecto', 'Fase', 'TipoItem', 'Atributo', 'EstadoFase']
+__all__ = ['Usuario','Rol','RolUsuario','Permiso','Proyecto', 'Fase', 'TipoItem', 'Atributo', 'EstadoFase']
 
 
 ##----------------------------- Tabla de Asociacion "Rol_Permiso"-----------------------------------
@@ -173,7 +173,7 @@ class Rol(DeclarativeBase):
     descripcion = Column('descripcion', VARCHAR(length=None, convert_unicode=False, assert_unicode=None, unicode_error=None, _warn_on_bytestring=False))
 
     #Relations
-    usuarios = relation('Usuario', secondary=Rol_Usuario, backref='roles')
+    usuarios = relationship('Usuario', secondary=Rol_Usuario, backref='roles')
     #permisos = relation('Permiso', secondary=Rol_Permiso, backref='permisos')
 
     #Special methods
@@ -195,7 +195,7 @@ class Permiso(DeclarativeBase):
     descripcion = Column(u'descripcion', VARCHAR(length=None, convert_unicode=False, assert_unicode=None, unicode_error=None, _warn_on_bytestring=False))
 
     #Relations
-    roles = relation('Rol', secondary=Rol_Permiso, backref='permisos')
+    roles = relationship('Rol', secondary=Rol_Permiso, backref='permisos')
 
     #Special methods
     def __repr__(self):
@@ -219,7 +219,7 @@ class Proyecto(DeclarativeBase):
     iniciado = Column('iniciado', BOOLEAN(create_constraint=True, name=None), nullable=False)
 
     #Tiene una relacion con la tabla Usuario
-    relacion_usuario = relation('Usuario', secondary=Proyecto_Usuario, backref='proyectos')
+    relacion_usuario = relationship('Usuario', secondary=Proyecto_Usuario, backref='proyectos')
 
 
 ##----------------------------- Clase "Fase"-----------------------------------
@@ -228,8 +228,8 @@ class Fase(DeclarativeBase):
     __table__ = Fase
 
     #relation definitions
-    relacion_estado_fase = relation('EstadoFase', backref='fases')
-    relacion_proyecto = relation('Proyecto', backref='fases')
+    relacion_estado_fase = relationship('EstadoFase', backref='fases')
+    relacion_proyecto = relationship('Proyecto', backref='fases')
 
 
 
@@ -243,7 +243,7 @@ class TipoItem(DeclarativeBase):
     descripcion = Column('descripcion', VARCHAR(length=None, convert_unicode=False, assert_unicode=None, unicode_error=None, _warn_on_bytestring=False))
 
     #relation definitions
-    relacion_fase = relation('Fase', backref='tipoitems')
+    relacion_fase = relationship('Fase', backref='tipoitems')
 
 
 
@@ -259,7 +259,7 @@ class Atributo(DeclarativeBase):
     tipo = Column('tipo', VARCHAR(length=None, convert_unicode=False, assert_unicode=None, unicode_error=None, _warn_on_bytestring=False), nullable=False)
 
     #relation definitions
-    relacion_tipo_item = relation('TipoItem', backref='atributos')
+    relacion_tipo_item = relationship('TipoItem', backref='atributos')
 
 
 class EstadoFase(DeclarativeBase):

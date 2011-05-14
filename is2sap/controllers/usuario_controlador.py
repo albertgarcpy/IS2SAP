@@ -11,7 +11,7 @@ from webhelpers import paginate
 
 from is2sap.lib.base import BaseController
 from is2sap.model import DBSession, metadata
-from is2sap.model.model import Usuario
+from is2sap.model.model import Usuario, Rol, Rol_Usuario
 from is2sap import model
 from is2sap.controllers.secure import SecureController
 from is2sap.controllers.error import ErrorController
@@ -20,22 +20,20 @@ from is2sap.controllers.error import ErrorController
 from is2sap.widgets.usuario_form import crear_usuario_form, editar_usuario_form
 
 
-
 __all__ = ['UsuarioController']
 
 class UsuarioController(BaseController):
 
     @expose()
     def index(self):
-        """Muestra la pantalla de bienvenida"""
-        redirect("/admin/usuario/listado")        
-
+        """Muestra la pantalla inicial"""
+        return dict(nombre_modelo='Usuario', page='index_usuario')        
 
     @expose('is2sap.templates.usuario.nuevo')
     def nuevo(self, **kw):
         """Despliega el formulario para añadir un nuevo Usuario."""
         tmpl_context.form = crear_usuario_form
-        return dict(nombre_modelo='Usuario', page='nuevo', value=kw)
+        return dict(nombre_modelo='Usuario', page='nuevo_usuario', value=kw)
 
     @validate(crear_usuario_form, error_handler=nuevo)
     @expose()
@@ -59,9 +57,7 @@ class UsuarioController(BaseController):
         usuarios = DBSession.query(Usuario).order_by(Usuario.apellido)
         currentPage = paginate.Page(usuarios, page, items_per_page=5)
         return dict(usuarios=currentPage.items,
-           page='listado', currentPage=currentPage)
-
-
+           page='listado_usuario', currentPage=currentPage)
 
     @expose('is2sap.templates.usuario.editar')
     def editar(self, id_usuario, **kw):
@@ -76,8 +72,7 @@ class UsuarioController(BaseController):
         kw['direccion']=traerUsuario.direccion
         kw['telefono']=traerUsuario.telefono 
         kw['email']=traerUsuario.email
-        return dict(nombre_modelo='Usuario', page='editar', value=kw)
-
+        return dict(nombre_modelo='Usuario', page='editar_usuario', value=kw)
 
     @validate(editar_usuario_form, error_handler=editar)
     @expose()
@@ -94,16 +89,39 @@ class UsuarioController(BaseController):
         DBSession.flush()
         redirect("/admin/usuario/listado")
 
-
     @expose('is2sap.templates.usuario.confirmar_eliminar')
     def confirmar_eliminar(self, id_usuario, **kw):
         """Despliega confirmacion de eliminacion"""
         usuario=DBSession.query(Usuario).get(id_usuario)
         return dict(nombre_modelo='Usuario', page='eliminar_usuario', value=usuario)
 
-
     @expose()
     def delete(self, id_usuario, **kw):
         """Metodo que elimina un registro de la base de datos"""
         DBSession.delete(DBSession.query(Usuario).get(id_usuario))
         redirect("/admin/usuario/listado")
+
+    @expose("is2sap.templates.usuario.agregar_roles")
+    def roles(self,id_usuario, page=1):
+        """Metodo para listar todos los usuarios de la base de datos"""
+        usuario = DBSession.query(Usuario).get(id_usuario)
+        roles = usuario.roles
+        currentPage = paginate.Page(roles, page, items_per_page=5)
+        return dict(roles=currentPage.items,
+           page='agregar_roles', currentPage=currentPage, usuario=usuario)
+
+    @expose()
+    def eliminar_rol_usuario(self, id_rol, id_usuario, **kw):
+        """Metodo que elimina un registro de la base de datos"""
+        rol = DBSession.query(Rol).get(id_rol)
+        usuario = DBSession.query(Usuario).get(id_usuario)
+        rol.usuarios.remove(usuario)
+        redirect("/admin/usuario/roles",id_usuario=id_usuario)
+
+    def permisos(self):
+        """Return a set with all permisos granted to the user."""
+        perms = set()
+        for g in self.roles:
+            perms = perms | set(g.permisos)
+        return perms
+
