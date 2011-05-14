@@ -89,6 +89,12 @@ ul#mainmenu li.loginlogout
     right: 10px;
 }
 
+ul#mainmenu li.menuprincipal
+{
+    float: left;
+    
+}
+
 ul#mainmenu li.loginlogout a:hover
 {
     background: url('../images/menu-item-border.png') left top no-repeat;
