@@ -10,11 +10,11 @@
 
      <head>
 	   <meta content="text/html; charset=UTF-8" http-equiv="content-type" py:replace="''"/>
-	   <title>Editar ${nombre_modelo}</title>
+	   <title>Editar Rol ${value.nombre_rol}</title>
      </head>
 
      <body>
-	   <h1>Editar ${nombre_modelo}</h1>
+	   <h2>Editar Rol <div style="color:green"> ${value.nombre_rol}</div></h2>
 	   ${menu_superior_editar()}
 	   <div py:replace="tmpl_context.form(value)">Form para editar rol</div>
      </body>

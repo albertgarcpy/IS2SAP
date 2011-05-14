@@ -103,7 +103,7 @@ class UsuarioController(BaseController):
 
     @expose("is2sap.templates.usuario.listar_roles")
     def roles(self,id_usuario, page=1):
-        """Metodo para listar todos los usuarios de la base de datos"""
+        """Metodo para listar todos los roles que tiene el usuario seleccionado"""
         usuario = DBSession.query(Usuario).get(id_usuario)
         roles = usuario.roles
         currentPage = paginate.Page(roles, page, items_per_page=5)
@@ -112,7 +112,7 @@ class UsuarioController(BaseController):
 
     @expose("is2sap.templates.usuario.agregar_roles")
     def rolUsuario(self, id_usuario, page=1):
-        """Metodo para listar todos los usuarios de la base de datos"""
+        """Metodo que permite listar los roles que se pueden agregar al usuario seleccionado"""
         usuario = DBSession.query(Usuario).get(id_usuario)
         rolesUsuario = usuario.roles
         roles = DBSession.query(Rol).all()
@@ -127,7 +127,7 @@ class UsuarioController(BaseController):
 
     @expose()
     def agregarRol(self, id_usuario, id_rol):
-        """Metodo para listar todos los usuarios de la base de datos"""
+        """Metodo que realiza la agregacion de un rol al usuario selecccionado"""
         rol = DBSession.query(Rol).get(id_rol)
         usuario = DBSession.query(Usuario).get(id_usuario)
         rol.usuarios.append(usuario)
@@ -135,16 +135,9 @@ class UsuarioController(BaseController):
 
     @expose()
     def eliminar_rol_usuario(self, id_usuario, id_rol, **kw):
-        """Metodo que elimina un registro de la base de datos"""
+        """Metodo que elimina un rol al usuario seleccionado"""
         rol = DBSession.query(Rol).get(id_rol)
         usuario = DBSession.query(Usuario).get(id_usuario)
         rol.usuarios.remove(usuario)
         redirect("/admin/usuario/roles",id_usuario=id_usuario)
-
-    def permisos(self):
-        """Return a set with all permisos granted to the user."""
-        perms = set()
-        for g in self.roles:
-            perms = perms | set(g.permisos)
-        return perms
 

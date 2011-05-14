@@ -10,6 +10,9 @@
                            <a href="${tg.url('/admin/rol/nuevo')}" class="${('', 'active')[defined('page') and page=='nuevo_rol']}">
                               <span class="menu_ar">Nuevo</span>
                            </a>
+                           <a href="${tg.url('/admin')}" class="${('', 'active')[defined('page') and page=='index']}">
+                              <span class="menu_ar">Volver</span>
+                           </a>
                      </span>
                  </li>
 	     </ul>
@@ -39,6 +42,41 @@
                      <span class="menu_r">
                            <a href="${tg.url('/admin/rol/listado')}" class="${('', 'active')[defined('page') and page=='listado_rol']}">
                               <span class="menu_ar">Cancelar</span>
+                           </a>
+                     </span>
+                 </li>
+	     </ul>
+	     <br class="clearit" />
+	 </div>
+     </py:def>
+
+     <py:def function="menu_rol_permiso(id_rol)">  
+	 <div class="menu bubplastic horizontal aqua">
+	     <ul>
+		 <li> 
+                     <span class="menu_r">
+                           <a href="${tg.url('/admin/rol/rolPermiso', id_rol=id_rol)}" 
+                              class="${('', 'active')[defined('page') and page=='agregar_permisos']}">
+                              <span class="menu_ar">Agregar</span>
+                           </a>
+                           <a href="${tg.url('/admin/rol/listado')}" class="${('', 'active')[defined('page') and page=='listado_roles']}">
+                              <span class="menu_ar">Volver</span>
+                           </a>
+                     </span>
+                 </li>
+	     </ul>
+	     <br class="clearit" />
+	 </div>
+     </py:def>
+
+     <py:def function="menu_rol_permiso_agregar(id_rol)">  
+	 <div class="menu bubplastic horizontal aqua">
+	     <ul>
+		 <li> 
+                     <span class="menu_r">
+                           <a href="${tg.url('/admin/rol/permisos',id_rol=id_rol)}" 
+                              class="${('', 'active')[defined('page') and page=='listar_permisos']}">
+                              <span class="menu_ar">Volver</span>
                            </a>
                      </span>
                  </li>

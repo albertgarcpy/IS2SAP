@@ -11,7 +11,7 @@ from webhelpers import paginate
 
 from is2sap.lib.base import BaseController
 from is2sap.model import DBSession, metadata
-from is2sap.model.model import Rol
+from is2sap.model.model import Rol, Permiso
 from is2sap import model
 from is2sap.controllers.secure import SecureController
 from is2sap.controllers.error import ErrorController
@@ -61,8 +61,7 @@ class RolController(BaseController):
         kw['id_rol']=traerRol.id_rol
         kw['nombre_rol']=traerRol.nombre_rol
         kw['descripcion']=traerRol.descripcion
-        return dict(nombre_modelo='Rol', page='editar_rol', value=kw)
-
+        return dict(nombre_modelo='Rol', page='editar_rol', value=traerRol)
 
     @validate(editar_rol_form, error_handler=editar)
     @expose()
@@ -74,16 +73,54 @@ class RolController(BaseController):
         DBSession.flush()
         redirect("/admin/rol/listado")
 
-
     @expose('is2sap.templates.rol.confirmar_eliminar')
     def confirmar_eliminar(self, id_rol, **kw):
         """Despliega confirmacion de eliminacion"""
         rol=DBSession.query(Rol).get(id_rol)
         return dict(nombre_modelo='Rol', page='eliminar_rol', value=rol)
 
-
     @expose()
     def delete(self, id_rol, **kw):
         """Metodo que elimina un registro de la base de datos"""
         DBSession.delete(DBSession.query(Rol).get(id_rol))
         redirect("/admin/rol/listado")
+
+    @expose("is2sap.templates.rol.listar_permisos")
+    def permisos(self, id_rol, page=1):
+        """Metodo para listar todos los permisos que tiene el rol seleccionado"""
+        rol = DBSession.query(Rol).get(id_rol)
+        permisos = rol.permisos
+        currentPage = paginate.Page(permisos, page, items_per_page=5)
+        return dict(permisos=currentPage.items,
+           page='listar_permisos', currentPage=currentPage, rol=rol)
+
+    @expose("is2sap.templates.rol.agregar_permisos")
+    def rolPermiso(self, id_rol, page=1):
+        """Metodo que permite listar los permisos que se pueden agregar al rol seleccionado"""
+        rol = DBSession.query(Rol).get(id_rol)
+        permisosRol = rol.permisos
+        permisos = DBSession.query(Permiso).all()
+        
+        for permiso in permisosRol:
+           permisos.remove(permiso)
+
+        currentPage = paginate.Page(permisos, page, items_per_page=5)
+        return dict(permisos=currentPage.items,
+           page='agregar_permisos', currentPage=currentPage, 
+           id_rol=id_rol, rol=rol)
+
+    @expose()
+    def agregarPermiso(self, id_rol, id_permiso):
+        """Metodo que realiza la agregacion de un permiso al rol selecccionado"""
+        permiso = DBSession.query(Permiso).get(id_permiso)
+        rol = DBSession.query(Rol).get(id_rol)
+        permiso.roles.append(rol)
+        redirect("/admin/rol/permisos",id_rol=id_rol)
+
+    @expose()
+    def eliminar_rol_permiso(self, id_rol, id_permiso, **kw):
+        """Metodo que elimina un permiso al rol seleccionado"""
+        permiso = DBSession.query(Permiso).get(id_permiso)
+        rol = DBSession.query(Rol).get(id_rol)
+        permiso.roles.remove(rol)
+        redirect("/admin/rol/permisos",id_rol=id_rol)
