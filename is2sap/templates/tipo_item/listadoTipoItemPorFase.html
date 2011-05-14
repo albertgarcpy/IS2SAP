@@ -30,7 +30,7 @@ ${menu_superior(idFase, idProyectoFase)}
             <td width="150">${tipoitem.nombre}</td>
             <td>${tipoitem.descripcion}</td>
             <td width="105"><a href="${tg.url('/admin/tipo_item/editar', id_tipo_item=tipoitem.id_tipo_item)}"><input class="alignEditar" name="editar" type="button" 		value="" /></a>
-			<a href="${tg.url('/admin/fase/confirmar_eliminar', id_tipo_item=tipoitem.id_tipo_item)}"> <input class="alignEliminar" name="eliminar" type="button" value=""/></a>
+			<a href="${tg.url('/admin/tipo_item/confirmar_eliminar', id_tipo_item=tipoitem.id_tipo_item)}"> <input class="alignEliminar" name="eliminar" type="button" value=""/></a>
 
         </td>
         </tr>

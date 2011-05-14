@@ -57,6 +57,26 @@ def bootstrap(command, conf, vars):
         q.descripcion = u'Este permiso dara un derecho de edicion al portador'
         q.roles.append(h)
         model.DBSession.add(q)
+
+        ef = model.EstadoFase()
+        ef.nombre_estado = 'Inicial'
+        model.DBSession.add(ef)
+
+        ef = model.EstadoFase()
+        ef.nombre_estado = 'Desarrollo'
+        model.DBSession.add(ef)
+
+        ef = model.EstadoFase()
+        ef.nombre_estado = 'Con Linea Base Parciales'
+        model.DBSession.add(ef)
+
+        ef = model.EstadoFase()
+        ef.nombre_estado = 'Con Lineas Bases'
+        model.DBSession.add(ef)
+
+        ef = model.EstadoFase()
+        ef.nombre_estado = 'Finalizado'
+        model.DBSession.add(ef)
     
         model.DBSession.flush()
         transaction.commit()

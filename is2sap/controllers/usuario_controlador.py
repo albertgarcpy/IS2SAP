@@ -101,17 +101,40 @@ class UsuarioController(BaseController):
         DBSession.delete(DBSession.query(Usuario).get(id_usuario))
         redirect("/admin/usuario/listado")
 
-    @expose("is2sap.templates.usuario.agregar_roles")
+    @expose("is2sap.templates.usuario.listar_roles")
     def roles(self,id_usuario, page=1):
         """Metodo para listar todos los usuarios de la base de datos"""
         usuario = DBSession.query(Usuario).get(id_usuario)
         roles = usuario.roles
         currentPage = paginate.Page(roles, page, items_per_page=5)
         return dict(roles=currentPage.items,
-           page='agregar_roles', currentPage=currentPage, usuario=usuario)
+           page='listar_roles', currentPage=currentPage, usuario=usuario)
+
+    @expose("is2sap.templates.usuario.agregar_roles")
+    def rolUsuario(self, id_usuario, page=1):
+        """Metodo para listar todos los usuarios de la base de datos"""
+        usuario = DBSession.query(Usuario).get(id_usuario)
+        rolesUsuario = usuario.roles
+        roles = DBSession.query(Rol).all()
+        
+        for rol in rolesUsuario:
+           roles.remove(rol)
+
+        currentPage = paginate.Page(roles, page, items_per_page=5)
+        return dict(roles=currentPage.items,
+           page='agregar_roles', currentPage=currentPage, 
+           id_usuario=id_usuario, usuario=usuario)
 
     @expose()
-    def eliminar_rol_usuario(self, id_rol, id_usuario, **kw):
+    def agregarRol(self, id_usuario, id_rol):
+        """Metodo para listar todos los usuarios de la base de datos"""
+        rol = DBSession.query(Rol).get(id_rol)
+        usuario = DBSession.query(Usuario).get(id_usuario)
+        rol.usuarios.append(usuario)
+        redirect("/admin/usuario/roles",id_usuario=id_usuario)
+
+    @expose()
+    def eliminar_rol_usuario(self, id_usuario, id_rol, **kw):
         """Metodo que elimina un registro de la base de datos"""
         rol = DBSession.query(Rol).get(id_rol)
         usuario = DBSession.query(Usuario).get(id_usuario)

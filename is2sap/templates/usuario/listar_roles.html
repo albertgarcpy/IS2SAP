@@ -10,13 +10,13 @@
 
     <head>
           <meta content="text/html; charset=UTF-8" http-equiv="content-type" py:replace="''"/>
-          <title>Opciones de Roles para ${usuario.nombre_usuario}</title>
+          <title>Lista de Roles de ${usuario.nombre_usuario}</title>
     </head>
 
     <body>
 
-            <h2>Opciones de Roles para <div style="color:green"> ${usuario.nombre_usuario}</div></h2>	
-            ${menu_rol_usuario_agregar(usuario.id_usuario)}
+            <h2>Roles de <div style="color:green"> ${usuario.nombre_usuario}</div></h2>
+            ${menu_rol_usuario(usuario.id_usuario)}
 	    <table border="1">
 		<tr style="color: purple; font-size: 11pt" align="center" >
 		    <th>ID</th>
@@ -32,8 +32,8 @@
 			    <td>${rol.descripcion}</td>
 
 			    <td> 
-				 <a href="${tg.url('/admin/usuario/agregarRol', id_usuario=id_usuario, id_rol=rol.id_rol)}">
-				    <input class="alignAgregarRolesUsuario" name="agregarRol" type="button" value=""/>
+				 <a href="${tg.url('/admin/usuario/eliminar_rol_usuario', id_usuario=usuario.id_usuario, id_rol=rol.id_rol)}">
+				    <input class="alignEliminar" name="eliminar" type="button" value=""/>
 				 </a>
 			    </td>
 
