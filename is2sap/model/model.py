@@ -271,6 +271,36 @@ class EstadoFase(DeclarativeBase):
 
     #relation definitions
 
+#class LineaBase(DeclarativeBase):
+   # __tablename__ = 'Linea_Base'
 
+    #column definitions
+    #descripcion = Column(u'descripcion', VARCHAR(length=None, convert_unicode=False, assert_unicode=None, unicode_error=None, _warn_on_bytestring=False))
+    #estado = Column(u'estado', VARCHAR(length=None, convert_unicode=False, assert_unicode=None, unicode_error=None, _warn_on_bytestring=False), nullable=False)
+    #id_fase = Column(u'id_fase', INTEGER(), ForeignKey('Fase.id_fase'), nullable=False)
+    #id_linea_base = Column(u'id_linea_base', INTEGER(), primary_key=True, nullable=False)
+    #version = Column(u'version', INTEGER(), nullable=False)
+
+    #relation definitions
+
+#class Item(DeclarativeBase):
+    #__table__ = 'Item'
+
+    #column definitions
+    #id_item = Column(u'id_item', INTEGER(), primary_key=True, nullable=False)
+    #id_tipo_item = Column(u'id_tipo_item', INTEGER(), ForeignKey('Tipo_Item.id_tipo_item'), nullable=False)
+    #id_linea_base = Column(u'id_linea_base', INTEGER(), ForeignKey('Linea_Base.id_linea_base'))
+    #numero = Column(u'numero', INTEGER(), nullable=False)
+    #descripcion = Column(u'descripcion', VARCHAR(length=None, convert_unicode=False, assert_unicode=None, unicode_error=None, _warn_on_bytestring=False), nullable=False)
+    #complejidad = Column(u'complejidad', VARCHAR(length=None, convert_unicode=False, assert_unicode=None, unicode_error=None, _warn_on_bytestring=False), nullable=False)
+    #prioridad = Column(u'prioridad', VARCHAR(length=None, convert_unicode=False, assert_unicode=None, unicode_error=None, _warn_on_bytestring=False), nullable=False)
+    #estado = Column(u'estado', VARCHAR(length=None, convert_unicode=False, assert_unicode=None, unicode_error=None, _warn_on_bytestring=False), nullable=False)
+    #archivo_externo = Column(u'archivo_externo', VARCHAR(length=None, convert_unicode=False, assert_unicode=None, unicode_error=None, _warn_on_bytestring=False))
+    #version = Column(u'version', VARCHAR(length=None, convert_unicode=False, assert_unicode=None, unicode_error=None, _warn_on_bytestring=False), nullable=False)
+    #observacion = Column(u'observacion', VARCHAR(length=None, convert_unicode=False, assert_unicode=None, unicode_error=None, _warn_on_bytestring=False))
+    #fecha_modificacion = Column(u'fecha_modificacion', DATE(), nullable=False)
+    #vivo = Column(u'vivo', BOOLEAN(create_constraint=True, name=None), nullable=False)
+
+    #relation definitions
 
 
