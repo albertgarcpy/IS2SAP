@@ -248,10 +248,22 @@ form.loginfields input#submit
 	width: 50px
 }
 .alignAgregarPermisos {
-	background: #CCFFCC url('../images/roles.png') top center no-repeat;
+	background: #CCFFCC url('../images/usuarioPermiso.jpeg') top center no-repeat;
 	width: 50px
 }
 .alignAgregarPermisosRol {
+	background: #CCFFCC url('../images/add1.png') top center no-repeat;
+	width: 50px
+}
+.alignAgregarUsuarios {
+	background: #CCFFCC url('../images/usuarios.jpeg') top center no-repeat;
+	width: 50px
+}
+.alignAgregarRolesProyecto {
+	background: #CCFFCC url('../images/add1.png') top center no-repeat;
+	width: 50px
+}
+.alignAgregarUsuariosProyecto {
 	background: #CCFFCC url('../images/add1.png') top center no-repeat;
 	width: 50px
 }

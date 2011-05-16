@@ -6,39 +6,38 @@
       xmlns:xi="http://www.w3.org/2001/XInclude">
 
       <xi:include href="master.html"/>
-      <xi:include href="menuPermiso.html"/>
+      <xi:include href="menuProyecto.html"/>
 
     <head>
           <meta content="text/html; charset=UTF-8" http-equiv="content-type" py:replace="''"/>
-          <title>Lista de Permisos</title>
+          <title>Lista de Usuarios de ${proyecto.nombre}</title>
     </head>
 
     <body>
 
-            <h2>Lista de <div style="color:green">Permisos</div></h2>
-            ${menu_superior()}
-
+            <h2>Usuarios del Proyecto <div style="color:green"> ${proyecto.nombre}</div></h2>
+            ${menu_usuario_proyecto(proyecto.id_proyecto)}
 	    <table border="1">
 		<tr style="color: purple; font-size: 11pt" align="center" >
 		    <th>ID</th>
-		    <th>Nombre</th>
-		    <th>Descripcion</th>
-		    <th>Acciones</th>		
+		    <th>Nombre y Apellido</th>
+		    <th>Nombre de Usuario</th>
+		    <th>Accion</th>		
 		</tr>
 
-		<py:for each="permiso in permisos">
+		<py:for each="usuario in usuarios">
 			<tr>
-			    <td>${permiso.id_permiso}</td>
-			    <td>${permiso.nombre_permiso}</td>
-			    <td>${permiso.descripcion}</td>
+			    <td>${usuario.id_usuario}</td>
+			    <td>${usuario.nombre + ' ' + usuario.apellido}</td>
+			    <td>${usuario.nombre_usuario}</td>
+
 			    <td> 
-                                 <a href="${tg.url('/admin/permiso/editar', id_permiso=permiso.id_permiso)}"> 
-				    <input class="alignEditar" name="editar" type="button" value="" />
-				 </a>
-				 <a href="${tg.url('/admin/permiso/confirmar_eliminar', id_permiso=permiso.id_permiso)}">
+				 <a href="${tg.url('/admin/proyecto/eliminar_usuario_proyecto', 
+                                         id_proyecto=proyecto.id_proyecto, id_usuario=usuario.id_usuario)}">
 				    <input class="alignEliminar" name="eliminar" type="button" value=""/>
 				 </a>
 			    </td>
+
 			</tr>
 		</py:for>
 	    </table>

@@ -58,13 +58,15 @@ Proyecto_Usuario = Table('Proyecto_Usuario', metadata,
         onupdate="CASCADE", ondelete="CASCADE" ), primary_key=True, nullable=False),
 )
 
-# Relacion entre mucho a mucho Proyecto Rol
+##----------------------------- Tabla de Asociacion "Proyecto_Rol"-----------------------------------
 Proyecto_Rol = Table('Proyecto_Rol', metadata,
     Column('id_proyecto', INTEGER(), ForeignKey('Proyecto.id_proyecto',
         onupdate="CASCADE", ondelete="CASCADE"), primary_key=True, nullable=False),
     Column('id_rol', INTEGER(), ForeignKey('Rol.id_rol',
         onupdate="CASCADE", ondelete="CASCADE"), primary_key=True, nullable=False)
 )
+
+
 
 Fase = Table('Fase', metadata,
     Column('id_fase', INTEGER(), primary_key=True, nullable=False),
@@ -92,6 +94,8 @@ unicode_error=None, _warn_on_bytestring=False), unique=True, nullable=False)
     telefono = Column(u'telefono', VARCHAR(length=None, convert_unicode=False, assert_unicode=None, unicode_error=None, _warn_on_bytestring=False))
     email = Column(u'e-mail', VARCHAR(length=None, convert_unicode=False, assert_unicode=None, unicode_error=None, _warn_on_bytestring=False))
 
+
+    proyectos = relationship('Proyecto', secondary=Proyecto_Usuario, backref='usuarios')
 
     #Special methods
     def __repr__(self):
@@ -174,7 +178,7 @@ class Rol(DeclarativeBase):
 
     #Relations
     usuarios = relationship('Usuario', secondary=Rol_Usuario, backref='roles')
-    #permisos = relation('Permiso', secondary=Rol_Permiso, backref='permisos')
+    proyectos = relationship('Proyecto', secondary=Proyecto_Rol, backref='roles')
 
     #Special methods
     def __repr__(self):
@@ -218,9 +222,6 @@ class Proyecto(DeclarativeBase):
     fecha = Column('fecha', DATE(), nullable=False)
     iniciado = Column('iniciado', BOOLEAN(create_constraint=True, name=None), nullable=False)
 
-    #Tiene una relacion con la tabla Usuario
-    relacion_usuario = relationship('Usuario', secondary=Proyecto_Usuario, backref='proyectos')
-
 
 ##----------------------------- Clase "Fase"-----------------------------------
 class Fase(DeclarativeBase):
@@ -232,7 +233,7 @@ class Fase(DeclarativeBase):
     relacion_proyecto = relationship('Proyecto', backref='fases')
 
 
-
+##----------------------------- Clase "TipoItem"-----------------------------------
 class TipoItem(DeclarativeBase):
     __tablename__ = 'Tipo_Item'
 
@@ -246,7 +247,7 @@ class TipoItem(DeclarativeBase):
     relacion_fase = relationship('Fase', backref='tipoitems')
 
 
-
+##----------------------------- Clase "Atributo"-----------------------------------
 class Atributo(DeclarativeBase):
 
     __tablename__ = 'Atributos'
@@ -261,7 +262,7 @@ class Atributo(DeclarativeBase):
     #relation definitions
     relacion_tipo_item = relationship('TipoItem', backref='atributos')
 
-
+##----------------------------- Clase "EstadoFase"-----------------------------------
 class EstadoFase(DeclarativeBase):
     __tablename__ = 'Estado_Fase'
 
