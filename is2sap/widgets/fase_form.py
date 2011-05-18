@@ -6,6 +6,7 @@ from tw.forms.validators import *
 from is2sap.widgets.mi_validador.mi_validador import *
 
 
+
 class FaseForm(TableForm):
 
     hover_help = True
@@ -14,19 +15,18 @@ class FaseForm(TableForm):
     fields = [
         HiddenField('id_fase', label_text='Id',
             help_text='Identificador de la Fase'),
-        TextField('id_estado_fase', validator=NotEmpty, label_text='Estado',
+        HiddenField('id_estado_fase', validator=NotEmpty, label_text='Estado',
             help_text='Identificador del estado de la fase.'),
-        TextField('id_proyecto', validator=NotEmpty, label_text='Proyecto',
+        HiddenField('id_proyecto', validator=NotEmpty, label_text='Proyecto',
             help_text='Identificador del Proyecto al que pertenece la fase'),
+        TextField('numero_fase', size=3, label_text='Numero de Fase',
+            help_text='Numero de fase asignado por el sistema.'),
         Spacer(),
         TextField('nombre', validator=NotEmpty, label_text='Nombre',
             help_text='Introduzca un nombre para la fase.'),        
         Spacer(),
-        TextArea('descripcion', attrs=dict(rows=3, cols=25), label_text='Descripcion',
-            help_text='Introduzca una descripcion de la fase'),        
-        Spacer(),
-        TextField('numero_fase', label_text='Numero de Fase',
-            help_text='Numero de fase asignado por el sistema.')]
+        TextArea('descripcion', label_text='Descripcion',
+            help_text='Introduzca una descripcion de la fase')]
 
     submit_text = 'Guardar Fase'
 
@@ -36,21 +36,20 @@ class EditFaseForm(TableForm):
     show_errors = True
 
     fields = [
-        HiddenField('id_fase', validator=NotEmpty, label_text='Id',
+        HiddenField('id_fase', label_text='Id',
             help_text='Identificador de la Fase'),
-        TextField('id_estado_fase', validator=NotEmpty, label_text='Id Fase',
+        HiddenField('id_estado_fase', validator=NotEmpty, label_text='Estado',
             help_text='Identificador del estado de la fase.'),
-        TextField('id_proyecto', validator=NotEmpty, label_text='Proyecto',
+        HiddenField('id_proyecto', validator=NotEmpty, label_text='Proyecto',
             help_text='Identificador del Proyecto al que pertenece la fase'),
+        TextField('numero_fase', size=3, label_text='Numero de Fase',
+            help_text='Numero de fase asignado por el sistema.'),
         Spacer(),
         TextField('nombre', validator=NotEmpty, label_text='Nombre',
             help_text='Introduzca un nombre para la fase.'),        
         Spacer(),
-        TextArea('descripcion', attrs=dict(rows=3, cols=25), label_text='Descripcion',
-            help_text='Introduzca una descripcion de la fase'),        
-        Spacer(),
-        TextField('numero_fase', label_text='Numero de Fase',
-            help_text='Numero de fase asignado por el sistema.')]
+        TextArea('descripcion', label_text='Descripcion',
+            help_text='Introduzca una descripcion de la fase')]
 
     submit_text = 'Guardar Fase'
     

@@ -66,14 +66,16 @@ class ProyectoController(BaseController):
     @expose('is2sap.templates.proyecto.editar')
     def editar(self, id_proyecto, **kw):
         """Metodo que rellena el formulario para editar los datos de un Proyecto"""
-        tmpl_context.form = editar_proyecto_form
         traerProyecto=DBSession.query(Proyecto).get(id_proyecto)
+        tmpl_context.form = editar_proyecto_form            
         kw['id_proyecto']=traerProyecto.id_proyecto
         kw['id_usuario']=traerProyecto.id_usuario
         kw['nombre']=traerProyecto.nombre
         kw['descripcion']=traerProyecto.descripcion
         kw['fecha']=traerProyecto.fecha
         kw['iniciado']=traerProyecto.iniciado
+        if traerProyecto.iniciado:
+            flash("El proyecto no puede modificarse porque ya se encuentra iniciado.")
         return dict(nombre_modelo='Proyecto', page='editar_proyecto', value=kw)
 
 

@@ -14,9 +14,8 @@ class TipoItemForm(TableForm):
     fields = [
         HiddenField('id_tipo_item', label_text='Id',
             help_text='Id del tipo_item'),
-        TextField('id_fase', label_text='Fase',
+        HiddenField('id_fase', label_text='Id de Fase',
             help_text='Introduzca un id de fase'),
-        Spacer(),
         TextField('nombre', validator=NotEmpty, label_text='Nombre',
             help_text='Introduzca el nombre del tipo de Item correcto'),
         Spacer(),
@@ -33,9 +32,8 @@ class EditTipoItemForm(TableForm):
     fields = [
         HiddenField('id_tipo_item', label_text='Id',
             help_text='Id del tipo_item'),
-        TextField('id_fase', label_text='Fase',
+        HiddenField('id_fase', label_text='Id de Fase',
             help_text='Introduzca un id de fase'),
-        Spacer(),
         TextField('nombre', validator=NotEmpty, label_text='Nombre',
             help_text='Introduzca el nombre del tipo de Item correcto'),
         Spacer(),

@@ -36,14 +36,14 @@ class TipoItemController(BaseController):
     def nuevo(self, **kw):
         """Despliega el formulario para añadir un nuevo tipo_item."""
         tmpl_context.form = crear_tipo_item_form
-        return dict(nombre_modelo='TipoItem', page='nuevo', value=kw)
+        return dict(nombre_modelo='Tipo Item', page='nuevo', value=kw)
 
     @expose('is2sap.templates.tipo_item.nuevo')
     def nuevoDesdeFase(self, id_fase, **kw):
         """Despliega el formulario para añadir un Nuevo Tipo de Item a la fase de un proyecto."""
         tmpl_context.form = crear_tipo_item_form
         kw['id_fase']=id_fase        
-        return dict(nombre_modelo='Fase', idFase=id_fase, page='nuevo', value=kw)
+        return dict(nombre_modelo='Tipo Item', idFase=id_fase, page='nuevo', value=kw)
 
     @validate(crear_tipo_item_form, error_handler=nuevoDesdeFase)
     @expose()
@@ -88,7 +88,7 @@ class TipoItemController(BaseController):
         kw['descripcion']=traertipo_item.descripcion
         kw['id_fase']=traertipo_item.id_fase
         
-        return dict(nombre_modelo='Tipo de Item', page='editar', value=kw)
+        return dict(nombre_modelo='Tipo Item', page='editar', value=kw)
 
 
     @validate(editar_tipo_item_form, error_handler=editar)
@@ -107,7 +107,7 @@ class TipoItemController(BaseController):
     def confirmar_eliminar(self, id_tipo_item, **kw):
         """Despliega confirmacion de eliminacion"""
         tipo_item = DBSession.query(TipoItem).get(id_tipo_item)
-        return dict(nombre_modelo='TipoItem', page='editar', value=tipo_item)
+        return dict(nombre_modelo='Tipo Item', page='editar', value=tipo_item)
 
 
     @expose()

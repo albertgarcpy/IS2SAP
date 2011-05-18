@@ -10,7 +10,7 @@ from tg import tmpl_context, validate
 from webhelpers import paginate
 
 from sqlalchemy.orm import contains_eager
-
+from sqlalchemy import func
 
 from is2sap.lib.base import BaseController
 from is2sap.model import DBSession, metadata
@@ -44,8 +44,10 @@ class FaseController(BaseController):
     def nuevoDesdeProyecto(self, id_proyecto, **kw):
         """Despliega el formulario para añadir una fase al proyecto."""
         tmpl_context.form = crear_fase_form
+        maxnumerofase=DBSession.query(func.max(Fase.numero_fase)).filter_by(id_proyecto=id_proyecto).first()
         kw['id_proyecto']=id_proyecto
         kw['id_estado_fase']=1
+        kw['numero_fase']=maxnumerofase[0] + 1
         return dict(nombre_modelo='Fase', idProyecto=id_proyecto, page='nuevo', value=kw)
 
 

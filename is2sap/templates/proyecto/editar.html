@@ -15,7 +15,9 @@
 <body>
    <h1>Editar ${nombre_modelo}</h1>
 ${menu_superior_editar()}
+<div py:if="not value.iniciado">
    <div py:replace="tmpl_context.form(value)">Input Form</div>
+</div>
 
 <!--
    <form id="crear_usuario_form" action="create" method="post" class="required movieform">

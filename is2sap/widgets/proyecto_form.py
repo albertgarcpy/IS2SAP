@@ -1,7 +1,7 @@
 """Usuario Form"""
 
-from tw.forms import TableForm, Spacer, TextField, PasswordField, CalendarDatePicker
-from tw.forms.fields import Button, SubmitButton, HiddenField, CheckBox, TextArea
+from tw.forms import TableForm, Spacer, TextField, PasswordField, CalendarDatePicker, TextArea
+from tw.forms.fields import Button, SubmitButton, HiddenField, CheckBox
 from tw.forms.validators import *
 from is2sap.widgets.mi_validador.mi_validador import *
 
@@ -20,7 +20,7 @@ class ProyectoForm(TableForm):
         TextField('nombre', validator=NotEmpty, label_text='Nombre',
             help_text='Introduzca su Nombre completo.'),
         Spacer(),
-        TextArea('descripcion', attrs=dict(rows=3, cols=25), label_text='Descripcion',
+        TextArea('descripcion', label_text='Descripcion',
             help_text='Introduzca una descripcion del Proyecto'),        
         Spacer(),
         CalendarDatePicker('fecha',
@@ -42,10 +42,10 @@ class EditProyectoForm(TableForm):
         HiddenField('id_usuario', label_text='id_usuario',
             help_text='Id del Usuario.'),
         Spacer(),
-        TextField('nombre', validator=NotEmpty, label_text='Nombre',
+        TextField('nombre', label_text='Nombre',
             help_text='Introduzca su Nombre completo.'),
         Spacer(),
-        TextArea('descripcion', attrs=dict(rows=3, cols=25), label_text='Descripcion',
+        TextArea('descripcion', label_text='Descripcion',
             help_text='Introduzca una descripcion del Proyecto'),        
         Spacer(),
         CalendarDatePicker('fecha',

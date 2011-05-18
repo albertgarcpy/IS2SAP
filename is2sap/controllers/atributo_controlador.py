@@ -33,7 +33,7 @@ class AtributoController(BaseController):
 
     @expose('is2sap.templates.atributo.nuevo')
     def nuevo(self, **kw):
-        """Despliega el formulario para añadir un nuevo Usuario."""
+        """Despliega el formulario para añadir un nuevo atributo."""
         tmpl_context.form = crear_atributo_form
         return dict(nombre_modelo='Atributo', page='nuevo', value=kw)
 
