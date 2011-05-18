@@ -6,20 +6,15 @@
 
   <xi:include href="master.html" />
   <xi:include href="menusatributo.html" />
-
 <head>
   <meta content="text/html; charset=UTF-8" http-equiv="content-type" py:replace="''"/>
-  <title>Editar ${nombre_modelo}</title>
+  <title>Nuevo ${nombre_modelo}</title>
 </head>
 
 <body>
-   <h1>Editar ${nombre_modelo}</h1>
-${menu_superior_editar(value.id_tipo_item)}
-   <div py:replace="tmpl_context.form(value)">Input Form</div>
+   <h1>Nuevo ${nombre_modelo}</h1>
+${menu_superior_nuevo(idTipoItem)}
 
-<!--
-   <form id="crear_usuario_form" action="create" method="post" class="required movieform">
-   </form>
--->
+   <div py:replace="tmpl_context.form(value)">Input Form</div>
 </body>
 </html>

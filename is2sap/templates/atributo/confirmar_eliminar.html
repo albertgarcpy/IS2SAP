@@ -33,8 +33,8 @@
 
 <div class="menu bubplastic horizontal aqua">
 	<ul>
-		<li><span class="menu_r"><a href="${tg.url('/admin/atributo/delete', id_atributo=value.id_atributo)}"><span class="menu_ar">Eliminar</span></a></span></li>
-		<li><span class="menu_r"><a href="${tg.url('/admin/atributo/listado')}"><span class="menu_ar">Cancelar</span></a></span></li>
+		<li><span class="menu_r"><a href="${tg.url('/admin/atributo/delete', id_atributo=value.id_atributo, id_tipo_item=value.id_tipo_item)}"><span class="menu_ar">Eliminar</span></a></span></li>
+		<li><span class="menu_r"><a href="${tg.url('/admin/atributo/listadoAtributosPorTipoItem', id_tipo_item=value.id_tipo_item)}"><span class="menu_ar">Cancelar</span></a></span></li>
 	</ul>
 	<br class="clearit" />
 </div>
