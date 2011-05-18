@@ -1,27 +1,22 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
                       "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:py="http://genshi.edgewall.org/"
       xmlns:xi="http://www.w3.org/2001/XInclude">
 
-  <xi:include href="master.html" />
-  <xi:include href="menuProyecto.html" />
-
+      <xi:include href="master.html"/>
+      <xi:include href="menuProyecto.html"/>
 <head>
-  <meta content="text/html; charset=UTF-8" http-equiv="content-type" py:replace="''"/>
-  <title>Editar ${nombre_modelo}</title>
+	<meta content="text/html; charset=UTF-8" http-equiv="content-type" py:replace="''"/>
+	<title>Editar Proyecto ${value.nombre}</title>
 </head>
 
 <body>
-   <h1>Editar ${nombre_modelo}</h1>
-${menu_superior_editar()}
-<div py:if="not value.iniciado">
-   <div py:replace="tmpl_context.form(value)">Input Form</div>
-</div>
-
-<!--
-   <form id="crear_usuario_form" action="create" method="post" class="required movieform">
-   </form>
--->
+   <h2>Editar Proyecto <div style="color:green"> ${value.nombre}</div></h2>
+	   ${menu_superior_editar()}
+	<div py:if="not value.iniciado">
+	   <div py:replace="tmpl_context.form(value)">Form para editar proyecto</div>
+	</div>
 </body>
 </html>

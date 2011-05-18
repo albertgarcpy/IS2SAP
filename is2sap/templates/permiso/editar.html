@@ -10,11 +10,11 @@
 
      <head>
 	   <meta content="text/html; charset=UTF-8" http-equiv="content-type" py:replace="''"/>
-	   <title>Editar ${nombre_modelo}</title>
+	   <title>Editar Permiso ${value.nombre_permiso}</title>
      </head>
 
      <body>
-	   <h1>Editar ${nombre_modelo}</h1>
+	   <h2>Editar Permiso <div style="color:green"> ${value.nombre_permiso}</div></h2>
 	   ${menu_superior_editar()}
 	   <div py:replace="tmpl_context.form(value)">Form para editar permiso</div>
      </body>
