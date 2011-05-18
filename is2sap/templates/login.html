@@ -8,17 +8,17 @@
 
 <head>
 <meta content="text/html; charset=UTF-8" http-equiv="content-type" py:replace="''"/>
-<title>Login Form</title>
+<title>Iniciar Sesion</title>
 </head>
 
 <body>
 <div id="loginform">
 <form action="${tg.url('/login_handler', params=dict(came_from=came_from.encode('utf-8'), __logins=login_counter.encode('utf-8')))}" method="post" accept-charset="UTF-8" class="loginfields">
-    <h2><span>Login</span></h2>
-    <label for="loginusername">Username:</label><input type="text" id="loginusername" name="login" class="text"></input><br/>
-    <label for="loginpassword">Password:</label><input type="password" id="loginpassword" name="password" class="text"></input>
+    <h2><span>Iniciar Sesion</span></h2>
+    <label for="loginusername">Usuario:</label><input type="text" id="loginusername" name="login" class="text"></input><br/>
+    <label for="loginpassword">Contraseña:</label><input type="password" id="loginpassword" name="password" class="text"></input>
     <label id="labelremember" for="loginremember">recordarme</label><input type="checkbox" id="loginremember" name="remember" value="2252000"/>
-    <input type="submit" id="submit" value="Login" />
+    <input type="submit" id="submit" value="Iniciar" />
 </form>
 </div>
 </body>
