@@ -12,20 +12,18 @@
 </head>
 
 <body>
-<h1>Eliminar Linea Base</h1>
-<h3>Desea eliminar el registro?</h3>
+<h1>Aprobar Linea Base</h1>
+<h3>Desea aprobar la linea base?</h3>
 <table border="1">        
 <tr style="color: purple; font-size: 11pt" >
           <th>ID</th>
           <th>Descripcion</th>
-          <th>Estado</th>
           <th>Fase</th>
           <th>Version</th>		 	  
           </tr>
         <tr>
             <td>${value.id_linea_base}</td>
             <td>${value.descripcion}</td>
-            <td>${value.estado}</td>
             <td>${value.id_fase}</td>
             <td>${value.version}</td>
         </tr>        
@@ -33,8 +31,8 @@
 
 <div class="menu bubplastic horizontal aqua">
 	<ul>
-		<li><span class="menu_r"><a href="${tg.url('/admin/linea_base/delete', id_linea_base=value.id_linea_base)}"><span class="menu_ar">Eliminar</span></a></span></li>
-		<li><span class="menu_r"><a href="${tg.url('/admin/linea_base/listado')}"><span class="menu_ar">Cancelar</span></a></span></li>
+		<li><span class="menu_r"><a href="${tg.url('/admin/linea_base/aprobaciones', id_linea_base=value.id_linea_base)}"><span class="menu_ar">Aprobar</span></a></span></li>
+		<li><span class="menu_r"><a href="${tg.url('/admin/linea_base/aprobaciones')}"><span class="menu_ar">Cancelar</span></a></span></li>
 	</ul>
 	<br class="clearit" />
 </div>
