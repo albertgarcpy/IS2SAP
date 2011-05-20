@@ -91,7 +91,7 @@ class ProyectoController(BaseController):
     def confirmar_eliminar(self, id_proyecto, **kw):
         """Despliega confirmacion de eliminacion"""
         proyecto=DBSession.query(Proyecto).get(id_proyecto)
-        return dict(nombre_modelo='Proyecto', page='eliminar_proyecto', value=proyecto)
+        return dict(nombre_modelo='Proyecto', page='eliminar', value=proyecto)
 
     @expose()
     def delete(self, id_proyecto, **kw):

@@ -1,0 +1,52 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:py="http://genshi.edgewall.org/"
+      xmlns:xi="http://www.w3.org/2001/XInclude">
+
+      <xi:include href="master.html" />
+      <xi:include href="menuProyecto.html" />
+
+    <head>
+          <meta content="text/html; charset=UTF-8" http-equiv="content-type" py:replace="''"/>
+          <title>Lista de Proyectos</title>
+    </head>
+
+    <body>
+           <h2>Lista de <div style="color:green">Proyectos</div></h2>
+           ${menu_superior()}
+
+           <table border="1" width="100%">
+	         <tr style="color: purple; font-size: 11pt" align="center">
+                    <th>ID</th>
+                    <th>Nombre</th>
+                    
+                 </tr>
+
+                 <py:for each="proyecto in proyectos">
+                    <tr>
+                         <td width="25">${proyecto.id_proyecto}</td>
+                         <td>${proyecto.nombre}</td>
+                                    
+                         <td width="200">
+                             
+			     <a href="${tg.url('/admin/proyecto/confirmar_eliminar', id_proyecto=proyecto.id_proyecto)}">
+                                <input class="alignEliminar" name="eliminar" type="button" value=""/>
+                             </a>
+		             
+                         </td>
+                         
+
+                    </tr>
+                 </py:for>
+            </table>
+
+	    <p class="pagelist">
+	       <a class="prevPage" href="/list?page=${currentPage.previous_page}">&nbsp;</a>
+		  ${currentPage.pager(format='~3~', page_param='page', show_if_single_page=True)}
+	       <a class="nextPage" href="/list?page=${currentPage.next_page}">&nbsp;</a>
+	    </p>
+
+    </body>
+</html>
