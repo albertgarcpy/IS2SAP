@@ -31,7 +31,7 @@ ${menu_superior()}
             <td>${linea_base.estado}</td>
             <td>${linea_base.id_fase}</td>
             <td>${linea_base.version}</td>
-            <td><a href="${tg.url('/admin/linea_base/editar', id_linea_base=linea_base.id_linea_base)}"> <input class="alignAprobar" name="aprobar" type="button" value="" /></a>			<a href="${tg.url('/admin/linea_base/confirmar_eliminar', id_linea_base=linea_base.id_linea_base)}"> <input class="alignRomper" name="desaprobar" type="button" value=""/></a></td>
+            <td><a href="${tg.url('/admin/linea_base/confirmar_aprobar', id_linea_base=linea_base.id_linea_base)}"> <input class="alignAprobar" name="aprobar" type="button" value="" /></a>			<a href="${tg.url('/admin/linea_base/confirmar_romper', id_linea_base=linea_base.id_linea_base)}"> <input class="alignRomper" name="desaprobar" type="button" value=""/></a></td>
 
         </tr>
         </py:for>

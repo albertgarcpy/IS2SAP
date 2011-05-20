@@ -35,7 +35,7 @@
 		  <li>
                       <span class="menu_r">
                            <a href="${tg.url('/admin/proyecto/iniciar', id_proyecto=value.id_proyecto)}">
-                              <span class="menu_ar">Eliminar</span>
+                              <span class="menu_ar">Iniciar</span>
                            </a>
                       </span>
                   </li>

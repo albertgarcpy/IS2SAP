@@ -14,7 +14,7 @@
 
 <body>
   <h2>Proyectos a <div style="color:green">Iniciar</div></h2>
-           ${menu_superior()}
+           ${menu_superior_iniciar()}
     <table border="1">
 		  <tr style="color: purple; font-size: 11pt" align="center" >
           <th>ID</th>
@@ -28,7 +28,7 @@
             <td>${proyecto.nombre}</td>
             
             <td ><a href="${tg.url('/admin/proyecto/confirmar_iniciar', id_proyecto=proyecto.id_proyecto)}">
-                                <input class="alignEliminar" name="eliminar" type="button"  value="" />
+                                <input class="alignIniciar" name="iniciar" type="button"  value="" />
                              </a>
             </td>
 

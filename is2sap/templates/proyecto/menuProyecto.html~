@@ -71,7 +71,7 @@
 		 <li> 
                      <span class="menu_r">
                            <a href="${tg.url('/configura')}" class="${('', 'active')[defined('page') and page=='listado_proyecto']}">
-                              <span class="menu_ar">Volver</span>
+                              <span class="menu_ar">Cancelar</span>
                            </a>
                      </span>
                  </li>
