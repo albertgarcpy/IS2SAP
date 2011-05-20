@@ -17,13 +17,13 @@ class LineaBaseForm(TableForm):
         TextField('descripcion', validator=NotEmpty, label_text='Descripcion',
             help_text='Introduzca su descripcion'),
         Spacer(),
-        TextField('estado', validator=NotEmpty, label_text='Estado', disabled=True,
+        TextField('estado', default='DESARROLLO', label_text='Estado', disabled=True,
             help_text='Introduzca su estado'),
         Spacer(),
         TextField('id_fase', validator=UniqueUsername, label_text='Fase',
             help_text='Introduzca una fase'),
         Spacer(),
-        TextField('version', validator=PlainText, label_text='Version',
+        TextField('version', default='1.0', disabled=True, label_text='Version',
             help_text='Introduzca la version'),
         Spacer()]
     submit_text = 'Guardar Linea Base'
