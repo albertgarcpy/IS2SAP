@@ -7,7 +7,7 @@
 <div class="menu bubplastic horizontal aqua">
 	<ul>
 		<li><span class="menu_r"><a href="${tg.url('/admin/tipo_item/nuevoDesdeFase', id_fase=id_fase)}" class="${('', 'active')[defined('page') and page=='about']}"><span class="menu_ar">Nuevo</span></a></span></li>
-		<li><span class="menu_r"><a href="${tg.url('/admin/proyecto/listaProyectos_a_importar')}" class="${('', 'active')[defined('page') and page=='about']}"><span class="menu_ar">Importar</span></a></span></li>
+		<li><span class="menu_r"><a href="${tg.url('/admin/linea_base/aprobaciones')}" class="${('', 'active')[defined('page') and page=='about']}"><span class="menu_ar">Importar</span></a></span></li>
 		<li><span class="menu_r"><a href="${tg.url('/admin/fase/listadoFasesPorProyecto', id_proyecto=id_proyecto)}" class="${('', 'active')[defined('page') and page=='about']}"><span class="menu_ar">Volver</span></a></span></li>
 	</ul>
 	<br class="clearit" />

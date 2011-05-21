@@ -91,7 +91,7 @@ class ProyectoController(BaseController):
     def confirmar_eliminar(self, id_proyecto, **kw):
         """Despliega confirmacion de eliminacion"""
         proyecto=DBSession.query(Proyecto).get(id_proyecto)
-        return dict(nombre_modelo='Proyecto', page='eliminar', value=proyecto)
+        return dict(nombre_modelo='Proyecto', page='eliminar_proyecto', value=proyecto)
 
     @expose()
     def delete(self, id_proyecto, **kw):
@@ -202,3 +202,12 @@ class ProyectoController(BaseController):
         currentPage = paginate.Page(proyectos, page, items_per_page=5)
         return dict(proyectos=currentPage.items,
            page='listaProyectos_a_iniciar', currentPage=currentPage)
+
+   
+    @expose("is2sap.templates.proyecto.listaProyectos_a_importar")
+    def listaProyectos_a_iniciar(self,page=1):
+        """Metodo para listar todos los Proyectos a importar de la base de datos"""
+        proyectos = DBSession.query(Proyecto).order_by(Proyecto.id_proyecto)
+        currentPage = paginate.Page(proyectos, page, items_per_page=5)
+        return dict(proyectos=currentPage.items,
+           page='listaProyectos_a_importar', currentPage=currentPage)

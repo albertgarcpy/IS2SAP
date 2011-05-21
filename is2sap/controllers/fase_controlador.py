@@ -86,6 +86,17 @@ class FaseController(BaseController):
            page='listado', nombreProyecto=nombreProyecto, idProyecto=id_proyecto, currentPage=currentPage)
 
 
+    @expose("is2sap.templates.fase.listadoFasesPorProyecto_a_importar")
+    def listadoFasesPorProyecto_a_importar(self,id_proyecto, page=1):
+        """Metodo para listar las Fases de un proyecto a importar """         
+        fasesPorProyecto = DBSession.query(Fase).join(Fase.relacion_estado_fase).filter(Fase.id_proyecto==id_proyecto).options(contains_eager(Fase.relacion_estado_fase)).order_by(Fase.numero_fase)
+#        fasesPorProyecto = DBSession.query(Fase).filter_by(id_proyecto=id_proyecto).order_by(Fase.numero_fase)
+        nombreProyecto = DBSession.query(Proyecto.nombre).filter_by(id_proyecto=id_proyecto).first()
+        currentPage = paginate.Page(fasesPorProyecto, page, items_per_page=5)
+        return dict(fasesPorProyecto=currentPage.items,
+           page='listadoFasesPorProyecto_a_importar', nombreProyecto=nombreProyecto, idProyecto=id_proyecto, currentPage=currentPage)
+
+
     @expose('is2sap.templates.fase.editar')
     def editar(self, id_fase, **kw):
         """Metodo que rellena el formulario para editar los datos de una Fase"""
