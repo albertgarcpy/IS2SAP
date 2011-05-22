@@ -42,6 +42,7 @@ from is2sap.controllers.rol_controlador import RolController
 from is2sap.controllers.fase_controlador import FaseController
 from is2sap.controllers.permiso_controlador import PermisoController
 
+from is2sap.controllers.linea_base_controlador import LineaBaseController
 
 
 from tg import tmpl_context, validate
@@ -58,15 +59,16 @@ class AdminController(TGController):
     allow_only = has_permission('administracion',
                                 msg=l_('Solo para usuarios con permiso "administracion"'))
     default_index_template = "genshi:is2sap.templates.admin_principal"
-
+		
+    #Administracion
     usuario = UsuarioController()
     rol = RolController()
     permiso = PermisoController()
     proyecto = ProyectoController()
     fase = FaseController()
     tipo_item = TipoItemController()
+    linea_base = LineaBaseController()
     atributo = AtributoController()
-
 
 
     def __init__(self, models, session, config_type=None, translations=None):

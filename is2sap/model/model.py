@@ -272,31 +272,18 @@ class EstadoFase(DeclarativeBase):
 
     #relation definitions
 
-#class LineaBase(DeclarativeBase):
-   # __tablename__ = 'Linea_Base'
-
-    #column definitions
-    #descripcion = Column(u'descripcion', VARCHAR(length=None, convert_unicode=False, assert_unicode=None, unicode_error=None, _warn_on_bytestring=False))
-    #estado = Column(u'estado', VARCHAR(length=None, convert_unicode=False, assert_unicode=None, unicode_error=None, _warn_on_bytestring=False), nullable=False)
-    #id_fase = Column(u'id_fase', INTEGER(), ForeignKey('Fase.id_fase'), nullable=False)
-    #id_linea_base = Column(u'id_linea_base', INTEGER(), primary_key=True, nullable=False)
-    #version = Column(u'version', INTEGER(), nullable=False)
-
-    #relation definitions
-
-
-##----------------------------- Clase "LineaBase"-----------------------------------
 class LineaBase(DeclarativeBase):
-
     __tablename__ = 'Linea_Base'
 
     #column definitions
-    id_linea_base = Column(u'id_linea_base', INTEGER(), primary_key=True, nullable=False)
-    id_fase = Column(u'id_fase', INTEGER(), ForeignKey('Fase.id_fase'), nullable=False)
     descripcion = Column(u'descripcion', VARCHAR(length=None, convert_unicode=False, assert_unicode=None, unicode_error=None, _warn_on_bytestring=False))
-    version = Column(u'version', INTEGER(), nullable=False)
     estado = Column(u'estado', VARCHAR(length=None, convert_unicode=False, assert_unicode=None, unicode_error=None, _warn_on_bytestring=False), nullable=False)
+    id_fase = Column(u'id_fase', INTEGER(), ForeignKey('Fase.id_fase'), nullable=False)
+    id_linea_base = Column(u'id_linea_base', INTEGER(), primary_key=True, nullable=False)
+    version = Column(u'version', INTEGER(), nullable=False)
 
+    #relation definitions
+    fase = relationship('Fase', backref='lineas_bases')
 
 
 ##----------------------------- Clase "Item"-----------------------------------

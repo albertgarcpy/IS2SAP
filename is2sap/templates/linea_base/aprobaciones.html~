@@ -1,0 +1,47 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:py="http://genshi.edgewall.org/"
+  xmlns:xi="http://www.w3.org/2001/XInclude">
+
+<xi:include href="master.html" />
+<xi:include href="menulinea_base.html" />
+
+<head>
+  <meta content="text/html; charset=UTF-8" http-equiv="content-type" py:replace="''"/>
+  <title>Aprobacion de Lineas Bases</title>
+</head>
+
+<body>
+	<h1>Aprobación de Lineas Bases</h1>
+${menu_superior()}
+    <table border="1">
+		  <tr style="color: purple; font-size: 11pt" align="center" >
+          <th>ID</th>
+          <th>Descripcion</th>
+          <th>Estado</th>
+          <th>Fase</th>
+          <th>Version</th>
+	</tr>
+
+        <py:for each="linea_base in linea_bases">
+        <tr>
+            <td>${linea_base.id_linea_base}</td>
+            <td>${linea_base.descripcion}</td>
+            <td>${linea_base.estado}</td>
+            <td>${linea_base.id_fase}</td>
+            <td>${linea_base.version}</td>
+            <td><a href="${tg.url('/admin/linea_base/confirmar_aprobar', id_linea_base=linea_base.id_linea_base)}"> <input class="alignAprobar" name="aprobar" type="button" value="" /></a>			<a href="${tg.url('/admin/linea_base/confirmar_romper', id_linea_base=linea_base.id_linea_base)}"> <input class="alignRomper" name="desaprobar" type="button" value=""/></a></td>
+
+        </tr>
+        </py:for>
+    </table>
+
+	<p class="pagelist">
+		<a class="prevPage" href="/list?page=${currentPage.previous_page}">&nbsp;</a>
+		${currentPage.pager(format='~3~', page_param='page', show_if_single_page=True)}
+		<a class="nextPage" href="/list?page=${currentPage.next_page}">&nbsp;</a>
+	</p>
+
+</body>
+</html>

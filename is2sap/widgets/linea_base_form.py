@@ -1,4 +1,4 @@
-"""Línea Base Form"""
+"""Linea Base Form"""
 
 from tw.forms import TableForm, Spacer, TextField, PasswordField
 from tw.forms.fields import Button, SubmitButton, HiddenField
@@ -17,17 +17,16 @@ class LineaBaseForm(TableForm):
         TextField('descripcion', validator=NotEmpty, label_text='Descripcion',
             help_text='Introduzca su descripcion'),
         Spacer(),
-        TextField('estado', validator=NotEmpty, label_text='Estado',
+        TextField('estado', default='DESARROLLO', label_text='Estado', disabled=True,
             help_text='Introduzca su estado'),
         Spacer(),
         TextField('id_fase', validator=UniqueUsername, label_text='Fase',
             help_text='Introduzca una fase'),
         Spacer(),
-        TextField('version', validator=PlainText, label_text='Version',
+        TextField('version', default='1.0', disabled=True, label_text='Version',
             help_text='Introduzca la version'),
         Spacer()]
-
-    submit_text = 'Guardar Línea Base'
+    submit_text = 'Guardar Linea Base'
 
 class EditLineaBaseForm(TableForm):
 
@@ -50,7 +49,7 @@ class EditLineaBaseForm(TableForm):
             help_text='Introduzca la version'),
         Spacer()]
 
-    submit_text = 'Guardar Línea Base'
+    submit_text = 'Guardar Linea Base'
     
 crear_linea_base_form = LineaBaseForm("CrearLineaBase",action='add')
 editar_linea_base_form = EditLineaBaseForm("EditarLineaBase", action='update')

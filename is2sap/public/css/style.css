@@ -225,10 +225,26 @@ form.loginfields input#submit
 	width: 50px
 }
 
-.alignaddAtributo {
-	background: #CCFFCC url('../images/add.png') top center no-repeat;
+.alignIniciar {
+	background: #CCFFCC url('../images/pencil.png') top center no-repeat;
 	width: 50px
 }
+
+.alignselectFase {
+	background: #CCFFCC url('../images/aprobar.png') top center no-repeat;
+	width: 50px
+}
+
+.alignselectProyecto {
+	background: #CCFFCC url('../images/aprobar.png') top center no-repeat;
+	width: 50px
+}
+
+.alignselectTipoitem {
+	background: #CCFFCC url('../images/aprobar.png') top center no-repeat;
+	width: 50px
+}
+
 .alignaddFase {
 	background: #CCFFCC url('../images/add1.png') top center no-repeat;
 	width: 50px
@@ -243,6 +259,17 @@ form.loginfields input#submit
 	background: #CCFFCC url('../images/delete.png') top center no-repeat;
 	width: 50px
 }
+
+.alignAprobar {
+	background: #CCFFCC url('../images/aprobar.png') top center no-repeat;
+	width: 50px
+}
+
+.alignRomper {
+	background: #CCFFCC url('../images/romper.png') top center no-repeat;
+	width: 50px
+}
+
 .alignAgregarRoles {
 	background: #CCFFCC url('../images/roles.png') top center no-repeat;
 	width: 50px
@@ -252,13 +279,14 @@ form.loginfields input#submit
 	width: 50px
 }
 .alignAgregarPermisos {
-	background: #CCFFCC url('../images/usuarioPermiso.jpeg') top center no-repeat;
+	background: #CCFFCC url('../images/roles.png') top center no-repeat;
 	width: 50px
 }
 .alignAgregarPermisosRol {
 	background: #CCFFCC url('../images/add1.png') top center no-repeat;
 	width: 50px
 }
+
 .alignAgregarUsuarios {
 	background: #CCFFCC url('../images/usuarios.jpeg') top center no-repeat;
 	width: 50px
@@ -281,6 +309,7 @@ form.loginfields input#submit
 	background: #CCFFCC url('../images/addItem.jpeg') top center no-repeat;
 	width: 50px
 }
+
 
 
 .botones {

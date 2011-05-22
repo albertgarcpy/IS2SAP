@@ -1,0 +1,52 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:py="http://genshi.edgewall.org/"
+  xmlns:xi="http://www.w3.org/2001/XInclude">
+
+<xi:include href="master.html" />
+<xi:include href="menuFase.html" />
+
+<head>
+  <meta content="text/html; charset=UTF-8" http-equiv="content-type" py:replace="''"/>
+  <title>${nombreProyecto}</title>
+</head>
+
+<body>
+	<h1>Seleccione la fase de: ${nombreProyecto} para importar sus Tipos de Items</h1>
+${menu_superior_fases_a_importar(idProyecto)}
+
+    <table border="1" width="100%">
+	 <tr style="color: purple; font-size: 11pt" align="center">
+          <th>ID</th>          
+		  <th>Numero de Fase</th>
+          <th>Nombre</th>
+          <th>Descripcion</th>
+          <th>Estado</th>
+		  <th>Tipos de Items</th>		
+		  
+          </tr>
+
+        <py:for each="fase in fasesPorProyecto">
+        <tr>
+            <td width="25">${fase.id_fase}</td>
+            <td width="50">${fase.numero_fase}</td>
+            <td width="150">${fase.nombre}</td>
+            <td>${fase.descripcion}</td>
+            <td width="70">${fase.relacion_estado_fase.nombre_estado}</td>
+           <td width="55">
+			<a href="${tg.url('/admin/tipo_item/listadoTipoItemPorFase', id_fase=fase.id_fase)}"> <input class="alignselectFase" name="selectfase" type="button" value=""/></a>
+		</td>
+        </tr>
+        </py:for>
+    </table>
+
+	<p class="pagelist">
+		<a class="prevPage" href="/list?page=${currentPage.previous_page}">&nbsp;</a>
+		${currentPage.pager(format='~3~', page_param='page', show_if_single_page=True)}
+		<a class="nextPage" href="/list?page=${currentPage.next_page}">&nbsp;</a>
+	</p>
+
+</body>
+</html>
+

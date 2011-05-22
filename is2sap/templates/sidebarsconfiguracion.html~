@@ -1,0 +1,20 @@
+<html xmlns:py="http://genshi.edgewall.org/"
+      xmlns:xi="http://www.w3.org/2001/XInclude"
+      py:strip="">
+
+<py:def function="sidebarsconfiguracion_top">
+  <div id="sb_top" class="sidebar">
+      <h2>Menu de Gestión de Configuración</h2>
+      <ul class="links">
+<!--
+        <li><a href="listaUsuarios">Usuarios</a></li>
+
+-->
+      <li> <a href="${tg.url('/admin/linea_base/listado')}">LINEAS BASES</a></li>
+      <li> <a href="${tg.url('/admin/linea_base/listado')}">INICIO DE PROYECTO</a></li>
+      
+      </ul>
+  </div>
+</py:def>
+
+</html>

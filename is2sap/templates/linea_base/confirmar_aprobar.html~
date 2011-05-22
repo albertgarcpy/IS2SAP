@@ -1,0 +1,49 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+                      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:py="http://genshi.edgewall.org/"
+      xmlns:xi="http://www.w3.org/2001/XInclude">
+
+  <xi:include href="master.html" />
+
+<head>
+  <meta content="text/html; charset=UTF-8" http-equiv="content-type" py:replace="''"/>
+  <title>Estoy tratando de borrar un archivo papacho</title>
+</head>
+
+<body>
+<h1>Aprobar Linea Base</h1>
+<h3>Desea aprobar la linea base?</h3>
+<table border="1">        
+<tr style="color: purple; font-size: 11pt" >
+          <th>ID</th>
+          <th>Descripcion</th>
+          <th>Fase</th>
+          <th>Version</th>		 	  
+          </tr>
+        <tr>
+            <td>${value.id_linea_base}</td>
+            <td>${value.descripcion}</td>
+            <td>${value.id_fase}</td>
+            <td>${value.version}</td>
+        </tr>        
+    </table>
+
+<div class="menu bubplastic horizontal aqua">
+	<ul>
+		<li><span class="menu_r"><a href="${tg.url('/admin/linea_base/aprobar', id_linea_base=value.id_linea_base)}"><span class="menu_ar">Aprobar</span></a></span></li>
+		<li><span class="menu_r"><a href="${tg.url('/admin/linea_base/aprobaciones')}"><span class="menu_ar">Cancelar</span></a></span></li>
+	</ul>
+	<br class="clearit" />
+</div>
+
+<!--
+
+<td><a href="${tg.url('/admin/usuario/delete', id_usuario=value.id)}"><input class="botones" name="aceptar" type="button" value="Eliminar"/></a></td>
+<td><a href="${tg.url('/admin/usuario/listado')}"><input class="botones" name="cancelar" type="button" value="Cancelar"/></a></td>	
+-->
+</body>
+</html>
+
+
+

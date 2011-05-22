@@ -9,11 +9,11 @@
 
 <head>
   <meta content="text/html; charset=UTF-8" http-equiv="content-type" py:replace="''"/>
-  <title>Lista de Usuarios</title>
+  <title>Lista de Lineas Bases</title>
 </head>
 
 <body>
-	<h1>Lista de Usuarios</h1>
+	<h1>Lista de Lineas Bases</h1>
 ${menu_superior()}
     <table border="1">
 		  <tr style="color: purple; font-size: 11pt" align="center" >
@@ -24,7 +24,7 @@ ${menu_superior()}
           <th>Version</th>
 	</tr>
 
-        <py:for each="usuario in usuarios">
+        <py:for each="linea_base in linea_bases">
         <tr>
             <td>${linea_base.id_linea_base}</td>
             <td>${linea_base.descripcion}</td>

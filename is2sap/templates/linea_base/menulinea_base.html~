@@ -6,7 +6,13 @@
   
 <div class="menu bubplastic horizontal aqua">
 	<ul>
-		<li><span class="menu_r"><a href="${tg.url('/admin/usuario/nuevo')}" class="${('', 'active')[defined('page') and page=='about']}"><span class="menu_ar">Nuevo</span></a></span></li>
+		<li><span class="menu_r">
+			<a href="${tg.url('/admin/linea_base/nuevo')}" class="${('', 'active')[defined('page') and page=='about']}"><span class="menu_ar">Nuevo</span></a>
+			<a href="${tg.url('/admin/linea_base/aprobaciones')}" class="${('', 'active')[defined('page') and page=='about']}"><span class="menu_ar">Aprobaciones</span></a>
+			<a href="${tg.url('/configura')}" class="${('', 'active')[defined('page') and page=='index']}">
+                              <span class="menu_ar">Volver</span>
+                        </a>
+		</span></li>
 	</ul>
 	<br class="clearit" />
 </div>
@@ -19,7 +25,7 @@
 
 <div class="menu bubplastic horizontal aqua">
 	<ul>
-		<li><span class="menu_r"><a href="${tg.url('/admin/usuario/listado')}" class="${('', 'active')[defined('page') and page=='about']}"><span class="menu_ar">Cancelar</span></a></span></li>
+		<li><span class="menu_r"><a href="${tg.url('/admin/linea_base/listado')}" class="${('', 'active')[defined('page') and page=='about']}"><span class="menu_ar">Cancelar</span></a></span></li>
 	</ul>
 	<br class="clearit" />
 </div>
@@ -32,10 +38,11 @@
 
 <div class="menu bubplastic horizontal aqua">
 	<ul>
-		<li><span class="menu_r"><a href="${tg.url('/admin/usuario/listado')}" class="${('', 'active')[defined('page') and page=='about']}"><span class="menu_ar">Cancelar</span></a></span></li>
+		<li><span class="menu_r"><a href="${tg.url('/admin/linea_base/listado')}" class="${('', 'active')[defined('page') and page=='about']}"><span class="menu_ar">Cancelar</span></a></span></li>
 	</ul>
 	<br class="clearit" />
 </div>
+
 
 </py:def>
 

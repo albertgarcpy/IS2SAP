@@ -13,7 +13,7 @@
 </head>
 
 <body>
-<h1>Menu Usuarios</h1>
+<h1>Menu Líneas Bases</h1>
 ${menu_superior()}
 </body>
 </html>

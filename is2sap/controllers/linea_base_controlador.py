@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Controlador de Línea Base"""
+"""Controlador de Linea Base"""
 
 from tg import expose, flash, require, url, request, redirect
 from pylons.i18n import ugettext as _, lazy_ugettext as l_
@@ -98,3 +98,49 @@ class LineaBaseController(BaseController):
         """Metodo que elimina un registro de la base de datos"""
         DBSession.delete(DBSession.query(LineaBase).get(id_linea_base))
         redirect("/admin/linea_base/listado")
+   
+
+    @expose("is2sap.templates.linea_base.aprobaciones")
+    def aprobaciones(self,page=1):
+        """Metodo para aprobar todos las linea_bases"""
+        linea_bases = DBSession.query(LineaBase)#.order_by(Usuario.id)
+        currentPage = paginate.Page(linea_bases, page, items_per_page=5)
+        return dict(linea_bases=currentPage.items,
+           page='aprobaciones', currentPage=currentPage)
+
+
+    @expose()
+    def aprobar(self, id_linea_base, **kw):     
+        """Metodo que aprueba la linea base"""
+        linea_base = DBSession.query(LineaBase).get(id_linea_base)
+	if linea_base.estado == 'REVISION':
+		version_aux = int(linea_base.version)+1
+  		linea_base.version = str(version_aux)
+	  
+        linea_base.estado = 'APROBADO'
+
+        DBSession.flush()
+        redirect("/admin/linea_base/aprobaciones")
+
+    
+    @expose()
+    def romper(self, id_linea_base, **kw):     
+        """Metodo que rompe la linea base"""
+        linea_base = DBSession.query(LineaBase).get(id_linea_base)   
+        linea_base.estado = 'REVISION'
+        DBSession.flush()
+        redirect("/admin/linea_base/aprobaciones")
+
+
+    @expose('is2sap.templates.linea_base.confirmar_romper')
+    def confirmar_romper(self, id_linea_base, **kw):
+        """Despliega confirmar romper linea base"""
+        linea_base=DBSession.query(LineaBase).get(id_linea_base)
+        return dict(nombre_modelo='LineaBase', page='editar', value=linea_base)
+
+
+    @expose('is2sap.templates.linea_base.confirmar_aprobar')
+    def confirmar_aprobar(self, id_linea_base, **kw):
+        """Despliega confirmar aprobar linea base"""
+        linea_base=DBSession.query(LineaBase).get(id_linea_base)
+        return dict(nombre_modelo='LineaBase', page='editar', value=linea_base)

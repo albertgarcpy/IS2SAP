@@ -76,6 +76,17 @@ class TipoItemController(BaseController):
         return dict(tipoItemPorFase=currentPage.items,
            page='listado', nombreFase=nombreFase, idProyectoFase=idProyectoFase, idFase=id_fase, currentPage=currentPage)
 
+    
+    @expose("is2sap.templates.tipo_item.listadoTipoItemPorFase_a_importar")
+    def listadoTipoItemPorFase_a_importar(self, id_fase, page=1):
+        """Metodo para listar los Tipos de Items de una Fase a importar"""         
+        tipoItemPorFase = DBSession.query(TipoItem).join(TipoItem.relacion_fase).filter(TipoItem.id_fase==id_fase).options(contains_eager(TipoItem.relacion_fase)).order_by(TipoItem.id_tipo_item)
+#        fasesPorProyecto = DBSession.query(Fase).filter_by(id_proyecto=id_proyecto).order_by(Fase.numero_fase)
+        nombreFase = DBSession.query(Fase.nombre).filter_by(id_fase=id_fase).first()
+        idProyectoFase = DBSession.query(Fase.id_proyecto).filter_by(id_fase=id_fase).first()
+        currentPage = paginate.Page(tipoItemPorFase, page, items_per_page=5)
+        return dict(tipoItemPorFase=currentPage.items,
+           page='listado', nombreFase=nombreFase, idProyectoFase=idProyectoFase, idFase=id_fase, currentPage=currentPage)
 
 
     @expose('is2sap.templates.tipo_item.editar')

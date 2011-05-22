@@ -1,0 +1,44 @@
+<html xmlns:py="http://genshi.edgewall.org/"
+      xmlns:xi="http://www.w3.org/2001/XInclude"
+      py:strip="">
+
+<py:def function="menu_superior(id_fase, id_proyecto)">
+  
+<div class="menu bubplastic horizontal aqua">
+	<ul>
+		<li><span class="menu_r"><a href="${tg.url('/admin/tipo_item/nuevoDesdeFase', id_fase=id_fase)}" class="${('', 'active')[defined('page') and page=='about']}"><span class="menu_ar">Nuevo</span></a></span></li>
+		<li><span class="menu_r"><a href="${tg.url('/admin/linea_base/aprobaciones')}" class="${('', 'active')[defined('page') and page=='about']}"><span class="menu_ar">Importar</span></a></span></li>
+		<li><span class="menu_r"><a href="${tg.url('/admin/fase/listadoFasesPorProyecto', id_proyecto=id_proyecto)}" class="${('', 'active')[defined('page') and page=='about']}"><span class="menu_ar">Volver</span></a></span></li>
+	</ul>
+	<br class="clearit" />
+</div>
+
+</py:def>
+
+
+
+<py:def function="menu_superior_nuevo(id_fase)">
+
+<div class="menu bubplastic horizontal aqua">
+	<ul>
+		<li><span class="menu_r"><a href="${tg.url('/admin/tipo_item/listadoTipoItemPorFase', id_fase=id_fase)}" class="${('', 'active')[defined('page') and page=='about']}"><span class="menu_ar">Cancelar</span></a></span></li>
+	</ul>
+	<br class="clearit" />
+</div>
+
+</py:def>
+
+
+
+<py:def function="menu_superior_editar(id_fase)">
+
+<div class="menu bubplastic horizontal aqua">
+	<ul>
+		<li><span class="menu_r"><a href="${tg.url('/admin/tipo_item/listadoTipoItemPorFase', id_fase=id_fase)}" class="${('', 'active')[defined('page') and page=='about']}"><span class="menu_ar">Cancelar</span></a></span></li>
+	</ul>
+	<br class="clearit" />
+</div>
+
+</py:def>
+
+</html>
