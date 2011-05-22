@@ -4,47 +4,32 @@
 from tg import expose, flash, require, url, request, redirect
 from pylons.i18n import ugettext as _, lazy_ugettext as l_
 from tgext.admin.tgadminconfig import TGAdminConfig
-#from tgext.admin.controller import AdminController, AdminConfig
-from is2sap.controllers.admin_controlador import AdminController
-from is2sap.controllers.desarrollo_controlador import DesarrolloController
 from repoze.what import predicates
+from tg import tmpl_context, validate
+from webhelpers import paginate
+from repoze.what.predicates import has_permission
 
+
+from is2sap.controllers.admin_controlador import AdminController
 from is2sap.lib.base import BaseController
 from is2sap.model import DBSession, metadata
 from is2sap import model
 from is2sap.controllers.secure import SecureController
 from is2sap.controllers.error import ErrorController
-#from is2sap.controllers.mi_admin_config import MiAdminConfig
-
-
-from tg import tmpl_context, validate
-#from is2sap.widgets.usuario_form import crear_usuario_form
-from webhelpers import paginate
-from repoze.what.predicates import has_permission
-#from tg import config
-
+from is2sap.controllers.item_controlador import ItemController
 
 
 __all__ = ['RootController']
 
 
 class RootController(BaseController):
+
     """
     The root controller for the IS2SAP application.
-
-    All the other controllers and WSGI applications should be mounted on this
-    controller. For example::
-
-        panel = ControlPanelController()
-        another_app = AnotherWSGIApplication()
-
-    Keep in mind that WSGI applications shouldn't be mounted directly: They
-    must be wrapped around with :class:`tg.controllers.WSGIAppController`.
-
     """
     #secc = SecureController()
     admin = AdminController(model, DBSession)
-    desa = DesarrolloController(model, DBSession)
+    item = ItemController()
     error = ErrorController()
 
     @expose('is2sap.templates.index')

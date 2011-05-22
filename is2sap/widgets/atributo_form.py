@@ -10,8 +10,7 @@ class AtributoForm(TableForm):
 
     hover_help = True
     show_errors = True
-    genre_options = [x for x in enumerate((
-        'Texto', 'Numerico', 'Fecha'))]
+    genre_options = ['Texto', 'Numerico', 'Fecha']
 
     fields = [
         HiddenField('id_atributo', label_text='Id',
@@ -33,8 +32,7 @@ class EditAtributoForm(TableForm):
 
     hover_help = True
     show_errors = True
-    genre_options = [x for x in enumerate((
-        'Texto', 'Numerico', 'Fecha'))]
+    genre_options = ['Texto', 'Numerico', 'Fecha']
 
     fields = [
         HiddenField('id_atributo', label_text='Id',

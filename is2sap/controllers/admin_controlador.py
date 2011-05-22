@@ -43,6 +43,7 @@ from is2sap.controllers.fase_controlador import FaseController
 from is2sap.controllers.permiso_controlador import PermisoController
 
 
+
 from tg import tmpl_context, validate
 
 from webhelpers import paginate
@@ -59,12 +60,14 @@ class AdminController(TGController):
     default_index_template = "genshi:is2sap.templates.admin_principal"
 
     usuario = UsuarioController()
-    proyecto = ProyectoController()
-    fase = FaseController()
-    atributo = AtributoController()
-    tipo_item = TipoItemController()
     rol = RolController()
     permiso = PermisoController()
+    proyecto = ProyectoController()
+    fase = FaseController()
+    tipo_item = TipoItemController()
+    atributo = AtributoController()
+
+
 
     def __init__(self, models, session, config_type=None, translations=None):
         super(AdminController, self).__init__()

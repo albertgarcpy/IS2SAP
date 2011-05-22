@@ -4,63 +4,70 @@
       xmlns:py="http://genshi.edgewall.org/"
       xmlns:xi="http://www.w3.org/2001/XInclude">
 
-  <xi:include href="master.html" />
+      <xi:include href="master.html" />
 
-<head>
-  <meta content="text/html; charset=UTF-8" http-equiv="content-type" py:replace="''"/>
-  <title>Estoy tratando de borrar un archivo papacho</title>
-</head>
+    <head>
+          <meta content="text/html; charset=UTF-8" http-equiv="content-type" py:replace="''"/>
+          <title>Eliminar Item ${nombre_tipo_item}</title>
+    </head>
 
-<body>
-<h1>Eliminar Item</h1>
-<h3>Desea eliminar el registro?</h3>
-<table border="1">        
-<tr style="color: purple; font-size: 11pt" >
-          <th>ID</th>
-          <th>Tipo de Item</th>
-          <th>Linea Base</th>
-          <th>Numero</th>
-          <th>Descripción</th>
-          <th>Complejidad</th>
-	  <th>Prioridad</th>
-	  <th>Estado</th>
-	  <th>Archivo Externo</th>
-	  <th>Version</th>
-	  <th>Observación</th>
-	  <th>Fecha de Modificación</th>
-          		  
-          </tr>
-        <tr>
-            <td>${value.id_item}</td>
-            <td>${value.id_tipo_item}</td>
-            <td>${value.id_linea_base}</td>
-            <td>${value.numero}</td>
-            <td>${value.descripcion}</td>
-            <td>${value.complejidad}</td>
-            <td>${value.prioridad}</td>
-	    <td>${value.estado}</td>
-	    <td>${value.archivo_externo}</td>
-	    <td>${value.version}</td>
-    	    <td>${value.observacion}</td>
-	    <td>${value.fecha_modificacion}</td>
+    <body>
+          <h2>Eliminar Item <div style="color:green"> ${nombre_tipo_item}</div></h2>
+          <h3>Desea eliminar el registro?</h3>
+
+              <table border="1">        
+                    <tr style="color: purple; font-size: 11pt" >
+                       <th>ID</th>
+                       <th>Tipo de Item</th>
+                       <th>Linea Base</th>
+                       <th>Numero</th>
+                       <th>Descripcion</th>
+                       <th>Complejidad</th>
+	               <th>Prioridad</th>
+	               <th>Estado</th>
+	               <th>Archivo Externo</th>
+	               <th>Version</th>
+	               <th>Observacion</th>
+	               <th>Fecha de Modificacion</th>
+                    </tr>
+                    <tr>
+                       <td>${item.id_item}</td>
+                       <td>${item.id_tipo_item}</td>
+                       <td>${item.id_linea_base}</td>
+                       <td>${item.numero}</td>
+                       <td>${item.descripcion}</td>
+                       <td>${item.complejidad}</td>
+                       <td>${item.prioridad}</td>
+	               <td>${item.estado}</td>
+	               <td>${item.archivo_externo}</td>
+	               <td>${item.version}</td>
+    	               <td>${item.observacion}</td>
+	               <td>${item.fecha_modificacion}</td>
 	    
-        </tr>        
-    </table>
+                    </tr>        
+              </table>
 
-<div class="menu bubplastic horizontal aqua">
-	<ul>
-		<li><span class="menu_r"><a href="${tg.url('/admin/item/delete', id_item=value.id_item)}"><span class="menu_ar">Eliminar</span></a></span></li>
-		<li><span class="menu_r"><a href="${tg.url('/admin/item/listado')}"><span class="menu_ar">Cancelar</span></a></span></li>
-	</ul>
-	<br class="clearit" />
-</div>
+              <div class="menu bubplastic horizontal aqua">
+	           <ul>
+		        <li>
+                             <span class="menu_r">
+                                   <a href="${tg.url('/admin/item/delete', id_item=item.id_item)}">
+                                      <span class="menu_ar">Eliminar</span>
+                                   </a>
+                             </span>
+                        </li>
+		        <li>
+                             <span class="menu_r">
+                                   <a href="${tg.url('/admin/item/listado')}">
+                                      <span class="menu_ar">Cancelar</span>
+                                   </a>
+                             </span>
+                        </li>
+	           </ul>
+	          <br class="clearit" />
+              </div>
 
-<!--
-
-<td><a href="${tg.url('/admin/usuario/delete', id_usuario=value.id)}"><input class="botones" name="aceptar" type="button" value="Eliminar"/></a></td>
-<td><a href="${tg.url('/admin/usuario/listado')}"><input class="botones" name="cancelar" type="button" value="Cancelar"/></a></td>	
--->
-</body>
+    </body>
 </html>
 
 

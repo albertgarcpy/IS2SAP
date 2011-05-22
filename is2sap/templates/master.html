@@ -32,7 +32,7 @@
         <li py:if="request.identity" id="login" class="loginlogout"><a href="${tg.url('/logout_handler')}">Logout</a></li>
         <li py:if="tg.predicates.has_permission('administracion')" id="admin" class="first"><a href="${tg.url('/admin')}">Administracion</a></li>
 		<li py:if="tg.predicates.has_permission('administracion')" id="admin" class="menuprincipal"><a href="${tg.url('/configura')}">Configuracion</a></li>
-		<li py:if="tg.predicates.has_permission('administracion')" id="admin" class="menuprincipal"><a href="${tg.url('/desa')}">Desarrollo</a></li>
+		<li py:if="tg.predicates.has_permission('edicion')" id="admin" class="menuprincipal"><a href="${tg.url('/desa')}">Desarrollo</a></li>
 		
     </span>
 

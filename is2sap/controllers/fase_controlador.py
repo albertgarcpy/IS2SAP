@@ -47,7 +47,12 @@ class FaseController(BaseController):
         maxnumerofase=DBSession.query(func.max(Fase.numero_fase)).filter_by(id_proyecto=id_proyecto).first()
         kw['id_proyecto']=id_proyecto
         kw['id_estado_fase']=1
-        kw['numero_fase']=maxnumerofase[0] + 1
+
+        if maxnumerofase[0]==None:
+           kw['numero_fase']=1
+        else:
+           kw['numero_fase']=maxnumerofase[0] + 1
+
         return dict(nombre_modelo='Fase', idProyecto=id_proyecto, page='nuevo', value=kw)
 
 
