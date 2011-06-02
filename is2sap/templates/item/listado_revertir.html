@@ -1,0 +1,84 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:py="http://genshi.edgewall.org/"
+      xmlns:xi="http://www.w3.org/2001/XInclude">
+
+      <xi:include href="master.html" />
+      <xi:include href="menuItems.html" />
+
+    <head>
+           <meta content="text/html; charset=UTF-8" http-equiv="content-type" py:replace="''"/>
+           <title>Versiones Revertibles</title>
+    </head>
+
+    <body>
+            <h2>Versiones <div style="color:green">Revertibles</div></h2>
+            ${menu_superior_revertir(id_proyecto, id_fase, id_tipo_item, id_item)}
+
+            <table border="1" width="100%">
+		  <tr style="color: purple; font-size: 11pt" align="center" >
+<!--
+                     <th>ID</th>
+                     <th>Tipo</th>
+                     <th>LB</th>
+-->
+                     <th>Descripcion</th>
+                     <th>Complejidad</th>
+	             <th>Prioridad</th>
+	             <th>Estado</th>
+<!--
+	             <th>Archivo Externo</th>
+-->
+	             <th>Version</th>
+	             <th>Observacion</th>
+<!--
+	             <th>Fecha de Modificacion</th>
+-->
+                     <th>Detalles</th>
+                  </tr>
+
+                  <py:for each="item in item_historial">
+                     <tr>
+<!--
+                         <td>${item.id_item}</td>
+                         <td>${item.id_tipo_item}</td>
+		         <td>${item.id_linea_base}</td>
+-->
+		         <td>${item.descripcion}</td>
+		         <td>${item.complejidad}</td>
+		         <td>${item.prioridad}</td>
+		         <td>${item.estado}</td>
+<!--
+		         <td>${item.archivo_externo}</td>
+-->
+		         <td>${item.version}</td>
+		         <td>${item.observacion}</td>
+<!--
+		         <td>${item.fecha_modificacion}</td>
+-->
+                         <td align="center">
+                             <a href="${tg.url('/item/revertir_item', id_proyecto=id_proyecto, id_fase=id_fase,
+                                        id_tipo_item=id_tipo_item, id_historial_item=item.id_historial_item)}"> 
+                                <input class="alignMetodoRevertir" name="metodoRevertir" type="button" value=""/>
+                             </a>
+                             <a href="${tg.url('/item/listado_detalles_revertir', id_proyecto=id_proyecto, id_fase=id_fase,
+                                        id_tipo_item=id_tipo_item, id_item=item.id_item, version= item.version)}"> 
+                                <input class="alignListarDetalleItemRevertible" name="detalles" type="button" value=""/>
+                             </a>
+                         </td>
+
+                      </tr>
+                  </py:for>
+             </table>
+
+	     <p class="pagelist">
+		<a class="prevPage" href="/list?page=${currentPage.previous_page}">&nbsp;</a>
+		${currentPage.pager(format='~3~', page_param='page', show_if_single_page=True)}
+		<a class="nextPage" href="/list?page=${currentPage.next_page}">&nbsp;</a>
+	     </p>
+
+
+    </body>
+</html>

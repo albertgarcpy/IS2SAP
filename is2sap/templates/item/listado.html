@@ -1,5 +1,6 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:py="http://genshi.edgewall.org/"
       xmlns:xi="http://www.w3.org/2001/XInclude">
@@ -16,46 +17,70 @@
             <h2>Lista de <div style="color:green">Items</div></h2>
             ${menu_superior_items(id_proyecto, id_fase, id_tipo_item)}
 
-            <table border="1">
+            <table border="1" width="100%">
 		  <tr style="color: purple; font-size: 11pt" align="center" >
+<!--
                      <th>ID</th>
-                     <th>Tipo de Item</th>
-                     <th>Linea Base</th>
-                     <th>Numero</th>
+                     <th>Tipo</th>
+                     <th>LB</th>
+-->
                      <th>Descripcion</th>
                      <th>Complejidad</th>
 	             <th>Prioridad</th>
 	             <th>Estado</th>
+<!--
 	             <th>Archivo Externo</th>
+-->
 	             <th>Version</th>
 	             <th>Observacion</th>
+<!--
 	             <th>Fecha de Modificacion</th>
+-->
+                     <th>Acciones</th>
                   </tr>
 
                   <py:for each="item in items">
                      <tr>
+<!--
                          <td>${item.id_item}</td>
                          <td>${item.id_tipo_item}</td>
 		         <td>${item.id_linea_base}</td>
-		         <td>${item.numero}</td>
+-->
 		         <td>${item.descripcion}</td>
 		         <td>${item.complejidad}</td>
 		         <td>${item.prioridad}</td>
 		         <td>${item.estado}</td>
+<!--
 		         <td>${item.archivo_externo}</td>
+-->
 		         <td>${item.version}</td>
 		         <td>${item.observacion}</td>
+<!--
 		         <td>${item.fecha_modificacion}</td>
+-->
                          <td>
-                             <a href="${tg.url('/item/editar', id_item=item.id_item)}">
+
+                             <a href="${tg.url('/item/editar', id_proyecto=id_proyecto, id_fase=id_fase,
+                                        id_tipo_item=id_tipo_item, id_item=item.id_item)}">
                                 <input class="alignEditar" name="editar" type="button" value="" />
-                             </a>			
-                             <a href="${tg.url('/item/confirmar_eliminar', id_item=item.id_item)}"> 
-                                <input class="alignEliminar" name="eliminar" type="button" value=""/>
+                             </a>
+		
+                             <a href="${tg.url('/item/confirmar_eliminar', id_proyecto=id_proyecto, id_fase=id_fase,
+                                        id_tipo_item=id_tipo_item, id_item=item.id_item)}"> 
+                                <input class="alignEliminarItem" name="eliminar" type="button" value=""/>
+                             </a>
+                             <a href="${tg.url('/item/listado_detalles', id_proyecto=id_proyecto, id_fase=id_fase,
+                                        id_tipo_item=id_tipo_item, id_item=item.id_item)}"> 
+                                <input class="alignListarDetalleItem" name="detalles" type="button" value=""/>
+                             </a>
+                             <a href="${tg.url('/item/listado_revertir', id_proyecto=id_proyecto, id_fase=id_fase,
+                                        id_tipo_item=id_tipo_item, id_item=item.id_item)}"> 
+                                <input class="alignRevertir" name="revertir" type="button" value=""/>
                              </a>
                          </td>
+
                       </tr>
-                   </py:for>
+                  </py:for>
              </table>
 
 	     <p class="pagelist">
@@ -63,6 +88,7 @@
 		${currentPage.pager(format='~3~', page_param='page', show_if_single_page=True)}
 		<a class="nextPage" href="/list?page=${currentPage.next_page}">&nbsp;</a>
 	     </p>
+
 
     </body>
 </html>

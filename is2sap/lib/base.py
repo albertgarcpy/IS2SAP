@@ -2,7 +2,8 @@
 
 """The base Controller API."""
 
-from tg import TGController, tmpl_context
+from tg import TGController, tmpl_context, validate 
+from pylons.decorators import validate 
 from tg.render import render
 from tg import request
 from pylons.i18n import _, ungettext, N_

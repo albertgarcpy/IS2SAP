@@ -29,15 +29,14 @@ class FaseController(BaseController):
 
     @expose()
     def index(self):
-        """Muestra la pantalla de bienvenida"""
-        redirect("/admin/fase/listado")        
-
+        """Muestra la pantalla inicial"""
+        return dict(nombre_modelo='Fase', page='index_fase')     
 
     @expose('is2sap.templates.fase.nuevo')
     def nuevo(self, **kw):
         """Despliega el formulario para añadir una fase al proyecto."""
         tmpl_context.form = crear_fase_form
-        return dict(nombre_modelo='Fase', page='nuevo', value=kw)
+        return dict(nombre_modelo='Fase', page='nueva_fase', value=kw)
 
 
     @expose('is2sap.templates.fase.nuevo')
@@ -70,7 +69,6 @@ class FaseController(BaseController):
         DBSession.flush()    
         redirect("/admin/fase/listadoFasesPorProyecto", id_proyecto=kw['id_proyecto'])
 
-
     @expose("is2sap.templates.fase.listado")
     def listado(self,page=1):
         """Metodo para listar las Fases de un proyecto """
@@ -78,7 +76,6 @@ class FaseController(BaseController):
         currentPage = paginate.Page(fases, page, items_per_page=5)
         return dict(fases=currentPage.items,
            page='listado', currentPage=currentPage)
-
 
     @expose("is2sap.templates.fase.listadoFasesPorProyecto")
     def listadoFasesPorProyecto(self,id_proyecto, page=1):
@@ -90,7 +87,6 @@ class FaseController(BaseController):
         return dict(fasesPorProyecto=currentPage.items,
            page='listado', nombreProyecto=nombreProyecto, idProyecto=id_proyecto, currentPage=currentPage)
 
-
     @expose("is2sap.templates.fase.listadoFasesPorProyecto_a_importar")
     def listadoFasesPorProyecto_a_importar(self,id_proyecto, page=1):
         """Metodo para listar las Fases de un proyecto a importar """         
@@ -100,7 +96,6 @@ class FaseController(BaseController):
         currentPage = paginate.Page(fasesPorProyecto, page, items_per_page=5)
         return dict(fasesPorProyecto=currentPage.items,
            page='listadoFasesPorProyecto_a_importar', nombreProyecto=nombreProyecto, idProyecto=id_proyecto, currentPage=currentPage)
-
 
     @expose('is2sap.templates.fase.editar')
     def editar(self, id_fase, **kw):
@@ -115,7 +110,6 @@ class FaseController(BaseController):
         kw['numero_fase']=traerFase.numero_fase
         return dict(nombre_modelo='Fase', page='editar_fase', value=kw)
 
-
     @validate(editar_fase_form, error_handler=editar)
     @expose()
     def update(self, **kw):        
@@ -127,13 +121,11 @@ class FaseController(BaseController):
         DBSession.flush()
         redirect("/admin/fase/listadoFasesPorProyecto", id_proyecto=kw['id_proyecto'])
 
-
     @expose('is2sap.templates.fase.confirmar_eliminar')
     def confirmar_eliminar(self, id_fase, **kw):
         """Despliega confirmacion de eliminacion"""
         fase=DBSession.query(Fase).get(id_fase)
         return dict(nombre_modelo='Fase', page='eliminar_fase', value=fase)
-
 
     @expose()
     def delete(self, id_fase, id_proyecto, **kw):

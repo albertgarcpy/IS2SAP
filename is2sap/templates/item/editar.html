@@ -6,17 +6,15 @@
       xmlns:xi="http://www.w3.org/2001/XInclude">
 
       <xi:include href="master.html"/>
-      <xi:include href="menuProyecto.html"/>
-<head>
-	<meta content="text/html; charset=UTF-8" http-equiv="content-type" py:replace="''"/>
-	<title>Editar  ${nombre_modelo}</title>
-</head>
+      <xi:include href="menuItems.html"/>
+    <head>
+	  <meta content="text/html; charset=UTF-8" http-equiv="content-type" py:replace="''"/>
+	  <title>Editar ${nombre_modelo}</title>
+    </head>
 
-<body>
-   <h2>Editar Proyecto <div style="color:green"> ${value.nombre}</div></h2>
-	   ${menu_superior_editar()}
-	<div py:if="not value.iniciado">
-	   <div py:replace="tmpl_context.form(value)">Form para editar item</div>
-	</div>
-</body>
+    <body>
+          <h2>Editar <div style="color:green"> ${nombre_modelo}</div></h2>
+	  ${menu_superior_editar(id_proyecto, id_fase, id_tipo_item)}
+	  <div py:replace="tmpl_context.form(value)">Form para editar item</div>
+    </body>
 </html>

@@ -22,6 +22,7 @@ from is2sap.widgets.usuario_form import crear_usuario_form, editar_usuario_form
 
 __all__ = ['UsuarioController']
 
+
 class UsuarioController(BaseController):
 
     @expose()

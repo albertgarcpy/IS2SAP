@@ -7,6 +7,7 @@ _ = lambda s: s
 
 class UniqueUsername(FancyValidator):
 
+   not_empty = True
 
    def validate_python(self, value, state):
       usuarios = DBSession.query(Usuario)

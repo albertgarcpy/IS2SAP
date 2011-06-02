@@ -20,7 +20,6 @@
                        <th>ID</th>
                        <th>Tipo de Item</th>
                        <th>Linea Base</th>
-                       <th>Numero</th>
                        <th>Descripcion</th>
                        <th>Complejidad</th>
 	               <th>Prioridad</th>
@@ -34,7 +33,6 @@
                        <td>${item.id_item}</td>
                        <td>${item.id_tipo_item}</td>
                        <td>${item.id_linea_base}</td>
-                       <td>${item.numero}</td>
                        <td>${item.descripcion}</td>
                        <td>${item.complejidad}</td>
                        <td>${item.prioridad}</td>
@@ -51,14 +49,15 @@
 	           <ul>
 		        <li>
                              <span class="menu_r">
-                                   <a href="${tg.url('/admin/item/delete', id_item=item.id_item)}">
+                                   <a href="${tg.url('/item/delete', id_proyecto=id_proyecto, 
+                                              id_fase=id_fase, id_tipo_item=id_tipo_item, id_item=item.id_item)}">
                                       <span class="menu_ar">Eliminar</span>
                                    </a>
                              </span>
                         </li>
 		        <li>
                              <span class="menu_r">
-                                   <a href="${tg.url('/admin/item/listado')}">
+                                   <a href="${tg.url('/item/listado', id_proyecto=id_proyecto, id_fase=id_fase, id_tipo_item=id_tipo_item)}">
                                       <span class="menu_ar">Cancelar</span>
                                    </a>
                              </span>

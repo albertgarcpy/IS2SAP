@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 """Main Controller"""
-
 from tg import expose, flash, require, url, request, redirect
 from pylons.i18n import ugettext as _, lazy_ugettext as l_
 from tgext.admin.tgadminconfig import TGAdminConfig
@@ -8,7 +7,10 @@ from repoze.what import predicates
 from tg import tmpl_context, validate
 from webhelpers import paginate
 from repoze.what.predicates import has_permission
-
+from tgext.crud import CrudRestController
+from tg.decorators import with_trailing_slash, override_template, expose
+from sqlalchemy.orm import class_mapper
+import inspect
 
 from is2sap.controllers.admin_controlador import AdminController
 from is2sap.lib.base import BaseController

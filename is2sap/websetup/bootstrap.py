@@ -25,25 +25,39 @@ def bootstrap(command, conf, vars):
         model.DBSession.add(u)
 
         v = model.Usuario()
-        v.nombre = u'Elias Rene'
-        v.apellido = u'Benitez Martinez'
-        v.nombre_usuario = u'elias'
-        v.email = u'elias_rene@hotmail.com'
-        v.password = u'elias'
-        v.direccion = u'Espanha c/ 10 de Agosto'
-        v.telefono = u'021-574543'
+        v.nombre = u'Alberto'
+        v.apellido = u'Garcete'
+        v.nombre_usuario = u'alberto'
+        v.email = u'albertgarcpy@hotmail.com'
+        v.password = u'alberto'
+        v.direccion = u'Asuncion'
+        v.telefono = u'0981-348929'
         model.DBSession.add(v)
-    
+
+        w = model.Usuario()
+        w.nombre = u'Baudelio'
+        w.apellido = u'Baez'
+        w.nombre_usuario = u'baudelio'
+        w.email = u'baudelio.baez@gmail.com'
+        w.password = u'baudelio'
+        w.direccion = u'San Lorenzo'
+        w.telefono = u'0983-283830'
+        model.DBSession.add(u)
+
         g = model.Rol()
         g.nombre_rol = u'administrador'
         g.descripcion = u'Grupo Administrador'
         g.usuarios.append(u)
+        g.usuarios.append(v)
+        g.usuarios.append(w)
         model.DBSession.add(g)
     
         h = model.Rol()
         h.nombre_rol = u'editor'
         h.descripcion = u'Grupo Edicion'
+        h.usuarios.append(u)
         h.usuarios.append(v)
+        h.usuarios.append(w)
         model.DBSession.add(h)
 
         p = model.Permiso()
@@ -77,6 +91,7 @@ def bootstrap(command, conf, vars):
         ef = model.EstadoFase()
         ef.nombre_estado = 'Finalizado'
         model.DBSession.add(ef)
+
     
         model.DBSession.flush()
         transaction.commit()
