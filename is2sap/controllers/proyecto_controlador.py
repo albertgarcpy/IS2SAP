@@ -187,18 +187,11 @@ class ProyectoController(BaseController):
         DBSession.flush()
         redirect("/admin/proyecto/listaProyectos_a_iniciar")
 
-
-    @expose('is2sap.templates.proyecto.confirmar_iniciar')
-    def confirmar_iniciar(self, id_proyecto, **kw):
-        """Despliega confirmar inicio de proyecto"""
-        proyecto=DBSession.query(Proyecto).get(id_proyecto)
-        return dict(nombre_modelo='Proyecto', page='editar', value=proyecto)
-
     
     @expose("is2sap.templates.proyecto.listaProyectos_a_iniciar")
     def listaProyectos_a_iniciar(self,page=1):
         """Metodo para listar todos los Proyectos a iniciar de la base de datos"""
-        proyectos = DBSession.query(Proyecto).order_by(Proyecto.id_proyecto)
+        proyectos = DBSession.query(Proyecto).filter_by(iniciado=False).order_by(Proyecto.id_proyecto)
         currentPage = paginate.Page(proyectos, page, items_per_page=5)
         return dict(proyectos=currentPage.items,
            page='listaProyectos_a_iniciar', currentPage=currentPage)

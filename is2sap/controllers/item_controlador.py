@@ -144,11 +144,8 @@ class ItemController(BaseController):
             DBSession.add(itemDetalle)
             DBSession.flush()
 
-
         flash("Item insertado")
         
-
-
         tipo_item = DBSession.query(TipoItem).filter_by(id_tipo_item=id_tipo_item).first()
         id_fase = tipo_item.id_fase
         fase = DBSession.query(Fase).filter_by(id_fase=id_fase).first()
@@ -214,8 +211,6 @@ class ItemController(BaseController):
               else:
                  fields.append(CalendarDatePicker(nombre.replace(" ", "_"), label_text=nombre, date_format='%d/%m/%Y',
                               help_text='Seleccione la fecha de Creacion del Proyecto'))
-
-   
         
         editar_item_form = ItemForm("EditarItem", action='update',fields=fields)
         tmpl_context.form = editar_item_form
@@ -295,9 +290,7 @@ class ItemController(BaseController):
             itemDetalleHistorial.nombre_atributo = nombre
             itemDetalleHistorial.valor = detalle.valor
             itemDetalleHistorial.version = itemHistorial.version
-
             detalle.valor = kw[nombre.replace(" ", "_")]
-
             DBSession.add(itemDetalleHistorial)
             DBSession.flush()
 
@@ -307,14 +300,10 @@ class ItemController(BaseController):
             itemDetalle = ItemDetalle()
             itemDetalle.id_item = id_item
             itemDetalle.nombre_atributo = nombre
-
             itemDetalle.valor = kw[nombre.replace(" ", "_")]
-
-
             DBSession.add(itemDetalle)
             DBSession.flush()
             
-
         flash("Item editado")
             
         tipo_item = DBSession.query(TipoItem).filter_by(id_tipo_item=id_tipo_item).first()
@@ -461,7 +450,14 @@ class ItemController(BaseController):
     def proyectos(self,page=1):
         """Metodo para listar todos los Proyectos existentes de la base de datos"""
         usuario = DBSession.query(Usuario).filter_by(nombre_usuario=request.identity['repoze.who.userid']).first()
-        proyectos = usuario.proyectos
+        todosProyectos = usuario.proyectos
+
+        proyectos = []
+
+        for proyecto in todosProyectos:
+            if proyecto.iniciado == True:
+               proyectos.append(proyecto)
+
         currentPage = paginate.Page(proyectos, page, items_per_page=5)
         return dict(proyectos=currentPage.items,
            page='listado_proyectos', currentPage=currentPage)
