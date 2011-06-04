@@ -530,12 +530,6 @@ clear:both;
 }
 /* END BUBBLE PLASTIC HORIZONTAL MENU */
 
-
-
-
-
-
-
 /* AQUA HOVER */
 .bubplastic.aqua ul li a:hover,
 .bubplastic.aqua ul li.highlight a {
@@ -554,47 +548,44 @@ clear:both;
 	border: solid 1px red;
 }
 
-/* MENU DE LISTADO DE PROYECTOS EN LA PARTE DE ACCIONES */
+/* menu_per DE LISTADO DE PROYECTOS EN LA PARTE DE ACCIONES */
 
 .bg {background: url(images/button4.gif);}
-.menu {padding:0px; margin:0; list-style:none; height:25px; background:#fff url(images/button1a.gif) repeat-x; position:relative; font-family:arial, verdana, sans-serif; }
-.menu li.top {display:block; float:left; position:relative;}
-.menu li a.top_link {display:block; float:left; height:25px; line-height:15px; color:#bbb; text-decoration:none; font-size:15px; font-weight:bold; padding:0 0 0px; cursor:pointer;}
-.menu li a.top_link span {float:left; font-weight:bold; display:block; padding:0 0px 0 0px; height:20px;}
-.menu li a.top_link span.down {float:left; display:block; padding:0 0px 0 0px; height:40px; background:url(images/down.gif) no-repeat right top;}
-.menu li a.top_link:hover {color:#000; background: url(images/button4.gif) no-repeat;}
-.menu li a.top_link:hover span {background:url(images/button4.gif) no-repeat right top;}
-.menu li a.top_link:hover span.down {background:url(images/button4a.gif) no-repeat right top;}
+.acciones {padding:0px; margin:0; list-style:none; height:25px; background:#fff url(images/button1a.gif) repeat-x; position:relative; font-family:arial, verdana, sans-serif; }
+.acciones li.top {display:block; float:left; position:relative;}
+.acciones li a.top_link {display:block; float:left; height:25px; line-height:15px; color:#bbb; text-decoration:none; font-size:15px; font-weight:bold; padding:0 0 0px; cursor:pointer;}
+.acciones li a.top_link span {float:left; font-weight:bold; display:block; padding:0 0px 0 0px; height:20px;}
+.acciones li a.top_link span.down {float:left; display:block; padding:0 0px 0 0px; height:40px; background:url(images/down.gif) no-repeat right top;}
+.acciones li a.top_link:hover {color:#000; background: url(images/button4.gif) no-repeat;}
+.acciones li a.top_link:hover span {background:url(images/button4.gif) no-repeat right top;}
+.acciones li a.top_link:hover span.down {background:url(images/button4a.gif) no-repeat right top;}
 
-.menu li:hover > a.top_link {color:#000; background: url(images/button4.gif) no-repeat;}
-.menu li:hover > a.top_link span {background:url(images/button4.gif) no-repeat right top;}
-.menu li:hover > a.top_link span.down {background:url(images/button4a.gif) no-repeat right top;}
+.acciones li:hover > a.top_link {color:#000; background: url(images/button4.gif) no-repeat;}
+.acciones li:hover > a.top_link span {background:url(images/button4.gif) no-repeat right top;}
+.acciones li:hover > a.top_link span.down {background:url(images/button4a.gif) no-repeat right top;}
 
-.menu table {border-collapse:collapse; width:0; height:0; position:absolute; top:0; left:0;}
+.acciones table {border-collapse:collapse; width:0; height:0; position:absolute; top:0; left:0;}
 
-.menu a:hover {visibility:visible;}
-.menu li:hover {position:relative; z-index:100;}
+.acciones a:hover {visibility:visible;}
+.acciones li:hover {position:relative; z-index:100;}
 
-.menu ul, 
-.menu :hover ul ul, 
-.menu :hover ul :hover ul ul,
-.menu :hover ul :hover ul :hover ul ul,
-.menu :hover ul :hover ul :hover ul :hover ul ul {position:absolute; left:-9999px; top:-9999px; width:0; height:0; margin:0; padding:0; list-style:none;}
+.acciones ul, 
+.acciones :hover ul ul, 
+.acciones :hover ul :hover ul ul,
+.acciones :hover ul :hover ul :hover ul ul,
+.acciones :hover ul :hover ul :hover ul :hover ul ul {position:absolute; left:-9999px; top:-9999px; width:0; height:0; margin:0; padding:0; list-style:none;}
 
-.menu :hover ul.sub {left:0px; top:0px; right:0px; background: #fff; padding:3px 0; border:1px solid #95d2ee; white-space:nowrap; width:110px; height:auto;}
-.menu :hover ul.sub li {display:block; height:20px; position:relative; float:left; width:100px;}
-.menu :hover ul.sub li a {font-weight:normal;display:block; font-size:12px; height:20px; width:106px; line-height:20px; text-indent:5px; color:#000; text-decoration:none; border:3px solid #fff; border-width:0 0 0 3px;}
-.menu :hover ul.sub li a.fly {background:#fff url(images/arrow.gif) 80px 7px no-repeat;}
-.menu :hover ul.sub li a:hover {background:#95d2ee; color:#fff;}
-.menu :hover ul.sub li a.fly:hover {background:#95d2ee url(images/arrow_over.gif) 80px 7px no-repeat; color:#fff;}
-.menu :hover ul li:hover > a.fly {background:#95d2ee url(images/arrow_over.gif) 80px 7px no-repeat; color:#fff;} 
+.acciones :hover ul.sub {left:0px; top:0px; right:0px; background: #fff; padding:3px 0; border:1px solid #95d2ee; white-space:nowrap; width:110px; height:auto;}
+.acciones :hover ul.sub li {display:block; height:20px; position:relative; float:left; width:100px;}
+.acciones :hover ul.sub li a {font-weight:normal;display:block; font-size:12px; height:20px; width:106px; line-height:20px; text-indent:5px; color:#000; text-decoration:none; border:3px solid #fff; border-width:0 0 0 3px;}
+.acciones :hover ul.sub li a.fly {background:#fff url(images/arrow.gif) 80px 7px no-repeat;}
+.acciones :hover ul.sub li a:hover {background:#95d2ee; color:#fff;}
+.acciones :hover ul.sub li a.fly:hover {background:#95d2ee url(images/arrow_over.gif) 80px 7px no-repeat; color:#fff;}
+.acciones :hover ul li:hover > a.fly {background:#95d2ee url(images/arrow_over.gif) 80px 7px no-repeat; color:#fff;} 
 
-.menu :hover ul :hover ul,
-.menu :hover ul :hover ul :hover ul,
-.menu :hover ul :hover ul :hover ul :hover ul,
-.menu :hover ul :hover ul :hover ul :hover ul :hover ul
+.acciones :hover ul :hover ul,
+.acciones :hover ul :hover ul :hover ul,
+.acciones :hover ul :hover ul :hover ul :hover ul,
+.acciones :hover ul :hover ul :hover ul :hover ul :hover ul
 {left:90px; top:-4px; background: #fff; padding:3px 0; border:1px solid 95d2ee; white-space:nowrap; width:93px; z-index:200; height:auto;}
-/* FIN DEL MENU DE LISTADO DE PROYECTOS EN LA PARTE DE ACCIONES */
-
-
-
+/* FIN DEL menu_per DE LISTADO DE PROYECTOS EN LA PARTE DE ACCIONES */
