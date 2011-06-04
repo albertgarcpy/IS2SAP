@@ -204,10 +204,3 @@ class ProyectoController(BaseController):
            page='listaProyectos_a_iniciar', currentPage=currentPage)
 
    
-    @expose("is2sap.templates.proyecto.listaProyectos_a_importar")
-    def listaProyectos_a_importar(self,page=1):
-        """Metodo para listar todos los Proyectos a importar de la base de datos"""
-        proyectos = DBSession.query(Proyecto).order_by(Proyecto.id_proyecto)
-        currentPage = paginate.Page(proyectos, page, items_per_page=5)
-        return dict(proyectos=currentPage.items,
-           page='listaProyectos_a_importar', currentPage=currentPage)

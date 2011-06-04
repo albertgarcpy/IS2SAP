@@ -1,0 +1,46 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:py="http://genshi.edgewall.org/"
+  xmlns:xi="http://www.w3.org/2001/XInclude">
+
+<xi:include href="master.html" />
+<xi:include href="menustipo_item.html" />
+
+<head>
+  <meta content="text/html; charset=UTF-8" http-equiv="content-type" py:replace="''"/>
+  <title>Tipo de Items que pueden importarse</title>
+</head>
+
+<body>
+	<h1>Tipo de Items que pueden importarse</h1>
+${menu_superior_importar(idFase)}
+${tmpl_context.form()}
+<div id="navTree">
+  <ul>
+    <py:for each="proyecto in listaProyectos">
+		<li style="font-size: 12pt" class="closed"> ${proyecto.nombre}
+		  <ul>
+
+
+			<div>
+			  <ul>
+		        <py:for each="fase in proyecto.fases">
+		   			<li style="font-size: 11pt" class="closed">${fase.nombre}
+					  <ul>
+				         <py:for each="tipoItem in fase.tipoitems">
+						   <li style="font-size: 10pt"><a href="${tg.url('/admin/tipo_item/importar', id_tipo_item=tipoItem.id_tipo_item, id_fase=idFase, nombre=tipoItem.nombre, descripcion=tipoItem.descripcion)}">${tipoItem.id_tipo_item}   -----     ${tipoItem.nombre}</a></li>
+				         </py:for>
+					  </ul>
+					 </li>
+		        </py:for>    
+			  </ul>
+			</div>
+		  </ul>
+		 </li>
+    </py:for>    
+  </ul>
+</div>
+</body>
+</html>
+

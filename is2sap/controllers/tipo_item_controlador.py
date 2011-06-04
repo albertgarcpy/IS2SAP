@@ -12,7 +12,7 @@ from sqlalchemy.orm import contains_eager
 
 from is2sap.lib.base import BaseController
 from is2sap.model import DBSession, metadata
-from is2sap.model.model import TipoItem, Fase
+from is2sap.model.model import Atributo, TipoItem, Fase, Proyecto
 from is2sap import model
 from is2sap.controllers.secure import SecureController
 from is2sap.controllers.error import ErrorController
@@ -21,15 +21,49 @@ from is2sap.controllers.error import ErrorController
 from is2sap.widgets.tipo_item_form import crear_tipo_item_form, editar_tipo_item_form
 
 
+from tw.jquery import TreeView
+
+
+
 
 __all__ = ['TipoItemController']
 
 class TipoItemController(BaseController):
 
+    @expose('is2sap.templates.tipo_item.listadoImportar')
+    def listadoImportar(self, id_fase):
+        listaProyectos=DBSession.query(Proyecto).order_by(Proyecto.id_proyecto)
+        for proyecto in listaProyectos:
+            for fase in proyecto.fases:
+                for tipoitem in fase.tipoitems:
+                    for atributo in tipoitem.atributos:
+                        print atributo.nombre
+        myTree = TreeView(treeDiv='navTree')
+        tmpl_context.form = myTree
+        return dict(listaProyectos=listaProyectos, idFase=id_fase)
+
+
     @expose()
-    def index(self):
-        """Muestra la pantalla de bienvenida"""
-        redirect("/admin/tipo_item/listado")        
+    def importar(self, id_tipo_item, id_fase, nombre, descripcion):
+        tipo_item = TipoItem()
+        tipo_item.id_fase = id_fase
+        tipo_item.nombre = nombre
+        tipo_item.descripcion = descripcion
+        DBSession.add(tipo_item)
+        DBSession.flush()
+
+        listaAtributos=DBSession.query(Atributo).filter_by(id_tipo_item=id_tipo_item).all()
+
+        for unAtributo in listaAtributos:
+            print unAtributo.nombre
+            atributo = Atributo()
+            atributo.id_tipo_item = tipo_item.id_tipo_item
+            atributo.nombre = unAtributo.nombre
+            atributo.descripcion = unAtributo.descripcion   
+            atributo.tipo = unAtributo.tipo 
+            DBSession.add(atributo)
+            DBSession.flush()
+        redirect("/admin/tipo_item/listadoTipoItemPorFase", id_fase=id_fase)
 
 
     @expose('is2sap.templates.tipo_item.nuevo')
@@ -68,18 +102,6 @@ class TipoItemController(BaseController):
     @expose("is2sap.templates.tipo_item.listadoTipoItemPorFase")
     def listadoTipoItemPorFase(self, id_fase, page=1):
         """Metodo para listar los Tipos de Items de una Fase """         
-        tipoItemPorFase = DBSession.query(TipoItem).join(TipoItem.relacion_fase).filter(TipoItem.id_fase==id_fase).options(contains_eager(TipoItem.relacion_fase)).order_by(TipoItem.id_tipo_item)
-#        fasesPorProyecto = DBSession.query(Fase).filter_by(id_proyecto=id_proyecto).order_by(Fase.numero_fase)
-        nombreFase = DBSession.query(Fase.nombre).filter_by(id_fase=id_fase).first()
-        idProyectoFase = DBSession.query(Fase.id_proyecto).filter_by(id_fase=id_fase).first()
-        currentPage = paginate.Page(tipoItemPorFase, page, items_per_page=5)
-        return dict(tipoItemPorFase=currentPage.items,
-           page='listado', nombreFase=nombreFase, idProyectoFase=idProyectoFase, idFase=id_fase, currentPage=currentPage)
-
-    
-    @expose("is2sap.templates.tipo_item.listadoTipoItemPorFase_a_importar")
-    def listadoTipoItemPorFase_a_importar(self, id_fase, page=1):
-        """Metodo para listar los Tipos de Items de una Fase a importar"""         
         tipoItemPorFase = DBSession.query(TipoItem).join(TipoItem.relacion_fase).filter(TipoItem.id_fase==id_fase).options(contains_eager(TipoItem.relacion_fase)).order_by(TipoItem.id_tipo_item)
 #        fasesPorProyecto = DBSession.query(Fase).filter_by(id_proyecto=id_proyecto).order_by(Fase.numero_fase)
         nombreFase = DBSession.query(Fase.nombre).filter_by(id_fase=id_fase).first()
