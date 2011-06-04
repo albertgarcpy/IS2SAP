@@ -37,31 +37,30 @@
                          <td>${proyecto.descripcion}</td>
                          <td width="50">${proyecto.fecha}</td>
                          <td width="50">${proyecto.iniciado}</td>            
-                         <td width="50">
-							
-							<ul class="menu">
-								<li class="top"><a href="#" class="top_link"><span>ACCIONES</span></a>
-								   <ul class="sub">
-						             <li><a href="${tg.url('/admin/proyecto/editar', id_proyecto=proyecto.id_proyecto)}">Editar		                    
-						             </a></li>
-									 <li><a href="${tg.url('/admin/proyecto/confirmar_eliminar', id_proyecto=proyecto.id_proyecto)}">Eliminar
-						             </a></li>
-								 	 <li><a href="${tg.url('/admin/proyecto/usuarios', id_proyecto=proyecto.id_proyecto)}">Agregar Usuarios
-								 	 </a></li>
-								 	 <li><a href="${tg.url('/admin/proyecto/roles', id_proyecto=proyecto.id_proyecto)}">Roles
-								 	 </a></li>										
-									</ul>
-								</li>	
-							</ul>
+                         <td width="105">
+							<ul>
+                                <li> Acciones
+                                    <ul>
+						                 <li><a href="${tg.url('/admin/proyecto/editar', id_proyecto=proyecto.id_proyecto)}">
+						                    <input class="alignEditar" name="editar" type="button"  value="" />
+						                 </a></li>
+							 			 <li><a href="${tg.url('/admin/proyecto/confirmar_eliminar', id_proyecto=proyecto.id_proyecto)}">
+						                    <input class="alignEliminar" name="eliminar" type="button" value=""/>
+						                 </a></li>
+								 		 <li><a href="${tg.url('/admin/proyecto/usuarios', id_proyecto=proyecto.id_proyecto)}">
+											<input class="alignAgregarUsuarios" name="agregarUsuarios" type="button" value=""/>
+								 		 </a></li>
+								 		 <li><a href="${tg.url('/admin/proyecto/roles', id_proyecto=proyecto.id_proyecto)}">
+											<input class="alignAgregarRoles" name="agregarRoles" type="button" value=""/>
+								 		 </a></li>
+                                     </ul>
+                                </li>
+						    </ul>
                          </td>
-                         <td width="70">
-						   <ul class="menu">
-								<li class="top"><a href="#" class="top_link"><span>FASES</span></a>
-								   <ul class="sub">
-						             <li><a href="${tg.url('/admin/fase/listadoFasesPorProyecto', id_proyecto=proyecto.id_proyecto)}">Fases</a></li>
-									</ul>
-								</li>	
-							</ul>
+                         <td width="50">
+                             <a href="${tg.url('/admin/fase/listadoFasesPorProyecto', id_proyecto=proyecto.id_proyecto)}">
+                                <input class="alignaddFase" name="addfase" type="button" value="" />
+                             </a>
                          </td>
 
                     </tr>

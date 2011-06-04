@@ -119,10 +119,10 @@ class ItemController(BaseController):
         item.complejidad = kw['complejidad']
         item.prioridad = kw['prioridad']
         item.estado = kw['estado']
-	item.archivo_externo = kw['archivo_externo']
-	item.version = kw['version']
-	item.observacion = kw['observacion']
-	item.fecha_modificacion = kw['fecha_modificacion']
+        item.archivo_externo = kw['archivo_externo']
+        item.version = kw['version']
+        item.observacion = kw['observacion']
+        item.fecha_modificacion = kw['fecha_modificacion']
         item.vivo = True
         DBSession.add(item)
         DBSession.flush()
@@ -223,10 +223,10 @@ class ItemController(BaseController):
         kw['complejidad']=item.complejidad
         kw['prioridad']=item.prioridad
         kw['estado']=item.estado
-	kw['archivo_externo']=item.archivo_externo
-	kw['version']=item.version
-	kw['observacion']=item.observacion
-	kw['fecha_modificacion']=item.fecha_modificacion
+        kw['archivo_externo']=item.archivo_externo
+        kw['version']=item.version
+        kw['observacion']=item.observacion
+        kw['fecha_modificacion']=item.fecha_modificacion
         kw['vivo']=item.vivo
 
         id_item = item.id_item
@@ -253,10 +253,10 @@ class ItemController(BaseController):
         itemHistorial.complejidad = item.complejidad
         itemHistorial.prioridad = item.prioridad
         itemHistorial.estado = item.estado
-	itemHistorial.archivo_externo = item.archivo_externo
-	itemHistorial.version = item.version
-	itemHistorial.observacion = item.observacion
-	itemHistorial.fecha_modificacion = item.fecha_modificacion
+        itemHistorial.archivo_externo = item.archivo_externo
+        itemHistorial.version = item.version
+        itemHistorial.observacion = item.observacion
+        itemHistorial.fecha_modificacion = item.fecha_modificacion
         DBSession.add(itemHistorial)
         
         item.id_tipo_item = kw['id_tipo_item']
@@ -265,10 +265,10 @@ class ItemController(BaseController):
         item.complejidad = kw['complejidad']
         item.prioridad = kw['prioridad']
         item.estado = kw['estado']
-	item.archivo_externo = kw['archivo_externo']
-	item.version = int(kw['version']) + 1
-	item.observacion = kw['observacion']
-	item.fecha_modificacion = kw['fecha_modificacion']
+        item.archivo_externo = kw['archivo_externo']
+        item.version = int(kw['version']) + 1
+        item.observacion = kw['observacion']
+        item.fecha_modificacion = kw['fecha_modificacion']
         item.vivo = True
 
         id_item = item.id_item
@@ -316,7 +316,7 @@ class ItemController(BaseController):
     @expose("is2sap.templates.item.listado")
     def listado(self, id_proyecto, id_fase, id_tipo_item, page=1):
         """Metodo para listar todos los items de la base de datos"""
-        items = DBSession.query(Item).filter_by(id_tipo_item=id_tipo_item).filter_by(vivo=True)
+        items = DBSession.query(Item).filter_by(id_tipo_item=id_tipo_item).filter_by(vivo=True).order_by(Item.id_item)
         currentPage = paginate.Page(items, page)#, items_per_page=1)
         return dict(items=currentPage.items, page='listado_item', id_proyecto=id_proyecto, 
                     id_fase=id_fase, id_tipo_item=id_tipo_item, currentPage=currentPage)
@@ -324,7 +324,7 @@ class ItemController(BaseController):
     @expose("is2sap.templates.item.listado_detalles")
     def listado_detalles(self, id_proyecto, id_fase, id_tipo_item, id_item, page=1):
         """Metodo para listar todos los items de la base de datos"""
-        detalles = DBSession.query(ItemDetalle).filter_by(id_item=id_item)
+        detalles = DBSession.query(ItemDetalle).filter_by(id_item=id_item).order_by(ItemDetalle.id_item_detalle)
         currentPage = paginate.Page(detalles, page)#, items_per_page=1)
         return dict(detalles=detalles, page='listado_detalles', id_proyecto=id_proyecto, 
                     id_fase=id_fase, id_tipo_item=id_tipo_item, currentPage=currentPage)
@@ -332,7 +332,7 @@ class ItemController(BaseController):
     @expose("is2sap.templates.item.listado_revertir")
     def listado_revertir(self, id_proyecto, id_fase, id_tipo_item, id_item, page=1):
         """Metodo para listar todos los items de la base de datos"""
-        item_historial = DBSession.query(ItemHistorial).filter_by(id_item=id_item)
+        item_historial = DBSession.query(ItemHistorial).filter_by(id_item=id_item).order_by(ItemHistorial.id_item)
         #detalles = DBSession.query(ItemDetalle).filter_by(id_item=id_item)
         currentPage = paginate.Page(item_historial, page)#, items_per_page=1)
         return dict(item_historial=item_historial, page='listado_revertir', id_proyecto=id_proyecto, 
@@ -363,10 +363,10 @@ class ItemController(BaseController):
         item_hist_nuevo.complejidad = item_actual.complejidad
         item_hist_nuevo.prioridad = item_actual.prioridad
         item_hist_nuevo.estado = item_actual.estado
-	item_hist_nuevo.archivo_externo = item_actual.archivo_externo
-	item_hist_nuevo.version = item_actual.version
-	item_hist_nuevo.observacion = item_actual.observacion
-	item_hist_nuevo.fecha_modificacion = item_actual.fecha_modificacion
+        item_hist_nuevo.archivo_externo = item_actual.archivo_externo
+        item_hist_nuevo.version = item_actual.version
+        item_hist_nuevo.observacion = item_actual.observacion
+        item_hist_nuevo.fecha_modificacion = item_actual.fecha_modificacion
         DBSession.add(item_hist_nuevo)
         
         item_actual.id_tipo_item = item_a_revertir.id_tipo_item
@@ -375,10 +375,10 @@ class ItemController(BaseController):
         item_actual.complejidad = item_a_revertir.complejidad
         item_actual.prioridad = item_a_revertir.prioridad
         item_actual.estado = item_a_revertir.estado
-	item_actual.archivo_externo = item_a_revertir.archivo_externo
-	item_actual.version = int(item_actual.version) + 1
-	item_actual.observacion = item_a_revertir.observacion
-	item_actual.fecha_modificacion = item_a_revertir.fecha_modificacion
+        item_actual.archivo_externo = item_a_revertir.archivo_externo
+        item_actual.version = int(item_actual.version) + 1
+        item_actual.observacion = item_a_revertir.observacion
+        item_actual.fecha_modificacion = item_a_revertir.fecha_modificacion
         item_actual.vivo = True
 
         #detalles_a_revertir = DBSession.query(ItemDetalleHistorial).filter_by(id_item=id_item).filter_by(version=version_a_revertir)
