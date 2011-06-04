@@ -31,7 +31,10 @@ ${menu_superior()}
             <td>${linea_base.estado}</td>
             <td>${linea_base.id_fase}</td>
             <td>${linea_base.version}</td>
-            <td><a href="${tg.url('/admin/linea_base/editar', id_linea_base=linea_base.id_linea_base)}"> <input class="alignEditar" name="editar" type="button" value="" /></a>			<a href="${tg.url('/admin/linea_base/confirmar_eliminar', id_linea_base=linea_base.id_linea_base)}"> <input class="alignEliminar" name="eliminar" type="button" value=""/></a></td>
+            <td><a href="${tg.url('/admin/linea_base/editar', id_linea_base=linea_base.id_linea_base)}"> <input class="alignEditar" name="editar" type="button" value="" /></a>			
+		<a href="${tg.url('/admin/linea_base/confirmar_eliminar', id_linea_base=linea_base.id_linea_base)}"> <input class="alignlistarItems" name="listaritems" type="button" value=""/></a>
+		<a href="${tg.url('/admin/linea_base/confirmar_eliminar', id_linea_base=linea_base.id_linea_base)}"> <input class="alignaddItemLineaBase" name="additemslineabase" type="button" value=""/></a>
+	    </td>
 
         </tr>
         </py:for>

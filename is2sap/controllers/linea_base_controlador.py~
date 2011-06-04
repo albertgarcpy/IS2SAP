@@ -114,7 +114,7 @@ class LineaBaseController(BaseController):
         """Metodo que aprueba la linea base"""
         linea_base = DBSession.query(LineaBase).get(id_linea_base)
 	if linea_base.estado == 'REVISION':
-		version_aux = float(linea_base.version)+1
+		version_aux = int(linea_base.version)+1
   		linea_base.version = str(version_aux)
 	  
         linea_base.estado = 'APROBADO'
@@ -144,3 +144,27 @@ class LineaBaseController(BaseController):
         """Despliega confirmar aprobar linea base"""
         linea_base=DBSession.query(LineaBase).get(id_linea_base)
         return dict(nombre_modelo='LineaBase', page='editar', value=linea_base)
+
+    @expose("is2sap.templates.linea_base.listado_proyectos")
+    def proyectos(self,page=1):
+        """Metodo para listar todos los Proyectos existentes de la base de datos"""
+        usuario = DBSession.query(Usuario).filter_by(nombre_usuario=request.identity['repoze.who.userid']).first()
+        todosProyectos = usuario.proyectos
+	proyectos = []
+        for proyecto in todosProyectos:
+            if proyecto.iniciado == True:
+               proyectos.append(proyecto)
+
+        currentPage = paginate.Page(proyectos, page, items_per_page=5)
+        return dict(proyectos=currentPage.items,
+           page='listado_proyectos', currentPage=currentPage)
+	
+
+    @expose("is2sap.templates.linea_base.listado_fases")
+    def fases(self,id_proyecto, page=1):
+        """Metodo para listar las Fases de un proyecto """
+        proyecto = DBSession.query(Proyecto).get(id_proyecto)
+        fases = proyecto.fases
+        currentPage = paginate.Page(fases, page, items_per_page=5)
+        return dict(fases=currentPage.items, page='listado_fases', 
+           nombre_proyecto=proyecto.nombre, id_proyecto=proyecto.id_proyecto, currentPage=currentPage)

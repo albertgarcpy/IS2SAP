@@ -11,7 +11,8 @@ from webhelpers import paginate
 
 from is2sap.lib.base import BaseController
 from is2sap.model import DBSession, metadata
-from is2sap.model.model import LineaBase
+
+from is2sap.model.model import TipoItem, Item, Proyecto, Usuario, Fase, Atributo, ItemDetalle, ItemHistorial, ItemDetalleHistorial, LineaBase
 from is2sap import model
 from is2sap.controllers.secure import SecureController
 from is2sap.controllers.error import ErrorController
@@ -144,3 +145,27 @@ class LineaBaseController(BaseController):
         """Despliega confirmar aprobar linea base"""
         linea_base=DBSession.query(LineaBase).get(id_linea_base)
         return dict(nombre_modelo='LineaBase', page='editar', value=linea_base)
+
+    @expose("is2sap.templates.linea_base.listado_proyectos")
+    def proyectos(self,page=1):
+        """Metodo para listar todos los Proyectos existentes de la base de datos"""
+        usuario = DBSession.query(Usuario).filter_by(nombre_usuario=request.identity['repoze.who.userid']).first()
+        todosProyectos = usuario.proyectos
+	proyectos = []
+        for proyecto in todosProyectos:
+            if proyecto.iniciado == True:
+               proyectos.append(proyecto)
+
+        currentPage = paginate.Page(proyectos, page, items_per_page=5)
+        return dict(proyectos=currentPage.items,
+           page='listado_proyectos', currentPage=currentPage)
+	
+
+    @expose("is2sap.templates.linea_base.listado_fases")
+    def fases(self,id_proyecto, page=1):
+        """Metodo para listar las Fases de un proyecto """
+        proyecto = DBSession.query(Proyecto).get(id_proyecto)
+        fases = proyecto.fases
+        currentPage = paginate.Page(fases, page, items_per_page=5)
+        return dict(fases=currentPage.items, page='listado_fases', 
+           nombre_proyecto=proyecto.nombre, id_proyecto=proyecto.id_proyecto, currentPage=currentPage)

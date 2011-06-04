@@ -20,6 +20,36 @@
 </py:def>
 
 
+<py:def function="menu_superior_proyectos">
+        <div class="menu bubplastic horizontal aqua">
+	    <ul>
+		<li>
+                     <span class="menu_r">
+                           <a href="${tg.url('/desa')}" class="${('', 'active')[defined('page') and page=='desa']}">
+                              <span class="menu_ar">Volver</span>
+                           </a>
+                     </span>
+                </li>
+	    </ul>
+	    <br class="clearit" />
+        </div>
+     </py:def>
+
+     <py:def function="menu_superior_fases">
+        <div class="menu bubplastic horizontal aqua">
+	    <ul>
+		<li>
+                    <span class="menu_r">
+                         <a href="${tg.url('/item/proyectos')}" class="${('', 'active')[defined('page') and page=='listado_proyectos']}">
+                            <span class="menu_ar">Volver</span>
+                         </a>
+                    </span>
+                </li>
+	    </ul>
+	    <br class="clearit" />
+        </div>
+     </py:def>
+
 
 <py:def function="menu_superior_nuevo">
 
