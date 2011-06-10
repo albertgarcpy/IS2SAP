@@ -60,7 +60,7 @@ Proyecto_Usuario = Table('Proyecto_Usuario', metadata,
 )
 
 ##----------------------------- Tabla de Asociacion "LineaBase_Item"-----------------------------------
-Proyecto_Usuario = Table('Proyecto_Usuario', metadata,
+LineaBase_Item = Table('LineaBase_Item', metadata,
     Column('id_linea_base', INTEGER(), ForeignKey('LineaBase.id_linea_base', 
         onupdate="CASCADE", ondelete="CASCADE"), primary_key=True, nullable=False),
     Column('id_item', INTEGER(), ForeignKey('Item.id_item', 
