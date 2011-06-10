@@ -52,8 +52,6 @@ class ItemController(BaseController):
                 HiddenField('id_item', label_text='Id'),
                 HiddenField('id_tipo_item', validator=NotEmpty, label_text='Tipo de Item'),
                 Spacer(),
-                TextField('id_linea_base', label_text='Linea Base'),
-                Spacer(),
                 TextArea('descripcion', validator=NotEmpty, attrs=dict(rows=3, cols=33), label_text='Descripcion',
                       help_text='Introduzca una descripcion'),
                 Spacer(),
@@ -115,7 +113,6 @@ class ItemController(BaseController):
         """Metodo para agregar un registro a la base de datos """
         item = Item()
         item.id_tipo_item = kw['id_tipo_item']
-        item.id_linea_base = kw['id_linea_base']
         item.descripcion = kw['descripcion']
         item.complejidad = kw['complejidad']
         item.prioridad = kw['prioridad']
@@ -165,8 +162,6 @@ class ItemController(BaseController):
         fields = [
                 HiddenField('id_item', label_text='Id'),
                 HiddenField('id_tipo_item', validator=NotEmpty, label_text='Tipo de Item'),
-                Spacer(),
-                HiddenField('id_linea_base', label_text='Linea Base'),
                 Spacer(),
                 TextArea('descripcion', validator=NotEmpty, attrs=dict(rows=3, cols=33), label_text='Descripcion',
                       help_text='Introduzca una descripcion'),
@@ -219,7 +214,6 @@ class ItemController(BaseController):
         item=DBSession.query(Item).get(id_item)
         kw['id_item']=item.id_item
         kw['id_tipo_item']=item.id_tipo_item
-        kw['id_linea_base']=item.id_linea_base
         kw['descripcion']=item.descripcion
         kw['complejidad']=item.complejidad
         kw['prioridad']=item.prioridad
@@ -249,7 +243,6 @@ class ItemController(BaseController):
         itemHistorial = ItemHistorial()
         itemHistorial.id_item = item.id_item
         itemHistorial.id_tipo_item = item.id_tipo_item
-        itemHistorial.id_linea_base = item.id_linea_base
         itemHistorial.descripcion = item.descripcion
         itemHistorial.complejidad = item.complejidad
         itemHistorial.prioridad = item.prioridad
@@ -261,7 +254,6 @@ class ItemController(BaseController):
         DBSession.add(itemHistorial)
         
         item.id_tipo_item = kw['id_tipo_item']
-        item.id_linea_base = kw['id_linea_base']
         item.descripcion = kw['descripcion']
         item.complejidad = kw['complejidad']
         item.prioridad = kw['prioridad']
@@ -359,7 +351,6 @@ class ItemController(BaseController):
         item_hist_nuevo = ItemHistorial()
         item_hist_nuevo.id_item = item_actual.id_item
         item_hist_nuevo.id_tipo_item = item_actual.id_tipo_item
-        item_hist_nuevo.id_linea_base = item_actual.id_linea_base
         item_hist_nuevo.descripcion = item_actual.descripcion
         item_hist_nuevo.complejidad = item_actual.complejidad
         item_hist_nuevo.prioridad = item_actual.prioridad
@@ -371,7 +362,6 @@ class ItemController(BaseController):
         DBSession.add(item_hist_nuevo)
         
         item_actual.id_tipo_item = item_a_revertir.id_tipo_item
-        item_actual.id_linea_base = item_a_revertir.id_linea_base
         item_actual.descripcion = item_a_revertir.descripcion
         item_actual.complejidad = item_a_revertir.complejidad
         item_actual.prioridad = item_a_revertir.prioridad

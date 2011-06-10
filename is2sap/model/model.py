@@ -367,7 +367,7 @@ class ItemHistorial(DeclarativeBase):
     id_historial_item = Column(u'id_historial_item', INTEGER(), primary_key=True, nullable=False)
     id_item = Column(u'id_item', INTEGER(), ForeignKey('Item.id_item'), nullable=False)
     id_tipo_item = Column(u'id_tipo_item', INTEGER(), ForeignKey('Tipo_Item.id_tipo_item'), nullable=False)
-    id_linea_base = Column(u'id_linea_base', INTEGER(), ForeignKey('Linea_Base.id_linea_base'), nullable=True)
+    
     descripcion = Column(u'descripcion', VARCHAR(length=None, convert_unicode=False, assert_unicode=None, unicode_error=None, _warn_on_bytestring=False), nullable=False)
     complejidad = Column(u'complejidad', VARCHAR(length=None, convert_unicode=False, assert_unicode=None, unicode_error=None, _warn_on_bytestring=False), nullable=False)
     prioridad = Column(u'prioridad', VARCHAR(length=None, convert_unicode=False, assert_unicode=None, unicode_error=None, _warn_on_bytestring=False), nullable=False)
