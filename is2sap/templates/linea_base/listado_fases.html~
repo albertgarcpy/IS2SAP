@@ -35,8 +35,8 @@
                          <td>${fase.descripcion}</td>
                          <td width="70">${fase.relacion_estado_fase.nombre_estado}</td>
 		         <td width="50" align="center">
-			    <a href="${tg.url('/admin/linea_base/listado')}"> 
-                               <input class="alignaddLineaBase" name="tipoItem" type="button" value=""/>
+			    <a href="${tg.url('/admin/linea_base/listado_linea_bases', id_proyecto=id_proyecto, id_fase=fase.id_fase)}"> 
+                               <input class="alignaddLineaBase" name="LineaBase" type="button" value=""/>
                             </a>
 		         </td>
                     </tr>

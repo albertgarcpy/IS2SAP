@@ -2,41 +2,189 @@
       xmlns:xi="http://www.w3.org/2001/XInclude"
       py:strip="">
 
-<py:def function="menu_superior">
-  
-<div class="menu bubplastic horizontal aqua">
-	<ul>
-		<li><span class="menu_r"><a href="${tg.url('/admin/usuario/nuevo')}" class="${('', 'active')[defined('page') and page=='about']}"><span class="menu_ar">Nuevo</span></a></span></li>
-	</ul>
-	<br class="clearit" />
-</div>
+     <py:def function="menu_superior_proyectos">
+        <div class="menu bubplastic horizontal aqua">
+	    <ul>
+		<li>
+                     <span class="menu_r">
+                           <a href="${tg.url('/desa')}" class="${('', 'active')[defined('page') and page=='desa']}">
+                              <span class="menu_ar">Volver</span>
+                           </a>
+                     </span>
+                </li>
+	    </ul>
+	    <br class="clearit" />
+        </div>
+     </py:def>
 
-</py:def>
+     <py:def function="menu_superior_fases">
+        <div class="menu bubplastic horizontal aqua">
+	    <ul>
+		<li>
+                    <span class="menu_r">
+                         <a href="${tg.url('/item/proyectos')}" class="${('', 'active')[defined('page') and page=='listado_proyectos']}">
+                            <span class="menu_ar">Volver</span>
+                         </a>
+                    </span>
+                </li>
+	    </ul>
+	    <br class="clearit" />
+        </div>
+     </py:def>
 
+     <py:def function="menu_superior_tipoitems(id_proyecto)">
+        <div class="menu bubplastic horizontal aqua">
+	    <ul>
+		<li>
+                    <span class="menu_r">
+                         <a href="${tg.url('/item/fases', id_proyecto=id_proyecto)}" 
+                            class="${('', 'active')[defined('page') and page=='listado_fases']}">
+                            <span class="menu_ar">Volver</span>
+                         </a>
+                    </span>
+                </li>
+	    </ul>
+	    <br class="clearit" />
+        </div>
+     </py:def>
 
+     <py:def function="menu_superior_items(id_proyecto, id_fase, id_tipo_item)">
+        <div class="menu bubplastic horizontal aqua">
+	    <ul>
+		<li>
+                    <span class="menu_r">
+                         <a href="${tg.url('/item/nuevo', id_proyecto=id_proyecto, id_fase=id_fase, id_tipo_item=id_tipo_item)}" 
+                            class="${('', 'active')[defined('page') and page=='nuevo_item']}">
+                            <span class="menu_ar">Nuevo</span>
+                         </a>
+                    </span>
+                </li>
+		<li>
+                    <span class="menu_r">
+                         <a href="${tg.url('/item/tipoItems', id_proyecto=id_proyecto, id_fase=id_fase)}" 
+                            class="${('', 'active')[defined('page') and page=='listado_tipo_items']}">
+                            <span class="menu_ar">Volver</span>
+                         </a>
+                    </span>
+                </li>
+	    </ul>
+	    <br class="clearit" />
+        </div>
+     </py:def>
 
-<py:def function="menu_superior_nuevo">
+    <py:def function="menu_superior_items_linea_base(id_proyecto, id_fase, id_linea_base)">
+        <div class="menu bubplastic horizontal aqua">
+	    <ul>
+		
+		<li>
+                    <span class="menu_r">
+                         <a href="${tg.url('/admin/linea_base/listado_linea_bases', id_proyecto=id_proyecto, id_fase=id_fase)}" 
+                            class="${('', 'active')[defined('page') and page=='listado_tipo_items']}">
+                            <span class="menu_ar">Volver</span>
+                         </a>
+                    </span>
+                </li>
+	    </ul>
+	    <br class="clearit" />
+        </div>
+     </py:def>
+     
+     <py:def function="menu_superior_items_a_asignar_linea_base(id_proyecto, id_fase, id_linea_base)">
+        <div class="menu bubplastic horizontal aqua">
+	    <ul>
+		
+		<li>
+                    <span class="menu_r">
+                         <a href="${tg.url('/admin/linea_base/listadoItemsPorLineaBase', id_proyecto=id_proyecto, id_fase=id_fase, id_linea_base=id_linea_base)}" 
+                            class="${('', 'active')[defined('page') and page=='listadoItemsPorLineaBase']}">
+                            <span class="menu_ar">Volver</span>
+                         </a>
+                    </span>
+                </li>
+	    </ul>
+	    <br class="clearit" />
+        </div>
+     </py:def>
 
-<div class="menu bubplastic horizontal aqua">
-	<ul>
-		<li><span class="menu_r"><a href="${tg.url('/admin/usuario/listado')}" class="${('', 'active')[defined('page') and page=='about']}"><span class="menu_ar">Cancelar</span></a></span></li>
-	</ul>
-	<br class="clearit" />
-</div>
+     <py:def function="menu_superior_nuevo(id_proyecto, id_fase, id_tipo_item)">
+        <div class="menu bubplastic horizontal aqua">
+	    <ul>
+		<li>
+                    <span class="menu_r">
+                         <a href="${tg.url('/item/listado', id_proyecto=id_proyecto, id_fase=id_fase, id_tipo_item=id_tipo_item)}" 
+                            class="${('', 'active')[defined('page') and page=='listado_item']}">
+                            <span class="menu_ar">Cancelar</span>
+                         </a>
+                    </span>
+                </li>
+	    </ul>
+	    <br class="clearit" />
+        </div>
+     </py:def>
 
-</py:def>
+     <py:def function="menu_superior_editar(id_proyecto, id_fase, id_tipo_item)">
+        <div class="menu bubplastic horizontal aqua">
+	    <ul>
+		<li>
+                    <span class="menu_r">
+                         <a href="${tg.url('/item/listado', id_proyecto=id_proyecto, id_fase=id_fase, id_tipo_item=id_tipo_item)}" 
+                            class="${('', 'active')[defined('page') and page=='listado_item']}">
+                            <span class="menu_ar">Cancelar</span>
+                         </a>
+                    </span>
+                </li>
+	    </ul>
+	    <br class="clearit" />
+        </div>
+     </py:def>
 
+     <py:def function="menu_superior_listado_detalles(id_proyecto, id_fase, id_tipo_item)">
+        <div class="menu bubplastic horizontal aqua">
+	    <ul>
+		<li>
+                    <span class="menu_r">
+                         <a href="${tg.url('/item/listado', id_proyecto=id_proyecto, id_fase=id_fase, id_tipo_item=id_tipo_item)}" 
+                            class="${('', 'active')[defined('page') and page=='listado_item']}">
+                            <span class="menu_ar">Volver</span>
+                         </a>
+                    </span>
+                </li>
+	    </ul>
+	    <br class="clearit" />
+        </div>
+     </py:def>
 
+     <py:def function="menu_superior_revertir(id_proyecto, id_fase, id_tipo_item, id_item)">
+        <div class="menu bubplastic horizontal aqua">
+	    <ul>
+		<li>
+                    <span class="menu_r">
+                         <a href="${tg.url('/item/listado', id_proyecto=id_proyecto, id_fase=id_fase, id_tipo_item=id_tipo_item)}" 
+                            class="${('', 'active')[defined('page') and page=='listado_item']}">
+                            <span class="menu_ar">Cancelar</span>
+                         </a>
+                    </span>
+                </li>
+	    </ul>
+	    <br class="clearit" />
+        </div>
+     </py:def>
 
-<py:def function="menu_superior_editar">
-
-<div class="menu bubplastic horizontal aqua">
-	<ul>
-		<li><span class="menu_r"><a href="${tg.url('/admin/usuario/listado')}" class="${('', 'active')[defined('page') and page=='about']}"><span class="menu_ar">Cancelar</span></a></span></li>
-	</ul>
-	<br class="clearit" />
-</div>
-
-</py:def>
+     <py:def function="menu_superior_listado_detalles_revertir(id_proyecto, id_fase, id_tipo_item, id_item)">
+        <div class="menu bubplastic horizontal aqua">
+	    <ul>
+		<li>
+                    <span class="menu_r">
+                         <a href="${tg.url('/item/listado_revertir', id_proyecto=id_proyecto, id_fase=id_fase, 
+                                    id_tipo_item=id_tipo_item, id_item=id_item)}" 
+                            class="${('', 'active')[defined('page') and page=='listado_item']}">
+                            <span class="menu_ar">Volver</span>
+                         </a>
+                    </span>
+                </li>
+	    </ul>
+	    <br class="clearit" />
+        </div>
+     </py:def>
 
 </html>

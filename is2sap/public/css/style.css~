@@ -347,7 +347,12 @@ form.loginfields input#submit
 	width: 50px
 }
 
-.alignListarDetalleItem {
+.alignlistarItems {
+	background: #CCFFCC url('../images/listado_detalles.jpeg') top center no-repeat;
+	width: 50px
+}
+
+.alignhistorialLineaBase {
 	background: #CCFFCC url('../images/listado_detalles.jpeg') top center no-repeat;
 	width: 50px
 }

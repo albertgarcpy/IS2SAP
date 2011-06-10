@@ -1,6 +1,6 @@
 """Linea Base Form"""
 
-from tw.forms import TableForm, Spacer, TextField, PasswordField
+from tw.forms import TableForm, Spacer, TextField, PasswordField, TextArea
 from tw.forms.fields import Button, SubmitButton, HiddenField
 from tw.forms.validators import *
 from is2sap.widgets.mi_validador.mi_validador import *
@@ -14,18 +14,19 @@ class LineaBaseForm(TableForm):
     fields = [
         HiddenField('id_linea_base', label_text='Id',
             help_text='Id del usuario'),
-        TextField('descripcion', validator=NotEmpty, label_text='Descripcion',
-            help_text='Introduzca su descripcion'),
+	TextField('nombre', validator=NotEmpty, label_text='Nombre',
+            help_text='Introduzca el nombre de la linea base'),
         Spacer(),
-        TextField('estado', default='DESARROLLO', label_text='Estado', disabled=True,
-            help_text='Introduzca su estado'),
+	TextArea('descripcion', label_text='Descripcion',
+            help_text='Introduzca una descripcion de la linea base'),        
         Spacer(),
-        TextField('id_fase', validator=UniqueUsername, label_text='Fase',
-            help_text='Introduzca una fase'),
-        Spacer(),
-        TextField('version', validator=PlainText, label_text='Version',
-            help_text='Introduzca la version'),
-        Spacer()]
+	HiddenField('id_estado', validator=NotEmpty, label_text='Estado',
+            help_text='Identificador del estado de la linea base.'),
+	HiddenField('id_fase', validator=NotEmpty, label_text='Fase',
+            help_text='Identificador de la fase.'),
+	HiddenField('version', validator=NotEmpty, label_text='Version',
+            help_text='Version de la linea base'),
+	Spacer()]
     submit_text = 'Guardar Linea Base'
 
 class EditLineaBaseForm(TableForm):
@@ -34,20 +35,21 @@ class EditLineaBaseForm(TableForm):
     show_errors = True
 
     fields = [
-        HiddenField('id_linea_base', label_text='Id',
+       HiddenField('id_linea_base', label_text='Id',
             help_text='Id del usuario'),
-        TextField('descripcion', validator=NotEmpty, label_text='Descripcion',
-            help_text='Introduzca su descripcion'),
+	TextField('nombre', validator=NotEmpty, label_text='Nombre',
+            help_text='Introduzca el nombre de la linea base'),
         Spacer(),
-        TextField('estado', validator=NotEmpty, label_text='Estado',
-            help_text='Introduzca su estado'),
+	TextArea('descripcion', label_text='Descripcion',
+            help_text='Introduzca una descripcion de la linea base'),        
         Spacer(),
-        TextField('id_fase', validator=UniqueUsername, label_text='Fase',
-            help_text='Introduzca una fase'),
-        Spacer(),
-        TextField('version', validator=PlainText, label_text='Version',
-            help_text='Introduzca la version'),
-        Spacer()]
+	HiddenField('id_estado', validator=NotEmpty, label_text='Estado',
+            help_text='Identificador del estado de la linea base.'),
+	HiddenField('id_fase', validator=NotEmpty, label_text='Fase',
+            help_text='Identificador de la fase.'),
+	HiddenField('version', validator=NotEmpty, label_text='Version',
+            help_text='Version de la linea base'),
+	Spacer()]
 
     submit_text = 'Guardar Linea Base'
     

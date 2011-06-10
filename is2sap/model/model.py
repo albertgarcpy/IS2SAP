@@ -59,6 +59,14 @@ Proyecto_Usuario = Table('Proyecto_Usuario', metadata,
         onupdate="CASCADE", ondelete="CASCADE" ), primary_key=True, nullable=False),
 )
 
+##----------------------------- Tabla de Asociacion "LineaBase_Item"-----------------------------------
+LineaBase_Item = Table('LineaBase_Item', metadata,
+    Column('id_linea_base', INTEGER(), ForeignKey('LineaBase.id_linea_base', 
+        onupdate="CASCADE", ondelete="CASCADE"), primary_key=True, nullable=False),
+    Column('id_item', INTEGER(), ForeignKey('Item.id_item', 
+        onupdate="CASCADE", ondelete="CASCADE" ), primary_key=True, nullable=False),
+)
+
 ##----------------------------- Tabla de Asociacion "Proyecto_Rol"-----------------------------------
 Proyecto_Rol = Table('Proyecto_Rol', metadata,
     Column('id_proyecto', INTEGER(), ForeignKey('Proyecto.id_proyecto',
@@ -283,6 +291,7 @@ class LineaBase(DeclarativeBase):
     __tablename__ = 'Linea_Base'
 
     #column definitions
+    nombre = Column(u'nombre', VARCHAR(length=None, convert_unicode=False, assert_unicode=None, unicode_error=None, _warn_on_bytestring=False))
     descripcion = Column(u'descripcion', VARCHAR(length=None, convert_unicode=False, assert_unicode=None, unicode_error=None, _warn_on_bytestring=False))
     estado = Column(u'estado', VARCHAR(length=None, convert_unicode=False, assert_unicode=None, unicode_error=None, _warn_on_bytestring=False), nullable=False)
     id_fase = Column(u'id_fase', INTEGER(), ForeignKey('Fase.id_fase'), nullable=False)
@@ -290,7 +299,25 @@ class LineaBase(DeclarativeBase):
     version = Column(u'version', INTEGER(), nullable=False)
 
     #relation definitions
-    fase = relationship('Fase', backref='lineas_bases')
+    fase = relationship('Fase', backref='linea_bases')
+
+
+##----------------------------- Clase "LineaBaseHistorial"-----------------------------------
+class LineaBaseHistorial(DeclarativeBase):
+
+    __tablename__ = 'Linea_Base_Historial'
+
+    #column definitions
+    id_historial_linea_base = Column(u'id_historial_linea_base', INTEGER(), primary_key=True, nullable=False)
+    nombre = Column(u'nombre', VARCHAR(length=None, convert_unicode=False, assert_unicode=None, unicode_error=None, _warn_on_bytestring=False))
+    descripcion = Column(u'descripcion', VARCHAR(length=None, convert_unicode=False, assert_unicode=None, unicode_error=None, _warn_on_bytestring=False))
+    estado = Column(u'estado', VARCHAR(length=None, convert_unicode=False, assert_unicode=None, unicode_error=None, _warn_on_bytestring=False), nullable=False)
+    id_fase = Column(u'id_fase', INTEGER(), ForeignKey('Fase.id_fase'), nullable=False)
+    id_linea_base = Column(u'id_linea_base', INTEGER(), ForeignKey('Item.id_item'), nullable=False)
+    version = Column(u'version', INTEGER(), nullable=False)
+
+    #relation definitions
+    relacion_historial_linea_base = relationship('LineaBase', backref='linea_base_historial')
 
 
 ##----------------------------- Clase "Item"-----------------------------------
@@ -301,7 +328,7 @@ class Item(DeclarativeBase):
     #column definitions
     id_item = Column(u'id_item', INTEGER(), primary_key=True, nullable=False)
     id_tipo_item = Column(u'id_tipo_item', INTEGER(), ForeignKey('Tipo_Item.id_tipo_item'), nullable=False)
-    id_linea_base = Column(u'id_linea_base', INTEGER(), ForeignKey('Linea_Base.id_linea_base'), nullable=True)
+   
     descripcion = Column(u'descripcion', VARCHAR(length=None, convert_unicode=False, assert_unicode=None, unicode_error=None, _warn_on_bytestring=False), nullable=False)
     complejidad = Column(u'complejidad', VARCHAR(length=None, convert_unicode=False, assert_unicode=None, unicode_error=None, _warn_on_bytestring=False), nullable=False)
     prioridad = Column(u'prioridad', VARCHAR(length=None, convert_unicode=False, assert_unicode=None, unicode_error=None, _warn_on_bytestring=False), nullable=False)
@@ -313,7 +340,8 @@ class Item(DeclarativeBase):
     vivo = Column(u'vivo', BOOLEAN(create_constraint=True, name=None), nullable=False)
 
     #relation definitions
-    linea_base = relationship('LineaBase', backref='items')
+    #linea_base = relationship('LineaBase', backref='items')
+    linea_bases = relationship('LineaBase', secondary=LineaBase_Item, backref='items')
 
 
 ##----------------------------- Clase "ItemDetalle"-----------------------------------

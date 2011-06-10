@@ -24,7 +24,7 @@
                      <th>Nombre</th>
                      <th>Descripcion</th>
                      <th>Estado</th>
-		     <th>Acciones</th>
+		     <th>Líneas Bases</th>
                   </tr>
 
                  <py:for each="fase in fases">
@@ -35,7 +35,7 @@
                          <td>${fase.descripcion}</td>
                          <td width="70">${fase.relacion_estado_fase.nombre_estado}</td>
 		         <td width="50" align="center">
-			    <a href="${tg.url('/admin/linea_base/listado')}"> 
+			    <a href="${tg.url('/admin/linea_base/listado_linea_bases', id_proyecto=id_proyecto, id_fase=fase.id_fase)}"> 
                                <input class="alignaddLineaBase" name="LineaBase" type="button" value=""/>
                             </a>
 		         </td>
