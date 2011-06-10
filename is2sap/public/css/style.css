@@ -352,6 +352,11 @@ form.loginfields input#submit
 	width: 50px
 }
 
+.alignhistorialLineaBase {
+	background: #CCFFCC url('../images/bg-bubplastic.gif') top center no-repeat;
+	width: 50px
+}
+
 .botones {
 	background: #CCFFCC;
 	height: 30px;

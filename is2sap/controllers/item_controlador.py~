@@ -504,6 +504,7 @@ class ItemController(BaseController):
         return dict(items=currentPage.items, page='listadoItemsParaAsignaraLineaBase', id_proyecto=id_proyecto, 
                     id_fase=id_fase, id_linea_base=id_linea_base, currentPage=currentPage)
 
+
     
     @expose()
     def asignarItem(self, id_proyecto, id_fase, id_linea_base):

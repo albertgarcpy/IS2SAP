@@ -34,22 +34,36 @@ class LineaBaseController(BaseController):
 
     @expose('is2sap.templates.linea_base.nuevo')
     def nuevo(self, **kw):
-        """Despliega el formulario para añadir un nuevo Línea Base."""
+        """Despliega el formulario para añadir una linea base a la fase"""
         tmpl_context.form = crear_linea_base_form
-        return dict(nombre_modelo='LineaBase', page='nuevo', value=kw)
+        return dict(nombre_modelo='LineaBase', page='nueva_linea_base', value=kw)
 
-    @validate(crear_linea_base_form, error_handler=nuevo)
+
+    @expose('is2sap.templates.linea_base.nuevo')
+    def nuevoDesdeFase(self, id_fase, **kw):
+        """Despliega el formulario para añadir una linea base a la fase"""
+        tmpl_context.form = crear_linea_base_form
+        kw['id_estado']= 'Desarrollo'
+        kw['id_fase']= id_fase
+	kw['version']= '1'
+        return dict(nombre_modelo='LineaBase', idFase=id_fase, page='nuevo', value=kw)
+
+
+    @validate(crear_linea_base_form, error_handler=nuevoDesdeFase)
     @expose()
     def add(self, **kw):
         """Metodo para agregar un registro a la base de datos """
         linea_base = LineaBase()
+	linea_base.nombre = kw['nombre']
         linea_base.descripcion = kw['descripcion']
-        linea_base.estado = kw['estado']
+        linea_base.estado = kw['id_estado']
         linea_base.id_fase = kw['id_fase']
         linea_base.version = kw['version']
         DBSession.add(linea_base)
-        DBSession.flush()    
-        redirect("/admin/linea_base/listado")
+        DBSession.flush()
+	id_fase = kw['id_fase']
+	id_proyecto=DBSession.query(Fase.id_proyecto).filter_by(id_fase=id_fase).first()    
+        redirect("/admin/linea_base/listado_linea_bases",id_proyecto=id_proyecto, id_fase=id_fase)
 
     @expose("is2sap.templates.linea_base.listado")
     def listado(self,page=1):
@@ -62,23 +76,25 @@ class LineaBaseController(BaseController):
 
 
     @expose('is2sap.templates.linea_base.editar')
-    def editar(self, id_linea_base, **kw):
+    def editar(self, id_proyecto, id_fase, id_linea_base, **kw):
         """Metodo que rellena el formulario para editar los datos de un Línea Base"""
         tmpl_context.form = editar_linea_base_form
         traerLineaBase=DBSession.query(LineaBase).get(id_linea_base)
         kw['id_linea_base']=traerLineaBase.id_linea_base
+	kw['nombre']=traerLineaBase.nombre
         kw['descripcion']=traerLineaBase.descripcion
         kw['estado']=traerLineaBase.estado
         kw['id_fase']=traerLineaBase.id_fase
         kw['version']=traerLineaBase.version
-        return dict(nombre_modelo='LineaBase', page='editar', value=kw)
+	return dict(nombre_modelo='LineaBase', id_proyecto=id_proyecto, id_fase=id_fase, id_linea_base=id_linea_base, page='editar', value=kw)
 
 
     @validate(editar_linea_base_form, error_handler=editar)
     @expose()
     def update(self, **kw):        
         """Metodo que actualiza la base de datos"""
-        linea_base = DBSession.query(LineaBase).get(kw['id_linea_base'])   
+        linea_base = DBSession.query(LineaBase).get(kw['id_linea_base'])
+	linea_base.nombre = kw['nombre']   
         linea_base.descripcion = kw['descripcion']
         linea_base.estado = kw['estado']
         linea_base.id_fase = kw['id_fase']
@@ -114,11 +130,11 @@ class LineaBaseController(BaseController):
     def aprobar(self, id_linea_base, **kw):     
         """Metodo que aprueba la linea base"""
         linea_base = DBSession.query(LineaBase).get(id_linea_base)
-	if linea_base.estado == 'REVISION':
+	if linea_base.estado == 'Revision':
 		version_aux = int(linea_base.version)+1
   		linea_base.version = str(version_aux)
 	  
-        linea_base.estado = 'APROBADO'
+        linea_base.estado = 'Aprobado'
 
         DBSession.flush()
         redirect("/admin/linea_base/aprobaciones")
@@ -128,7 +144,7 @@ class LineaBaseController(BaseController):
     def romper(self, id_linea_base, **kw):     
         """Metodo que rompe la linea base"""
         linea_base = DBSession.query(LineaBase).get(id_linea_base)   
-        linea_base.estado = 'REVISION'
+        linea_base.estado = 'Revision'
         DBSession.flush()
         redirect("/admin/linea_base/aprobaciones")
 
@@ -169,3 +185,26 @@ class LineaBaseController(BaseController):
         currentPage = paginate.Page(fases, page, items_per_page=5)
         return dict(fases=currentPage.items, page='listado_fases', 
            nombre_proyecto=proyecto.nombre, id_proyecto=proyecto.id_proyecto, currentPage=currentPage)
+
+
+    @expose("is2sap.templates.linea_base.listado_linea_bases")
+    def listado_linea_bases(self, id_proyecto, id_fase, page=1):
+        """Metodo para listar las lineas bases de una Fase """
+        fase = DBSession.query(Fase).get(id_fase)
+        linea_bases = fase.linea_bases
+        currentPage = paginate.Page(linea_bases, page, items_per_page=5)
+        return dict(linea_bases=currentPage.items,
+           page='listado_linea_bases', nombre_fase=fase.nombre, id_proyecto=id_proyecto, id_fase=id_fase, currentPage=currentPage)
+
+
+    @expose("is2sap.templates.linea_base.historial_linea_bases")
+    def historial_linea_bases(self, id_proyecto, id_fase, id_linea_base, page=1):
+        """Metodo para listar el historial de una linea base"""
+        linea_base = DBSession.query(LineaBase).get(id_linea_base)
+        linea_bases = linea_base.linea_base_historial
+        currentPage = paginate.Page(linea_bases, page, items_per_page=5)
+        return dict(linea_bases=currentPage.items,
+           page='historial_linea_bases', nombre_linea_base=linea_base.nombre, id_proyecto=id_proyecto, id_fase=id_fase, currentPage=currentPage)
+
+
+   
