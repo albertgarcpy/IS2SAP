@@ -1,0 +1,25 @@
+---PARA AGREGAR LOS CAMBIOS AL REPOSITORIO
+
+cd /home/alberto/workspace/IS2SAP
+git add --all
+git commit -m 'first commit'
+git pull
+(RESOLVER CONFLICTOS SI HAY)
+git add --all
+git commit -m 'first commit'
+git push -u origin master
+
+---PARA OBTENER LOS ULTIMOS CAMBIOS DEL REPOSITORIO
+
+cd /home/alberto/workspace/IS2SAP
+git pull
+
+
+--- SOLO PARA EMPUJAR AL REPOSITORIO POR PRIMERA VEZ
+
+git remote add origin git@github.com:albertgarcpy/IS2SAP.git
+
+
+--- PARA CLONAR UN REPOSITORIO
+
+git clone git@github.com:albertgarcpy/IS2SAP.git

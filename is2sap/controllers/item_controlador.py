@@ -16,6 +16,13 @@ from tw.forms.fields import Button, SubmitButton, HiddenField, CheckBox, FileFie
 from tw.forms.validators import *
 from sqlalchemy.orm import contains_eager
 
+import shutil
+import os
+from pkg_resources import resource_filename
+
+public_dirname = os.path.join(os.path.abspath(resource_filename('is2sap', 'public')))
+items_dirname = os.path.join(public_dirname, 'items')
+
 
 from is2sap.widgets.mi_validador.mi_validador import *
 from is2sap.lib.base import BaseController
@@ -61,8 +68,7 @@ class ItemController(BaseController):
                 SingleSelectField('prioridad', validator=NotEmpty, options=prioridad_options, label_text='Prioridad',
                       help_text='Introduzca la prioridad'),
                 Spacer(),
-                SingleSelectField('estado', validator=NotEmpty, options=estado_options, label_text='Estado',
-                      help_text='Introduzca un estado valido'),
+                TextField('estado', disabled='False', label_text='Estado'),
                 Spacer(),
 	        FileField('archivo_externo', label_text='Archivo Externo',
                       help_text='Introduzca un archivo externo'),
@@ -103,6 +109,7 @@ class ItemController(BaseController):
         tmpl_context.form = crear_item_form
         kw['id_tipo_item']= int(id_tipo_item)
         kw['version']= 1
+        kw['estado']="Desarrollo"
         
         return dict(nombre_modelo='Item', id_proyecto=id_proyecto, id_fase=id_fase, id_tipo_item=id_tipo_item, page='nuevo_item', value=kw)
 
@@ -111,13 +118,19 @@ class ItemController(BaseController):
     @expose()
     def add(self, **kw):
         """Metodo para agregar un registro a la base de datos """
+        guardarArchivo = True
         item = Item()
         item.id_tipo_item = kw['id_tipo_item']
         item.descripcion = kw['descripcion']
         item.complejidad = kw['complejidad']
         item.prioridad = kw['prioridad']
-        item.estado = kw['estado']
-        item.archivo_externo = kw['archivo_externo']
+        item.estado = "Desarrollo"
+
+        if kw['archivo_externo'] != "":
+           item.archivo_externo = kw['archivo_externo'].filename
+        else:
+           guardarArchivo = False
+
         item.version = kw['version']
         item.observacion = kw['observacion']
         item.fecha_modificacion = kw['fecha_modificacion']
@@ -141,6 +154,20 @@ class ItemController(BaseController):
 
             DBSession.add(itemDetalle)
             DBSession.flush()
+
+        if guardarArchivo == True:
+           #write the picture file to the public directory
+           item_path = os.path.join(items_dirname, str(item.id_item))
+           try:
+               os.makedirs(item_path)
+           except OSError:
+               #ignore if the folder already exists
+               pass
+        
+           item_path = os.path.join(item_path, item.archivo_externo)
+           f = file(item_path, "w")
+           f.write(kw['archivo_externo'].value)
+           f.close()
 
         flash("Item insertado")
         
@@ -172,8 +199,7 @@ class ItemController(BaseController):
                 SingleSelectField('prioridad', validator=NotEmpty, options=prioridad_options, label_text='Prioridad',
                       help_text='Introduzca la prioridad'),
                 Spacer(),
-                SingleSelectField('estado', validator=NotEmpty, options=estado_options, label_text='Estado',
-                      help_text='Introduzca un estado valido'),
+                TextField('estado', disabled='False', label_text='Estado'),
                 Spacer(),
 	        FileField('archivo_externo', label_text='Archivo Externo',
                       help_text='Introduzca un archivo externo'),
@@ -217,7 +243,7 @@ class ItemController(BaseController):
         kw['descripcion']=item.descripcion
         kw['complejidad']=item.complejidad
         kw['prioridad']=item.prioridad
-        kw['estado']=item.estado
+        kw['estado']="Desarrollo"
         kw['archivo_externo']=item.archivo_externo
         kw['version']=item.version
         kw['observacion']=item.observacion
@@ -239,6 +265,11 @@ class ItemController(BaseController):
     @expose()
     def update(self, **kw):        
         """Metodo que actualiza la base de datos"""
+
+# FALTAN ALGUNOS PUNTOS:: Cuando el item esta aprobado, se modifica, cambia de version, se va al historial con el estado de Desarrollo, y el actual queda en #estado de Desarrollo y pone en revision todos los que estan afectado por el. Verificar que la Linea Base en la que se encuentra no este #aprobada. Si el item esta en una Linea Base en estado de Desarrollo o en Revision se tiene que desasignar automaticamente de la Linea Base. #Se tiene que tener en cuenta sus antecesores. 
+
+# Al modificarse un item en una fase posterior, hay que poner en revision automaticamente la Linea Base en el que se encuentran los items afectados, dejando intacto los items que no estan afectados.
+
         item = DBSession.query(Item).get(kw['id_item'])   
         itemHistorial = ItemHistorial()
         itemHistorial.id_item = item.id_item
@@ -246,7 +277,7 @@ class ItemController(BaseController):
         itemHistorial.descripcion = item.descripcion
         itemHistorial.complejidad = item.complejidad
         itemHistorial.prioridad = item.prioridad
-        itemHistorial.estado = item.estado
+        itemHistorial.estado = "Desarrollo"
         itemHistorial.archivo_externo = item.archivo_externo
         itemHistorial.version = item.version
         itemHistorial.observacion = item.observacion
@@ -257,7 +288,7 @@ class ItemController(BaseController):
         item.descripcion = kw['descripcion']
         item.complejidad = kw['complejidad']
         item.prioridad = kw['prioridad']
-        item.estado = kw['estado']
+        item.estado = "Desarrollo"
         item.archivo_externo = kw['archivo_externo']
         item.version = int(kw['version']) + 1
         item.observacion = kw['observacion']
@@ -322,10 +353,45 @@ class ItemController(BaseController):
         return dict(detalles=detalles, page='listado_detalles', id_proyecto=id_proyecto, 
                     id_fase=id_fase, id_tipo_item=id_tipo_item, currentPage=currentPage)
 
+    @expose("is2sap.templates.item.listado_revivir")
+    def listado_revivir(self, id_proyecto, id_fase, id_tipo_item, page=1):
+        """Metodo para listar los items del tipo correspondiente que pueden ser revividos"""
+        items = DBSession.query(Item).filter_by(id_tipo_item=id_tipo_item).filter_by(vivo=False).order_by(Item.id_item)
+        currentPage = paginate.Page(items, page)#, items_per_page=1)
+        return dict(items=currentPage.items, page='listado_revivir', id_proyecto=id_proyecto, 
+                    id_fase=id_fase, id_tipo_item=id_tipo_item, currentPage=currentPage)
+
+    @expose()
+    def revivir_item(self, id_proyecto, id_fase, id_tipo_item, id_item, **kw):        
+        """Metodo que revive un item que habia sido eliminado"""
+        item = DBSession.query(Item).get(id_item)
+        item.vivo = True
+        item.estado = "Desarrollo"
+        DBSession.flush()
+        flash("Item revivido")           
+        redirect("/item/listado", id_proyecto=id_proyecto, id_fase=id_fase, id_tipo_item=id_tipo_item)
+
+    @expose("is2sap.templates.item.listado_detalles_revivir")
+    def listado_detalles_revivir(self, id_proyecto, id_fase, id_tipo_item, id_item, page=1):
+        """Metodo para listar todos los items de la base de datos"""
+        item_detalle = DBSession.query(ItemDetalle).filter_by(id_item=id_item)
+        currentPage = paginate.Page(item_detalle, page)#, items_per_page=1)
+        return dict(item_detalle=item_detalle, page='listado_detalles_revivir', id_proyecto=id_proyecto, 
+                    id_fase=id_fase, id_tipo_item=id_tipo_item, id_item=id_item, currentPage=currentPage)
+
+    @expose()
+    def aprobar(self, id_proyecto, id_fase, id_tipo_item, id_item, **kw):        
+        """Metodo que cambia el estado de un item al de Aprobado"""
+        item = DBSession.query(Item).get(id_item)
+        item.estado = "Aprobado"
+        DBSession.flush()
+        flash("Item aprobado")           
+        redirect("/item/listado", id_proyecto=id_proyecto, id_fase=id_fase, id_tipo_item=id_tipo_item)
+
     @expose("is2sap.templates.item.listado_revertir")
     def listado_revertir(self, id_proyecto, id_fase, id_tipo_item, id_item, page=1):
         """Metodo para listar todos los items de la base de datos"""
-        item_historial = DBSession.query(ItemHistorial).filter_by(id_item=id_item).order_by(ItemHistorial.id_item)
+        item_historial = DBSession.query(ItemHistorial).filter_by(id_item=id_item).order_by(ItemHistorial.version)
         #detalles = DBSession.query(ItemDetalle).filter_by(id_item=id_item)
         currentPage = paginate.Page(item_historial, page)#, items_per_page=1)
         return dict(item_historial=item_historial, page='listado_revertir', id_proyecto=id_proyecto, 
@@ -342,6 +408,9 @@ class ItemController(BaseController):
     @expose()
     def revertir_item(self, id_proyecto, id_fase, id_tipo_item, id_historial_item, **kw):        
         """Metodo que actualiza la base de datos"""
+
+#FALTAN ALGUNOS PUNTOS:: Para revertir vuelve en estado de Desarrollo y pone en revision a todos los que dependen de el, le asigna una nueva version y trata de recuperar todas las relaciones que se pueda.
+
         item_a_revertir = DBSession.query(ItemHistorial).get(id_historial_item)
         version_a_revertir = item_a_revertir.version
         id_item = item_a_revertir.id_item
@@ -365,7 +434,7 @@ class ItemController(BaseController):
         item_actual.descripcion = item_a_revertir.descripcion
         item_actual.complejidad = item_a_revertir.complejidad
         item_actual.prioridad = item_a_revertir.prioridad
-        item_actual.estado = item_a_revertir.estado
+        item_actual.estado = "Desarrollo"
         item_actual.archivo_externo = item_a_revertir.archivo_externo
         item_actual.version = int(item_actual.version) + 1
         item_actual.observacion = item_a_revertir.observacion
@@ -426,16 +495,20 @@ class ItemController(BaseController):
     @expose()
     def delete(self, id_proyecto, id_fase, id_tipo_item, id_item, **kw):
         """Metodo que elimina un registro de la base de datos"""
+
+#FALTAN ALGUNOS PUNTOS::Al eliminar el item se tiene que eliminar todas las relaciones que tiene y poner en revision todos los que afectados por el.
+
         item = DBSession.query(Item).get(id_item)
         item.vivo = False
+
+        #Ejemplo de como eliminar los detalles de un Item
         #detalles_del_item = item.item_detalles
         #tabla_item_detalle = DBSession.query(ItemDetalle).all()
-
         #for detalle in detalles_del_item:
             #DBSession.delete(DBSession.query(ItemDetalle).get(detalle.id_item_detalle))
-
         #DBSession.delete(DBSession.query(Item).get(id_item))
-        #redirect("/item/listado",id_proyecto=id_proyecto, id_fase=id_fase, id_tipo_item=id_tipo_item)
+
+        redirect("/item/listado",id_proyecto=id_proyecto, id_fase=id_fase, id_tipo_item=id_tipo_item)
 
     @expose("is2sap.templates.item.listado_proyectos")
     def proyectos(self,page=1):
@@ -456,8 +529,20 @@ class ItemController(BaseController):
     @expose("is2sap.templates.item.listado_fases")
     def fases(self,id_proyecto, page=1):
         """Metodo para listar las Fases de un proyecto """
+
+#FALTAN ALGUNOS PUNTOS: Para poder listar las fases a cargar items, se tiene como criterio que la fase no este en estado Inicial y las anteriores esten con Lineas Bases Parciales o Con Lineas Bases.
+
         proyecto = DBSession.query(Proyecto).get(id_proyecto)
         fases = proyecto.fases
+
+#Activar este for luego de que se haya hecho todo el metodo Iniciar Proyecto
+        #fasesTodas = proyecto.fases
+        #fases = []
+
+        #for fase in fasesTodas:
+        #    if fase.relacion_estado_fase.nombre_estado != "Inicial":
+        #       fases.append(fase)
+
         currentPage = paginate.Page(fases, page, items_per_page=5)
         return dict(fases=currentPage.items, page='listado_fases', 
            nombre_proyecto=proyecto.nombre, id_proyecto=proyecto.id_proyecto, currentPage=currentPage)
