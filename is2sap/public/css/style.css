@@ -255,6 +255,11 @@ form.loginfields input#submit
 	width: 50px
 }
 
+.alignaddLineaBase {
+	background: #CCFFCC url('../images/add1.png') top center no-repeat;
+	width: 50px
+}
+
 .alignaddAtributo{
 	background: #CCFFCC url('../images/add1.png') top center no-repeat;
 	width: 50px
@@ -337,7 +342,20 @@ form.loginfields input#submit
 	width: 50px
 }
 
+.alignaddItemLineaBase {
+	background: #CCFFCC url('../images/addItem.jpeg') top center no-repeat;
+	width: 50px
+}
 
+.alignlistarItems {
+	background: #CCFFCC url('../images/listado_detalles.jpeg') top center no-repeat;
+	width: 50px
+}
+
+.alignhistorialLineaBase {
+	background: #CCFFCC url('../images/bg-bubplastic.gif') top center no-repeat;
+	width: 50px
+}
 
 .botones {
 	background: #CCFFCC;

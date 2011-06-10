@@ -35,12 +35,14 @@ from is2sap.controllers.error import ErrorController
 
 
 from is2sap.controllers.usuario_controlador import UsuarioController
-from is2sap.controllers.tipo_item_controlador import TipoItemController
+#from is2sap.controllers.tipo_item_controlador import TipoItemController
 from is2sap.controllers.atributo_controlador import AtributoController
 from is2sap.controllers.proyecto_controlador import ProyectoController
 from is2sap.controllers.rol_controlador import RolController
 from is2sap.controllers.fase_controlador import FaseController
 from is2sap.controllers.permiso_controlador import PermisoController
+
+from is2sap.controllers.linea_base_controlador import LineaBaseController
 
 
 from tg import tmpl_context, validate
@@ -60,15 +62,14 @@ class AdminController(TGController):
 		
     #Administracion
     usuario = UsuarioController()
-    proyecto = ProyectoController()
-    fase = FaseController()
-    atributo = AtributoController()
-    tipo_item = TipoItemController()
     rol = RolController()
     permiso = PermisoController()
-    #Gestion de Configuracion
+    proyecto = ProyectoController()
+    fase = FaseController()
+    #tipo_item = TipoItemController()
     linea_base = LineaBaseController()
-    #Desarrollo
+    atributo = AtributoController()
+
 
     def __init__(self, models, session, config_type=None, translations=None):
         super(AdminController, self).__init__()

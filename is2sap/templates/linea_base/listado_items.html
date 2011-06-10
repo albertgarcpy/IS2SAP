@@ -6,7 +6,7 @@
       xmlns:xi="http://www.w3.org/2001/XInclude">
 
       <xi:include href="master.html" />
-      <xi:include href="menuItems.html" />
+      <xi:include href="menulinea_base.html" />
 
     <head>
            <meta content="text/html; charset=UTF-8" http-equiv="content-type" py:replace="''"/>
@@ -58,61 +58,6 @@
 <!--
 		         <td>${item.fecha_modificacion}</td>
 -->
-
-                         <td width="50">			
-			     <ul class="menu acciones">
-				<li class="top">
-                                   <a href="#" class="top_link"><span>ACCIONES</span></a>
-				      <ul class="sub">
-					 <li>
-                                             <a href="${tg.url('/item/aprobar', id_proyecto=id_proyecto, id_fase=id_fase,
-                                                      id_tipo_item=id_tipo_item, id_item=item.id_item)}">Aprobar
-					     </a>
-                                         </li>
-			                 <li>
-                                             <a href="${tg.url('/item/editar', id_proyecto=id_proyecto, id_fase=id_fase,
-                                                      id_tipo_item=id_tipo_item, id_item=item.id_item)}">Editar		                    
-				             </a>
-                                         </li>
-					 <li>
-                                             <a href="${tg.url('/item/confirmar_eliminar', id_proyecto=id_proyecto, id_fase=id_fase,
-                                                      id_tipo_item=id_tipo_item, id_item=item.id_item)}">Eliminar
-				             </a>
-                                         </li>
-					 <li>
-                                             <a href="${tg.url('/item/listado_detalles', id_proyecto=id_proyecto, id_fase=id_fase,
-                                                      id_tipo_item=id_tipo_item, id_item=item.id_item)}">Detalles
-					     </a>
-                                         </li>
-					 <li>
-                                             <a href="${tg.url('/item/listado_revertir', id_proyecto=id_proyecto, id_fase=id_fase,
-                                                      id_tipo_item=id_tipo_item, id_item=item.id_item)}">Revertibles
-					     </a>
-                                         </li>										
-				       </ul>
-				 </li>	
-							
-                             </ul>
-                         </td>
-
-<!--
-                         <td width="70">
-			    <ul class="menu acciones">
-			       <li class="top">
-                                  <a href="#" class="top_link"><span>FASES</span></a>
-			            <ul class="sub">
-			               <li>
-                                           <a href="${tg.url('/admin/fase/listadoFasesPorProyecto', 
-                                                    id_proyecto=proyecto.id_proyecto)}">Fases</a></li>
-			            </ul>
-			       </li>	
-			    </ul>
-                         </td>
-
-
-
-
-
                          <td>
 
                              <a href="${tg.url('/item/editar', id_proyecto=id_proyecto, id_fase=id_fase,
@@ -133,7 +78,7 @@
                                 <input class="alignRevertir" name="revertir" type="button" value=""/>
                              </a>
                          </td>
--->
+
                       </tr>
                   </py:for>
              </table>
