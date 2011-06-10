@@ -32,7 +32,7 @@ except ImportError:
     from sqlalchemy.databases.postgres import *
 
 __all__ = ['Usuario','Rol','Permiso','Proyecto', 'Fase', 'TipoItem', 'Atributo', 
-           'EstadoFase', 'Item', 'LineaBase', 'ItemDetalle', 'ItemHistorial', 'ItemDetalleHistorial','HistorialItem']
+           'EstadoFase', 'Item', 'LineaBase', 'ItemDetalle', 'ItemHistorial', 'ItemDetalleHistorial','HistorialItem', 'Relacion']
 
 
 ##----------------------------- Tabla de Asociacion "Rol_Permiso"-----------------------------------
@@ -385,3 +385,16 @@ class HistorialItem(DeclarativeBase):
     #relation definitions
     item = relationship('Item', backref='historial')
 
+
+class Relacion(DeclarativeBase):
+    __tablename__ = 'Relacion'
+
+    #column definitions
+    id_relacion = Column(u'id_relacion', INTEGER(), primary_key=True, nullable=False)
+    tipo = Column(u'tipo', VARCHAR(length=None, convert_unicode=False, assert_unicode=None, unicode_error=None, _warn_on_bytestring=False), nullable=False)
+    id_item1 = Column(u'id_item1', INTEGER(), ForeignKey('Item.id_item'), nullable=False)
+    id_item2 = Column(u'id_item2', INTEGER(), ForeignKey('Item.id_item'), nullable=False)
+    estado = Column(u'estado', VARCHAR(length=None, convert_unicode=False, assert_unicode=None, unicode_error=None, _warn_on_bytestring=False), nullable=False)
+    version = Column(u'version', INTEGER(), nullable=False)
+
+    #relation definitions
