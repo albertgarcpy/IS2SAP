@@ -40,13 +40,13 @@ class LineaBaseController(BaseController):
 
 
     @expose('is2sap.templates.linea_base.nuevo')
-    def nuevoDesdeFase(self, id_fase, **kw):
+    def nuevoDesdeFase(self, id_proyecto, id_fase, **kw):
         """Despliega el formulario para añadir una linea base a la fase"""
         tmpl_context.form = crear_linea_base_form
         kw['id_estado']= 'Desarrollo'
         kw['id_fase']= id_fase
 	kw['version']= '1'
-        return dict(nombre_modelo='LineaBase', idFase=id_fase, page='nuevo', value=kw)
+        return dict(nombre_modelo='LineaBase', id_proyecto=id_proyecto, id_fase=id_fase, page='nuevo', value=kw)
 
 
     @validate(crear_linea_base_form, error_handler=nuevoDesdeFase)
@@ -204,7 +204,7 @@ class LineaBaseController(BaseController):
         linea_bases = linea_base.linea_base_historial
         currentPage = paginate.Page(linea_bases, page, items_per_page=5)
         return dict(linea_bases=currentPage.items,
-           page='historial_linea_bases', nombre_linea_base=linea_base.nombre, id_proyecto=id_proyecto, id_fase=id_fase, currentPage=currentPage)
+           page='historial_linea_bases', nombre_linea_base=linea_base.nombre, id_proyecto=id_proyecto, id_fase=id_fase, id_linea_base=id_linea_base, currentPage=currentPage)
 
 
    
