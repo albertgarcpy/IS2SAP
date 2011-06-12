@@ -32,7 +32,7 @@
 	             <th>Archivo Externo</th>
 -->
 	             <th>Version</th>
-	             <th>Observacion</th>
+	             <th width="250">Observacion</th>
 <!--
 	             <th>Fecha de Modificacion</th>
 -->
@@ -54,7 +54,7 @@
 		         <td>${item.archivo_externo}</td>
 -->
 		         <td>${item.version}</td>
-		         <td>${item.observacion}</td>
+		         <td width="250">${item.observacion}</td>
 <!--
 		         <td>${item.fecha_modificacion}</td>
 -->
@@ -84,11 +84,11 @@
                                                       id_tipo_item=id_tipo_item, id_item=item.id_item)}">Detalles
 					     </a>
                                          </li>
-					 <li>
-                                             <a href="${tg.url('/item/listado_revertir', id_proyecto=id_proyecto, id_fase=id_fase,
+					 <li><a href="${tg.url('/item/listado_revertir', id_proyecto=id_proyecto, id_fase=id_fase,
                                                       id_tipo_item=id_tipo_item, id_item=item.id_item)}">Revertibles
-					     </a>
-                                         </li>										
+					     </a></li>
+					 <li><a href="${tg.url('/relacion/listado', id_item=item.id_item)}">Relaciones
+					     </a></li>
 				       </ul>
 				 </li>	
 							
