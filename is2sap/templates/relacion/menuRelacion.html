@@ -2,16 +2,13 @@
       xmlns:xi="http://www.w3.org/2001/XInclude"
       py:strip="">
 
-     <py:def function="menu_superior">  
+     <py:def function="menu_superior(idItemActual)">  
 	 <div class="menu bubplastic horizontal aqua">
 	     <ul>
 		 <li> 
                      <span class="menu_r">
-                           <a href="${tg.url('/desa/relacion/nuevo')}" class="${('', 'active')[defined('page') and page=='nuevo_relacion']}">
+                           <a href="${tg.url('/relacion/nuevo',idItemActual=idItemActual)}" class="${('', 'active')[defined('page') and page=='nuevo_relacion']}">
                               <span class="menu_ar">Nuevo</span>
-                           </a>
-                           <a href="${tg.url('/desa')}" class="${('', 'active')[defined('page') and page=='index']}">
-                              <span class="menu_ar">Volver</span>
                            </a>
                      </span>
                  </li>
@@ -25,7 +22,7 @@
 	     <ul>
 		 <li> 
                      <span class="menu_r">
-                           <a href="${tg.url('/desa/relacion/listado')}" class="${('', 'active')[defined('page') and page=='listado_relacion']}">
+                           <a href="${tg.url('/relacion/listado')}" class="${('', 'active')[defined('page') and page=='listado_relacion']}">
                               <span class="menu_ar">Cancelar</span>
                            </a>
                      </span>
@@ -34,13 +31,13 @@
 	     <br class="clearit" />
 	 </div>
      </py:def>
-
+<!--
      <py:def function="menu_superior_editar">  
 	 <div class="menu bubplastic horizontal aqua">
 	     <ul>
 		 <li> 
                      <span class="menu_r">
-                           <a href="${tg.url('/desa/relacion/listado')}" class="${('', 'active')[defined('page') and page=='listado_relacion']}">
+                           <a href="${tg.url('/relacion/listado')}" class="${('', 'active')[defined('page') and page=='listado_relacion']}">
                               <span class="menu_ar">Cancelar</span>
                            </a>
                      </span>
@@ -49,7 +46,7 @@
 	     <br class="clearit" />
 	 </div>
      </py:def>
-
+-->
      
 
 </html>

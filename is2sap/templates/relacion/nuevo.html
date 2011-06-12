@@ -6,16 +6,58 @@
       xmlns:xi="http://www.w3.org/2001/XInclude">
 
       <xi:include href="master.html"/>
-      <xi:include href="menuRelacion.html"/>
 
      <head>
 	   <meta content="text/html; charset=UTF-8" http-equiv="content-type" py:replace="''"/>
-	   <title>Nuevo ${nombre_modelo}</title>
+	    <title>Nuevo ${nombre_modelo}</title>
      </head>
 
      <body>
-	   <h2>Nuevo <div style="color:green"> ${nombre_modelo}</div></h2>
-	   ${menu_superior_nuevo()}
-	   <div py:replace="tmpl_context.form(value)">Form para crear relacion</div>
+	   <h2>Nueva  ${nombre_modelo} Para el Item: ${idItemActual} </h2>
+<table >
+  <tr valign="top">
+    <td>
+	    <table border="1">
+          <caption style="font-size: 12pt">ITEMS DE LA FASE ANTERIOR</caption>
+		  <tr style="color: purple; font-size: 11pt" align="center" >
+            <th>Item ID</th>		    
+            <th>Descripcion</th>
+		  </tr>
+
+		  <py:for each="item in itemsDeFaseAdyacente">
+			<tr>           
+                <td>${item.id_item}</td>
+                <td>${item.descripcion}</td>
+                <td> <a href="${tg.url('/relacion/addAncestro', id_item1 = item.id_item, id_item2=idItemActual)}"> 
+				       <input class="alignaddFase" name="agregarRelacion1" type="button" value=" " />
+				     </a>				 
+		        </td>
+			</tr>
+		</py:for>
+	    </table>
+    </td>
+    <td width="55"></td>
+    <td>
+	    <table border="1">
+          <caption style="font-size: 12pt">ITEMS DE LA MISMA FASE</caption>
+		  <tr style="color: purple; font-size: 11pt" align="center" >
+            <th>Item ID</th>		    
+            <th>Descripcion</th>
+		  </tr>
+
+		  <py:for each="item in itemsDeFase">
+			<tr>           
+                <td>${item.id_item}</td>
+                <td>${item.descripcion}</td>
+                <td> <a href="${tg.url('/relacion/addHijo', id_item1 = idItemActual, id_item2=item.id_item)}"> 
+				       <input class="alignaddFase" name="agregarRelacion2" type="button" value="" />
+				     </a>				 
+		        </td>
+			</tr>
+		</py:for>
+	    </table>
+    </td>
+  </tr>
+</table>
      </body>
 </html>

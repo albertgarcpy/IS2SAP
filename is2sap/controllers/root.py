@@ -19,6 +19,7 @@ from is2sap import model
 from is2sap.controllers.secure import SecureController
 from is2sap.controllers.error import ErrorController
 from is2sap.controllers.item_controlador import ItemController
+from is2sap.controllers.relacion_controlador import RelacionController
 
 
 __all__ = ['RootController']
@@ -32,6 +33,7 @@ class RootController(BaseController):
     #secc = SecureController()
     admin = AdminController(model, DBSession)
     item = ItemController()
+    relacion = RelacionController()
     error = ErrorController()
 
     @expose('is2sap.templates.index')
