@@ -14,7 +14,7 @@
     </head>
 
     <body>
-            <h2>Lista de <div style="color:green">Items</div></h2>
+            <h2>Seleccione los Items<div style="color:green">a Cargar</div></h2>
             ${menu_superior_items_linea_base(id_proyecto, id_fase, id_linea_base)}
 
             <table border="1" width="50%">
@@ -47,9 +47,9 @@
 		         <td>${item.fecha_modificacion}</td>
 -->
                          <td> 
-				 <a href="${tg.url('/admin/linea_base/listadoItemsParaAsignaraLineaBase', 
-                                         id_proyecto=proyecto.id_proyecto, id_usuario=usuario.id_usuario)}">
-				    <input class="alignEliminar" name="eliminar" type="button" value=""/>
+				 <a href="${tg.url('/item/asignarItem', 
+                                         id_proyecto=id_proyecto, id_fase=id_fase, id_linea_base=id_linea_base)}">
+				    <input class="alignaddAtributo" name="addAtributo" type="button" value="" />
 				 </a>
 			 </td>
 

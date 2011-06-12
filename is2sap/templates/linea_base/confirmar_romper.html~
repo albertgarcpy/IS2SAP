@@ -8,7 +8,7 @@
 
 <head>
   <meta content="text/html; charset=UTF-8" http-equiv="content-type" py:replace="''"/>
-  <title>Estoy tratando de borrar un archivo papacho</title>
+  <title>Confirmacion de ruptura</title>
 </head>
 
 <body>
@@ -31,7 +31,7 @@
 
 <div class="menu bubplastic horizontal aqua">
 	<ul>
-		<li><span class="menu_r"><a href="${tg.url('/admin/linea_base/romper', id_linea_base=value.id_linea_base)}"><span class="menu_ar">Romper</span></a></span></li>
+		<li><span class="menu_r"><a href="${tg.url('/admin/linea_base/romper', id_proyecto=id_proyecto, id_fase=id_fase, id_linea_base=value.id_linea_base)}"><span class="menu_ar">Romper</span></a></span></li>
 		<li><span class="menu_r"><a href="${tg.url('/admin/linea_base/aprobaciones')}"><span class="menu_ar">Cancelar</span></a></span></li>
 	</ul>
 	<br class="clearit" />
