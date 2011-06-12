@@ -8,20 +8,16 @@ from tgext.admin.controller import AdminController, AdminConfig
 from repoze.what import predicates
 from tg import tmpl_context, validate
 from webhelpers import paginate
-
 from sqlalchemy.orm import contains_eager
 from sqlalchemy import func
 
 from is2sap.lib.base import BaseController
 from is2sap.model import DBSession, metadata
-from is2sap.model.model import Fase, Proyecto, EstadoFase
+from is2sap.model.model import Fase, Proyecto, EstadoFase, TipoItem, Atributo
 from is2sap import model
 from is2sap.controllers.secure import SecureController
 from is2sap.controllers.error import ErrorController
-
 from is2sap.widgets.fase_form import crear_fase_form, editar_fase_form
-
-
 
 __all__ = ['FaseController']
 
@@ -38,10 +34,14 @@ class FaseController(BaseController):
         tmpl_context.form = crear_fase_form
         return dict(nombre_modelo='Fase', page='nueva_fase', value=kw)
 
-
     @expose('is2sap.templates.fase.nuevo')
     def nuevoDesdeProyecto(self, id_proyecto, **kw):
         """Despliega el formulario para añadir una fase al proyecto."""
+        proyecto = DBSession.query(Proyecto).get(id_proyecto)
+        if proyecto.iniciado == True:
+            flash("Proyecto ya iniciado. No puede crear fases!")
+            redirect("/admin/fase/listadoFasesPorProyecto", id_proyecto=id_proyecto)
+
         tmpl_context.form = crear_fase_form
         maxnumerofase=DBSession.query(func.max(Fase.numero_fase)).filter_by(id_proyecto=id_proyecto).first()
         kw['id_proyecto']=id_proyecto
@@ -53,7 +53,6 @@ class FaseController(BaseController):
            kw['numero_fase']=maxnumerofase[0] + 1
 
         return dict(nombre_modelo='Fase', idProyecto=id_proyecto, page='nuevo', value=kw)
-
 
     @validate(crear_fase_form, error_handler=nuevoDesdeProyecto)
     @expose()
@@ -85,11 +84,17 @@ class FaseController(BaseController):
         nombreProyecto = DBSession.query(Proyecto.nombre).filter_by(id_proyecto=id_proyecto).first()
         currentPage = paginate.Page(fasesPorProyecto, page, items_per_page=5)
         return dict(fasesPorProyecto=currentPage.items,
-           page='listado', nombreProyecto=nombreProyecto, idProyecto=id_proyecto, currentPage=currentPage)
+           page='listado_fases', nombre_proyecto=nombreProyecto, id_proyecto=id_proyecto, currentPage=currentPage)
 
     @expose('is2sap.templates.fase.editar')
-    def editar(self, id_fase, **kw):
+    def editar(self, id_proyecto, id_fase, **kw):
         """Metodo que rellena el formulario para editar los datos de una Fase"""
+
+        proyecto = DBSession.query(Proyecto).get(id_proyecto)
+        if proyecto.iniciado == True:
+            flash("Proyecto ya iniciado. No puede editar fases!")
+            redirect("/admin/fase/listadoFasesPorProyecto", id_proyecto=id_proyecto)
+
         tmpl_context.form = editar_fase_form
         traerFase=DBSession.query(Fase).get(id_fase)
         kw['id_fase']=traerFase.id_fase
@@ -112,16 +117,32 @@ class FaseController(BaseController):
         redirect("/admin/fase/listadoFasesPorProyecto", id_proyecto=kw['id_proyecto'])
 
     @expose('is2sap.templates.fase.confirmar_eliminar')
-    def confirmar_eliminar(self, id_fase, **kw):
+    def confirmar_eliminar(self, id_proyecto, id_fase, **kw):
         """Despliega confirmacion de eliminacion"""
+        proyecto = DBSession.query(Proyecto).get(id_proyecto)
+        if proyecto.iniciado == True:
+           flash("Proyecto ya iniciado. No puede eliminar fases!")
+           redirect("/admin/fase/listadoFasesPorProyecto", id_proyecto=id_proyecto)
+
         fase=DBSession.query(Fase).get(id_fase)
         return dict(nombre_modelo='Fase', page='eliminar_fase', value=fase)
 
     @expose()
-    def delete(self, id_fase, id_proyecto, **kw):
+    def delete(self, id_proyecto, id_fase, **kw):
         """ Metodo que elimina un registro de la base de datos 
             Parametros:
                        -  id_fase: identificador de la fase
         """
+        tipo_items = DBSession.query(TipoItem).filter_by(id_fase=id_fase).all()
+
+        for tipo_item in tipo_items:
+           id_tipo_item = tipo_item.id_tipo_item
+           atributos = DBSession.query(Atributo).filter_by(id_tipo_item=id_tipo_item).all()
+           for atributo in atributos:
+              DBSession.delete(DBSession.query(Atributo).get(atributo.id_atributo))
+           DBSession.delete(DBSession.query(TipoItem).get(id_tipo_item))
+
         DBSession.delete(DBSession.query(Fase).get(id_fase))
+        flash("Fase eliminada!")
+
         redirect("/admin/fase/listadoFasesPorProyecto", id_proyecto=id_proyecto)

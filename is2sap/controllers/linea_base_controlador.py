@@ -12,13 +12,18 @@ from webhelpers import paginate
 from is2sap.lib.base import BaseController
 from is2sap.model import DBSession, metadata
 
-from is2sap.model.model import TipoItem, Item, Proyecto, Usuario, Fase, Atributo, ItemDetalle, ItemHistorial, ItemDetalleHistorial, LineaBase
+from is2sap.model.model import TipoItem, Item, Proyecto, Usuario, Fase, Atributo, ItemDetalle, ItemHistorial, ItemDetalleHistorial, LineaBase, LineaBase_Item, LineaBaseHistorial
 from is2sap import model
 from is2sap.controllers.secure import SecureController
 from is2sap.controllers.error import ErrorController
 
 
-from is2sap.widgets.linea_base_form import crear_linea_base_form, editar_linea_base_form
+from is2sap.widgets.linea_base_form import LineaBaseForm, EditLineaBaseForm
+
+from tw.forms import TableForm, Spacer, TextField, PasswordField, TextArea
+from tw.forms.fields import Button, SubmitButton, HiddenField
+from tw.forms.validators import *
+from is2sap.widgets.mi_validador.mi_validador import *
 
 
 
@@ -40,19 +45,36 @@ class LineaBaseController(BaseController):
 
 
     @expose('is2sap.templates.linea_base.nuevo')
-    def nuevoDesdeFase(self, id_fase, **kw):
+    def nuevoDesdeFase(self, id_proyecto, id_fase, **kw):
         """Despliega el formulario para añadir una linea base a la fase"""
+	fields = [
+        HiddenField('id_linea_base', label_text='Id',
+            help_text='Id del usuario'),
+	TextField('nombre', validator=NotEmpty, label_text='Nombre',
+            help_text='Introduzca el nombre de la linea base'),
+        Spacer(),
+	TextArea('descripcion', label_text='Descripcion',
+            help_text='Introduzca una descripcion de la linea base'),        
+        Spacer(),
+	HiddenField('id_estado', validator=NotEmpty, label_text='Estado',
+            help_text='Identificador del estado de la linea base.'),
+	HiddenField('id_fase', validator=NotEmpty, label_text='Fase',
+            help_text='Identificador de la fase.'),
+	HiddenField('version', validator=NotEmpty, label_text='Version',
+            help_text='Version de la linea base')]
+	crear_linea_base_form = LineaBaseForm("CrearLineaBase", action='add',fields=fields)
         tmpl_context.form = crear_linea_base_form
         kw['id_estado']= 'Desarrollo'
         kw['id_fase']= id_fase
 	kw['version']= '1'
-        return dict(nombre_modelo='LineaBase', idFase=id_fase, page='nuevo', value=kw)
+        return dict(nombre_modelo='LineaBase', id_proyecto=id_proyecto, id_fase=id_fase, page='nuevo', value=kw)
 
 
-    @validate(crear_linea_base_form, error_handler=nuevoDesdeFase)
+    #@validate(crear_linea_base_form, error_handler=nuevoDesdeFase)
     @expose()
     def add(self, **kw):
         """Metodo para agregar un registro a la base de datos """
+	
         linea_base = LineaBase()
 	linea_base.nombre = kw['nombre']
         linea_base.descripcion = kw['descripcion']
@@ -78,8 +100,28 @@ class LineaBaseController(BaseController):
     @expose('is2sap.templates.linea_base.editar')
     def editar(self, id_proyecto, id_fase, id_linea_base, **kw):
         """Metodo que rellena el formulario para editar los datos de un Línea Base"""
+	traerLineaBase=DBSession.query(LineaBase).get(id_linea_base)
+	deshabilitado=False
+	if traerLineaBase.estado=='Aprobado':
+		deshabilitado=True
+	fields = [
+       HiddenField('id_linea_base', label_text='Id',
+            help_text='Id del usuario'),
+	TextField('nombre', validator=NotEmpty, label_text='Nombre', disabled=deshabilitado,
+            help_text='Introduzca el nombre de la linea base'),
+        Spacer(),
+	TextArea('descripcion', label_text='Descripcion', disabled=deshabilitado,
+            help_text='Introduzca una descripcion de la linea base'),        
+        Spacer(),
+	HiddenField('id_estado', validator=NotEmpty, label_text='Estado',
+            help_text='Identificador del estado de la linea base.'),
+	HiddenField('id_fase', validator=NotEmpty, label_text='Fase',
+            help_text='Identificador de la fase.'),
+	HiddenField('version', validator=NotEmpty, label_text='Version',
+            help_text='Version de la linea base')]
+	editar_linea_base_form = EditLineaBaseForm("EditarLineaBase", action='update', fields=fields)
         tmpl_context.form = editar_linea_base_form
-        traerLineaBase=DBSession.query(LineaBase).get(id_linea_base)
+        
         kw['id_linea_base']=traerLineaBase.id_linea_base
 	kw['nombre']=traerLineaBase.nombre
         kw['descripcion']=traerLineaBase.descripcion
@@ -89,7 +131,7 @@ class LineaBaseController(BaseController):
 	return dict(nombre_modelo='LineaBase', id_proyecto=id_proyecto, id_fase=id_fase, id_linea_base=id_linea_base, page='editar', value=kw)
 
 
-    @validate(editar_linea_base_form, error_handler=editar)
+    #@validate(editar_linea_base_form, error_handler=editar)
     @expose()
     def update(self, **kw):        
         """Metodo que actualiza la base de datos"""
@@ -110,57 +152,50 @@ class LineaBaseController(BaseController):
         return dict(nombre_modelo='LineaBase', page='editar', value=linea_base)
 
 
-    @expose()
-    def delete(self, id_linea_base, **kw):
-        """Metodo que elimina un registro de la base de datos"""
-        DBSession.delete(DBSession.query(LineaBase).get(id_linea_base))
-        redirect("/admin/linea_base/listado")
-   
-
     @expose("is2sap.templates.linea_base.aprobaciones")
-    def aprobaciones(self,page=1):
+    def aprobaciones(self, id_proyecto, id_fase, page=1):
         """Metodo para aprobar todos las linea_bases"""
         linea_bases = DBSession.query(LineaBase)#.order_by(Usuario.id)
         currentPage = paginate.Page(linea_bases, page, items_per_page=5)
         return dict(linea_bases=currentPage.items,
-           page='aprobaciones', currentPage=currentPage)
+           page='aprobaciones', id_proyecto=id_proyecto, id_fase=id_fase, currentPage=currentPage)
 
 
     @expose()
-    def aprobar(self, id_linea_base, **kw):     
+    def aprobar(self, id_proyecto, id_fase, id_linea_base, **kw):     
         """Metodo que aprueba la linea base"""
         linea_base = DBSession.query(LineaBase).get(id_linea_base)
-	if linea_base.estado == 'Revision':
-		version_aux = int(linea_base.version)+1
-  		linea_base.version = str(version_aux)
-	  
         linea_base.estado = 'Aprobado'
-
         DBSession.flush()
-        redirect("/admin/linea_base/aprobaciones")
+        redirect("/admin/linea_base/aprobaciones",id_proyecto=id_proyecto, id_fase=id_fase)
 
     
     @expose()
-    def romper(self, id_linea_base, **kw):     
+    def romper(self,  id_proyecto, id_fase, id_linea_base, **kw):     
         """Metodo que rompe la linea base"""
-        linea_base = DBSession.query(LineaBase).get(id_linea_base)   
-        linea_base.estado = 'Revision'
-        DBSession.flush()
-        redirect("/admin/linea_base/aprobaciones")
+        linea_base = DBSession.query(LineaBase).get(id_linea_base)
+	linea_base.estado = 'Desarrollo' 
+	#Guarda en el historial la última linea base aprobada(*Hacer) 
+	linea_baseHistorial = LineaBaseHistorial()
+        linea_baseHistorial.id_linea_base = linea_base.id_linea_base
+        linea_baseHistorial.nombre = linea_base.nombre
+        linea_baseHistorial.descripcion = linea_base.descripcion
+        linea_baseHistorial.estado = linea_base.estado
+        linea_baseHistorial.id_fase = linea_base.id_fase
+	linea_baseHistorial.version = linea_base.version
+        DBSession.add(linea_baseHistorial) 
+	version_aux = int(linea_base.version)+1
+  	linea_base.version = str(version_aux)
+	DBSession.flush()
+        redirect("/admin/linea_base/aprobaciones", id_proyecto=id_proyecto, id_fase=id_fase)
 
 
     @expose('is2sap.templates.linea_base.confirmar_romper')
-    def confirmar_romper(self, id_linea_base, **kw):
+    def confirmar_romper(self, id_proyecto, id_fase, id_linea_base, **kw):
         """Despliega confirmar romper linea base"""
         linea_base=DBSession.query(LineaBase).get(id_linea_base)
-        return dict(nombre_modelo='LineaBase', page='editar', value=linea_base)
+        return dict(nombre_modelo='LineaBase', id_proyecto=id_proyecto, id_fase=id_fase, id_linea_base=id_linea_base, page='editar', value=linea_base)
 
-
-    @expose('is2sap.templates.linea_base.confirmar_aprobar')
-    def confirmar_aprobar(self, id_linea_base, **kw):
-        """Despliega confirmar aprobar linea base"""
-        linea_base=DBSession.query(LineaBase).get(id_linea_base)
-        return dict(nombre_modelo='LineaBase', page='editar', value=linea_base)
 
     @expose("is2sap.templates.linea_base.listado_proyectos")
     def proyectos(self,page=1):
@@ -204,7 +239,7 @@ class LineaBaseController(BaseController):
         linea_bases = linea_base.linea_base_historial
         currentPage = paginate.Page(linea_bases, page, items_per_page=5)
         return dict(linea_bases=currentPage.items,
-           page='historial_linea_bases', nombre_linea_base=linea_base.nombre, id_proyecto=id_proyecto, id_fase=id_fase, currentPage=currentPage)
+           page='historial_linea_bases', nombre_linea_base=linea_base.nombre, id_proyecto=id_proyecto, id_fase=id_fase, id_linea_base=id_linea_base, currentPage=currentPage)
 
 
    

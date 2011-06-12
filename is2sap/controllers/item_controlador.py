@@ -27,7 +27,7 @@ items_dirname = os.path.join(public_dirname, 'items')
 from is2sap.widgets.mi_validador.mi_validador import *
 from is2sap.lib.base import BaseController
 from is2sap.model import DBSession, metadata
-from is2sap.model.model import TipoItem, Item, Proyecto, Usuario, Fase, Atributo, ItemDetalle, ItemHistorial, ItemDetalleHistorial, LineaBase
+from is2sap.model.model import TipoItem, Item, Proyecto, Usuario, Fase, Atributo, ItemDetalle, ItemHistorial, ItemDetalleHistorial, LineaBase, LineaBase_Item
 from is2sap import model
 from is2sap.controllers.secure import SecureController
 from is2sap.controllers.error import ErrorController
@@ -581,18 +581,20 @@ class ItemController(BaseController):
 
     
     @expose()
-    def asignarItem(self, id_proyecto, id_fase, id_linea_base):
+    def asignarItem(self, id_proyecto, id_fase, id_linea_base, id_item):
         """Metodo que realiza la asignacion de un item a la linea base selecccionada"""
         item = DBSession.query(Item).get(id_item)
         linea_base = DBSession.query(LineaBase).get(id_linea_base)
         item.linea_bases.append(linea_base)
+
         redirect("/item/listadoItemsParaAsignaraLineaBase",id_proyecto=id_proyecto, id_fase=id_fase, id_linea_base=id_linea_base)
 
 
     @expose()
-    def desasignar_item_linea_base(self, id_proyecto, id_fase, id_linea_base, **kw):
+    def desasignar_item_linea_base(self, id_proyecto, id_fase, id_linea_base, id_item, **kw):
         """Metodo que desasigna un item de la linea base seleccionada"""
         item = DBSession.query(Item).get(id_item)
         linea_base = DBSession.query(LineaBase).get(id_linea_base)
         item.linea_bases.remove(linea_base)
+
         redirect("/item/listadoItemsPorLineaBase", id_proyecto=id_proyecto, id_fase=id_fase, id_linea_base=id_linea_base)

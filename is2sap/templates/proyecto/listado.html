@@ -38,30 +38,45 @@
                          <td width="50">${proyecto.fecha}</td>
                          <td width="50">${proyecto.iniciado}</td>            
                          <td width="50">
-							
-							<ul class="menu acciones">
-								<li class="top"><a href="#" class="top_link"><span>ACCIONES</span></a>
-								   <ul class="sub">
-						             <li><a href="${tg.url('/admin/proyecto/editar', id_proyecto=proyecto.id_proyecto)}">Editar		                    
-						             </a></li>
-									 <li><a href="${tg.url('/admin/proyecto/confirmar_eliminar', id_proyecto=proyecto.id_proyecto)}">Eliminar
-						             </a></li>
-								 	 <li><a href="${tg.url('/admin/proyecto/usuarios', id_proyecto=proyecto.id_proyecto)}">Agregar Usuarios
-								 	 </a></li>
-								 	 <li><a href="${tg.url('/admin/proyecto/roles', id_proyecto=proyecto.id_proyecto)}">Roles
-								 	 </a></li>										
-									</ul>
-								</li>	
-							</ul>
+			    <ul class="menu acciones">
+			       <li class="top">
+                                  <a href="#" class="top_link"><span>ACCIONES</span></a>
+				    <ul class="sub">
+				       <li><a href="${tg.url('/admin/proyecto/editar',
+                                                    id_proyecto=proyecto.id_proyecto)}">Editar		                    
+				           </a>
+                                       </li>					 
+                                       <li><a href="${tg.url('/admin/proyecto/confirmar_eliminar',
+                                                    id_proyecto=proyecto.id_proyecto)}">Eliminar
+				           </a>
+                                       </li>
+				       <li>
+                                           <a href="${tg.url('/admin/proyecto/usuarios', 
+                                                    id_proyecto=proyecto.id_proyecto)}">Agregar Usuarios
+					   </a>
+                                       </li>
+				       <li>
+                                           <a href="${tg.url('/admin/proyecto/roles', 
+                                                    id_proyecto=proyecto.id_proyecto)}">Roles
+					   </a>
+                                       </li>										
+				    </ul>
+				</li>	
+			     </ul>
                          </td>
                          <td width="70">
-						   <ul class="menu acciones">
-								<li class="top"><a href="#" class="top_link"><span>FASES</span></a>
-								   <ul class="sub">
-						             <li><a href="${tg.url('/admin/fase/listadoFasesPorProyecto', id_proyecto=proyecto.id_proyecto)}">Fases</a></li>
-									</ul>
-								</li>	
-							</ul>
+			    <ul class="menu acciones">
+			       <li class="top">
+                                  <a href="#" class="top_link"><span>FASES</span></a>
+				     <ul class="sub">
+				        <li>
+                                            <a href="${tg.url('/admin/fase/listadoFasesPorProyecto',
+                                                    id_proyecto=proyecto.id_proyecto)}">Fases
+                                            </a>
+                                        </li>
+				     </ul>
+			       </li>	
+			    </ul>
                          </td>
 
                     </tr>

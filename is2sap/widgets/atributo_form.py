@@ -15,13 +15,13 @@ class AtributoForm(TableForm):
     fields = [
         HiddenField('id_atributo', label_text='Id',
             help_text='Id del atributo'),
-        TextField('id_tipo_item', validator=NotEmpty, label_text='Identificador del Tipo de Item',
+        HiddenField('id_tipo_item', validator=NotEmpty, label_text='Identificador del Tipo de Item',
             help_text='Introduzca el tipo de item asociado al atributo'),
         Spacer(),
-        TextField('nombre', validator=NotEmpty, label_text='Nombre',
+        TextField('nombre', validator=NotEmpty, label_text='Nombre', size=38,
             help_text='Introduzca el nombre del atributo'),
         Spacer(),
-        TextArea('descripcion', label_text='Descripcion'),
+        TextArea('descripcion', attrs=dict(rows=10, cols=50), label_text='Descripcion'),
         Spacer(),
         SingleSelectField('tipo', options=genre_options, label_text='Tipo',
             help_text = 'Seleccione el tipo del atributo.')]
@@ -37,13 +37,13 @@ class EditAtributoForm(TableForm):
     fields = [
         HiddenField('id_atributo', label_text='Id',
             help_text='Id del atributo'),
-        TextField('id_tipo_item', validator=NotEmpty, label_text='Identificador del Tipo de Item',
+        HiddenField('id_tipo_item', validator=NotEmpty, label_text='Identificador del Tipo de Item',
             help_text='Introduzca el tipo de item asociado al atributo'),
         Spacer(),
-        TextField('nombre', validator=NotEmpty, label_text='Nombre',
+        TextField('nombre', validator=NotEmpty, label_text='Nombre', size=38,
             help_text='Introduzca el nombre del atributo'),
         Spacer(),
-        TextArea('descripcion', label_text='Descripcion'),
+        TextArea('descripcion', attrs=dict(rows=10, cols=50), label_text='Descripcion'),
         Spacer(),
         SingleSelectField('tipo', options=genre_options, label_text='Tipo',
             help_text = 'Seleccione el tipo del atributo.')]

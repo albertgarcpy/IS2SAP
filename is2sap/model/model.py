@@ -396,22 +396,6 @@ class ItemDetalleHistorial(DeclarativeBase):
     item_detalle = relationship('ItemDetalle', backref='item_detalle_historial')
 
 
-##----------------------------- Clase "HistorialDetalle"-----------------------------------
-class HistorialItem(DeclarativeBase):
-
-    __tablename__ = 'Historial_Item'
-
-    #column definitions
-    id_historial_item = Column(u'id_historial_item', INTEGER(), primary_key=True, nullable=False)
-    id_item = Column(u'id_item', INTEGER(), ForeignKey('Item.id_item'), nullable=False)
-    nombre_atributo = Column(u'nombre_atributo', VARCHAR(length=None, convert_unicode=False, assert_unicode=None, unicode_error=None, _warn_on_bytestring=False), nullable=False)
-    valor = Column(u'valor', VARCHAR(length=None, convert_unicode=False, assert_unicode=None, unicode_error=None, _warn_on_bytestring=False), nullable=False)
-    version = Column(u'version', VARCHAR(length=None, convert_unicode=False, assert_unicode=None, unicode_error=None, _warn_on_bytestring=False), nullable=False)
-
-    #relation definitions
-    item = relationship('Item', backref='historial')
-
-
 class RelacionItem(DeclarativeBase):
     __tablename__ = 'Relacion'
 

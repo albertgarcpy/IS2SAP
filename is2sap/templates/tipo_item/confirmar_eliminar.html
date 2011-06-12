@@ -1,52 +1,59 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
                       "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:py="http://genshi.edgewall.org/"
       xmlns:xi="http://www.w3.org/2001/XInclude">
 
-  <xi:include href="master.html" />
+      <xi:include href="master.html" />
 
-<head>
-  <meta content="text/html; charset=UTF-8" http-equiv="content-type" py:replace="''"/>
-  <title>Tipo de Item</title>
-</head>
+    <head>
+          <meta content="text/html; charset=UTF-8" http-equiv="content-type" py:replace="''"/>
+          <title>Eliminar Tipo de Item ${value.nombre}</title>
+    </head>
 
-<body>
-<h1>Eliminar Tipo de Item</h1>
-<h3>Desea eliminar el registro?</h3>
-<table border="1">        
-<tr style="color: purple; font-size: 11pt" >
-          <th>ID</th>
-          <th>Fase</th>
-          <th>Nombre</th>
-          <th>Descripción</th>
+    <body>
+          <h2>Eliminar Tipo de Item <div style="color:green"> ${value.nombre}</div></h2>
+          <h3>Desea eliminar el registro?</h3>
 
-          	  
-          </tr>
-        <tr>
-            <td>${value.id_tipo_item}</td>
-            <td>${value.id_fase}</td>
-            <td>${value.nombre}</td>
-            <td>${value.descripcion}</td>
+          <table border="1">        
+                <tr style="color: purple; font-size: 11pt" >
+                   <th>ID</th>
+                   <th>Fase</th>
+                   <th>Nombre</th>
+                   <th>Descripción</th>	  
+                </tr>
+                <tr>
+                   <td>${value.id_tipo_item}</td>
+                   <td>${value.id_fase}</td>
+                   <td>${value.nombre}</td>
+                   <td>${value.descripcion}</td>
+                </tr>        
+          </table>
 
-            
-        </tr>        
-    </table>
+          <div class="menu bubplastic horizontal aqua">
+	      <ul>
+		  <li>
+                      <span class="menu_r">
+                           <a href="${tg.url('/admin/tipo_item/delete', id_proyecto=id_proyecto, id_fase=value.id_fase,
+                                    id_tipo_item=value.id_tipo_item)}">
+                             <span class="menu_ar">Eliminar</span>
+                           </a>
+                      </span>
+                  </li>
+		  <li>
+                     <span class="menu_r">
+                          <a href="${tg.url('/admin/tipo_item/listadoTipoItemPorFase', id_proyecto=id_proyecto,
+                                   id_fase=value.id_fase)}">
+                            <span class="menu_ar">Cancelar</span>
+                          </a>
+                     </span>
+                  </li>
+	      </ul>
+	      <br class="clearit" />
+          </div>
 
-<div class="menu bubplastic horizontal aqua">
-	<ul>
-		<li><span class="menu_r"><a href="${tg.url('/admin/tipo_item/delete', id_tipo_item=value.id_tipo_item, id_fase=value.id_fase)}"><span class="menu_ar">Eliminar</span></a></span></li>
-		<li><span class="menu_r"><a href="${tg.url('/admin/tipo_item/listadoTipoItemPorFase', id_fase=value.id_fase)}"><span class="menu_ar">Cancelar</span></a></span></li>
-	</ul>
-	<br class="clearit" />
-</div>
-
-<!--
-
-<td><a href="${tg.url('/admin/usuario/delete', id_usuario=value.id)}"><input class="botones" name="aceptar" type="button" value="Eliminar"/></a></td>
-<td><a href="${tg.url('/admin/usuario/listado')}"><input class="botones" name="cancelar" type="button" value="Cancelar"/></a></td>	
--->
-</body>
+    </body>
 </html>
 
 
