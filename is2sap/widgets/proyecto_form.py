@@ -17,7 +17,7 @@ class ProyectoForm(TableForm):
         HiddenField('id_usuario', label_text='id_usuario',
             help_text='Id del Usuario.'),
         Spacer(),
-        TextField('nombre', validator=NotEmpty, label_text='Nombre',
+        TextField('nombre', validator=NotEmpty, label_text='Nombre', size=38,
             help_text='Introduzca su Nombre completo.'),
         Spacer(),
         TextArea('descripcion', label_text='Descripcion',

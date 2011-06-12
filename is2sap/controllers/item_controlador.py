@@ -586,6 +586,7 @@ class ItemController(BaseController):
         item = DBSession.query(Item).get(id_item)
         linea_base = DBSession.query(LineaBase).get(id_linea_base)
         item.linea_bases.append(linea_base)
+
         redirect("/item/listadoItemsParaAsignaraLineaBase",id_proyecto=id_proyecto, id_fase=id_fase, id_linea_base=id_linea_base)
 
 
@@ -595,4 +596,5 @@ class ItemController(BaseController):
         item = DBSession.query(Item).get(id_item)
         linea_base = DBSession.query(LineaBase).get(id_linea_base)
         item.linea_bases.remove(linea_base)
+
         redirect("/item/listadoItemsPorLineaBase", id_proyecto=id_proyecto, id_fase=id_fase, id_linea_base=id_linea_base)
