@@ -67,6 +67,15 @@ LineaBase_Item = Table('LineaBase_Item', metadata,
         onupdate="CASCADE", ondelete="CASCADE" ), primary_key=True, nullable=False),
 )
 
+##----------------------------- Tabla de Asociacion "LineaBase_Item_Historial"-----------------------------------
+LineaBase_Item_Historial = Table('LineaBase_Item_Historial', metadata,
+    Column('id_historial_linea_base', INTEGER(), ForeignKey('Linea_Base_Historial.id_historial_linea_base', 
+        onupdate="CASCADE", ondelete="CASCADE"), primary_key=True, nullable=False),
+    Column('id_item', INTEGER(), ForeignKey('Item.id_item', 
+        onupdate="CASCADE", ondelete="CASCADE" ), primary_key=True, nullable=False),
+    Column(u'version', INTEGER(), nullable=False)
+)
+
 ##----------------------------- Tabla de Asociacion "Proyecto_Rol"-----------------------------------
 Proyecto_Rol = Table('Proyecto_Rol', metadata,
     Column('id_proyecto', INTEGER(), ForeignKey('Proyecto.id_proyecto',
@@ -341,6 +350,8 @@ class Item(DeclarativeBase):
     #relation definitions
     #linea_base = relationship('LineaBase', backref='items')
     linea_bases = relationship('LineaBase', secondary=LineaBase_Item, backref='items')
+    linea_bases_historial = relationship('LineaBaseHistorial', secondary=LineaBase_Item_Historial, backref='items_historial')
+
 
 
 ##----------------------------- Clase "ItemDetalle"-----------------------------------

@@ -14,7 +14,7 @@
 
 <body>
 	<h1>Lista de Líneas Bases</h1>
-${menu_superior()}
+${menu_superior(id_proyecto, id_fase)}
     <table border="1">
 		  <tr style="color: purple; font-size: 11pt" align="center" >
           <th>ID</th>
@@ -23,6 +23,8 @@ ${menu_superior()}
           <th>Estado</th>
           <th>Fase</th>
           <th>Version</th>
+	  <th>Editar</th>
+	  	  
 	</tr>
 
         <py:for each="linea_base in linea_bases">

@@ -209,6 +209,8 @@ class ProyectoController(BaseController):
         """Metodo que da inicio a un proyecto"""
         proyecto = DBSession.query(Proyecto).get(id_proyecto)   
         proyecto.iniciado = True
+	fase = DBSession.query(Fase).filter_by(id_proyecto=id_proyecto).first()
+	fase.id_estado_fase = 2
         DBSession.flush()
         redirect("/admin/proyecto/listaProyectos_a_iniciar")
 

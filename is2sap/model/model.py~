@@ -32,7 +32,7 @@ except ImportError:
     from sqlalchemy.databases.postgres import *
 
 __all__ = ['Usuario','Rol','Permiso','Proyecto', 'Fase', 'TipoItem', 'Atributo', 
-           'EstadoFase', 'Item', 'LineaBase', 'ItemDetalle', 'ItemHistorial', 'ItemDetalleHistorial','HistorialItem']
+           'EstadoFase', 'Item', 'LineaBase', 'ItemDetalle', 'ItemHistorial', 'ItemDetalleHistorial','HistorialItem','RelacionItem']
 
 
 ##----------------------------- Tabla de Asociacion "Rol_Permiso"-----------------------------------
@@ -65,6 +65,15 @@ LineaBase_Item = Table('LineaBase_Item', metadata,
         onupdate="CASCADE", ondelete="CASCADE"), primary_key=True, nullable=False),
     Column('id_item', INTEGER(), ForeignKey('Item.id_item', 
         onupdate="CASCADE", ondelete="CASCADE" ), primary_key=True, nullable=False),
+)
+
+##----------------------------- Tabla de Asociacion "LineaBase_Item_Historial"-----------------------------------
+LineaBase_Item_Historial = Table('LineaBase_Item_Historial', metadata,
+    Column('id_historial_linea_base', INTEGER(), ForeignKey('Linea_Base_Historial.id_historial_linea_base', 
+        onupdate="CASCADE", ondelete="CASCADE"), primary_key=True, nullable=False),
+    Column('id_item', INTEGER(), ForeignKey('Item.id_item', 
+        onupdate="CASCADE", ondelete="CASCADE" ), primary_key=True, nullable=False),
+    Column(u'version', INTEGER(), nullable=False)
 )
 
 ##----------------------------- Tabla de Asociacion "Proyecto_Rol"-----------------------------------
@@ -366,10 +375,6 @@ class ItemHistorial(DeclarativeBase):
     id_historial_item = Column(u'id_historial_item', INTEGER(), primary_key=True, nullable=False)
     id_item = Column(u'id_item', INTEGER(), ForeignKey('Item.id_item'), nullable=False)
     id_tipo_item = Column(u'id_tipo_item', INTEGER(), ForeignKey('Tipo_Item.id_tipo_item'), nullable=False)
-<<<<<<< HEAD
-    
-=======
->>>>>>> 397227166e7006e1994acf76f36005190bdd71e7
     descripcion = Column(u'descripcion', VARCHAR(length=None, convert_unicode=False, assert_unicode=None, unicode_error=None, _warn_on_bytestring=False), nullable=False)
     complejidad = Column(u'complejidad', VARCHAR(length=None, convert_unicode=False, assert_unicode=None, unicode_error=None, _warn_on_bytestring=False), nullable=False)
     prioridad = Column(u'prioridad', VARCHAR(length=None, convert_unicode=False, assert_unicode=None, unicode_error=None, _warn_on_bytestring=False), nullable=False)
@@ -400,18 +405,16 @@ class ItemDetalleHistorial(DeclarativeBase):
     item_detalle = relationship('ItemDetalle', backref='item_detalle_historial')
 
 
-##----------------------------- Clase "HistorialDetalle"-----------------------------------
-class HistorialItem(DeclarativeBase):
-
-    __tablename__ = 'Historial_Item'
+class RelacionItem(DeclarativeBase):
+    __tablename__ = 'Relacion'
 
     #column definitions
-    id_historial_item = Column(u'id_historial_item', INTEGER(), primary_key=True, nullable=False)
-    id_item = Column(u'id_item', INTEGER(), ForeignKey('Item.id_item'), nullable=False)
-    nombre_atributo = Column(u'nombre_atributo', VARCHAR(length=None, convert_unicode=False, assert_unicode=None, unicode_error=None, _warn_on_bytestring=False), nullable=False)
-    valor = Column(u'valor', VARCHAR(length=None, convert_unicode=False, assert_unicode=None, unicode_error=None, _warn_on_bytestring=False), nullable=False)
-    version = Column(u'version', VARCHAR(length=None, convert_unicode=False, assert_unicode=None, unicode_error=None, _warn_on_bytestring=False), nullable=False)
+    id_relacion = Column(u'id_relacion', INTEGER(), primary_key=True, nullable=False)
+    tipo = Column(u'tipo', VARCHAR(length=None, convert_unicode=False, assert_unicode=None, unicode_error=None, _warn_on_bytestring=False), nullable=False)
+    id_item1 = Column(u'id_item1', INTEGER())
+    id_item2 = Column(u'id_item2', INTEGER())
+    #estado = Column(u'estado', VARCHAR(length=None, convert_unicode=False, assert_unicode=None, unicode_error=None, _warn_on_bytestring=False), nullable=False)
+    #version = Column(u'version', INTEGER(), nullable=False)
 
     #relation definitions
-    item = relationship('Item', backref='historial')
-
+#ForeignKey('Item.id_item')

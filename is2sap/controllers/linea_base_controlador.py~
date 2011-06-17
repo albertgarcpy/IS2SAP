@@ -125,7 +125,7 @@ class LineaBaseController(BaseController):
         kw['id_linea_base']=traerLineaBase.id_linea_base
 	kw['nombre']=traerLineaBase.nombre
         kw['descripcion']=traerLineaBase.descripcion
-        kw['estado']=traerLineaBase.estado
+	kw['estado']=traerLineaBase.estado
         kw['id_fase']=traerLineaBase.id_fase
         kw['version']=traerLineaBase.version
 	return dict(nombre_modelo='LineaBase', id_proyecto=id_proyecto, id_fase=id_fase, id_linea_base=id_linea_base, page='editar', value=kw)
@@ -133,16 +133,19 @@ class LineaBaseController(BaseController):
 
     #@validate(editar_linea_base_form, error_handler=editar)
     @expose()
-    def update(self, **kw):        
+    def update(self,id_proyecto, id_fase, **kw):        
         """Metodo que actualiza la base de datos"""
         linea_base = DBSession.query(LineaBase).get(kw['id_linea_base'])
 	linea_base.nombre = kw['nombre']   
         linea_base.descripcion = kw['descripcion']
-        linea_base.estado = kw['estado']
+	auxiliar=kw['estado']
+	if auxiliar=='Revision':
+		auxiliar='Desarrollo'
+        linea_base.estado = auxiliar
         linea_base.id_fase = kw['id_fase']
         linea_base.version = kw['version']
         DBSession.flush()
-        redirect("/admin/linea_base/listado")
+        redirect("/admin/linea_base/listado_linea_bases, id_proyecto=id_proyecto, id_fase=id_fase")
 
 
     @expose('is2sap.templates.linea_base.confirmar_eliminar')
@@ -187,7 +190,7 @@ class LineaBaseController(BaseController):
 	version_aux = int(linea_base.version)+1
   	linea_base.version = str(version_aux)
 	DBSession.flush()
-        redirect("/admin/linea_base/aprobaciones", id_proyecto, id_fase)
+        redirect("/admin/linea_base/aprobaciones", id_proyecto=id_proyecto, id_fase=id_fase)
 
 
     @expose('is2sap.templates.linea_base.confirmar_romper')
@@ -216,7 +219,11 @@ class LineaBaseController(BaseController):
     def fases(self,id_proyecto, page=1):
         """Metodo para listar las Fases de un proyecto """
         proyecto = DBSession.query(Proyecto).get(id_proyecto)
-        fases = proyecto.fases
+        fasesProyecto = proyecto.fases
+	fases = DBSession.query(Fase).all()
+	for fase in fasesProyecto:
+	   if fase.estado == 'Inicial':
+	        fases.remove(fase)
         currentPage = paginate.Page(fases, page, items_per_page=5)
         return dict(fases=currentPage.items, page='listado_fases', 
            nombre_proyecto=proyecto.nombre, id_proyecto=proyecto.id_proyecto, currentPage=currentPage)

@@ -73,7 +73,7 @@ class TipoItemController(BaseController):
         """Despliega el formulario para añadir un Nuevo Tipo de Item a la fase de un proyecto."""
         print kw
         tmpl_context.form = crear_tipo_item_form
-        #kw['id_fase']=id_fase     
+        kw['id_fase']=id_fase     
         return dict(nombre_modelo='Tipo Item', page='nuevo_tipo_item', id_proyecto=id_proyecto, id_fase=id_fase, value=kw)
 
     @validate(crear_tipo_item_form, error_handler=nuevoDesdeFase)
