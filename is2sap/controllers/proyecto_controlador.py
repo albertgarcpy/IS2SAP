@@ -65,7 +65,7 @@ class ProyectoController(BaseController):
 
         traerProyecto=DBSession.query(Proyecto).get(id_proyecto)
         if traerProyecto.iniciado:
-            flash("El proyecto no puede modificarse porque ya se encuentra iniciado.")
+            flash(_("El proyecto no puede modificarse porque ya se encuentra iniciado."), 'warning')
             redirect("/admin/proyecto/listado")
 
         tmpl_context.form = editar_proyecto_form            
@@ -97,7 +97,7 @@ class ProyectoController(BaseController):
 
         proyecto = DBSession.query(Proyecto).get(id_proyecto)
         if proyecto.iniciado == True:
-           flash("Proyecto ya iniciado. No puede eliminar!")
+           flash(_("Proyecto ya iniciado. No puede eliminar!"), 'warning')
            redirect("/admin/proyecto/listado")
 
         return dict(nombre_modelo='Proyecto', page='eliminar_proyecto', value=proyecto)

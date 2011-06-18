@@ -14,10 +14,10 @@ class RolForm(TableForm):
     fields = [
         HiddenField('id_rol', label_text='Id',
             help_text='Id del Rol'),
-        TextField('nombre_rol', validator=NotEmpty_PlainText, label_text='Nombre', size=30,
+        TextField('nombre_rol', validator=NotEmpty_PlainText, label_text='Nombre', size=38,
             help_text='Introduzca el nombre del Rol.'),
         Spacer(),
-        TextArea('descripcion', label_text='Descripcion', attrs=dict(rows=3, cols=49),
+        TextArea('descripcion', label_text='Descripcion', attrs=dict(rows=10, cols=50),
             help_text='Introduzca una descripcion del Rol'),
         Spacer()]
 
@@ -31,10 +31,10 @@ class EditRolForm(TableForm):
     fields = [
         HiddenField('id_rol', label_text='Id',
             help_text='Id del Rol'),
-        TextField('nombre_rol', validator=NotEmpty_PlainText, label_text='Nombre', size=30,
+        TextField('nombre_rol', validator=NotEmpty_PlainText, label_text='Nombre', size=38,
             help_text='Introduzca el nombre del Rol.'),
         Spacer(),
-        TextArea('descripcion', label_text='Descripcion', attrs=dict(rows=3, cols=49),
+        TextArea('descripcion', label_text='Descripcion', attrs=dict(rows=10, cols=49),
             help_text='Introduzca una descripcion del Rol'),
         Spacer()]
 

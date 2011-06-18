@@ -20,10 +20,9 @@ from is2sap.controllers.secure import SecureController
 from is2sap.controllers.error import ErrorController
 from is2sap.controllers.item_controlador import ItemController
 from is2sap.controllers.relacion_controlador import RelacionController
-
+from is2sap.controllers.otros_controlador import OtrosController
 
 __all__ = ['RootController']
-
 
 class RootController(BaseController):
 
@@ -34,6 +33,7 @@ class RootController(BaseController):
     admin = AdminController(model, DBSession)
     item = ItemController()
     relacion = RelacionController()
+    otros = OtrosController()
     error = ErrorController()
 
     @expose('is2sap.templates.index')
@@ -50,6 +50,11 @@ class RootController(BaseController):
     def desa(self):
         """Display some information about auth* on this application."""
         return dict(page='desa')
+
+    @expose('is2sap.templates.otros')
+    def otras_op(self):
+        """Display some information about auth* on this application."""
+        return dict(page='otros')
 
     @expose('is2sap.templates.index')
     @require(predicates.has_permission('administracion',  msg=l_('Solo para el Administrador')))
