@@ -11,7 +11,7 @@ from webhelpers import paginate
 
 from is2sap.lib.base import BaseController
 from is2sap.model import DBSession, metadata
-from is2sap.model.model import Proyecto, Usuario, Rol
+from is2sap.model.model import Proyecto, Usuario, Rol, Fase, TipoItem, Atributo 
 from is2sap import model
 from is2sap.controllers.secure import SecureController
 from is2sap.controllers.error import ErrorController
@@ -62,7 +62,12 @@ class ProyectoController(BaseController):
     @expose('is2sap.templates.proyecto.editar')
     def editar(self, id_proyecto, **kw):
         """Metodo que rellena el formulario para editar los datos de un Proyecto"""
+
         traerProyecto=DBSession.query(Proyecto).get(id_proyecto)
+        if traerProyecto.iniciado:
+            flash("El proyecto no puede modificarse porque ya se encuentra iniciado.")
+            redirect("/admin/proyecto/listado")
+
         tmpl_context.form = editar_proyecto_form            
         kw['id_proyecto']=traerProyecto.id_proyecto
         kw['id_usuario']=traerProyecto.id_usuario
@@ -70,8 +75,7 @@ class ProyectoController(BaseController):
         kw['descripcion']=traerProyecto.descripcion
         kw['fecha']=traerProyecto.fecha
         kw['iniciado']=traerProyecto.iniciado
-        if traerProyecto.iniciado:
-            flash("El proyecto no puede modificarse porque ya se encuentra iniciado.")
+
         return dict(nombre_modelo='Proyecto', page='editar_proyecto', value=kw)
 
     @validate(editar_proyecto_form, error_handler=editar)
@@ -90,13 +94,34 @@ class ProyectoController(BaseController):
     @expose('is2sap.templates.proyecto.confirmar_eliminar')
     def confirmar_eliminar(self, id_proyecto, **kw):
         """Despliega confirmacion de eliminacion"""
-        proyecto=DBSession.query(Proyecto).get(id_proyecto)
+
+        proyecto = DBSession.query(Proyecto).get(id_proyecto)
+        if proyecto.iniciado == True:
+           flash("Proyecto ya iniciado. No puede eliminar!")
+           redirect("/admin/proyecto/listado")
+
         return dict(nombre_modelo='Proyecto', page='eliminar_proyecto', value=proyecto)
 
     @expose()
     def delete(self, id_proyecto, **kw):
         """Metodo que elimina un registro de la base de datos"""
+
+        proyecto = DBSession.query(Proyecto).get(id_proyecto)
+        fases = proyecto.fases
+        
+        for fase in fases:
+           id_fase = fase.id_fase
+           tipo_items = DBSession.query(TipoItem).filter_by(id_fase=id_fase).all()
+           for tipo_item in tipo_items:
+              id_tipo_item = tipo_item.id_tipo_item
+              atributos = DBSession.query(Atributo).filter_by(id_tipo_item=id_tipo_item).all()
+              for atributo in atributos:
+                 DBSession.delete(DBSession.query(Atributo).get(atributo.id_atributo))
+              DBSession.delete(DBSession.query(TipoItem).get(id_tipo_item))
+           DBSession.delete(DBSession.query(Fase).get(id_fase))
+
         DBSession.delete(DBSession.query(Proyecto).get(id_proyecto))
+        flash("Proyecto eliminado!")
         redirect("/admin/proyecto/listado")
 
     @expose("is2sap.templates.proyecto.listar_roles")
@@ -184,30 +209,18 @@ class ProyectoController(BaseController):
         """Metodo que da inicio a un proyecto"""
         proyecto = DBSession.query(Proyecto).get(id_proyecto)   
         proyecto.iniciado = True
+	fase = DBSession.query(Fase).filter_by(id_proyecto=id_proyecto).first()
+	fase.estado = 'Desarrollo'
         DBSession.flush()
         redirect("/admin/proyecto/listaProyectos_a_iniciar")
-
-
-    @expose('is2sap.templates.proyecto.confirmar_iniciar')
-    def confirmar_iniciar(self, id_proyecto, **kw):
-        """Despliega confirmar inicio de proyecto"""
-        proyecto=DBSession.query(Proyecto).get(id_proyecto)
-        return dict(nombre_modelo='Proyecto', page='editar', value=proyecto)
 
     
     @expose("is2sap.templates.proyecto.listaProyectos_a_iniciar")
     def listaProyectos_a_iniciar(self,page=1):
         """Metodo para listar todos los Proyectos a iniciar de la base de datos"""
-        proyectos = DBSession.query(Proyecto).order_by(Proyecto.id_proyecto)
+        proyectos = DBSession.query(Proyecto).filter_by(iniciado=False).order_by(Proyecto.id_proyecto)
         currentPage = paginate.Page(proyectos, page, items_per_page=5)
         return dict(proyectos=currentPage.items,
            page='listaProyectos_a_iniciar', currentPage=currentPage)
 
    
-    @expose("is2sap.templates.proyecto.listaProyectos_a_importar")
-    def listaProyectos_a_iniciar(self,page=1):
-        """Metodo para listar todos los Proyectos a importar de la base de datos"""
-        proyectos = DBSession.query(Proyecto).order_by(Proyecto.id_proyecto)
-        currentPage = paginate.Page(proyectos, page, items_per_page=5)
-        return dict(proyectos=currentPage.items,
-           page='listaProyectos_a_importar', currentPage=currentPage)

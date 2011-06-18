@@ -72,6 +72,7 @@ class TipoItemController(BaseController):
     @expose('is2sap.templates.tipo_item.nuevo')
     def nuevoDesdeFase(self, id_proyecto, id_fase, **kw):
         """Despliega el formulario para añadir un Nuevo Tipo de Item a la fase de un proyecto."""
+
         try:
             kw['id_proyecto'] = id_proyecto
             kw['id_fase'] = id_fase

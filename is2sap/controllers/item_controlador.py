@@ -595,3 +595,24 @@ class ItemController(BaseController):
         item.linea_bases.remove(linea_base)
 
         redirect("/item/listadoItemsPorLineaBase", id_proyecto=id_proyecto, id_fase=id_fase, id_linea_base=id_linea_base)
+
+
+    @expose("is2sap.templates.item.listado_detalles_items_linea_base")
+    def listado_detalles_items_linea_base(self, id_proyecto, id_fase, id_linea_base, id_item, page=1):
+        """Metodo para listar todos los detalles de los items que pertenecen a la linea base"""
+        detalles = DBSession.query(ItemDetalle).filter_by(id_item=id_item).order_by(ItemDetalle.id_item_detalle)
+        currentPage = paginate.Page(detalles, page)#, items_per_page=1)
+        return dict(detalles=currentPage.items, page='listado_detalles_items_linea_base', id_proyecto=id_proyecto, 
+                    id_fase=id_fase, id_linea_base=id_linea_base, id_item=id_item, currentPage=currentPage)
+
+
+    @expose("is2sap.templates.item.listadoItemsPorLineaBaseHistorial")
+    def listadoItemsPorLineaBaseHistorial(self, id_proyecto, id_fase, id_linea_base, version, page=1):
+        """Metodo para listar todos los items de la base de datos que pertenecen al historial de la linea base"""
+	#No se como hacer aqui para el tema de la version
+        linea_base=DBSession.query(LineaBase).get(id_linea_base)
+	items = linea_base.itemshistorial
+        currentPage = paginate.Page(items, page)#, items_per_page=1)
+        return dict(items=currentPage.items, page='listadoItemsPorLineaBaseHistorial', id_proyecto=id_proyecto, 
+                    id_fase=id_fase, id_linea_base=id_linea_base, currentPage=currentPage)
+
