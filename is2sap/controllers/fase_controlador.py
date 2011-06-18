@@ -39,7 +39,7 @@ class FaseController(BaseController):
         """Despliega el formulario para añadir una fase al proyecto."""
         proyecto = DBSession.query(Proyecto).get(id_proyecto)
         if proyecto.iniciado == True:
-            flash("Proyecto ya iniciado. No puede crear fases!")
+            flash(_("Proyecto ya iniciado. No puede crear fases!"), 'warning')
             redirect("/admin/fase/listadoFasesPorProyecto", id_proyecto=id_proyecto)
 
         tmpl_context.form = crear_fase_form
@@ -92,7 +92,7 @@ class FaseController(BaseController):
 
         proyecto = DBSession.query(Proyecto).get(id_proyecto)
         if proyecto.iniciado == True:
-            flash("Proyecto ya iniciado. No puede editar fases!")
+            flash(_("Proyecto ya iniciado. No puede editar fases!"), 'warning')
             redirect("/admin/fase/listadoFasesPorProyecto", id_proyecto=id_proyecto)
 
         tmpl_context.form = editar_fase_form
@@ -121,7 +121,7 @@ class FaseController(BaseController):
         """Despliega confirmacion de eliminacion"""
         proyecto = DBSession.query(Proyecto).get(id_proyecto)
         if proyecto.iniciado == True:
-           flash("Proyecto ya iniciado. No puede eliminar fases!")
+           flash(_("Proyecto ya iniciado. No puede eliminar fases!"), 'warning')
            redirect("/admin/fase/listadoFasesPorProyecto", id_proyecto=id_proyecto)
 
         fase=DBSession.query(Fase).get(id_fase)

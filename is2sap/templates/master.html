@@ -1,57 +1,63 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
                       "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:py="http://genshi.edgewall.org/"
       xmlns:xi="http://www.w3.org/2001/XInclude"
       py:strip="">
-    <xi:include href="header.html" />
-    <xi:include href="sidebars.html" />
-    <xi:include href="sidebarsdesarrollo.html" />
-    <xi:include href="sidebarsconfiguracion.html" />
-    <xi:include href="footer.html" />
-<head py:match="head" py:attrs="select('@*')">
-    <meta content="text/html; charset=UTF-8" http-equiv="content-type" py:replace="''"/>
-    <title py:replace="''">Your title goes here</title>
-    <meta py:replace="select('*')"/>
-    <link rel="stylesheet" type="text/css" media="screen" href="${tg.url('/css/style.css')}" />
-    <link rel="stylesheet" type="text/css" media="screen" href="${tg.url('/css/admin.css')}" />
-</head>
 
-<body py:match="body" py:attrs="select('@*')">
-<!-- Comentario en una página HTML -->
-  ${header()}
- <ul id="mainmenu">
+      <xi:include href="header.html" />
+      <xi:include href="sidebars.html" />
+      <xi:include href="sidebarsdesarrollo.html" />
+      <xi:include href="sidebarsconfiguracion.html" />
+      <xi:include href="sidebarsotros.html" />
+      <xi:include href="footer.html" />
 
-<!--
-		<li class="first"><a href="${tg.url('/')}" class="${('', 'active')[defined('page') and page=='index']}">Configuracion</a></li>
-	    <li><a href="${tg.url('/desa')}" class="${('', 'active')[defined('page') and page=='desa']}">Desarrollo</a></li>
--->
+    <head py:match="head" py:attrs="select('@*')">
+         <meta content="text/html; charset=UTF-8" http-equiv="content-type" py:replace="''"/>
+              <title py:replace="''">Your title goes here</title>
+         <meta py:replace="select('*')"/>
+         <link rel="stylesheet" type="text/css" media="screen" href="${tg.url('/css/style.css')}" />
+         <link rel="stylesheet" type="text/css" media="screen" href="${tg.url('/css/admin.css')}" />
+    </head>
 
-    <span py:if="tg.auth_stack_enabled" py:strip="True">
-        <li py:if="not request.identity" id="login" class="loginlogout"><a href="${tg.url('/login')}">Login</a></li>
-        <li py:if="request.identity" id="login" class="loginlogout"><a href="${tg.url('/logout_handler')}">Logout</a></li>
-        <li py:if="tg.predicates.has_permission('administracion')" id="admin" class="first"><a href="${tg.url('/admin')}">Administracion</a></li>
-		<li py:if="tg.predicates.has_permission('administracion')" id="admin" class="menuprincipal"><a href="${tg.url('/configura')}">Configuracion</a></li>
-		<li py:if="tg.predicates.has_permission('edicion')" id="admin" class="menuprincipal"><a href="${tg.url('/desa')}">Desarrollo</a></li>
-		
-    </span>
+    <body py:match="body" py:attrs="select('@*')">
+         ${header()}
+         <ul id="mainmenu">
+            <span py:if="tg.auth_stack_enabled" py:strip="True">
+                 <li py:if="not request.identity" id="login" class="loginlogout">
+                    <a href="${tg.url('/login')}">Login</a>
+                 </li>
+                 <li py:if="request.identity" id="login" class="loginlogout">
+                    <a href="${tg.url('/logout_handler')}">Logout</a>
+                 </li>
+                 <li py:if="tg.predicates.has_permission('administracion')" id="admin" class="first">
+                    <a href="${tg.url('/admin')}">Administracion</a>
+                 </li>
+		 <li py:if="tg.predicates.has_permission('administracion')" id="admin" class="menuprincipal">
+                    <a href="${tg.url('/configura')}">Configuracion</a>
+                 </li>
+		 <li py:if="tg.predicates.has_permission('edicion')" id="admin" class="menuprincipal">
+                    <a href="${tg.url('/desa')}">Desarrollo</a>
+                 </li>
+		 <li py:if="request.identity" id="admin" class="menuprincipal">
+                    <a href="${tg.url('/otras_op')}">Otras Opciones</a>
+                 </li>
+            </span>
+         </ul>
 
- </ul>
 
-  <div id="content">
- 
-    <py:if test="defined('page')">
+         <div id="content"> 
+             <py:if test="defined('page')">
+             </py:if>
+             <py:with vars="flash=tg.flash_obj.render('flash', use_js=False)">
+             <div py:if="flash" py:content="XML(flash)" />
+             </py:with>
+             <div py:replace="select('*|text()')"/>
+	     <br/>
+	     <br/>
+             ${footer()}
+             </div>
 
-    </py:if>
-    <py:with vars="flash=tg.flash_obj.render('flash', use_js=False)">
-        <div py:if="flash" py:content="XML(flash)" />
-    </py:with>
-    <div py:replace="select('*|text()')"/>
-		<br />
-		<br />
-
-    <!-- End of main_content -->
-    ${footer()}
-  </div>
-</body>
+    </body>
 </html>

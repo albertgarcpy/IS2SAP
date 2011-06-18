@@ -26,7 +26,6 @@ class AtributoController(BaseController):
         """Muestra la pantalla inicial"""
         return dict(nombre_modelo='Atributo', page='index_atributo')        
 
-
 #    @expose('is2sap.templates.atributo.nuevo')
 #    def nuevo(self, **kw):
 #        """Despliega el formulario para añadir un nuevo atributo."""
@@ -82,7 +81,11 @@ class AtributoController(BaseController):
     def editar(self, id_proyecto, id_fase, id_tipo_item, id_atributo, **kw):
         """Metodo que rellena el formulario para editar los datos de un usuario"""
 
-
+        proyecto = DBSession.query(Proyecto).get(id_proyecto)
+        if proyecto.iniciado == True:
+            flash(_("Proyecto ya iniciado. No puede editar Atributo!"), 'warning')
+            redirect("/admin/atributo/listadoAtributosPorTipoItem", id_proyecto=id_proyecto, 
+                 id_fase=id_fase, id_tipo_item=id_tipo_item)
 
         tmpl_context.form = editar_atributo_form
         traerAtributo=DBSession.query(Atributo).get(id_atributo)
@@ -91,6 +94,7 @@ class AtributoController(BaseController):
         kw['nombre']=traerAtributo.nombre
         kw['descripcion']=traerAtributo.descripcion
         kw['tipo']=traerAtributo.tipo
+
         return dict(nombre_modelo='Atributo', page='editar', id_proyecto=id_proyecto, 
                     id_fase=id_fase, id_tipo_item=id_tipo_item, value=kw)
 
@@ -119,7 +123,7 @@ class AtributoController(BaseController):
 
         proyecto = DBSession.query(Proyecto).get(id_proyecto)
         if proyecto.iniciado == True:
-            flash("Proyecto ya iniciado. No puede eliminar Atributo!")
+            flash(_("Proyecto ya iniciado. No puede eliminar Atributo!"), 'warning')
             redirect("/admin/atributo/listadoAtributosPorTipoItem", id_proyecto=id_proyecto, 
                  id_fase=id_fase, id_tipo_item=id_tipo_item)
 

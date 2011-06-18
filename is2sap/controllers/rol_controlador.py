@@ -15,9 +15,7 @@ from is2sap.model.model import Rol, Permiso
 from is2sap import model
 from is2sap.controllers.secure import SecureController
 from is2sap.controllers.error import ErrorController
-
 from is2sap.widgets.rol_form import crear_rol_form, editar_rol_form
-
 
 __all__ = ['RolController']
 

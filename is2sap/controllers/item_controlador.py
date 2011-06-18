@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 """Controlador de Item"""
+
 from tg import expose, flash, require, url, request, redirect
 from pylons.i18n import ugettext as _, lazy_ugettext as l_
 from tgext.admin.tgadminconfig import TGAdminConfig
@@ -15,14 +16,12 @@ from tw.forms import TableForm, Spacer, TextField, PasswordField, CalendarDatePi
 from tw.forms.fields import Button, SubmitButton, HiddenField, CheckBox, FileField
 from tw.forms.validators import *
 from sqlalchemy.orm import contains_eager
-
 import shutil
 import os
 from pkg_resources import resource_filename
 
 public_dirname = os.path.join(os.path.abspath(resource_filename('is2sap', 'public')))
 items_dirname = os.path.join(public_dirname, 'items')
-
 
 from is2sap.widgets.mi_validador.mi_validador import *
 from is2sap.lib.base import BaseController
@@ -33,16 +32,14 @@ from is2sap.controllers.secure import SecureController
 from is2sap.controllers.error import ErrorController
 from is2sap.widgets.item_form import ItemForm, EditItemForm
 
-
 __all__ = ['ItemController']
-
 
 class ItemController(BaseController):
 
     allow_only = has_permission('edicion',
                                 msg=l_('Solo para usuarios con permiso "edicion"'))
     
-    @expose()
+    @expose('is2sap.templates.item.index')
     def index(self):
         """Muestra la pantalla inicial"""
         return dict(nombre_modelo='Item', page='index_item')

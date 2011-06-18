@@ -1,0 +1,68 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:py="http://genshi.edgewall.org/"
+      xmlns:xi="http://www.w3.org/2001/XInclude">
+
+      <xi:include href="master.html" />
+      <xi:include href="menuItems.html" />
+
+    <head>
+           <meta content="text/html; charset=UTF-8" http-equiv="content-type" py:replace="''"/>
+           <title>Lista de Items</title>
+    </head>
+
+    <body>
+            <h2>Lista de <div style="color:green">Items de la Línea Base</div></h2>
+            ${menu_superior_items_linea_base(id_proyecto, id_fase, id_linea_base)}
+
+            <table border="1" width="50%">
+		  <tr style="color: purple; font-size: 11pt" align="center" >
+<!--
+                     <th>ID</th>
+                     <th>Tipo</th>
+                     <th>LB</th>
+-->
+                     <th>Descripcion</th>
+                     <th>Complejidad</th>
+	             
+                     <th>Acciones</th>
+                  </tr>
+
+                  <py:for each="item in items">
+                     <tr>
+<!--
+                         <td>${item.id_item}</td>
+                         <td>${item.id_tipo_item}</td>
+		         <td>${item.id_linea_base}</td>
+-->
+		         <td>${item.descripcion}</td>
+		         <td>${item.complejidad}</td>
+<!--
+		         <td>${item.archivo_externo}</td>
+-->
+		        
+<!--
+		         <td>${item.fecha_modificacion}</td>
+-->
+                         <td> 
+				 <a href="${tg.url('/item/desasignar_item_linea_base', 
+                                         id_proyecto=id_proyecto, id_fase=id_fase, id_linea_base=id_linea_base)}">
+				    <input class="alignEliminar" name="eliminar" type="button" value=""/>
+				 </a>
+			 </td>
+
+                      </tr>
+                  </py:for>
+             </table>
+
+	     <p class="pagelist">
+		<a class="prevPage" href="/list?page=${currentPage.previous_page}">&nbsp;</a>
+		${currentPage.pager(format='~3~', page_param='page', show_if_single_page=True)}
+		<a class="nextPage" href="/list?page=${currentPage.next_page}">&nbsp;</a>
+	     </p>
+
+
+    </body>
+</html>

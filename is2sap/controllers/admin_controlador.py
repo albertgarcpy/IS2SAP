@@ -1,13 +1,11 @@
 """Admin Controller"""
 from sqlalchemy.orm import class_mapper
 import inspect
-
 from tg.controllers import TGController
 from tg.decorators import with_trailing_slash, override_template, expose
 from tg.exceptions import HTTPNotFound
 from tg import config as tg_config
 from mi_admin_config import MiAdminConfig as AdminConfig 
-
 from tgext.crud import CrudRestController
 
 engine = 'genshi'
@@ -20,20 +18,18 @@ except ImportError:
     pass
 
 from repoze.what.predicates import in_group
-
 from tg import expose, flash, require, url, request, redirect
 from pylons.i18n import ugettext as _, lazy_ugettext as l_
 from tgext.admin.tgadminconfig import TGAdminConfig
-
-
+from tg import tmpl_context, validate
+from webhelpers import paginate
+from repoze.what.predicates import has_permission
 from repoze.what import predicates
 
 from is2sap.lib.base import BaseController
 from is2sap import model
 from is2sap.controllers.secure import SecureController
 from is2sap.controllers.error import ErrorController
-
-
 from is2sap.controllers.usuario_controlador import UsuarioController
 from is2sap.controllers.tipo_item_controlador import TipoItemController
 from is2sap.controllers.atributo_controlador import AtributoController
@@ -41,14 +37,7 @@ from is2sap.controllers.proyecto_controlador import ProyectoController
 from is2sap.controllers.rol_controlador import RolController
 from is2sap.controllers.fase_controlador import FaseController
 from is2sap.controllers.permiso_controlador import PermisoController
-
 from is2sap.controllers.linea_base_controlador import LineaBaseController
-
-
-from tg import tmpl_context, validate
-
-from webhelpers import paginate
-from repoze.what.predicates import has_permission
 
 
 class AdminController(TGController):

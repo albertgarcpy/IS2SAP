@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 """Controlador de Tipo de Item"""
 
+import tg
 from tg import expose, flash, require, url, request, redirect
 from pylons.i18n import ugettext as _, lazy_ugettext as l_
 from tgext.admin.tgadminconfig import TGAdminConfig
@@ -71,15 +72,27 @@ class TipoItemController(BaseController):
     @expose('is2sap.templates.tipo_item.nuevo')
     def nuevoDesdeFase(self, id_proyecto, id_fase, **kw):
         """Despliega el formulario para añadir un Nuevo Tipo de Item a la fase de un proyecto."""
-        print kw
-        tmpl_context.form = crear_tipo_item_form
-        kw['id_fase']=id_fase     
+
+        try:
+            kw['id_proyecto'] = id_proyecto
+            kw['id_fase'] = id_fase
+            tmpl_context.form = crear_tipo_item_form
+        except TypeError:
+            print "Error de tipo"
+            redirect("/admin/tipo_item/listadoTipoItemPorFase", id_proyecto=id_proyecto, id_fase=id_fase)
+        #if tg.tmpl_context.form_errors:
+        #   flash('There was a problem with the form!')
+        #   redirect("/admin/tipo_item/listadoTipoItemPorFase", id_proyecto=id_proyecto, id_fase=id_fase)
+        
         return dict(nombre_modelo='Tipo Item', page='nuevo_tipo_item', id_proyecto=id_proyecto, id_fase=id_fase, value=kw)
 
-    @validate(crear_tipo_item_form, error_handler=nuevoDesdeFase)
     @expose()
+    @validate(crear_tipo_item_form)#, error_handler=nuevoDesdeFase)
     def add(self, **kw):
         """Metodo para agregar un registro a la base de datos """
+
+        print kw.items()
+
         tipo_item = TipoItem()
         tipo_item.id_fase = kw['id_fase']
         tipo_item.nombre = kw['nombre']
@@ -87,6 +100,7 @@ class TipoItemController(BaseController):
         DBSession.add(tipo_item)
         DBSession.flush()
         flash("Tipo de Item creado!")
+
         fase = tipo_item.relacion_fase
         id_proyecto = fase.id_proyecto
 
@@ -143,7 +157,7 @@ class TipoItemController(BaseController):
 
         proyecto = DBSession.query(Proyecto).get(id_proyecto)
         if proyecto.iniciado == True:
-           flash("Proyecto ya iniciado. No puede eliminar Tipo de Item!")
+           flash(_("Proyecto ya iniciado. No puede eliminar Tipo de Item!"), 'warning')
            redirect("/admin/tipo_item/listadoTipoItemPorFase", id_proyecto=id_proyecto, id_fase=id_fase)
 
         tipo_item = DBSession.query(TipoItem).get(id_tipo_item)
