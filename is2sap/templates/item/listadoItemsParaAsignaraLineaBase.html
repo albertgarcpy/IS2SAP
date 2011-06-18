@@ -27,7 +27,7 @@
                      <th>Descripcion</th>
                      <th>Complejidad</th>
 	             
-                     <th>Acciones</th>
+                     <th>Accion</th>
                   </tr>
 
                   <py:for each="item in items">
@@ -51,6 +51,9 @@
                                          id_proyecto=id_proyecto, id_fase=id_fase, id_linea_base=id_linea_base, id_item=item.id_item)}">
 				    <input class="alignaddAtributo" name="addAtributo" type="button" value="" />
 				 </a>
+				<a href="${tg.url('/item/listado_detalles_items_linea_base', id_proyecto=id_proyecto, id_fase=id_fase, id_linea_base=id_linea_base, id_item=item.id_item)}">
+                              <input class="alignlistarItems" name="listaritems" type="button" value="" />
+                		</a>
 			 </td>
 
                       </tr>

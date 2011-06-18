@@ -178,7 +178,7 @@ class LineaBaseController(BaseController):
         """Metodo que rompe la linea base"""
         linea_base = DBSession.query(LineaBase).get(id_linea_base)
 	linea_base.estado = 'Desarrollo' 
-	#Guarda en el historial la última linea base aprobada(*Hacer) 
+	#Guarda en el historial la última linea base aprobada
 	linea_baseHistorial = LineaBaseHistorial()
         linea_baseHistorial.id_linea_base = linea_base.id_linea_base
         linea_baseHistorial.nombre = linea_base.nombre
@@ -186,6 +186,12 @@ class LineaBaseController(BaseController):
         linea_baseHistorial.estado = linea_base.estado
         linea_baseHistorial.id_fase = linea_base.id_fase
 	linea_baseHistorial.version = linea_base.version
+	items = linea_base.items
+        #Aqui se van agregando registros a la tabla Linea_Base_Item_Historial
+	#Para que el sistema guarde automáticamente el historial de los items que contiene la linea base
+	for item in items:
+        	item.linea_bases_historial.append(linea_baseHistorial)
+
         DBSession.add(linea_baseHistorial) 
 	version_aux = int(linea_base.version)+1
   	linea_base.version = str(version_aux)

@@ -27,7 +27,7 @@ items_dirname = os.path.join(public_dirname, 'items')
 from is2sap.widgets.mi_validador.mi_validador import *
 from is2sap.lib.base import BaseController
 from is2sap.model import DBSession, metadata
-from is2sap.model.model import TipoItem, Item, Proyecto, Usuario, Fase, Atributo, ItemDetalle, ItemHistorial, ItemDetalleHistorial, LineaBase, LineaBase_Item
+from is2sap.model.model import TipoItem, Item, Proyecto, Usuario, Fase, Atributo, ItemDetalle, ItemHistorial, ItemDetalleHistorial, LineaBase, LineaBase_Item, LineaBaseHistorial
 from is2sap import model
 from is2sap.controllers.secure import SecureController
 from is2sap.controllers.error import ErrorController
@@ -612,10 +612,20 @@ class ItemController(BaseController):
     @expose("is2sap.templates.item.listadoItemsPorLineaBaseHistorial")
     def listadoItemsPorLineaBaseHistorial(self, id_proyecto, id_fase, id_linea_base, version, page=1):
         """Metodo para listar todos los items de la base de datos que pertenecen al historial de la linea base"""
-	#No se como hacer aqui para el tema de la version
-        linea_base=DBSession.query(LineaBase).get(id_linea_base)
-	items = linea_base.itemshistorial
+	linea_base_historial=DBSession.query(LineaBaseHistorial).filter_by(id_linea_base=id_linea_base).filter_by(version=version).first()
+	items = linea_base_historial.items_historial
         currentPage = paginate.Page(items, page)#, items_per_page=1)
         return dict(items=currentPage.items, page='listadoItemsPorLineaBaseHistorial', id_proyecto=id_proyecto, 
                     id_fase=id_fase, id_linea_base=id_linea_base, currentPage=currentPage)
+
+
+    @expose("is2sap.templates.item.listado_detalles_items_linea_base_historial")
+    def listado_detalles_items_linea_base_historial(self, id_proyecto, id_fase, id_linea_base, id_item, version, page=1):
+        """Metodo para listar todos los detalles de los items que pertenecen a la linea base"""
+        detalles = DBSession.query(ItemDetalle).filter_by(id_item=id_item).filter_by(version=version).order_by(ItemDetalle.id_item_detalle)
+	if detalles == []:
+		detalles = DBSession.query(ItemDetalleHistorial).filter_by(id_item=id_item).filter_by(version=version).order_by(ItemDetalleHistorial.id_historial_item_detalle)
+        currentPage = paginate.Page(detalles, page)#, items_per_page=1)
+        return dict(detalles=currentPage.items, page='listado_detalles_items_linea_base_historial', id_proyecto=id_proyecto, 
+                    id_fase=id_fase, id_linea_base=id_linea_base, id_item=id_item, currentPage=currentPage)
 

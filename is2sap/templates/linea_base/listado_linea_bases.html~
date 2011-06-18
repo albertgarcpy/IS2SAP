@@ -23,7 +23,7 @@ ${menu_superior(id_proyecto, id_fase)}
           <th>Estado</th>
           <th>Fase</th>
           <th>Version</th>
-	  <th>Editar</th>
+	  <th>Opciones</th>
 	  	  
 	</tr>
 

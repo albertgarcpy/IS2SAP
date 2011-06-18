@@ -350,6 +350,8 @@ class Item(DeclarativeBase):
     #relation definitions
     #linea_base = relationship('LineaBase', backref='items')
     linea_bases = relationship('LineaBase', secondary=LineaBase_Item, backref='items')
+    linea_bases_historial = relationship('LineaBaseHistorial', secondary=LineaBase_Item_Historial, backref='items_historial')
+
 
 
 ##----------------------------- Clase "ItemDetalle"-----------------------------------
