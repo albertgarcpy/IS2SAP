@@ -26,7 +26,7 @@ items_dirname = os.path.join(public_dirname, 'items')
 from is2sap.widgets.mi_validador.mi_validador import *
 from is2sap.lib.base import BaseController
 from is2sap.model import DBSession, metadata
-from is2sap.model.model import TipoItem, Item, Proyecto, Usuario, Fase, Atributo, ItemDetalle, ItemHistorial, ItemDetalleHistorial, LineaBase, LineaBase_Item
+from is2sap.model.model import TipoItem, Item, Proyecto, Usuario, Fase, Atributo, ItemDetalle, ItemHistorial, ItemDetalleHistorial, LineaBase, LineaBase_Item, LineaBaseHistorial
 from is2sap import model
 from is2sap.controllers.secure import SecureController
 from is2sap.controllers.error import ErrorController
@@ -554,65 +554,4 @@ class ItemController(BaseController):
            page='listado_tipo_items', nombre_fase=fase.nombre, id_proyecto=id_proyecto, id_fase=id_fase, currentPage=currentPage)
 
         
-    @expose("is2sap.templates.item.listadoItemsPorLineaBase")
-    def listadoItemsPorLineaBase(self, id_proyecto, id_fase, id_linea_base, page=1):
-        """Metodo para listar todos los items de la base de datos que pertenecen a la linea base"""
-        linea_base=DBSession.query(LineaBase).get(id_linea_base)
-	items = linea_base.items
-        currentPage = paginate.Page(items, page)#, items_per_page=1)
-        return dict(items=currentPage.items, page='listadoItemsPorLineaBase', id_proyecto=id_proyecto, 
-                    id_fase=id_fase, id_linea_base=id_linea_base, currentPage=currentPage)
-
-	
-    @expose("is2sap.templates.item.listadoItemsParaAsignaraLineaBase")
-    def listadoItemsParaAsignaraLineaBase(self, id_proyecto, id_fase, id_linea_base, page=1):
-        """Metodo para listar todos los items a asignar a la linea base"""
-        linea_base=DBSession.query(LineaBase).get(id_linea_base)
-	itemsLineaBase = linea_base.items
-	items = DBSession.query(Item).all()
-	for item in itemsLineaBase:
-           items.remove(item)
-        currentPage = paginate.Page(items, page)#, items_per_page=1)
-        return dict(items=currentPage.items, page='listadoItemsParaAsignaraLineaBase', id_proyecto=id_proyecto, 
-                    id_fase=id_fase, id_linea_base=id_linea_base, currentPage=currentPage)
-
     
-    @expose()
-    def asignarItem(self, id_proyecto, id_fase, id_linea_base, id_item):
-        """Metodo que realiza la asignacion de un item a la linea base selecccionada"""
-        item = DBSession.query(Item).get(id_item)
-        linea_base = DBSession.query(LineaBase).get(id_linea_base)
-        item.linea_bases.append(linea_base)
-
-        redirect("/item/listadoItemsParaAsignaraLineaBase",id_proyecto=id_proyecto, id_fase=id_fase, id_linea_base=id_linea_base)
-
-
-    @expose()
-    def desasignar_item_linea_base(self, id_proyecto, id_fase, id_linea_base, id_item, **kw):
-        """Metodo que desasigna un item de la linea base seleccionada"""
-        item = DBSession.query(Item).get(id_item)
-        linea_base = DBSession.query(LineaBase).get(id_linea_base)
-        item.linea_bases.remove(linea_base)
-
-        redirect("/item/listadoItemsPorLineaBase", id_proyecto=id_proyecto, id_fase=id_fase, id_linea_base=id_linea_base)
-
-
-    @expose("is2sap.templates.item.listado_detalles_items_linea_base")
-    def listado_detalles_items_linea_base(self, id_proyecto, id_fase, id_linea_base, id_item, page=1):
-        """Metodo para listar todos los detalles de los items que pertenecen a la linea base"""
-        detalles = DBSession.query(ItemDetalle).filter_by(id_item=id_item).order_by(ItemDetalle.id_item_detalle)
-        currentPage = paginate.Page(detalles, page)#, items_per_page=1)
-        return dict(detalles=currentPage.items, page='listado_detalles_items_linea_base', id_proyecto=id_proyecto, 
-                    id_fase=id_fase, id_linea_base=id_linea_base, id_item=id_item, currentPage=currentPage)
-
-
-    @expose("is2sap.templates.item.listadoItemsPorLineaBaseHistorial")
-    def listadoItemsPorLineaBaseHistorial(self, id_proyecto, id_fase, id_linea_base, version, page=1):
-        """Metodo para listar todos los items de la base de datos que pertenecen al historial de la linea base"""
-	#No se como hacer aqui para el tema de la version
-        linea_base=DBSession.query(LineaBase).get(id_linea_base)
-	items = linea_base.itemshistorial
-        currentPage = paginate.Page(items, page)#, items_per_page=1)
-        return dict(items=currentPage.items, page='listadoItemsPorLineaBaseHistorial', id_proyecto=id_proyecto, 
-                    id_fase=id_fase, id_linea_base=id_linea_base, currentPage=currentPage)
-

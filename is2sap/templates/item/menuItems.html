@@ -80,39 +80,7 @@
         </div>
      </py:def>
 
-    <py:def function="menu_superior_items_linea_base(id_proyecto, id_fase, id_linea_base)">
-        <div class="menu bubplastic horizontal aqua">
-	    <ul>
-		
-		<li>
-                    <span class="menu_r">
-                         <a href="${tg.url('/admin/linea_base/listado_linea_bases', id_proyecto=id_proyecto, id_fase=id_fase)}" 
-                            class="${('', 'active')[defined('page') and page=='listado_tipo_items']}">
-                            <span class="menu_ar">Volver</span>
-                         </a>
-                    </span>
-                </li>
-	    </ul>
-	    <br class="clearit" />
-        </div>
-     </py:def>
-     
-     <py:def function="menu_superior_items_a_asignar_linea_base(id_proyecto, id_fase, id_linea_base)">
-        <div class="menu bubplastic horizontal aqua">
-	    <ul>
-		
-		<li>
-                    <span class="menu_r">
-                         <a href="${tg.url('/admin/linea_base/listadoItemsPorLineaBase', id_proyecto=id_proyecto, id_fase=id_fase, id_linea_base=id_linea_base)}" 
-                            class="${('', 'active')[defined('page') and page=='listadoItemsPorLineaBase']}">
-                            <span class="menu_ar">Volver</span>
-                         </a>
-                    </span>
-                </li>
-	    </ul>
-	    <br class="clearit" />
-        </div>
-     </py:def>
+    
 
      <py:def function="menu_superior_nuevo(id_proyecto, id_fase, id_tipo_item)">
         <div class="menu bubplastic horizontal aqua">

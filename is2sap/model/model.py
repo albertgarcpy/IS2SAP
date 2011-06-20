@@ -73,7 +73,6 @@ LineaBase_Item_Historial = Table('LineaBase_Item_Historial', metadata,
         onupdate="CASCADE", ondelete="CASCADE"), primary_key=True, nullable=False),
     Column('id_item', INTEGER(), ForeignKey('Item.id_item', 
         onupdate="CASCADE", ondelete="CASCADE" ), primary_key=True, nullable=False),
-    Column(u'version', INTEGER(), nullable=False)
 )
 
 ##----------------------------- Tabla de Asociacion "Proyecto_Rol"-----------------------------------
