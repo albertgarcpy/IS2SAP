@@ -16,7 +16,7 @@
 <body>
 
   <h2>Lista de <div style="color:green">Relaciones</div></h2>
-  ${menu_superior(idItemActual)}
+  ${menu_superior(idItemActual, id_proyecto, id_fase, id_tipo_item)}
   <table>
     <tr  valign="top" align="center">
       <td>
@@ -28,7 +28,7 @@
           <py:for each="antecesor in antecesores">
             <tr>           
               <td>${antecesor.id_item1}</td>
-              <td> <a href="${tg.url('/relacion/delete', id_relacion = antecesor.id_relacion, idItemActual = idItemActual)}"> 
+              <td> <a href="${tg.url('/relacion/delete', id_relacion = antecesor.id_relacion, idItemActual = idItemActual, id_proyecto=id_proyecto, id_fase=id_fase, id_tipo_item=id_tipo_item)}"> 
                      <input class="alignEliminar" name="eliminar" type="button" value="" />
                    </a>				 
               </td>
@@ -47,7 +47,7 @@
           <py:for each="hijo in hijos">
             <tr>           
               <td>${hijo.id_item2}</td>
-              <td> <a href="${tg.url('/relacion/delete', id_relacion = hijo.id_relacion, idItemActual = idItemActual)}"> 
+              <td> <a href="${tg.url('/relacion/delete', id_relacion = hijo.id_relacion, idItemActual = idItemActual, id_proyecto=id_proyecto, id_fase=id_fase, id_tipo_item=id_tipo_item)}"> 
                      <input class="alignEliminar" name="eliminar" type="button" value="" />
                    </a>				 
               </td>

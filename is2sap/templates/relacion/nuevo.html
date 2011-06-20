@@ -6,6 +6,7 @@
       xmlns:xi="http://www.w3.org/2001/XInclude">
 
       <xi:include href="master.html"/>
+      <xi:include href="menuRelacion.html"/>
 
      <head>
 	   <meta content="text/html; charset=UTF-8" http-equiv="content-type" py:replace="''"/>
@@ -14,7 +15,8 @@
 
      <body>
 	   <h2>Nueva  ${nombre_modelo} Para el Item: ${idItemActual} </h2>
-<table >
+${menu_superior_nuevo(idItemActual, id_proyecto, id_fase, id_tipo_item)}
+<table>
   <tr valign="top">
     <td>
 	    <table border="1">
@@ -28,7 +30,7 @@
 			<tr>           
                 <td>${item.id_item}</td>
                 <td>${item.descripcion}</td>
-                <td> <a href="${tg.url('/relacion/addAncestro', id_item1 = item.id_item, id_item2=idItemActual)}"> 
+                <td> <a href="${tg.url('/relacion/addAncestro', id_item1 = item.id_item, id_item2=idItemActual, id_proyecto=id_proyecto, id_fase=id_fase, id_tipo_item=id_tipo_item)}"> 
 				       <input class="alignaddFase" name="agregarRelacion1" type="button" value=" " />
 				     </a>				 
 		        </td>
@@ -49,7 +51,7 @@
 			<tr>           
                 <td>${item.id_item}</td>
                 <td>${item.descripcion}</td>
-                <td> <a href="${tg.url('/relacion/addHijo', id_item1 = idItemActual, id_item2=item.id_item)}"> 
+                <td> <a href="${tg.url('/relacion/addHijo', id_item1 = idItemActual, id_item2=item.id_item, id_proyecto=id_proyecto, id_fase=id_fase, id_tipo_item=id_tipo_item)}"> 
 				       <input class="alignaddFase" name="agregarRelacion2" type="button" value="" />
 				     </a>				 
 		        </td>
