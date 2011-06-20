@@ -288,10 +288,15 @@ class LineaBaseController(BaseController):
     @expose("is2sap.templates.linea_base.listadoItemsParaAsignaraLineaBase")
     def listadoItemsParaAsignaraLineaBase(self, id_proyecto, id_fase, id_linea_base, page=1):
         """Metodo para listar todos los items a asignar a la linea base"""
-        linea_base=DBSession.query(LineaBase).get(id_linea_base)
-	itemsLineaBase = linea_base.items
-	items = DBSession.query(Item).filter_by(vivo=1).filter_by(estado='Aprobado').all()
-	for item in itemsLineaBase:
+        #linea_base=DBSession.query(LineaBase).get(id_linea_base)
+	linea_bases=DBSession.query(LineaBase).all()
+	itemsenLineaBase = []
+	for linea_base in linea_bases:
+		itemsLineaBase = linea_base.items
+		for itemLineaBase in itemsLineaBase:
+			itemsenLineaBase.add(itemLineaBase)
+	items = DBSession.query(Item).filter_by(vivo=True).filter_by(estado='Aprobado').all()
+	for item in itemsenLineaBase:
            items.remove(item)
         currentPage = paginate.Page(items, page)#, items_per_page=1)
         return dict(items=currentPage.items, page='listadoItemsParaAsignaraLineaBase', id_proyecto=id_proyecto, 
