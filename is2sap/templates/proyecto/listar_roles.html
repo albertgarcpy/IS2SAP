@@ -17,22 +17,27 @@
 
             <h2>Roles del Proyecto <div style="color:green"> ${proyecto.nombre}</div></h2>
             ${menu_rol_proyecto(proyecto.id_proyecto)}
-	    <table border="1">
+	    <table border="1" width="100%">
 		<tr style="color: purple; font-size: 11pt" align="center" >
+<!--
 		    <th>ID</th>
-		    <th>Nombre</th>
-		    <th>Descripcion</th>
-		    <th>Accion</th>		
+-->
+		    <th align="center">Nombre</th>
+		    <th align="center">Descripcion</th>
+		    <th align="center">Desasignar</th>		
 		</tr>
 
 		<py:for each="rol in roles">
 			<tr>
+<!--
 			    <td>${rol.id_rol}</td>
-			    <td>${rol.nombre_rol}</td>
-			    <td>${rol.descripcion}</td>
+-->
+			    <td width="40%" align="left">${rol.nombre_rol}</td>
+			    <td width="48%" align="left">${rol.descripcion}</td>
 
-			    <td> 
-				 <a href="${tg.url('/admin/proyecto/eliminar_rol_proyecto', id_proyecto=proyecto.id_proyecto, id_rol=rol.id_rol)}">
+			    <td width="12%" align="center"> 
+				 <a href="${tg.url('/admin/proyecto/eliminar_rol_proyecto', 
+                                          id_proyecto=proyecto.id_proyecto, id_rol=rol.id_rol)}">
 				    <input class="alignEliminar" name="eliminar" type="button" value=""/>
 				 </a>
 			    </td>
@@ -42,9 +47,11 @@
 	    </table>
 
 	    <p class="pagelist">
-		<a class="prevPage" href="/list?page=${currentPage.previous_page}">&nbsp;</a>
+		<a class="prevPage" href="${tg.url('/admin/proyecto/roles',page=currentPage.previous_page,
+                                          id_proyecto=proyecto.id_proyecto)}">&nbsp;</a>
 		${currentPage.pager(format='~3~', page_param='page', show_if_single_page=True)}
-		<a class="nextPage" href="/list?page=${currentPage.next_page}">&nbsp;</a>
+		<a class="nextPage" href="${tg.url('/admin/proyecto/roles',page=currentPage.next_page,
+                                          id_proyecto=proyecto.id_proyecto)}">&nbsp;</a>
 	    </p>
 
     </body>

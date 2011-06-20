@@ -13,26 +13,32 @@
 
     <body>
           <h2>Eliminar Fase <div style="color:green"> ${value.nombre}</div></h2>
-          <h3>Desea eliminar el registro?</h3>
 
-          <table border="1">        
+          <table border="1" width="100%">        
                 <tr style="color: purple; font-size: 11pt" >
-		   <th>ID</th>
-                   <th>Estado</th>
-                   <th>Proyecto</th>
-                   <th>Nombre</th>
-                   <th>Descripcion</th>
-		   <th>Numero de Fase</th>		  
+<!--
+                    <th>ID</th>
+-->          
+		    <th align="center">Nro.</th>
+                    <th align="center">Nombre</th>
+                    <th align="center">Descripcion</th>
+                    <th align="center">Estado</th>		  
                 </tr>
                 <tr>
-                   <td>${value.id_fase}</td>
-                   <td>${value.id_estado_fase}</td>
-                   <td>${value.id_proyecto}</td>
-                   <td>${value.nombre}</td>
-                   <td>${value.descripcion}</td>
-                   <td>${value.numero_fase}</td>
+<!--
+                   <td width="25">${fase.id_fase}</td>
+-->
+                   <td width="5%" align="left">${value.numero_fase}</td>
+                   <td width="35%" align="left">${value.nombre}</td>
+                   <td width="51%" align="left">${value.descripcion}</td>
+                   <td width="9%" align="left">${value.relacion_estado_fase.nombre_estado}</td>
                 </tr>        
           </table>
+
+          <br>
+          </br>
+
+          <h3><div style="color:red">DESEA ELIMINAR EL REGISTRO?</div></h3>
 
           <div class="menu bubplastic horizontal aqua">
 	      <ul>
