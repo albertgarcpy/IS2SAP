@@ -13,26 +13,34 @@
 
     <body>
           <h2>Eliminar Proyecto <div style="color:green"> ${value.nombre}</div></h2>
-          <h3>Desea eliminar el registro?</h3>
 
-          <table border="1">        
+          <table border="1" width="100%">        
                 <tr style="color: purple; font-size: 11pt" >
+<!--
                    <th>ID</th>
-<!--               <th>Usuario</th>      -->
-                   <th>Nombre</th>
-                   <th>Descripcion</th>
-                   <th>Fecha</th>
-	           <th>Iniciado</th>		  
+                   <th>Usuario</th>   
+-->   
+                   <th align="center">Nombre</th>
+                   <th align="center">Descripcion</th>
+                   <th align="center">Creacion</th>
+	           <th align="center">Iniciado</th>		  
                 </tr>
                 <tr>
+<!--
                     <td>${value.id_proyecto}</td>
-<!--                <td>${value.id_usuario}</td>-->
-                    <td>${value.nombre}</td>
-                    <td>${value.descripcion}</td>
-                    <td>${value.fecha}</td>
-                    <td>${value.iniciado}</td>
+                    <td>${value.id_usuario}</td>
+-->
+                    <td width="32%" align="left">${value.nombre}</td>
+                    <td width="50%" align="justify">${value.descripcion}</td>
+                    <td width="10%" align="center">${value.fecha}</td>
+                    <td width="8%" align="center">${value.iniciado}</td>
                 </tr>        
           </table>
+
+         <br>
+         </br>
+
+         <h3><div style="color:red">DESEA ELIMINAR EL REGISTRO?</div></h3>
 
           <div class="menu bubplastic horizontal aqua">
 	      <ul>

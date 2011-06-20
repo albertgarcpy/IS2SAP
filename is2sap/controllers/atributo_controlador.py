@@ -8,10 +8,13 @@ from tgext.admin.controller import AdminController, AdminConfig
 from repoze.what import predicates
 from tg import tmpl_context, validate
 from webhelpers import paginate
+from sqlalchemy import func
+from sqlalchemy.exc import IntegrityError, SQLAlchemyError
+import transaction
 
 from is2sap.lib.base import BaseController
 from is2sap.model import DBSession, metadata
-from is2sap.model.model import Proyecto, TipoItem, Atributo
+from is2sap.model.model import Proyecto, TipoItem, Atributo, Fase
 from is2sap import model
 from is2sap.controllers.secure import SecureController
 from is2sap.controllers.error import ErrorController
@@ -26,17 +29,24 @@ class AtributoController(BaseController):
         """Muestra la pantalla inicial"""
         return dict(nombre_modelo='Atributo', page='index_atributo')        
 
-#    @expose('is2sap.templates.atributo.nuevo')
-#    def nuevo(self, **kw):
-#        """Despliega el formulario para añadir un nuevo atributo."""
-#        tmpl_context.form = crear_atributo_form
-#        return dict(nombre_modelo='Atributo', page='nuevo', value=kw)
-
     @expose('is2sap.templates.atributo.nuevoDesdeTipoItem')
-    def nuevoDesdeTipoItem(self, id_proyecto, id_fase, id_tipo_item, **kw):
+    def nuevoDesdeTipoItem(self, id_tipo_item, **kw):
         """Despliega el formulario para añadir un nuevo atributo."""
-        tmpl_context.form = crear_atributo_form
-        kw['id_tipo_item']=id_tipo_item
+        try:
+            tmpl_context.form = crear_atributo_form
+            tipo_item = DBSession.query(TipoItem).get(id_tipo_item)
+            id_fase = tipo_item.id_fase
+            fase = DBSession.query(Fase).get(id_fase)
+            id_proyecto = fase.id_proyecto
+            kw['id_tipo_item']=id_tipo_item
+        except SQLAlchemyError:
+            flash(_("No se pudo acceder a Creacion Atributo! SQLAlchemyError..."), 'error')
+            redirect("/admin/atributo/listadoAtributosPorTipoItem", id_proyecto=id_proyecto, 
+                     id_fase=id_fase, id_tipo_item=id_tipo_item)
+        except (AttributeError, NameError):
+            flash(_("No se pudo acceder a Creacon de Atributo! Hay Problemas con el servidor..."), 'error')
+            redirect("/admin/atributo/listadoAtributosPorTipoItem", id_proyecto=id_proyecto, 
+                     id_fase=id_fase, id_tipo_item=id_tipo_item)
         return dict(nombre_modelo='Atributo', page='nuevo_atributo', id_proyecto=id_proyecto, 
                     id_fase=id_fase, id_tipo_item=id_tipo_item, value=kw)
 
@@ -44,51 +54,75 @@ class AtributoController(BaseController):
     @expose()
     def add(self, **kw):
         """Metodo para agregar un registro a la base de datos """
-        atributo = Atributo()
-        atributo.id_tipo_item = kw['id_tipo_item']
-        atributo.nombre = kw['nombre']
-        atributo.descripcion = kw['descripcion']
-        atributo.tipo = kw['tipo']
-        DBSession.add(atributo)
-        DBSession.flush()
-        flash("Atributo agregado!")
-        id_tipo_item = kw['id_tipo_item']
-        tipo_item = DBSession.query(TipoItem).get(id_tipo_item)
-        fase = tipo_item.relacion_fase
-        id_proyecto = fase.id_proyecto
+        try:
+            atributo = Atributo()
+            atributo.id_tipo_item = kw['id_tipo_item']
+            atributo.nombre = kw['nombre']
+            atributo.descripcion = kw['descripcion']
+            atributo.tipo = kw['tipo']
+            DBSession.add(atributo)
+            DBSession.flush()
+            transaction.commit()
+            tipo_item = DBSession.query(TipoItem).get(kw['id_tipo_item'])
+            id_tipo_item = tipo_item.id_tipo_item
+            fase = tipo_item.relacion_fase
+            id_fase = fase.id_fase
+            id_proyecto = fase.id_proyecto
+        except IntegrityError:
+            transaction.abort()
+            flash(_("No se ha guardado! Hay Problemas con el servidor..."), 'error')
+            redirect("/admin/atributo/listadoAtributosPorTipoItem", id_proyecto=id_proyecto, 
+                     id_fase=id_fase, id_tipo_item=id_tipo_item)
+        except SQLAlchemyError:
+            flash(_("No se ha guardado! SQLAlchemyError..."), 'error')
+            redirect("/admin/atributo/listadoAtributosPorTipoItem", id_proyecto=id_proyecto, 
+                     id_fase=id_fase, id_tipo_item=id_tipo_item)
+        except (AttributeError, NameError):
+            flash(_("No se ha guardado! Hay Problemas con el servidor..."), 'error')
+            redirect("/admin/atributo/listadoAtributosPorTipoItem", id_proyecto=id_proyecto, 
+                     id_fase=id_fase, id_tipo_item=id_tipo_item)
+        else:
+            flash(_("Atributo creado!"), 'ok')
 
         redirect("/admin/atributo/listadoAtributosPorTipoItem", id_proyecto=id_proyecto, 
-                 id_fase=fase.id_fase, id_tipo_item=id_tipo_item)
-
-#    @expose("is2sap.templates.atributo.listado")
-#    def listado(self,page=1):
-#        """Metodo para listar todos los atributos de la base de datos"""
-#        atributos = DBSession.query(Atributo)#.order_by(Usuario.id)
-#        currentPage = paginate.Page(atributos, page, items_per_page=5)
-#        return dict(atributos=currentPage.items,
-#           page='listado', currentPage=currentPage)
+                 id_fase=id_fase, id_tipo_item=id_tipo_item)
 
     @expose("is2sap.templates.atributo.listadoAtributosPorTipoItem")
     def listadoAtributosPorTipoItem(self, id_proyecto, id_fase, id_tipo_item, page=1):
         """Metodo para listar todos los atributos de la base de datos"""
-        atributos = DBSession.query(Atributo).filter_by(id_tipo_item=id_tipo_item).order_by(Atributo.id_atributo)
-        currentPage = paginate.Page(atributos, page, items_per_page=5)
-        tipo_item = DBSession.query(TipoItem).get(id_tipo_item)
+        try:
+            atributos = DBSession.query(Atributo).filter_by(id_tipo_item=id_tipo_item).order_by(Atributo.id_atributo)
+            currentPage = paginate.Page(atributos, page, items_per_page=10)
+            tipo_item = DBSession.query(TipoItem).get(id_tipo_item)
+        except SQLAlchemyError:
+            flash(_("No se pudo acceder a Atributos de Tipo de Item! SQLAlchemyError..."), 'error')
+            redirect("/admin/tipo_item/listadoTipoItemPorFase", id_proyecto=id_proyecto, id_fase=id_fase)
+        except (AttributeError, NameError):
+            flash(_("No se pudo acceder a Atributos de Tipo de Item! Hay Problemas con el servidor..."), 'error')
+            redirect("/admin/tipo_item/listadoTipoItemPorFase", id_proyecto=id_proyecto, id_fase=id_fase)
+
         return dict(atributos=currentPage.items,page='listado_atributos', nombre_tipo_item=tipo_item.nombre, 
                     id_proyecto=id_proyecto, id_fase=id_fase, id_tipo_item=id_tipo_item, currentPage=currentPage)
 
     @expose('is2sap.templates.atributo.editar')
-    def editar(self, id_proyecto, id_fase, id_tipo_item, id_atributo, **kw):
+    def editar(self, id_atributo, **kw):
         """Metodo que rellena el formulario para editar los datos de un usuario"""
 
+        traerAtributo = DBSession.query(Atributo).get(id_atributo)
+        id_tipo_item = traerAtributo.id_tipo_item
+        tipo_item = DBSession.query(TipoItem).get(id_tipo_item)
+        id_fase = tipo_item.id_fase
+        fase = DBSession.query(Fase).get(id_fase)
+        id_proyecto = fase.id_proyecto
         proyecto = DBSession.query(Proyecto).get(id_proyecto)
+
         if proyecto.iniciado == True:
-            flash(_("Proyecto ya iniciado. No puede editar Atributo!"), 'warning')
+            flash(_("Proyecto ya iniciado. No puede editar Atributo!"), 'error')
             redirect("/admin/atributo/listadoAtributosPorTipoItem", id_proyecto=id_proyecto, 
                  id_fase=id_fase, id_tipo_item=id_tipo_item)
 
         tmpl_context.form = editar_atributo_form
-        traerAtributo=DBSession.query(Atributo).get(id_atributo)
+        
         kw['id_atributo']=traerAtributo.id_atributo
         kw['id_tipo_item']=traerAtributo.id_tipo_item
         kw['nombre']=traerAtributo.nombre
@@ -123,7 +157,7 @@ class AtributoController(BaseController):
 
         proyecto = DBSession.query(Proyecto).get(id_proyecto)
         if proyecto.iniciado == True:
-            flash(_("Proyecto ya iniciado. No puede eliminar Atributo!"), 'warning')
+            flash(_("Proyecto ya iniciado. No puede eliminar Atributo!"), 'error')
             redirect("/admin/atributo/listadoAtributosPorTipoItem", id_proyecto=id_proyecto, 
                  id_fase=id_fase, id_tipo_item=id_tipo_item)
 

@@ -19,25 +19,28 @@
 
            <table border="1" width="100%">
 	         <tr style="color: purple; font-size: 11pt" align="center">
-                    <th>ID</th>
-<!--                <th>Usuario</th> -->
-                    <th>Nombre</th>
-                    <th>Descripcion</th>
-                    <th>Fecha</th>
-		    <th>Iniciado</th>		  
-		    <th>Acciones</th>
-		    <th>Fases</th>
+<!--             <th>ID</th>
+                 <th>Usuario</th> 
+-->
+                    <th align="center">Nombre</th>
+                    <th align="center">Descripcion</th>
+                    <th align="center">Creacion</th>
+		    <th align="center">Iniciado</th>		  
+		    <th align="center">Acciones</th>
+		    <th align="center">Fases</th>
                  </tr>
 
                  <py:for each="proyecto in proyectos">
                     <tr>
-                         <td width="25">${proyecto.id_proyecto}</td>
-<!--                     <td>${proyecto.id_usuario}</td> -->
-                         <td>${proyecto.nombre}</td>
-                         <td>${proyecto.descripcion}</td>
-                         <td width="50">${proyecto.fecha}</td>
-                         <td width="50">${proyecto.iniciado}</td>            
-                         <td width="50">
+<!--
+                     <td width="25">${proyecto.id_proyecto}</td>
+                     <td>${proyecto.id_usuario}</td> 
+-->
+                         <td width="24%" align="left">${proyecto.nombre}</td>
+                         <td width="40%" align="justify">${proyecto.descripcion}</td>
+                         <td width="10%" align="center">${proyecto.fecha}</td>
+                         <td width="8%" align="center">${proyecto.iniciado}</td>            
+                         <td width="11%" align="center">
 			    <ul class="menu acciones">
 			       <li class="top">
                                   <a href="#" class="top_link"><span>ACCIONES</span></a>
@@ -57,15 +60,15 @@
                                        </li>
 				       <li>
                                            <a href="${tg.url('/admin/proyecto/roles', 
-                                                    id_proyecto=proyecto.id_proyecto)}">Roles
+                                                    id_proyecto=proyecto.id_proyecto)}">Agregar Roles
 					   </a>
                                        </li>										
 				    </ul>
 				</li>	
 			     </ul>
                          </td>
-                         <td width="70">
-			    <ul class="menu acciones">
+                         <td width="7%" align="center">
+			    <ul class="menu fasesproyecto">
 			       <li class="top">
                                   <a href="#" class="top_link"><span>FASES</span></a>
 				     <ul class="sub">
@@ -84,9 +87,9 @@
             </table>
 
 	    <p class="pagelist">
-	       <a class="prevPage" href="/list?page=${currentPage.previous_page}">&nbsp;</a>
+	       <a class="prevPage" href="/admin/proyecto/listado?page=${currentPage.previous_page}">&nbsp;</a>
 		  ${currentPage.pager(format='~3~', page_param='page', show_if_single_page=True)}
-	       <a class="nextPage" href="/list?page=${currentPage.next_page}">&nbsp;</a>
+	       <a class="nextPage" href="/admin/proyecto/listado?page=${currentPage.next_page}">&nbsp;</a>
 	    </p>
 
     </body>

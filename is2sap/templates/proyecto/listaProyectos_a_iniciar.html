@@ -14,20 +14,31 @@
     </head>
 
     <body>
-          <h2>Proyectos a <div style="color:green">Iniciar</div></h2>
+          <h2>Proyectos no <div style="color:green">Iniciados</div></h2>
           ${menu_superior_proyectos_a_iniciar()}
 
-          <table border="1">
+          <table border="1" width="100%">
 		<tr style="color: purple; font-size: 11pt" align="center" >
+<!--
                    <th>ID</th>
-                   <th>Nombre</th>
+-->
+                   <th align="center">Nombre</th>
+                   <th align="center">Descripcion</th>
+                   <th align="center">Creacion</th>
+	           <th align="center">Iniciado</th>
+                   <th align="center">Iniciar</th>
 	        </tr>
 
                 <py:for each="proyecto in proyectos">
                    <tr>
+<!--
                        <td>${proyecto.id_proyecto}</td>
-                       <td>${proyecto.nombre}</td>
-                       <td>
+-->
+                       <td width="32%" align="left">${proyecto.nombre}</td>
+                       <td width="42%" align="justify">${proyecto.descripcion}</td>
+                       <td width="10%" align="center">${proyecto.fecha}</td>
+                       <td width="8%" align="center">${proyecto.iniciado}</td>
+                       <td width="8%" align="center">
                            <a href="${tg.url('/admin/proyecto/iniciar', id_proyecto=proyecto.id_proyecto)}">
                               <input class="alignIniciar" name="iniciar" type="button"  value="" />
                            </a>
@@ -36,11 +47,11 @@
                 </py:for>
           </table>
 
-	  <p class="pagelist">
-	     <a class="prevPage" href="/list?page=${currentPage.previous_page}">&nbsp;</a>
-	     ${currentPage.pager(format='~3~', page_param='page', show_if_single_page=True)}
-	     <a class="nextPage" href="/list?page=${currentPage.next_page}">&nbsp;</a>
-	  </p>
+	    <p class="pagelist">
+	       <a class="prevPage" href="/admin/proyecto/listaProyectos_a_iniciar?page=${currentPage.previous_page}">&nbsp;</a>
+		  ${currentPage.pager(format='~3~', page_param='page', show_if_single_page=True)}
+	       <a class="nextPage" href="/admin/proyecto/listaProyectos_a_iniciar?page=${currentPage.next_page}">&nbsp;</a>
+	    </p>
 
     </body>
 </html>

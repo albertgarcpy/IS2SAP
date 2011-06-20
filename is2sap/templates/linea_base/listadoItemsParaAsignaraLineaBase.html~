@@ -6,7 +6,7 @@
       xmlns:xi="http://www.w3.org/2001/XInclude">
 
       <xi:include href="master.html" />
-      <xi:include href="menuItems.html" />
+      <xi:include href="menulinea_base.html" />
 
     <head>
            <meta content="text/html; charset=UTF-8" http-equiv="content-type" py:replace="''"/>
@@ -47,7 +47,7 @@
 		         <td>${item.fecha_modificacion}</td>
 -->
                          <td> 
-				 <a href="${tg.url('/item/asignarItem', 
+				 <a href="${tg.url('/admin/linea_base/asignarItem', 
                                          id_proyecto=id_proyecto, id_fase=id_fase, id_linea_base=id_linea_base, id_item=item.id_item)}">
 				    <input class="alignaddAtributo" name="addAtributo" type="button" value="" />
 				 </a>
