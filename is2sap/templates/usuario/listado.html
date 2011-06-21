@@ -18,27 +18,56 @@
             <h2>Lista de <div style="color:green">Usuarios</div></h2>
             ${menu_superior()}
 
-	    <table border="1">
+	    <table border="1" width="100%">
 		<tr style="color: purple; font-size: 11pt" align="center" >
+<!--
                    <th>ID</th>
-                   <th>Nombre</th>
-                   <th>Apellido</th>
-                   <th>User Name</th>
-                   <th>Direccion</th>
-		   <th>Telefono</th>
-		   <th>E-mail</th>		  
-		   <th>Acciones</th>		
+-->
+                   <th align="center">Nombre y Apellido</th>
+                   <th align="center">Username</th>
+                   <th align="center">Direccion</th>
+		   <th align="center">Telefono</th>
+		   <th align="center">E-mail</th>		  
+		   <th align="center">Acciones</th>		
 		</tr>
 
 		<py:for each="usuario in usuarios">
 			<tr>
+<!--
                             <td>${usuario.id_usuario}</td>
-                            <td>${usuario.nombre}</td>
-                            <td>${usuario.apellido}</td>
-                            <td>${usuario.nombre_usuario}</td>
-                            <td>${usuario.direccion}</td>
-                            <td>${usuario.telefono}</td>
-                            <td>${usuario.email}</td>
+-->
+                            <td width="25%" align="left">${usuario.nombre} ${usuario.apellido}</td>
+                            <td width="15%" align="left">${usuario.nombre_usuario}</td>
+                            <td width="17%" align="left">${usuario.direccion}</td>
+                            <td width="12%" align="left">${usuario.telefono}</td>
+                            <td width="20%" align="left">${usuario.email}</td>
+
+                            <td width="11%" align="left">
+			       <ul class="menu acciones">
+			          <li class="top">
+                                     <a href="#" class="top_link"><span>ACCIONES</span></a>
+				       <ul class="sub">
+				          <li>
+                                              <a href="${tg.url('/admin/usuario/editar', 
+                                                      id_usuario=usuario.id_usuario)}"> Editar		                    
+				              </a>
+                                          </li>					 
+                                          <li>
+                                              <a href="${tg.url('/admin/usuario/confirmar_eliminar', 
+                                                      id_usuario=usuario.id_usuario)}">Eliminar
+				              </a>
+                                          </li>
+				          <li>
+                                              <a href="${tg.url('/admin/usuario/roles', 
+                                                      id_usuario=usuario.id_usuario)}">Agregar Roles
+					      </a>
+                                          </li>									
+				       </ul>
+				   </li>	
+			       </ul>
+                            </td>
+
+<!--
 			    <td> <a href="${tg.url('/admin/usuario/editar', id_usuario=usuario.id_usuario)}"> 
 				    <input class="alignEditar" name="editar" type="button" value="" />
 				 </a>
@@ -49,14 +78,15 @@
 				    <input class="alignAgregarRoles" name="agregarRoles" type="button" value=""/>
 				 </a>
 			    </td>
+-->
 			</tr>
 		</py:for>
 	    </table>
 
 	    <p class="pagelist">
-		<a class="prevPage" href="/list?page=${currentPage.previous_page}">&nbsp;</a>
-		${currentPage.pager(format='~3~', page_param='page', show_if_single_page=True)}
-		<a class="nextPage" href="/list?page=${currentPage.next_page}">&nbsp;</a>
+	       <a class="prevPage" href="/admin/usuario/listado?page=${currentPage.previous_page}">&nbsp;</a>
+		  ${currentPage.pager(format='~3~', page_param='page', show_if_single_page=True)}
+	       <a class="nextPage" href="/admin/usuario/listado?page=${currentPage.next_page}">&nbsp;</a>
 	    </p>
 
     </body>

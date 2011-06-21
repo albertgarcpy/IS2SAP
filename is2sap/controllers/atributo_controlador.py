@@ -40,13 +40,14 @@ class AtributoController(BaseController):
             id_proyecto = fase.id_proyecto
             kw['id_tipo_item']=id_tipo_item
         except SQLAlchemyError:
-            flash(_("No se pudo acceder a Creacion Atributo! SQLAlchemyError..."), 'error')
+            flash(_("No se pudo acceder a Creacion de Atributo! SQLAlchemyError..."), 'error')
             redirect("/admin/atributo/listadoAtributosPorTipoItem", id_proyecto=id_proyecto, 
                      id_fase=id_fase, id_tipo_item=id_tipo_item)
         except (AttributeError, NameError):
             flash(_("No se pudo acceder a Creacon de Atributo! Hay Problemas con el servidor..."), 'error')
             redirect("/admin/atributo/listadoAtributosPorTipoItem", id_proyecto=id_proyecto, 
                      id_fase=id_fase, id_tipo_item=id_tipo_item)
+
         return dict(nombre_modelo='Atributo', page='nuevo_atributo', id_proyecto=id_proyecto, 
                     id_fase=id_fase, id_tipo_item=id_tipo_item, value=kw)
 
@@ -107,27 +108,34 @@ class AtributoController(BaseController):
     @expose('is2sap.templates.atributo.editar')
     def editar(self, id_atributo, **kw):
         """Metodo que rellena el formulario para editar los datos de un usuario"""
+        try:
+            tmpl_context.form = editar_atributo_form
+            traerAtributo = DBSession.query(Atributo).get(id_atributo)
+            id_tipo_item = traerAtributo.id_tipo_item
+            tipo_item = DBSession.query(TipoItem).get(id_tipo_item)
+            id_fase = tipo_item.id_fase
+            fase = DBSession.query(Fase).get(id_fase)
+            id_proyecto = fase.id_proyecto
+            proyecto = DBSession.query(Proyecto).get(id_proyecto)
 
-        traerAtributo = DBSession.query(Atributo).get(id_atributo)
-        id_tipo_item = traerAtributo.id_tipo_item
-        tipo_item = DBSession.query(TipoItem).get(id_tipo_item)
-        id_fase = tipo_item.id_fase
-        fase = DBSession.query(Fase).get(id_fase)
-        id_proyecto = fase.id_proyecto
-        proyecto = DBSession.query(Proyecto).get(id_proyecto)
+            if proyecto.iniciado == True:
+               flash(_("Proyecto ya iniciado. No puede editar Atributo!"), 'error')
+               redirect("/admin/atributo/listadoAtributosPorTipoItem", id_proyecto=id_proyecto, 
+                        id_fase=id_fase, id_tipo_item=id_tipo_item)
 
-        if proyecto.iniciado == True:
-            flash(_("Proyecto ya iniciado. No puede editar Atributo!"), 'error')
+            kw['id_atributo']=traerAtributo.id_atributo
+            kw['id_tipo_item']=traerAtributo.id_tipo_item
+            kw['nombre']=traerAtributo.nombre
+            kw['descripcion']=traerAtributo.descripcion
+            kw['tipo']=traerAtributo.tipo
+        except SQLAlchemyError:
+            flash(_("No se pudo acceder a Edicion de Atributo! SQLAlchemyError..."), 'error')
             redirect("/admin/atributo/listadoAtributosPorTipoItem", id_proyecto=id_proyecto, 
-                 id_fase=id_fase, id_tipo_item=id_tipo_item)
-
-        tmpl_context.form = editar_atributo_form
-        
-        kw['id_atributo']=traerAtributo.id_atributo
-        kw['id_tipo_item']=traerAtributo.id_tipo_item
-        kw['nombre']=traerAtributo.nombre
-        kw['descripcion']=traerAtributo.descripcion
-        kw['tipo']=traerAtributo.tipo
+                     id_fase=id_fase, id_tipo_item=id_tipo_item)
+        except (AttributeError, NameError):
+            flash(_("No se pudo acceder a Edicion de Atributo! Hay Problemas con el servidor..."), 'error')
+            redirect("/admin/atributo/listadoAtributosPorTipoItem", id_proyecto=id_proyecto, 
+                     id_fase=id_fase, id_tipo_item=id_tipo_item)
 
         return dict(nombre_modelo='Atributo', page='editar', id_proyecto=id_proyecto, 
                     id_fase=id_fase, id_tipo_item=id_tipo_item, value=kw)
@@ -136,17 +144,34 @@ class AtributoController(BaseController):
     @expose()
     def update(self, **kw):        
         """Metodo que actualiza la base de datos"""
-        atributo = DBSession.query(Atributo).get(kw['id_atributo'])   
-        atributo.id_tipo_item = kw['id_tipo_item']
-        atributo.nombre=kw['nombre']
-        atributo.descripcion = kw['descripcion']
-        atributo.tipo = kw['tipo']
-        DBSession.flush()
-        flash("Atributo editado!")
-        id_tipo_item = kw['id_tipo_item']
-        tipo_item = DBSession.query(TipoItem).get(id_tipo_item)
-        fase = tipo_item.relacion_fase
-        id_proyecto = fase.id_proyecto
+        try:
+            atributo = DBSession.query(Atributo).get(kw['id_atributo'])   
+            atributo.id_tipo_item = kw['id_tipo_item']
+            atributo.nombre=kw['nombre']
+            atributo.descripcion = kw['descripcion']
+            atributo.tipo = kw['tipo']
+            DBSession.flush()
+            transaction.commit()
+            tipo_item = DBSession.query(TipoItem).get(kw['id_tipo_item'])
+            id_tipo_item = tipo_item.id_tipo_item
+            fase = tipo_item.relacion_fase
+            id_fase = fase.id_fase        
+            id_proyecto = fase.id_proyecto
+        except IntegrityError:
+            transaction.abort()
+            flash(_("No se han guardado los cambios! Hay Problemas con el servidor..."), 'error')
+            redirect("/admin/atributo/listadoAtributosPorTipoItem", id_proyecto=id_proyecto, 
+                     id_fase=id_fase, id_tipo_item=id_tipo_item)
+        except SQLAlchemyError:
+            flash(_("No se han guardado los cambios! SQLAlchemyError..."), 'error')
+            redirect("/admin/atributo/listadoAtributosPorTipoItem", id_proyecto=id_proyecto, 
+                     id_fase=id_fase, id_tipo_item=id_tipo_item)
+        except (AttributeError, NameError):
+            flash(_("No se han guardado los cambios! Hay Problemas con el servidor..."), 'error')
+            redirect("/admin/atributo/listadoAtributosPorTipoItem", id_proyecto=id_proyecto, 
+                     id_fase=id_fase, id_tipo_item=id_tipo_item)
+        else:
+            flash(_("Se han guardado los cambios!"), 'ok')
 
         redirect("/admin/atributo/listadoAtributosPorTipoItem", id_proyecto=id_proyecto, 
                  id_fase=fase.id_fase, id_tipo_item=id_tipo_item)
@@ -154,14 +179,24 @@ class AtributoController(BaseController):
     @expose('is2sap.templates.atributo.confirmar_eliminar')
     def confirmar_eliminar(self, id_proyecto, id_fase, id_tipo_item, id_atributo, **kw):
         """Despliega confirmacion de eliminacion"""
+        try:
+            proyecto = DBSession.query(Proyecto).get(id_proyecto)
 
-        proyecto = DBSession.query(Proyecto).get(id_proyecto)
-        if proyecto.iniciado == True:
-            flash(_("Proyecto ya iniciado. No puede eliminar Atributo!"), 'error')
+            if proyecto.iniciado == True:
+               flash(_("Proyecto ya iniciado. No puede eliminar Atributo!"), 'error')
+               redirect("/admin/atributo/listadoAtributosPorTipoItem", id_proyecto=id_proyecto, 
+                        id_fase=id_fase, id_tipo_item=id_tipo_item)
+
+            atributo = DBSession.query(Atributo).get(id_atributo)
+        except SQLAlchemyError:
+            flash(_("No se pudo acceder a Eliminacion de Atributo! SQLAlchemyError..."), 'error')
             redirect("/admin/atributo/listadoAtributosPorTipoItem", id_proyecto=id_proyecto, 
-                 id_fase=id_fase, id_tipo_item=id_tipo_item)
+                     id_fase=id_fase, id_tipo_item=id_tipo_item)
+        except (AttributeError, NameError):
+            flash(_("No se pudo acceder a Eliminacion de Atributo! Hay Problemas con el servidor..."), 'error')
+            redirect("/admin/atributo/listadoAtributosPorTipoItem", id_proyecto=id_proyecto, 
+                     id_fase=id_fase, id_tipo_item=id_tipo_item)
 
-        atributo=DBSession.query(Atributo).get(id_atributo)
         return dict(nombre_modelo='Atributo', page='editar', id_proyecto=id_proyecto, 
                     id_fase=id_fase, id_tipo_item=id_tipo_item, value=atributo)
 
@@ -171,8 +206,25 @@ class AtributoController(BaseController):
             Parametros: - id_atributo: Para identificar el atributo a eliminar
                         - id_tipo_item: Para redireccionar al listado de atributos correspondientes al tipo de item 
         """
-        DBSession.delete(DBSession.query(Atributo).get(id_atributo))
-        flash("Atributo eliminado!")
+        try:
+            DBSession.delete(DBSession.query(Atributo).get(id_atributo))
+            DBSession.flush()
+            transaction.commit()
+        except IntegrityError:
+            transaction.abort()
+            flash(_("No se ha eliminado! Hay Problemas con el servidor..."), 'error')
+            redirect("/admin/atributo/listadoAtributosPorTipoItem", id_proyecto=id_proyecto, 
+                     id_fase=id_fase, id_tipo_item=id_tipo_item)
+        except SQLAlchemyError:
+            flash(_("No se ha eliminado! SQLAlchemyError..."), 'error')
+            redirect("/admin/atributo/listadoAtributosPorTipoItem", id_proyecto=id_proyecto, 
+                     id_fase=id_fase, id_tipo_item=id_tipo_item)
+        except (AttributeError, NameError):
+            flash(_("No se ha eliminado! Hay Problemas con el servidor..."), 'error')
+            redirect("/admin/atributo/listadoAtributosPorTipoItem", id_proyecto=id_proyecto, 
+                     id_fase=id_fase, id_tipo_item=id_tipo_item)
+        else:
+            flash(_("Atributo eliminado!"), 'ok')
 
         redirect("/admin/atributo/listadoAtributosPorTipoItem", id_proyecto=id_proyecto, 
                  id_fase=id_fase, id_tipo_item=id_tipo_item)

@@ -17,21 +17,26 @@
 
             <h2>Opciones de Permisos para <div style="color:green"> ${rol.nombre_rol}</div></h2>	
             ${menu_rol_permiso_agregar(rol.id_rol)}
-	    <table border="1">
+
+	    <table border="1" width="100%">
 		<tr style="color: purple; font-size: 11pt" align="center" >
+<!--
 		    <th>ID</th>
-		    <th>Nombre</th>
-		    <th>Descripcion</th>
-		    <th>Accion</th>		
+-->
+		    <th align="center">Nombre</th>
+		    <th align="center">Descripcion</th>
+		    <th align="center">Asignar</th>		
 		</tr>
 
 		<py:for each="permiso in permisos">
 			<tr>
+<!--
 			    <td>${permiso.id_permiso}</td>
-			    <td>${permiso.nombre_permiso}</td>
-			    <td>${permiso.descripcion}</td>
+-->
+			    <td width="40%" align="left">${permiso.nombre_permiso}</td>
+			    <td width="50%" align="left">${permiso.descripcion}</td>
 
-			    <td> 
+			    <td width="10%" align="center"> 
 				 <a href="${tg.url('/admin/rol/agregarPermiso', id_rol=id_rol, id_permiso=permiso.id_permiso)}">
 				    <input class="alignAgregarPermisosRol" name="agregarPermiso" type="button" value=""/>
 				 </a>
@@ -42,9 +47,11 @@
 	    </table>
 
 	    <p class="pagelist">
-		<a class="prevPage" href="/list?page=${currentPage.previous_page}">&nbsp;</a>
+		<a class="prevPage" href="${tg.url('/admin/rol/rolPermiso',page=currentPage.previous_page,
+                                          id_rol=rol.id_rol)}">&nbsp;</a>
 		${currentPage.pager(format='~3~', page_param='page', show_if_single_page=True)}
-		<a class="nextPage" href="/list?page=${currentPage.next_page}">&nbsp;</a>
+		<a class="nextPage" href="${tg.url('/admin/rol/rolPermiso',page=currentPage.next_page,
+                                          id_rol=rol.id_rol)}">&nbsp;</a>
 	    </p>
 
     </body>

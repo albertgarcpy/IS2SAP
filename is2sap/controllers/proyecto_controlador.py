@@ -18,8 +18,6 @@ from is2sap.model.model import Proyecto, Usuario, Rol, Fase, TipoItem, Atributo
 from is2sap import model
 from is2sap.controllers.secure import SecureController
 from is2sap.controllers.error import ErrorController
-
-
 from is2sap.widgets.proyecto_form import crear_proyecto_form, editar_proyecto_form
 
 
@@ -41,10 +39,10 @@ class ProyectoController(BaseController):
             kw['id_usuario']=usuario_id
         except SQLAlchemyError:
             flash(_("No se pudo acceder a Creacion de Proyectos! SQLAlchemyError..."), 'error')
-            redirect("/admin")
+            redirect("/admin/proyecto/listado")
         except (AttributeError, NameError):
             flash(_("No se pudo acceder a Creacion de Proyecto! Hay Problemas con el servidor..."), 'error')
-            redirect("/admin")
+            redirect("/admin/proyecto/listado")
 
         return dict(nombre_modelo='Proyecto', page='nuevo_proyecto', value=kw)
 
@@ -73,7 +71,7 @@ class ProyectoController(BaseController):
             flash(_("No se ha guardado! Hay Problemas con el servidor..."), 'error')
             redirect("/admin/proyecto/listado")
         else:
-            flash(_("Proyecto guardado exitosamente!"), 'ok')
+            flash(_("Proyecto creado!"), 'ok')
     
         redirect("/admin/proyecto/listado")
 
@@ -111,10 +109,10 @@ class ProyectoController(BaseController):
             kw['iniciado']=traerProyecto.iniciado
         except SQLAlchemyError:
             flash(_("No se pudo acceder a Edicion de Proyectos! SQLAlchemyError..."), 'error')
-            redirect("/admin")
+            redirect("/admin/proyecto/listado")
         except (AttributeError, NameError):
             flash(_("No se pudo acceder a Edicion de Proyecto! Hay Problemas con el servidor..."), 'error')
-            redirect("/admin")
+            redirect("/admin/proyecto/listado")
 
         return dict(nombre_modelo='Proyecto', page='editar_proyecto', value=kw)
 
@@ -217,6 +215,30 @@ class ProyectoController(BaseController):
         return dict(roles=currentPage.items, page='listar_roles', 
                     currentPage=currentPage, id_proyecto=id_proyecto, proyecto=proyecto)
 
+    @expose()
+    def eliminar_rol_proyecto(self, id_proyecto, id_rol, **kw):
+        """Metodo que elimina un rol al proyecto seleccionado"""
+        try:
+            rol = DBSession.query(Rol).get(id_rol)
+            proyecto = DBSession.query(Proyecto).get(id_proyecto)
+            rol.proyectos.remove(proyecto)
+            DBSession.flush()
+            transaction.commit()
+        except IntegrityError:
+            transaction.abort()
+            flash(_("No se ha desasignado dicho Rol! Hay Problemas con el servidor..."), 'error')
+            redirect("/admin/proyecto/roles",id_proyecto=id_proyecto)
+        except SQLAlchemyError:
+            flash(_("No se ha desasignado dicho Rol! SQLAlchemyError..."), 'error')
+            redirect("/admin/proyecto/roles",id_proyecto=id_proyecto)
+        except (AttributeError, NameError):
+            flash(_("No se ha desasignado decho Rol! Hay Problemas con el servidor..."), 'error')
+            redirect("/admin/proyecto/roles",id_proyecto=id_proyecto)
+        else:
+            flash(_("Rol desasignado!"), 'ok')
+
+        redirect("/admin/proyecto/roles",id_proyecto=id_proyecto)
+
     @expose("is2sap.templates.proyecto.agregar_roles")
     def rolProyecto(self, id_proyecto, page=1):
         """Metodo que permite listar los roles que se pueden agregar al proyecto seleccionado"""
@@ -232,10 +254,10 @@ class ProyectoController(BaseController):
             currentPage = paginate.Page(roles, page, items_per_page=10)
         except SQLAlchemyError:
             flash(_("No se pudo acceder a Agregar Roles al Proyecto! SQLAlchemyError..."), 'error')
-            redirect("/admin/proyecto/listado")
+            redirect("/admin/proyecto/roles",id_proyecto=id_proyecto)
         except (AttributeError, NameError):
             flash(_("No se pudo acceder a Agregar Roles al Proyecto! Hay Problemas con el servidor..."), 'error')
-            redirect("/admin/proyecto/listado")
+            redirect("/admin/proyecto/roles",id_proyecto=id_proyecto)
 
         return dict(roles=currentPage.items,
            page='agregar_roles', currentPage=currentPage, 
@@ -253,42 +275,17 @@ class ProyectoController(BaseController):
         except IntegrityError:
             transaction.abort()
             flash(_("No se ha asignado dicho Rol! Hay Problemas con el servidor..."), 'error')
-            redirect("/admin/proyecto/listado")
+            redirect("/admin/proyecto/rolProyecto",id_proyecto=id_proyecto)
         except SQLAlchemyError:
             flash(_("No se ha asignado dicho Rol! SQLAlchemyError..."), 'error')
-            redirect("/admin/proyecto/listado")
+            redirect("/admin/proyecto/rolProyecto",id_proyecto=id_proyecto)
         except (AttributeError, NameError):
             flash(_("No se ha asignado decho Rol! Hay Problemas con el servidor..."), 'error')
-            redirect("/admin/proyecto/listado")
+            redirect("/admin/proyecto/rolProyecto",id_proyecto=id_proyecto)
         else:
             flash(_("Rol asignado!"), 'ok')
 
-        redirect("/admin/proyecto/roles",id_proyecto=id_proyecto)
-
-    @expose()
-    def eliminar_rol_proyecto(self, id_proyecto, id_rol, **kw):
-        """Metodo que elimina un rol al proyecto seleccionado"""
-        try:
-            rol = DBSession.query(Rol).get(id_rol)
-            proyecto = DBSession.query(Proyecto).get(id_proyecto)
-            rol.proyectos.remove(proyecto)
-            DBSession.flush()
-            transaction.commit()
-        except IntegrityError:
-            transaction.abort()
-            flash(_("No se ha desasignado dicho Rol! Hay Problemas con el servidor..."), 'error')
-            redirect("/admin/proyecto/listado")
-        except SQLAlchemyError:
-            flash(_("No se ha desasignado dicho Rol! SQLAlchemyError..."), 'error')
-            redirect("/admin/proyecto/listado")
-        except (AttributeError, NameError):
-            flash(_("No se ha desasignado decho Rol! Hay Problemas con el servidor..."), 'error')
-            redirect("/admin/proyecto/listado")
-        else:
-            flash(_("Rol desasignado!"), 'ok')
-
-
-        redirect("/admin/proyecto/roles",id_proyecto=id_proyecto)
+        redirect("/admin/proyecto/rolProyecto",id_proyecto=id_proyecto)
 
     @expose("is2sap.templates.proyecto.listar_usuarios")
     def usuarios(self,id_proyecto, page=1):
@@ -308,6 +305,30 @@ class ProyectoController(BaseController):
         return dict(usuarios=currentPage.items,
            page='listar_usuarios', id_proyecto=id_proyecto, currentPage=currentPage, proyecto=proyecto)
 
+    @expose()
+    def eliminar_usuario_proyecto(self, id_proyecto, id_usuario, **kw):
+        """Metodo que elimina un usuario al proyecto seleccionado"""
+        try:
+            usuario = DBSession.query(Usuario).get(id_usuario)
+            proyecto = DBSession.query(Proyecto).get(id_proyecto)
+            usuario.proyectos.remove(proyecto)
+            DBSession.flush()
+            transaction.commit()
+        except IntegrityError:
+            transaction.abort()
+            flash(_("No se ha desasignado dicho Usuario! Hay Problemas con el servidor..."), 'error')
+            redirect("/admin/proyecto/usuarios", id_proyecto=id_proyecto)
+        except SQLAlchemyError:
+            flash(_("No se ha desasignado dicho Usuario! SQLAlchemyError..."), 'error')
+            redirect("/admin/proyecto/usuarios", id_proyecto=id_proyecto)
+        except (AttributeError, NameError):
+            flash(_("No se ha desasignado decho Usuario! Hay Problemas con el servidor..."), 'error')
+            redirect("/admin/proyecto/usuarios", id_proyecto=id_proyecto)
+        else:
+            flash(_("Usuario desasignado!"), 'ok')
+
+        redirect("/admin/proyecto/usuarios", id_proyecto=id_proyecto)
+
     @expose("is2sap.templates.proyecto.agregar_usuarios")
     def usuarioProyecto(self, id_proyecto, page=1):
         """Metodo que permite listar los usuarios que se pueden agregar al proyecto seleccionado"""
@@ -323,10 +344,10 @@ class ProyectoController(BaseController):
             currentPage = paginate.Page(usuarios, page, items_per_page=10)
         except SQLAlchemyError:
             flash(_("No se pudo acceder a Agregar Usuarios al Proyecto! SQLAlchemyError..."), 'error')
-            redirect("/admin/proyecto/listado")
+            redirect("/admin/proyecto/usuarios", id_proyecto=id_proyecto)
         except (AttributeError, NameError):
             flash(_("No se pudo acceder a Agregar Usuarios al Proyecto! Hay Problemas con el servidor..."), 'error')
-            redirect("/admin/proyecto/listado")
+            redirect("/admin/proyecto/usuarios", id_proyecto=id_proyecto)
 
         return dict(usuarios=currentPage.items, page='agregar_usuarios', 
                     currentPage=currentPage, id_proyecto=id_proyecto, proyecto=proyecto)
@@ -343,41 +364,17 @@ class ProyectoController(BaseController):
         except IntegrityError:
             transaction.abort()
             flash(_("No se ha asignado dicho Usuario! Hay Problemas con el servidor..."), 'error')
-            redirect("/admin/proyecto/listado")
+            redirect("/admin/proyecto/usuarioProyecto", id_proyecto=id_proyecto)
         except SQLAlchemyError:
             flash(_("No se ha asignado dicho Usuario! SQLAlchemyError..."), 'error')
-            redirect("/admin/proyecto/listado")
+            redirect("/admin/proyecto/usuarioProyecto", id_proyecto=id_proyecto)
         except (AttributeError, NameError):
             flash(_("No se ha asignado decho Usuario! Hay Problemas con el servidor..."), 'error')
-            redirect("/admin/proyecto/listado")
+            redirect("/admin/proyecto/usuarioProyecto", id_proyecto=id_proyecto)
         else:
             flash(_("Usuario asignado!"), 'ok')
 
-        redirect("/admin/proyecto/usuarios",id_proyecto=id_proyecto)
-
-    @expose()
-    def eliminar_usuario_proyecto(self, id_proyecto, id_usuario, **kw):
-        """Metodo que elimina un usuario al proyecto seleccionado"""
-        try:
-            usuario = DBSession.query(Usuario).get(id_usuario)
-            proyecto = DBSession.query(Proyecto).get(id_proyecto)
-            usuario.proyectos.remove(proyecto)
-            DBSession.flush()
-            transaction.commit()
-        except IntegrityError:
-            transaction.abort()
-            flash(_("No se ha desasignado dicho Usuario! Hay Problemas con el servidor..."), 'error')
-            redirect("/admin/proyecto/listado")
-        except SQLAlchemyError:
-            flash(_("No se ha desasignado dicho Usuario! SQLAlchemyError..."), 'error')
-            redirect("/admin/proyecto/listado")
-        except (AttributeError, NameError):
-            flash(_("No se ha desasignado decho Usuario! Hay Problemas con el servidor..."), 'error')
-            redirect("/admin/proyecto/listado")
-        else:
-            flash(_("Usuario desasignado!"), 'ok')
-
-        redirect("/admin/proyecto/usuarios",id_proyecto=id_proyecto)
+        redirect("/admin/proyecto/usuarioProyecto",id_proyecto=id_proyecto)
 
     @expose("is2sap.templates.proyecto.listaProyectos_a_iniciar")
     def listaProyectos_a_iniciar(self,page=1):

@@ -308,7 +308,7 @@ form.loginfields input#submit
 }
 .alignAgregarRolesUsuario {
 	background: #CCFFCC url('../images/add1.png') top center no-repeat;
-	width: 50px
+	width: 84px
 }
 .alignAgregarPermisos {
 	background: #CCFFCC url('../images/roles.png') top center no-repeat;
@@ -316,7 +316,7 @@ form.loginfields input#submit
 }
 .alignAgregarPermisosRol {
 	background: #CCFFCC url('../images/add1.png') top center no-repeat;
-	width: 50px
+	width: 84px
 }
 
 .alignAgregarUsuarios {
@@ -325,11 +325,11 @@ form.loginfields input#submit
 }
 .alignAgregarRolesProyecto {
 	background: #CCFFCC url('../images/add1.png') top center no-repeat;
-	width: 80px
+	width: 84px
 }
 .alignAgregarUsuariosProyecto {
 	background: #CCFFCC url('../images/add1.png') top center no-repeat;
-	width: 80px
+	width: 84px
 }
 
 .alignMostrarFases {

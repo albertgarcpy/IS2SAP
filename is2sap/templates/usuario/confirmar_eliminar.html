@@ -13,28 +13,34 @@
 
     <body>
           <h2>Eliminar Usuario <div style="color:green"> ${value.nombre_usuario}</div></h2>
-          <h3>Desea eliminar el registro?</h3>
 
-	  <table border="1">        
+	  <table border="1" width="100%">        
 	        <tr style="color: purple; font-size: 11pt" >
-                    <th>ID</th>
-                    <th>Nombre</th>
-                    <th>Apellido</th>
-                    <th>Nombre de Usuario</th>
-                    <th>Direccion</th>
-		    <th>Telefono</th>
-		    <th>E-mail</th>
+<!--
+                   <th>ID</th>
+-->
+                   <th align="center">Nombre y Apellido</th>
+                   <th align="center">Username</th>
+                   <th align="center">Direccion</th>
+		   <th align="center">Telefono</th>
+		   <th align="center">E-mail</th>		  
 		</tr>
 	        <tr>
-                    <td>${value.id_usuario}</td>
-                    <td>${value.nombre}</td>
-                    <td>${value.apellido}</td>
-                    <td>${value.nombre_usuario}</td>
-                    <td>${value.direccion}</td>
-                    <td>${value.telefono}</td>
-                    <td>${value.email}</td>
+<!--
+                   <td>${usuario.id_usuario}</td>
+-->
+                   <td width="30%" align="left">${value.nombre} ${value.apellido}</td>
+                   <td width="20%" align="left">${value.nombre_usuario}</td>
+                   <td width="18%" align="left">${value.direccion}</td>
+                   <td width="12%" align="left">${value.telefono}</td>
+                   <td width="20%" align="left">${value.email}</td>
 	        </tr>        
 	  </table>
+
+          <br>
+          </br>
+
+          <h3><div style="color:red">DESEA ELIMINAR EL REGISTRO?</div></h3>
 
           <div class="menu bubplastic horizontal aqua">
 	      <ul>
