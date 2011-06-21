@@ -15,7 +15,6 @@ import transaction
 import time
 import os
 
-from is2sap.widgets.relacion_form import editar_relacion_form
 
 newGrafo = Graph()
 inserciones=0
@@ -47,23 +46,27 @@ class RelacionController(BaseController):
             for item1 in itemsDeFase:            
                 if item1.id_item == hijo.id_item2:
                     itemsDeFase.remove(item1)
-        # Comment: Esto trae los items de la fase adyacente anterior para las relaciones del itemActual
+
+        
+        # Comment: Esto trae los items de la fase adyacente anterior para las relaciones del itemActual        
         proyecto=DBSession.query(Proyecto).join(Fase).join(TipoItem).join(Item).filter(Item.id_item==idItemActual).one()
+        proyecto.fases.sort()
         posicion=0        
+        itemsDeFaseAdyacente=""
         for fase in proyecto.fases:
-            print fase.id_fase
-            if fase.id_fase==faseActual.id_fase:                
-                posicion = proyecto.fases.index(fase) - 1                
-        if posicion >= 0:
-            itemsDeFaseAdyacente = DBSession.query(Item).join(TipoItem).join(Fase).filter(Fase.id_fase==proyecto.fases[posicion].id_fase).all()
-        else:
-            itemsDeFaseAdyacente = DBSession.query(Item).join(TipoItem).join(Fase).filter(Item.descripcion=="").all()
+            print "ID DE LA FASE:", fase.id_fase
+            if fase.numero_fase==faseActual.numero_fase-1:
+                print "El numero de fase donde estoy es :", fase.numero_fase
+                itemsDeFaseAdyacente = DBSession.query(Item).join(TipoItem).join(Fase).filter(Fase.id_fase==fase.id_fase).filter(Item.estado=="Aprobado").all()
+        if faseActual.numero_fase == 1:
+            itemsDeFaseAdyacente = DBSession.query(Item).join(TipoItem).join(Fase).filter(Item.complejidad=="100").all()
         antecesores = DBSession.query(RelacionItem).filter_by(id_item2=idItemActual).filter_by(tipo="Antecesor-Sucesor").order_by(RelacionItem.id_item1).all()       
         for antec in antecesores:        
             for item2 in itemsDeFaseAdyacente:            
                 if item2.id_item == antec.id_item1:
                     itemsDeFaseAdyacente.remove(item2)
-        return dict(nombre_modelo='Relaciones', page='relacion', idItemActual=idItemActual, itemsDeFase=itemsDeFase, itemsDeFaseAdyacente=itemsDeFaseAdyacente, id_proyecto=id_proyecto, id_fase=id_fase, id_tipo_item=id_tipo_item)
+        return dict(nombre_modelo='Relacion', page='relacion', idItemActual=idItemActual, itemsDeFase=itemsDeFase, itemsDeFaseAdyacente=itemsDeFaseAdyacente, id_proyecto=id_proyecto, id_fase=id_fase, id_tipo_item=id_tipo_item)
+
 
     @expose("is2sap.templates.relacion.listado")
     def listado(self, id_item, id_proyecto, id_fase, id_tipo_item):
@@ -80,7 +83,8 @@ class RelacionController(BaseController):
             newGrafo.add_edge(padre.id_item1, padre.id_item2, False)            
             self.buscarCiclos(padre.id_item1)
 
-    def insertar(self, kw): 
+
+    def insertarHijo(self, kw): 
         newGrafo.__init__()
         global inserciones
         inserciones = inserciones + 1
@@ -107,68 +111,36 @@ class RelacionController(BaseController):
                 DBSession.add(relacion)
                 DBSession.flush() 
                 transaction.commit()        
+
+
     @expose()
     def addHijo(self, **kw):
-        self.insertar(kw)
-        """listaRelacion=[]
-        newGrafo.__init__()
-        print listaRelacion
-    
-        if len(listaRelacion) == 0:                        
-            self.buscarCiclos(kw['id_item1'])
-            id_item1 = int(kw['id_item1'])
-            id_item2 = int(kw['id_item2'])
-            newGrafo.add_edge(id_item1, id_item2, False)
-            hayciclo = newGrafo.walk(id_item1)
-            print newGrafo
-            print hayciclo
-            if hayciclo:
-                print "La insercion de esta relacion creara un ciclo"
-            else:
-                print "No se encuentran ciclos"        
-            
-                relacion = RelacionItem()
-                relacion.tipo = "Padre-Hijo"
-                relacion.id_item1 = kw['id_item1']
-                relacion.id_item2 = kw['id_item2']
-                #relacion.estado = "Activo"
-                #relacion.version = version        
-                DBSession.add(relacion)
-                DBSession.flush() 
-                transaction.commit()"""       
+        self.insertarHijo(kw)
         redirect('listado', id_item=kw['id_item1'], id_proyecto=kw['id_proyecto'], id_fase=kw['id_fase'], id_tipo_item=kw['id_tipo_item'])
         
+
+    def insertarAncestro(self, kw): 
+        global inserciones
+        inserciones = inserciones + 1
+        print "el numero de inserciones es :", inserciones
+        if inserciones == 1:
+            relacion1 = RelacionItem()
+            relacion1.tipo = "Antecesor-Sucesor"        
+            relacion1.id_item1 = kw['id_item1']
+            relacion1.id_item2 = kw['id_item2']
+            ##relacion1.estado = "Activo"
+            ##relacion1.version = version        
+            DBSession.add(relacion1)
+            DBSession.flush()
+            transaction.commit()        
 
 
     @expose()
     def addAncestro(self, **kw):
         """Metodo para agregar un registro a la base de datos """       
-        relacion1 = RelacionItem()
-        relacion1.tipo = "Antecesor-Sucesor"        
-        relacion1.id_item1 = kw['id_item1']
-        relacion1.id_item2 = kw['id_item2']
-        ##relacion1.estado = "Activo"
-        ##relacion1.version = version        
-        DBSession.add(relacion1)
-        DBSession.flush()       
+        self.insertarAncestro(kw)
         redirect('listado', id_item=kw['id_item2'], id_proyecto=kw['id_proyecto'], id_fase=kw['id_fase'], id_tipo_item=kw['id_tipo_item'])
 
-#    @expose('is2sap.templates.usuario.editar')
-#    def editar(self, id_usuario, **kw):
-#        """Metodo que rellena el formulario para editar los datos de un usuario"""
-#        return dict(nombre_modelo='Usuario', page='editar_usuario', value=kw)
-
-#    @validate(editar_usuario_form, error_handler=editar)
-#    @expose()
-#    def update(self, **kw):        
-#        """Metodo que actualiza la base de datos"""
-
-
-#    @expose('is2sap.templates.usuario.confirmar_eliminar')
-#    def confirmar_eliminar(self, id_usuario, **kw):
-#        """Despliega confirmacion de eliminacion"""
-
-#        return dict(nombre_modelo='Usuario', page='eliminar_usuario', value=usuario)
 
     @expose()
     def delete(self, id_relacion, idItemActual, id_proyecto, id_fase, id_tipo_item):

@@ -529,8 +529,11 @@ class ItemController(BaseController):
 
 #FALTAN ALGUNOS PUNTOS: Para poder listar las fases a cargar items, se tiene como criterio que la fase no este en estado Inicial y las anteriores esten con Lineas Bases Parciales o Con Lineas Bases.
 
-        proyecto = DBSession.query(Proyecto).get(id_proyecto)
-        fases = proyecto.fases
+        """proyecto = DBSession.query(Proyecto).get(id_proyecto)
+        #fases = proyecto.fases"""
+        fases= DBSession.query(Fase).join(Fase.relacion_estado_fase).filter(Fase.id_proyecto==id_proyecto).options(contains_eager(Fase.relacion_estado_fase)).order_by(Fase.numero_fase)
+        nombreProyecto = DBSession.query(Proyecto.nombre).filter_by(id_proyecto=id_proyecto).first()
+
 
 #Activar este for luego de que se haya hecho todo el metodo Iniciar Proyecto
         #fasesTodas = proyecto.fases
@@ -542,7 +545,7 @@ class ItemController(BaseController):
 
         currentPage = paginate.Page(fases, page, items_per_page=5)
         return dict(fases=currentPage.items, page='listado_fases', 
-           nombre_proyecto=proyecto.nombre, id_proyecto=proyecto.id_proyecto, currentPage=currentPage)
+           nombre_proyecto=nombreProyecto, id_proyecto=id_proyecto, currentPage=currentPage)
 
     @expose("is2sap.templates.item.listado_tipo_items")
     def tipoItems(self, id_proyecto, id_fase, page=1):
