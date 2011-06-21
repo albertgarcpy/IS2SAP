@@ -410,12 +410,9 @@ class RelacionItem(DeclarativeBase):
     __tablename__ = 'Relacion'
 
     #column definitions
-    id_relacion = Column(u'id_relacion', INTEGER(), primary_key=True, nullable=False)
-    tipo = Column(u'tipo', VARCHAR(length=None, convert_unicode=False, assert_unicode=None, unicode_error=None, _warn_on_bytestring=False), nullable=False)
-    id_item1 = Column(u'id_item1', INTEGER())
-    id_item2 = Column(u'id_item2', INTEGER())
-    #estado = Column(u'estado', VARCHAR(length=None, convert_unicode=False, assert_unicode=None, unicode_error=None, _warn_on_bytestring=False), nullable=False)
-    #version = Column(u'version', INTEGER(), nullable=False)
+    id_relacion = Column('id_relacion', INTEGER(), primary_key=True, nullable=False)
+    tipo = Column('tipo', VARCHAR(length=None, convert_unicode=False, assert_unicode=None, unicode_error=None, _warn_on_bytestring=False), nullable=False)
+    id_item1 = Column('id_item1', INTEGER(), nullable=False)
+    id_item2 = Column('id_item2', INTEGER(), nullable=False)
 
     #relation definitions
-#ForeignKey('Item.id_item')
