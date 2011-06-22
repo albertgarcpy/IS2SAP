@@ -110,16 +110,16 @@ class LineaBaseController(BaseController):
     def editar(self, id_proyecto, id_fase, id_linea_base, **kw):
         """Metodo que rellena el formulario para editar los datos de un Línea Base"""
 	traerLineaBase=DBSession.query(LineaBase).get(id_linea_base)
-	deshabilitado=False
 	if traerLineaBase.estado=='Aprobado':
-		deshabilitado=True
+		flash(_("No puede editar una Linea Base Aprobada"), 'warning')
+                redirect("/admin/linea_base/listado_linea_bases",id_proyecto=id_proyecto, id_fase=id_fase)
 	fields = [
        HiddenField('id_linea_base', label_text='Id',
             help_text='Id del usuario'),
-	TextField('nombre', validator=NotEmpty, label_text='Nombre', disabled=deshabilitado,
+	TextField('nombre', validator=NotEmpty, label_text='Nombre', 
             help_text='Introduzca el nombre de la linea base'),
         Spacer(),
-	TextArea('descripcion', label_text='Descripcion', disabled=deshabilitado,
+	TextArea('descripcion', label_text='Descripcion', 
             help_text='Introduzca una descripcion de la linea base'),        
         Spacer(),
 	HiddenField('estado', validator=NotEmpty, label_text='Estado',
@@ -172,7 +172,7 @@ class LineaBaseController(BaseController):
     @expose("is2sap.templates.linea_base.aprobaciones")
     def aprobaciones(self, id_proyecto, id_fase, page=1):
         """Metodo para aprobar todos las linea_bases"""
-        linea_bases = DBSession.query(LineaBase).order_by(LineaBase.id_linea_base)
+        linea_bases = DBSession.query(LineaBase).filter_by(id_fase=id_fase).order_by(LineaBase.id_linea_base)
         currentPage = paginate.Page(linea_bases, page, items_per_page=5)
         return dict(linea_bases=currentPage.items,
            page='aprobaciones', id_proyecto=id_proyecto, id_fase=id_fase, currentPage=currentPage)
@@ -184,12 +184,12 @@ class LineaBaseController(BaseController):
 	linea_base = DBSession.query(LineaBase).get(id_linea_base)
 	if linea_base.estado=='Aprobado':
 		flash(_("La Linea Base ya se encuentra aprobada"), 'warning')
-                redirect("/admin/linea_base/aprobaciones",id_proyecto=id_proyecto, id_fase=id_fase)
+                redirect("/admin/linea_base/listado_linea_bases",id_proyecto=id_proyecto, id_fase=id_fase)
 	items = linea_base.items
 	#Se verifica antes de aprobar que la linea base tenga por lo menos un item
 	if items == []:
 		flash(_("No puede aprobar una Linea Base sin items"), 'error')
-                redirect("/admin/linea_base/aprobaciones",id_proyecto=id_proyecto, id_fase=id_fase)
+                redirect("/admin/linea_base/listado_linea_bases",id_proyecto=id_proyecto, id_fase=id_fase)
 	#Aqui se aprueba la linea base
 	linea_base.estado = 'Aprobado'
 	################################### Modificacion de Estado de Fases ###############################
@@ -206,7 +206,7 @@ class LineaBaseController(BaseController):
 	tipo_items=DBSession.query(TipoItem).filter_by(id_fase=id_fase)
 	itemsDeFaseActual = []
 	for tipo_item in tipo_items:
-		itemsTipoItem = DBSession.query(Item).filter_by(id_tipo_item=tipo_item.id_tipo_item).filter_by(vivo=True).order_by(Item.id_item)
+		itemsTipoItem = DBSession.query(Item).filter_by(id_tipo_item=tipo_item.id_tipo_item).filter_by(vivo=True).filter_by(estado='Aprobado')
 		for itemTipoItem in itemsTipoItem:
 			itemsDeFaseActual.append(itemTipoItem)
 	contador_items_en_fase_actual = 0
@@ -217,20 +217,20 @@ class LineaBaseController(BaseController):
 	#Aqui se verifica si todos los items de la fase actual se encuentran en una linea base
 	if contador_items_en_linea_base == contador_items_en_fase_actual:
 		#En caso positivo el estado de la fase actual pasa al estado Con Lineas Bases(Id=4)
-		fase.id_estado = 4
+		fase.id_estado_fase = '4'
 	else:	
 		#En caso contrario, el estado de la fase actual pasa al estado Con Lineas Bases Parciales(Id=3)
-		fase.id_estado = 3
+		fase.id_estado = '3'
 	maxnumerofase = DBSession.query(func.max(Fase.numero_fase)).filter_by(id_proyecto=id_proyecto).first()
 	#A continuación se verifica que: si existe una fase posterior, dicha fase cambia a estado de Desarrollo(Id=2)
 	if fase.numero_fase < maxnumerofase:
 		numero_fase_siguiente = fase.numero_fase+1 
-		fase_siguiente=DBSession.query(Fase).filter_by(id_proyecto=id_proyecto).filter_by(numero_fase=numero_fase_siguiente)
-		fase_siguiente.id_estado = 2	
+		fase_siguiente=DBSession.query(Fase).filter_by(id_proyecto=id_proyecto).filter_by(numero_fase=numero_fase_siguiente).first()
+		fase_siguiente.id_estado_fase = '2'	
         
         DBSession.flush()
 	flash("Linea Base Aprobada")
-        redirect("/admin/linea_base/aprobaciones",id_proyecto=id_proyecto, id_fase=id_fase)
+        redirect("/admin/linea_base/listado_linea_bases",id_proyecto=id_proyecto, id_fase=id_fase)
 
     
     @expose()
@@ -258,7 +258,7 @@ class LineaBaseController(BaseController):
   	linea_base.version = str(version_aux)
 	DBSession.flush()
 	flash("Linea Base Rota")
-        redirect("/admin/linea_base/aprobaciones", id_proyecto=id_proyecto, id_fase=id_fase)
+        redirect("/admin/linea_base/listado_linea_bases", id_proyecto=id_proyecto, id_fase=id_fase)
 
 
     @expose('is2sap.templates.linea_base.confirmar_romper')
@@ -268,7 +268,7 @@ class LineaBaseController(BaseController):
 	#Si la linea base se encuentra en estado Desarrollo o Revision no podrá romper
 	if linea_base.estado=='Desarrollo' or linea_base.estado=='Revision':
 		flash(_("La Linea Base no esta aprobada"), 'error')
-                redirect("/admin/linea_base/aprobaciones",id_proyecto=id_proyecto, id_fase=id_fase)
+                redirect("/admin/linea_base/listado_linea_bases",id_proyecto=id_proyecto, id_fase=id_fase)
         return dict(nombre_modelo='LineaBase', id_proyecto=id_proyecto, id_fase=id_fase, id_linea_base=id_linea_base, page='editar', value=linea_base)
 
 
@@ -291,11 +291,12 @@ class LineaBaseController(BaseController):
     def fases(self,id_proyecto, page=1):
         """Metodo para listar las Fases de un proyecto """
         proyecto = DBSession.query(Proyecto).get(id_proyecto)
-        fasesProyecto = proyecto.fases
-	fases = DBSession.query(Fase).all()
+        #fasesProyecto = proyecto.fases
+	fasesProyecto = DBSession.query(Fase).filter_by(id_proyecto=id_proyecto)
+	fases=[]
 	for fase in fasesProyecto:
-	   if fase.id_estado_fase == 1:
-	        fases.remove(fase)
+	   if fase.id_estado_fase <> 1:
+	        fases.append(fase)
         currentPage = paginate.Page(fases, page, items_per_page=5)
         return dict(fases=currentPage.items, page='listado_fases', 
            nombre_proyecto=proyecto.nombre, id_proyecto=proyecto.id_proyecto, currentPage=currentPage)
@@ -305,7 +306,8 @@ class LineaBaseController(BaseController):
     def listado_linea_bases(self, id_proyecto, id_fase, page=1):
         """Metodo para listar las lineas bases de una Fase """
         fase = DBSession.query(Fase).get(id_fase)
-        linea_bases = fase.linea_bases
+        #linea_bases = fase.linea_bases
+	linea_bases = DBSession.query(LineaBase).filter_by(id_fase=id_fase).order_by(LineaBase.id_linea_base)
         currentPage = paginate.Page(linea_bases, page, items_per_page=5)
         return dict(linea_bases=currentPage.items,
            page='listado_linea_bases', nombre_fase=fase.nombre, id_proyecto=id_proyecto, id_fase=id_fase, currentPage=currentPage)
@@ -314,8 +316,12 @@ class LineaBaseController(BaseController):
     @expose("is2sap.templates.linea_base.historial_linea_bases")
     def historial_linea_bases(self, id_proyecto, id_fase, id_linea_base, page=1):
         """Metodo para listar el historial de una linea base"""
+	fase = DBSession.query(Fase).get(id_fase)
         linea_base = DBSession.query(LineaBase).get(id_linea_base)
         linea_bases = linea_base.linea_base_historial
+	if linea_bases==[]:
+		flash(_("La Linea Base no tiene historiales"), 'warning')
+                redirect("/admin/linea_base/listado_linea_bases",id_proyecto=id_proyecto, id_fase=id_fase)
         currentPage = paginate.Page(linea_bases, page, items_per_page=5)
         return dict(linea_bases=currentPage.items,
            page='historial_linea_bases', nombre_linea_base=linea_base.nombre, id_proyecto=id_proyecto, id_fase=id_fase, id_linea_base=id_linea_base, currentPage=currentPage)
@@ -341,7 +347,14 @@ class LineaBaseController(BaseController):
 		itemsLineaBase = linea_base.items
 		for itemLineaBase in itemsLineaBase:
 			itemsenLineaBase.append(itemLineaBase)
-	items = DBSession.query(Item).filter_by(vivo=True).filter_by(estado='Aprobado').all()
+	#items Contiene todos los items que se encuentran en la fase actual
+	tipo_items=DBSession.query(TipoItem).filter_by(id_fase=id_fase)
+	itemsDeFaseActual = []
+	for tipo_item in tipo_items:
+		itemsTipoItem = DBSession.query(Item).filter_by(id_tipo_item=tipo_item.id_tipo_item).filter_by(vivo=True).filter_by(estado='Aprobado').order_by(Item.id_item)
+		for itemTipoItem in itemsTipoItem:
+			itemsDeFaseActual.append(itemTipoItem)
+	items=itemsDeFaseActual 
 	for item in itemsenLineaBase:
            items.remove(item)
         currentPage = paginate.Page(items, page)
@@ -359,7 +372,7 @@ class LineaBaseController(BaseController):
         item = DBSession.query(Item).get(id_item)
         linea_base = DBSession.query(LineaBase).get(id_linea_base)
         item.linea_bases.append(linea_base)
-
+	flash("Item Asignado a la Linea Base")
         redirect("/admin/linea_base/listadoItemsParaAsignaraLineaBase",id_proyecto=id_proyecto, id_fase=id_fase, id_linea_base=id_linea_base)
 
 
@@ -373,7 +386,7 @@ class LineaBaseController(BaseController):
         item = DBSession.query(Item).get(id_item)
         linea_base = DBSession.query(LineaBase).get(id_linea_base)
         item.linea_bases.remove(linea_base)
-
+	flash("Item Desasignado de la Linea Base")
         redirect("/admin/linea_base/listadoItemsPorLineaBase", id_proyecto=id_proyecto, id_fase=id_fase, id_linea_base=id_linea_base)
 
 

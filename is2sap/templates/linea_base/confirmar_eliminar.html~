@@ -8,7 +8,7 @@
 
 <head>
   <meta content="text/html; charset=UTF-8" http-equiv="content-type" py:replace="''"/>
-  <title>Estoy tratando de borrar un archivo papacho</title>
+  <title>Confirmacion de eliminacion</title>
 </head>
 
 <body>

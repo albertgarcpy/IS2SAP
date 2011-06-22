@@ -33,7 +33,7 @@ ${menu_superior(id_proyecto, id_fase)}
             <td>${linea_base.nombre}</td>
 	    <td>${linea_base.descripcion}</td>
             <td>${linea_base.estado}</td>
-            <td>${linea_base.id_fase}</td>
+            <td>${linea_base.fase.numero_fase}</td>
             <td>${linea_base.version}</td>
             <td><a href="${tg.url('/admin/linea_base/editar', id_proyecto=id_proyecto, id_fase=id_fase, id_linea_base=linea_base.id_linea_base)}"> <input class="alignEditar" name="editar" type="button" value="" /></a>			
 		<a href="${tg.url('/admin/linea_base/listadoItemsPorLineaBase', id_proyecto=id_proyecto, id_fase=id_fase, id_linea_base=linea_base.id_linea_base)}"> <input class="alignlistarItems" name="listaritems" type="button" value=""/></a>
@@ -43,6 +43,7 @@ ${menu_superior(id_proyecto, id_fase)}
 		<a href="${tg.url('/admin/linea_base/historial_linea_bases', id_proyecto=id_proyecto, id_fase=id_fase, id_linea_base=linea_base.id_linea_base)}">
                               <input class="alignhistorialLineaBase" name="historiallineabase" type="button" value="" />
                 </a>
+		<a href="${tg.url('/admin/linea_base/aprobar', id_proyecto=id_proyecto, id_fase=id_fase, id_linea_base=linea_base.id_linea_base)}"> <input class="alignAprobar" name="aprobar" type="button" value="" /></a>			<a href="${tg.url('/admin/linea_base/confirmar_romper',  id_proyecto=id_proyecto, id_fase=id_fase, id_linea_base=linea_base.id_linea_base)}"> <input class="alignRomper" name="desaprobar" type="button" value=""/></a>
 	    </td>
         </tr>
         </py:for>

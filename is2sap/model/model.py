@@ -326,7 +326,8 @@ class LineaBaseHistorial(DeclarativeBase):
 
     #relation definitions
     relacion_historial_linea_base = relationship('LineaBase', backref='linea_base_historial')
-
+    fase = relationship('Fase', backref='linea_bases_historial')
+	
 
 ##----------------------------- Clase "Item"-----------------------------------
 class Item(DeclarativeBase):

@@ -24,7 +24,7 @@
         <tr>
             <td>${value.id_linea_base}</td>
             <td>${value.descripcion}</td>
-            <td>${value.id_fase}</td>
+            <td>${value.fase.numero_fase}</td>
             <td>${value.version}</td>
         </tr>        
     </table>
@@ -32,7 +32,7 @@
 <div class="menu bubplastic horizontal aqua">
 	<ul>
 		<li><span class="menu_r"><a href="${tg.url('/admin/linea_base/romper', id_proyecto=id_proyecto, id_fase=id_fase, id_linea_base=value.id_linea_base)}"><span class="menu_ar">Romper</span></a></span></li>
-		<li><span class="menu_r"><a href="${tg.url('/admin/linea_base/aprobaciones', id_proyecto=id_proyecto, id_fase=id_fase)}"><span class="menu_ar">Cancelar</span></a></span></li>
+		<li><span class="menu_r"><a href="${tg.url('/admin/linea_base/listado_linea_bases', id_proyecto=id_proyecto, id_fase=id_fase)}"><span class="menu_ar">Cancelar</span></a></span></li>
 	</ul>
 	<br class="clearit" />
 </div>
