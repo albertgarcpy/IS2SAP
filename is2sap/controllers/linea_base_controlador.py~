@@ -26,12 +26,9 @@ from is2sap.controllers.secure import SecureController
 from is2sap.controllers.error import ErrorController
 
 
-from is2sap.widgets.linea_base_form import LineaBaseForm, EditLineaBaseForm
+from is2sap.widgets.linea_base_form import crear_linea_base_form, editar_linea_base_form
 
-from tw.forms import TableForm, Spacer, TextField, PasswordField, TextArea
-from tw.forms.fields import Button, SubmitButton, HiddenField
-from tw.forms.validators import *
-from is2sap.widgets.mi_validador.mi_validador import *
+
 
 
 
@@ -44,41 +41,25 @@ class LineaBaseController(BaseController):
         """Muestra la pantalla de bienvenida"""
         redirect("/admin/linea_base/listado")        
 
-
+    
     @expose('is2sap.templates.linea_base.nuevo')
-    def nuevo(self, **kw):
+    def nuevo(self, id_fase, **kw):
         """Despliega el formulario para añadir una linea base a la fase"""
-        tmpl_context.form = crear_linea_base_form
-        return dict(nombre_modelo='LineaBase', page='nueva_linea_base', value=kw)
-
-
-    @expose('is2sap.templates.linea_base.nuevo')
-    def nuevoDesdeFase(self, id_proyecto, id_fase, **kw):
-        """Despliega el formulario para añadir una linea base a la fase"""
-	fields = [
-        HiddenField('id_linea_base', label_text='Id',
-            help_text='Id del usuario'),
-	TextField('nombre', validator=NotEmpty, label_text='Nombre',
-            help_text='Introduzca el nombre de la linea base'),
-        Spacer(),
-	TextArea('descripcion', label_text='Descripcion',
-            help_text='Introduzca una descripcion de la linea base'),        
-        Spacer(),
-	HiddenField('id_estado', validator=NotEmpty, label_text='Estado',
-            help_text='Identificador del estado de la linea base.'),
-	HiddenField('id_fase', validator=NotEmpty, label_text='Fase',
-            help_text='Identificador de la fase.'),
-	HiddenField('version', validator=NotEmpty, label_text='Version',
-            help_text='Version de la linea base')]
-	crear_linea_base_form = LineaBaseForm("CrearLineaBase", action='add',fields=fields)
-        tmpl_context.form = crear_linea_base_form
+	fase=DBSession.query(Fase).get(id_fase)
+	if fase.relacion_estado_fase.nombre_estado=='Con Lineas Bases':
+		flash(_("Todos los items de esta fase ya se encuentran en una Linea Base Aprobada"), 'warning')
+                redirect("/admin/linea_base/listado_linea_bases",id_proyecto=fase.id_proyecto, id_fase=id_fase)	    
+		
         kw['id_estado']= 'Desarrollo'
         kw['id_fase']= id_fase
 	kw['version']= '1'
-        return dict(nombre_modelo='LineaBase', id_proyecto=id_proyecto, id_fase=id_fase, page='nuevo', value=kw)
+	tmpl_context.form = crear_linea_base_form
+        return dict(nombre_modelo='LineaBase', id_proyecto=fase.id_proyecto, id_fase=id_fase, page='nuevo', value=kw)
 
 
     
+    
+    @validate(crear_linea_base_form, error_handler=nuevo)
     @expose()
     def add(self, **kw):
         """Metodo para agregar un registro a la base de datos """
@@ -107,27 +88,12 @@ class LineaBaseController(BaseController):
 
 
     @expose('is2sap.templates.linea_base.editar')
-    def editar(self, id_proyecto, id_fase, id_linea_base, **kw):
+    def editar(self, id_fase, id_linea_base, **kw):
         """Metodo que rellena el formulario para editar los datos de un Línea Base"""
 	traerLineaBase=DBSession.query(LineaBase).get(id_linea_base)
 	if traerLineaBase.estado=='Aprobado':
 		flash(_("No puede editar una Linea Base Aprobada"), 'warning')
                 redirect("/admin/linea_base/listado_linea_bases",id_proyecto=id_proyecto, id_fase=id_fase)
-	fields = [
-       HiddenField('id_linea_base', label_text='Id',
-            help_text='Id del usuario'),
-	TextField('nombre', validator=NotEmpty, label_text='Nombre', 
-            help_text='Introduzca el nombre de la linea base'),
-        Spacer(),
-	TextArea('descripcion', label_text='Descripcion', 
-            help_text='Introduzca una descripcion de la linea base'),        
-        Spacer(),
-	HiddenField('estado', validator=NotEmpty, label_text='Estado',
-            help_text='Identificador del estado de la linea base.'),
-	HiddenField('id_fase', validator=NotEmpty, label_text='Fase',
-            help_text='Identificador de la fase.'),
-	HiddenField('version', validator=NotEmpty, label_text='Version',
-            help_text='Version de la linea base')]
 	
         
         kw['id_linea_base']=traerLineaBase.id_linea_base
@@ -136,13 +102,13 @@ class LineaBaseController(BaseController):
 	kw['estado']=traerLineaBase.estado
         kw['id_fase']=traerLineaBase.id_fase
         kw['version']=traerLineaBase.version
-	editar_linea_base_form = EditLineaBaseForm("EditarLineaBase", action='update', fields=fields)
-        tmpl_context.form = editar_linea_base_form
 	
+        tmpl_context.form = editar_linea_base_form
+	fase=DBSession.query(Fase).get(id_fase)
 	return dict(nombre_modelo='LineaBase', id_proyecto=id_proyecto, id_fase=id_fase, id_linea_base=id_linea_base, page='editar', value=kw)
 
 
-    
+    @validate(editar_linea_base_form, error_handler=editar)
     @expose()
     def update(self, **kw):        
         """Metodo que actualiza la base de datos"""
@@ -193,7 +159,7 @@ class LineaBaseController(BaseController):
 	#Aqui se aprueba la linea base
 	linea_base.estado = 'Aprobado'
 	################################### Modificacion de Estado de Fases ###############################
-	linea_bases=DBSession.query(LineaBase).filter_by(id_fase=id_fase)
+	linea_bases=DBSession.query(LineaBase).filter_by(id_fase=id_fase).filter_by(estado='Aprobado')
 	itemsenLineaBase = []
 	for linea_base in linea_bases:
 		itemsLineaBase = linea_base.items
@@ -202,7 +168,7 @@ class LineaBaseController(BaseController):
 	contador_items_en_linea_base = 0
 	for item in itemsenLineaBase:
 		contador_items_en_linea_base = contador_items_en_linea_base + 1
-	#Se almacena la cantidad de items que se encuentran en una linea base dentro de la fase actual en: contador_items_en_linea_base
+	#Se almacena la cantidad de items que se encuentran en una linea base aprobada dentro de la fase actual en: contador_items_en_linea_base
 	tipo_items=DBSession.query(TipoItem).filter_by(id_fase=id_fase)
 	itemsDeFaseActual = []
 	for tipo_item in tipo_items:
@@ -220,7 +186,7 @@ class LineaBaseController(BaseController):
 		fase.id_estado_fase = '4'
 	else:	
 		#En caso contrario, el estado de la fase actual pasa al estado Con Lineas Bases Parciales(Id=3)
-		fase.id_estado = '3'
+		fase.id_estado_fase = '3'
 	maxnumerofase = DBSession.query(func.max(Fase.numero_fase)).filter_by(id_proyecto=id_proyecto).first()
 	#A continuación se verifica que: si existe una fase posterior, dicha fase cambia a estado de Desarrollo(Id=2)
 	if fase.numero_fase < maxnumerofase:
@@ -236,6 +202,11 @@ class LineaBaseController(BaseController):
     @expose()
     def romper(self,  id_proyecto, id_fase, id_linea_base, **kw):     
         """Metodo que rompe la linea base"""
+	fase=DBSession.query(Fase).get(id_fase)
+	#print "pasa por aca"
+	#print fase.id_estado_fase
+	if fase.relacion_estado_fase.nombre_estado=='Con Lineas Bases':
+		fase.id_estado_fase='3'
         linea_base = DBSession.query(LineaBase).get(id_linea_base)
 	
 	linea_base.estado = 'Desarrollo' 
@@ -319,6 +290,9 @@ class LineaBaseController(BaseController):
 	fase = DBSession.query(Fase).get(id_fase)
         linea_base = DBSession.query(LineaBase).get(id_linea_base)
         linea_bases = linea_base.linea_base_historial
+	if linea_bases==[]:
+		flash(_("La Linea Base no tiene historiales"), 'warning')
+                redirect("/admin/linea_base/listado_linea_bases",id_proyecto=id_proyecto, id_fase=id_fase)
         currentPage = paginate.Page(linea_bases, page, items_per_page=5)
         return dict(linea_bases=currentPage.items,
            page='historial_linea_bases', nombre_linea_base=linea_base.nombre, id_proyecto=id_proyecto, id_fase=id_fase, id_linea_base=id_linea_base, currentPage=currentPage)
@@ -337,7 +311,10 @@ class LineaBaseController(BaseController):
     @expose("is2sap.templates.linea_base.listadoItemsParaAsignaraLineaBase")
     def listadoItemsParaAsignaraLineaBase(self, id_proyecto, id_fase, id_linea_base, page=1):
         """Metodo para listar todos los items a asignar a la linea base"""
-        
+	lineabase=DBSession.query(LineaBase).get(id_linea_base)
+        if lineabase.estado=='Aprobado':
+		flash(_("La Linea Base ya se encuentra aprobada"), 'warning')
+                redirect("/admin/linea_base/listado_linea_bases",id_proyecto=id_proyecto, id_fase=id_fase)
 	linea_bases=DBSession.query(LineaBase).filter_by(id_fase=id_fase)
 	itemsenLineaBase = []
 	for linea_base in linea_bases:

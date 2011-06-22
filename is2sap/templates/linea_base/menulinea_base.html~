@@ -7,8 +7,8 @@
 <div class="menu bubplastic horizontal aqua">
 	<ul>
 		<li><span class="menu_r">
-			<a href="${tg.url('/admin/linea_base/nuevoDesdeFase', id_proyecto=id_proyecto, id_fase=id_fase)}" class="${('', 'active')[defined('page') and page=='about']}"><span class="menu_ar">Nuevo</span></a>
-			<a href="${tg.url('/admin/linea_base/aprobaciones', id_proyecto=id_proyecto, id_fase=id_fase)}" class="${('', 'active')[defined('page') and page=='about']}"><span class="menu_ar">Aprobaciones</span></a>
+			<a href="${tg.url('/admin/linea_base/nuevo', id_proyecto=id_proyecto, id_fase=id_fase)}" class="${('', 'active')[defined('page') and page=='about']}"><span class="menu_ar">Nuevo</span></a>
+			
 			<a href="${tg.url('/configura')}" class="${('', 'active')[defined('page') and page=='index']}">
                               <span class="menu_ar">Volver</span>
                         </a>
