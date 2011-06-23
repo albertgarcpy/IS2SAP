@@ -46,10 +46,23 @@ class LineaBaseController(BaseController):
     def nuevo(self, id_fase, **kw):
         """Despliega el formulario para añadir una linea base a la fase"""
 	fase=DBSession.query(Fase).get(id_fase)
+	#Comprobación de si el estado de la fase se encuentra en Con Lineas Bases
 	if fase.relacion_estado_fase.nombre_estado=='Con Lineas Bases':
 		flash(_("Todos los items de esta fase ya se encuentran en una Linea Base Aprobada"), 'warning')
                 redirect("/admin/linea_base/listado_linea_bases",id_proyecto=fase.id_proyecto, id_fase=id_fase)	    
-		
+	tipo_items=DBSession.query(TipoItem).filter_by(id_fase=id_fase)
+	itemsDeFaseActual = []
+	for tipo_item in tipo_items:
+		itemsTipoItem = DBSession.query(Item).filter_by(id_tipo_item=tipo_item.id_tipo_item).filter_by(vivo=True)
+		for itemTipoItem in itemsTipoItem:
+			itemsDeFaseActual.append(itemTipoItem)
+	contador_items_en_fase_actual = 0
+	for item in itemsDeFaseActual:
+		contador_items_en_fase_actual = contador_items_en_fase_actual + 1
+	#Comprobación de si existen items cargados para la fase actual
+	if contador_items_en_fase_actual == 0:
+		flash(_("Aun no existen items cargados para esta fase"), 'warning')
+                redirect("/admin/linea_base/listado_linea_bases",id_proyecto=fase.id_proyecto, id_fase=id_fase)		
         kw['id_estado']= 'Desarrollo'
         kw['id_fase']= id_fase
 	kw['version']= '1'
@@ -128,13 +141,6 @@ class LineaBaseController(BaseController):
 	redirect("/admin/linea_base/listado_linea_bases", id_proyecto=id_proyecto, id_fase=id_fase)
 
 
-    @expose('is2sap.templates.linea_base.confirmar_eliminar')
-    def confirmar_eliminar(self, id_linea_base, **kw):
-        """Despliega confirmacion de eliminacion"""
-        linea_base=DBSession.query(LineaBase).get(id_linea_base)
-        return dict(nombre_modelo='LineaBase', page='editar', value=linea_base)
-
-
     @expose("is2sap.templates.linea_base.aprobaciones")
     def aprobaciones(self, id_proyecto, id_fase, page=1):
         """Metodo para aprobar todos las linea_bases"""
@@ -158,6 +164,7 @@ class LineaBaseController(BaseController):
                 redirect("/admin/linea_base/listado_linea_bases",id_proyecto=id_proyecto, id_fase=id_fase)
 	#Aqui se aprueba la linea base
 	linea_base.estado = 'Aprobado'
+	DBSession.flush()
 	################################### Modificacion de Estado de Fases ###############################
 	linea_bases=DBSession.query(LineaBase).filter_by(id_fase=id_fase).filter_by(estado='Aprobado')
 	itemsenLineaBase = []
@@ -184,9 +191,10 @@ class LineaBaseController(BaseController):
 	if contador_items_en_linea_base == contador_items_en_fase_actual:
 		#En caso positivo el estado de la fase actual pasa al estado Con Lineas Bases(Id=4)
 		fase.id_estado_fase = '4'
-	else:	
-		#En caso contrario, el estado de la fase actual pasa al estado Con Lineas Bases Parciales(Id=3)
+	if contador_items_en_linea_base < contador_items_en_fase_actual:	
+		#En este caso, el estado de la fase actual pasa al estado Con Lineas Bases Parciales(Id=3)
 		fase.id_estado_fase = '3'
+	DBSession.flush()
 	maxnumerofase = DBSession.query(func.max(Fase.numero_fase)).filter_by(id_proyecto=id_proyecto).first()
 	#A continuación se verifica que: si existe una fase posterior, dicha fase cambia a estado de Desarrollo(Id=2)
 	if fase.numero_fase < maxnumerofase:
@@ -202,14 +210,49 @@ class LineaBaseController(BaseController):
     def romper(self,  id_proyecto, id_fase, id_linea_base, **kw):     
         """Metodo que rompe la linea base"""
 	fase=DBSession.query(Fase).get(id_fase)
-	#print "pasa por aca"
-	#print fase.id_estado_fase
-	if fase.relacion_estado_fase.nombre_estado=='Con Lineas Bases':
-		fase.id_estado_fase='3'
+	linea_bases=DBSession.query(LineaBase).filter_by(id_fase=id_fase).filter_by(estado='Aprobado')
+	itemsenLineaBase = []
+	for linea_base in linea_bases:
+		itemsLineaBase = linea_base.items
+		for itemLineaBase in itemsLineaBase:
+			itemsenLineaBase.append(itemLineaBase)
+	contador_items_en_linea_base = 0
+	for item in itemsenLineaBase:
+		contador_items_en_linea_base = contador_items_en_linea_base + 1
+	#Se almacena la cantidad de items que se encuentran en una linea base aprobada dentro de la fase actual en: contador_items_en_linea_base
+	if contador_items_en_linea_base==1:
+		if fase.relacion_estado_fase.nombre_estado=='Con Lineas Bases' or fase.relacion_estado_fase.nombre_estado=='Con Lineas Bases Parciales':
+			fase.id_estado_fase='2'
+			maxnumerofase = DBSession.query(func.max(Fase.numero_fase)).filter_by(id_proyecto=id_proyecto).first()
+			#A continuación se verifica que: si existe una fase posterior, y si no tiene items, tendrá que tener el estado de su fase inicial
+			if fase.numero_fase < maxnumerofase:
+				numero_fase_siguiente = fase.numero_fase+1 
+				fase_siguiente=DBSession.query(Fase).filter_by(id_proyecto=id_proyecto).filter_by(numero_fase=numero_fase_siguiente).first()
+				tipo_items=DBSession.query(TipoItem).filter_by(id_fase=fase_siguiente.id_fase)
+				itemsDeFaseActual = []
+				for tipo_item in tipo_items:
+					itemsTipoItem = DBSession.query(Item).filter_by(id_tipo_item=tipo_item.id_tipo_item).filter_by(vivo=True)
+					for itemTipoItem in itemsTipoItem:
+						itemsDeFaseActual.append(itemTipoItem)
+				contador_items_en_fase_siguiente = 0
+				for item in itemsDeFaseActual:
+					contador_items_en_fase_siguiente = contador_items_en_fase_siguiente + 1
+				if contador_items_en_fase_siguiente == 0:
+					fase_siguiente.id_estado_fase='1'	
 	
+	#Comprueba si la fase se encuentra en el estado Con Linas Bases, cambia al estado Con Lineas Bases Parciales,
+	# si es que existe más de un item en una linea base
+	if contador_items_en_linea_base>1:
+		if fase.relacion_estado_fase.nombre_estado=='Con Lineas Bases':
+		      fase.id_estado_fase='3'
+
+	DBSession.flush()
         linea_base = DBSession.query(LineaBase).get(id_linea_base)
-	
+	#Cambia el estado de la linea base de Aprobado a Desarrollo
 	linea_base.estado = 'Desarrollo' 
+	
+	
+	DBSession.flush()
 	#Guarda en el historial la última linea base aprobada
 	linea_baseHistorial = LineaBaseHistorial()
         linea_baseHistorial.id_linea_base = linea_base.id_linea_base
@@ -233,10 +276,10 @@ class LineaBaseController(BaseController):
 		linea_base_item_historial.version=item.version
 		item.linea_bases_historial.append(linea_base_item_historial)
 		DBSession.add(linea_base_item_historial)
+		DBSession.flush()
 		 
 	
-        #DBSession.add(linea_baseHistorial) 
-	version_aux = int(linea_base.version)+1
+        version_aux = int(linea_base.version)+1
   	linea_base.version = str(version_aux)
 	DBSession.flush()
 	flash("Linea Base Rota")
@@ -408,7 +451,7 @@ class LineaBaseController(BaseController):
 	#items = linea_base_item_historial.item_historial
         currentPage = paginate.Page(items, page)
         return dict(items=currentPage.items, page='listadoItemsPorLineaBaseHistorial', id_proyecto=id_proyecto, 
-                    id_fase=id_fase, id_linea_base=id_linea_base, currentPage=currentPage)
+                    id_fase=id_fase, id_linea_base=id_linea_base, version=version, currentPage=currentPage)
 
 
     @expose("is2sap.templates.linea_base.listado_detalles_items_linea_base_historial")
@@ -423,6 +466,6 @@ class LineaBaseController(BaseController):
 		detalles = DBSession.query(ItemDetalleHistorial).filter_by(id_item=id_item).filter_by(version=version).order_by(ItemDetalleHistorial.id_historial_item_detalle)
         currentPage = paginate.Page(detalles, page)
         return dict(detalles=currentPage.items, page='listado_detalles_items_linea_base_historial', id_proyecto=id_proyecto, 
-                    id_fase=id_fase, id_linea_base=id_linea_base, id_item=id_item, currentPage=currentPage)
+                    id_fase=id_fase, id_linea_base=id_linea_base, id_item=id_item, version=version, currentPage=currentPage)
 
    
