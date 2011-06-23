@@ -81,7 +81,7 @@ def bootstrap(command, conf, vars):
         model.DBSession.add(ef)
 
         ef = model.EstadoFase()
-        ef.nombre_estado = 'Con Lineas Bases Parciales'
+        ef.nombre_estado = 'Con Linea Base Parciales'
         model.DBSession.add(ef)
 
         ef = model.EstadoFase()
