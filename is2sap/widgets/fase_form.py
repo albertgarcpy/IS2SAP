@@ -25,7 +25,7 @@ class FaseForm(TableForm):
         TextField('nombre', validator=NotEmpty, label_text='Nombre', size=38,
             help_text='Introduzca un nombre para la fase.'),        
         Spacer(),
-        TextArea('descripcion', label_text='Descripcion',
+        TextArea('descripcion', label_text='Descripcion', attrs=dict(rows=10, cols=50),
             help_text='Introduzca una descripcion de la fase')]
 
     submit_text = 'Guardar Fase'
@@ -48,7 +48,7 @@ class EditFaseForm(TableForm):
         TextField('nombre', validator=NotEmpty, label_text='Nombre', size=38,
             help_text='Introduzca un nombre para la fase.'),        
         Spacer(),
-        TextArea('descripcion', label_text='Descripcion',
+        TextArea('descripcion', label_text='Descripcion', attrs=dict(rows=10, cols=50),
             help_text='Introduzca una descripcion de la fase')]
 
     submit_text = 'Guardar Fase'

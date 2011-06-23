@@ -54,12 +54,13 @@ class TipoItemController(BaseController):
         return dict(listaProyectos=listaProyectos, id_proyecto=id_proyecto, id_fase=id_fase)
 
     @expose()
-    def importar(self, id_proyecto, id_fase, id_tipo_item, nombre, descripcion):
+    def importar(self, id_proyecto, id_fase, id_tipo_item, nombre, descripcion, codigo):
         """Metodo que realiza la importacion del Tipo de Item con todos sus Atributos"""
         try:
             tipo_item = TipoItem()
             tipo_item.id_fase = id_fase
             tipo_item.nombre = nombre
+            tipo_item.codigo = codigo
             tipo_item.descripcion = descripcion
             DBSession.add(tipo_item)
             DBSession.flush()
@@ -117,6 +118,7 @@ class TipoItemController(BaseController):
             tipo_item = TipoItem()
             tipo_item.id_fase = kw['id_fase']
             tipo_item.nombre = kw['nombre']
+            tipo_item.codigo = kw['codigo']
             tipo_item.descripcion = kw['descripcion']
             DBSession.add(tipo_item)
             DBSession.flush()
@@ -144,7 +146,6 @@ class TipoItemController(BaseController):
         """Metodo para listar los Tipos de Items de una Fase """
         try:         
             tipoItemPorFase = DBSession.query(TipoItem).join(TipoItem.relacion_fase).filter(TipoItem.id_fase==id_fase).options(contains_eager(TipoItem.relacion_fase)).order_by(TipoItem.id_tipo_item)
-#           fasesPorProyecto = DBSession.query(Fase).filter_by(id_proyecto=id_proyecto).order_by(Fase.numero_fase)
             nombreFase = DBSession.query(Fase.nombre).filter_by(id_fase=id_fase).first()
             idProyectoFase = DBSession.query(Fase.id_proyecto).filter_by(id_fase=id_fase).first()
             currentPage = paginate.Page(tipoItemPorFase, page, items_per_page=10)
@@ -167,11 +168,18 @@ class TipoItemController(BaseController):
             id_fase = tipo_item.id_fase
             fase = DBSession.query(Fase).get(id_fase)
             id_proyecto = fase.id_proyecto
-            traertipo_item=DBSession.query(TipoItem).get(id_tipo_item)
-            kw['id_tipo_item']=traertipo_item.id_tipo_item
-            kw['nombre']=traertipo_item.nombre
-            kw['descripcion']=traertipo_item.descripcion
-            kw['id_fase']=traertipo_item.id_fase
+            proyecto = DBSession.query(Proyecto).get(id_proyecto)
+            
+            if proyecto.iniciado == True:
+               flash(_("Proyecto ya iniciado. No puede editar Tipo de Item!"), 'error')
+               redirect("/admin/tipo_item/listadoTipoItemPorFase", id_proyecto=id_proyecto, id_fase=id_fase)
+
+            traertipo_item = DBSession.query(TipoItem).get(id_tipo_item)
+            kw['id_tipo_item'] = traertipo_item.id_tipo_item
+            kw['nombre'] = traertipo_item.nombre
+            kw['codigo'] = traertipo_item.codigo
+            kw['descripcion'] = traertipo_item.descripcion
+            kw['id_fase'] = traertipo_item.id_fase
         except SQLAlchemyError:
             flash(_("No se pudo acceder a Edicion de Tipo de Item! SQLAlchemyError..."), 'error')
             redirect("/admin/tipo_item/listadoTipoItemPorFase", id_proyecto=id_proyecto, id_fase=id_fase)
@@ -188,6 +196,7 @@ class TipoItemController(BaseController):
         try:
             tipo_item = DBSession.query(TipoItem).get(kw['id_tipo_item'])   
             tipo_item.nombre = kw['nombre']
+            tipo_item.codigo = kw['codigo']
             tipo_item.descripcion = kw['descripcion']
             tipo_item.id_fase = kw['id_fase']
             DBSession.flush()

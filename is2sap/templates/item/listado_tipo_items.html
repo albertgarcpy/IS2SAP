@@ -20,18 +20,25 @@
 
            <table border="1" width="100%">
 	         <tr style="color: purple; font-size: 11pt" align="center">
-                    <th>ID</th>          		  
-                    <th>Nombre</th>
-                    <th>Descripcion</th>
-		    <th>Crear Items</th>
+<!--
+                    <th>ID</th>
+-->
+                    <th align="center">Codigo</th>
+                    <th align="center">Nombre</th>
+                    <th align="center">Descripcion</th>
+	            <th align="center">Crear Items</th>
                  </tr>
 
                  <py:for each="tipoItem in tipoItems">
                     <tr>
-                        <td width="25">${tipoItem.id_tipo_item}</td>
-                        <td width="150">${tipoItem.nombre}</td>
-                        <td>${tipoItem.descripcion}</td>
-			<td width="50" align="center">
+<!--
+                       <td width="25">${tipoItem.id_tipo_item}</td>
+-->
+                       <td width="15%" align="left">${tipoItem.codigo}</td>
+                       <td width="25%" align="left">${tipoItem.nombre}</td>
+                       <td width="48%" align="left">${tipoItem.descripcion}</td>
+
+			<td width="12" align="center">
                            <a href="${tg.url('/item/listado', id_proyecto=id_proyecto, 
                                    id_fase=id_fase, id_tipo_item=tipoItem.id_tipo_item)}">
                               <input class="alignaddAtributo" name="addAtributo" type="button" value="" />
@@ -42,9 +49,11 @@
            </table>
 
 	   <p class="pagelist">
-	      <a class="prevPage" href="/list?page=${currentPage.previous_page}">&nbsp;</a>
+	      <a class="prevPage" href="${tg.url('/item/tipoItems',page=currentPage.previous_page,
+                                         id_proyecto=id_proyecto, id_fase=id_fase)}">&nbsp;</a>
 		 ${currentPage.pager(format='~3~', page_param='page', show_if_single_page=True)}
-	      <a class="nextPage" href="/list?page=${currentPage.next_page}">&nbsp;</a>
+	      <a class="nextPage" href="${tg.url('/item/tipoItems',page=currentPage.next_page,
+                                         id_proyecto=id_proyecto, id_fase=id_fase)}">&nbsp;</a>
 	   </p>
 
     </body>

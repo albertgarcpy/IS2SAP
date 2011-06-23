@@ -14,7 +14,7 @@ class PermisoForm(TableForm):
     fields = [
         HiddenField('id_permiso', label_text='Id',
             help_text='Id del Permiso'),
-        TextField('nombre_permiso', validator=NotEmpty_PlainText, label_text='Nombre', size=38,
+        TextField('nombre_permiso', validator=NotEmpty, label_text='Nombre', size=38,
             help_text='Introduzca el nombre del Permiso.'),
         Spacer(),
         TextArea('descripcion', label_text='Descripcion', attrs=dict(rows=10, cols=50),
@@ -31,7 +31,7 @@ class EditPermisoForm(TableForm):
     fields = [
         HiddenField('id_permiso', label_text='Id',
             help_text='Id del Permiso'),
-        TextField('nombre_permiso', validator=NotEmpty_PlainText, label_text='Nombre', size=38,
+        TextField('nombre_permiso', validator=NotEmpty, label_text='Nombre', size=38,
             help_text='Introduzca el nombre del Permiso.'),
         Spacer(),
         TextArea('descripcion', label_text='Descripcion', attrs=dict(rows=10, cols=50),

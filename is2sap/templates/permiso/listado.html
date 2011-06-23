@@ -18,19 +18,44 @@
             <h2>Lista de <div style="color:green">Permisos</div></h2>
             ${menu_superior()}
 
-	    <table border="1">
+	    <table border="1" width="100%">
 		<tr style="color: purple; font-size: 11pt" align="center" >
+<!--
 		    <th>ID</th>
-		    <th>Nombre</th>
-		    <th>Descripcion</th>
-		    <th>Acciones</th>		
+-->
+		    <th align="center">Nombre</th>
+		    <th align="center">Descripcion</th>
+		    <th align="center">Acciones</th>		
 		</tr>
 
 		<py:for each="permiso in permisos">
 			<tr>
+<!--
 			    <td>${permiso.id_permiso}</td>
-			    <td>${permiso.nombre_permiso}</td>
-			    <td>${permiso.descripcion}</td>
+-->
+			    <td width="41%" align="left">${permiso.nombre_permiso}</td>
+			    <td width="48%" align="left">${permiso.descripcion}</td>
+
+                            <td width="11%" align="left">
+			       <ul class="menu acciones">
+			          <li class="top">
+                                     <a href="#" class="top_link"><span>ACCIONES</span></a>
+				       <ul class="sub">
+				          <li>
+                                              <a href="${tg.url('/admin/permiso/editar', 
+                                                      id_permiso=permiso.id_permiso)}">Editar		                    
+				              </a>
+                                          </li>					 
+                                          <li>
+                                              <a href="${tg.url('/admin/permiso/confirmar_eliminar', 
+                                                      id_permiso=permiso.id_permiso)}">Eliminar
+				              </a>
+                                          </li>								
+				       </ul>
+				   </li>	
+			       </ul>
+                            </td>
+<!--
 			    <td> 
                                  <a href="${tg.url('/admin/permiso/editar', id_permiso=permiso.id_permiso)}"> 
 				    <input class="alignEditar" name="editar" type="button" value="" />
@@ -39,14 +64,15 @@
 				    <input class="alignEliminar" name="eliminar" type="button" value=""/>
 				 </a>
 			    </td>
+-->
 			</tr>
 		</py:for>
 	    </table>
 
 	    <p class="pagelist">
-		<a class="prevPage" href="/list?page=${currentPage.previous_page}">&nbsp;</a>
-		${currentPage.pager(format='~3~', page_param='page', show_if_single_page=True)}
-		<a class="nextPage" href="/list?page=${currentPage.next_page}">&nbsp;</a>
+	       <a class="prevPage" href="/admin/permiso/listado?page=${currentPage.previous_page}">&nbsp;</a>
+		  ${currentPage.pager(format='~3~', page_param='page', show_if_single_page=True)}
+	       <a class="nextPage" href="/admin/permiso/listado?page=${currentPage.next_page}">&nbsp;</a>
 	    </p>
 
     </body>

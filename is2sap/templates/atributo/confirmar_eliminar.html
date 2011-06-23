@@ -13,23 +13,33 @@
 
     <body>
           <h2>Eliminar Atributo <div style="color:green"> ${value.nombre}</div></h2>
-          <h3>Desea eliminar el registro?</h3>
-          <table border="1">        
+
+          <table border="1" width="100%">        
                 <tr style="color: purple; font-size: 11pt" >
+
+<!--
                    <th>ID</th>
                    <th>Tipo de Item</th>
-                   <th>Nombre</th>
-                   <th>Descripcion</th>
-	           <th>Tipo</th>		  		  
+-->
+                   <th align="center">Nombre</th>
+                   <th align="center">Descripcion</th>
+                   <th align="center">Tipo</th>		  		  
                 </tr>
                 <tr>
+<!--
                     <td>${value.id_atributo}</td>
                     <td>${value.id_tipo_item}</td>
-                    <td>${value.nombre}</td>
-                    <td>${value.descripcion}</td>
-                    <td>${value.tipo}</td>
+-->
+                    <td width="35%" align="left">${value.nombre}</td>
+                    <td width="46%" align="left">${value.descripcion}</td>
+                    <td width="8%" align="left">${value.tipo}</td>
                 </tr>        
           </table>
+
+          <br>
+          </br>
+
+          <h3><div style="color:red">DESEA ELIMINAR EL REGISTRO?</div></h3>
 
           <div class="menu bubplastic horizontal aqua">
 	      <ul>

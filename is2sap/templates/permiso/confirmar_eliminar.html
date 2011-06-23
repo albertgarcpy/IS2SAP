@@ -13,20 +13,28 @@
 
     <body>
           <h2>Eliminar Permiso <div style="color:green"> ${value.nombre_permiso}</div></h2>
-          <h3>Desea eliminar el registro?</h3>
 
-	  <table border="1">        
+	  <table border="1" width="100%">        
 	        <tr style="color: purple; font-size: 11pt" >
-		   <th>ID</th>
-		   <th>Nombre</th>
-		   <th>Descripcion</th>
+<!--
+		    <th>ID</th>
+-->
+		    <th align="center">Nombre</th>
+		    <th align="center">Descripcion</th>
 		</tr>
 	        <tr>
-		   <td>${value.id_permiso}</td>
-		   <td>${value.nombre_permiso}</td>
-		   <td>${value.descripcion}</td>
+<!--
+	           <td>${value.id_permiso}</td>
+-->
+		   <td width="40%" align="left">${value.nombre_permiso}</td>
+		   <td width="60%" align="left">${value.descripcion}</td>
 	        </tr>        
 	  </table>
+
+          <br>
+          </br>
+
+          <h3><div style="color:red">DESEA ELIMINAR EL REGISTRO?</div></h3>
 
           <div class="menu bubplastic horizontal aqua">
 	      <ul>

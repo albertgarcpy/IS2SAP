@@ -10,12 +10,12 @@
 
     <head>
            <meta content="text/html; charset=UTF-8" http-equiv="content-type" py:replace="''"/>
-           <title>Detalles de Item a Revivir</title>
+           <title>Detalles de Item Revertible</title>
     </head>
 
     <body>
-            <h2>Detalles del <div style="color:green">Item a Revivir</div></h2>
-            ${menu_superior_listado_detalles_revivir(id_proyecto, id_fase, id_tipo_item)}
+            <h2>Detalles del Item<div style="color:green">Revertible</div></h2>
+            ${menu_superior_listado_detalles_revertir_desde_fase(id_proyecto, id_fase)}
 
             <table border="1" width="100%">
 		  <tr style="color: purple; font-size: 11pt" align="center" >
@@ -23,7 +23,7 @@
                      <th align="center">Valor</th>
                   </tr>
 
-                  <py:for each="detalle in item_detalle">
+                  <py:for each="detalle in item_detalle_historial">
                      <tr>
 		         <td width="40%" align="left">${detalle.nombre_atributo}</td>
 		         <td width="60%" align="left">${detalle.valor}</td>
@@ -32,13 +32,13 @@
              </table>
 
 	     <p class="pagelist">
-	       <a class="prevPage" href="${tg.url('/item/listado_detalles_revivir',page=currentPage.previous_page,
+	       <a class="prevPage" href="${tg.url('/item/detalles_revertir_desde_fase',page=currentPage.previous_page,
                                          id_proyecto=id_proyecto, id_fase=id_fase, id_tipo_item=id_tipo_item, 
-                                         id_item=id_item)}">&nbsp;</a>
+                                         id_item=id_item, version=version)}">&nbsp;</a>
 		 ${currentPage.pager(format='~3~', page_param='page', show_if_single_page=True)}
-	       <a class="nextPage" href="${tg.url('/item/listado_detalles_revivir',page=currentPage.next_page,
+	       <a class="nextPage" href="${tg.url('/item/detalles_revertir_desde_fase',page=currentPage.next_page,
                                          id_proyecto=id_proyecto, id_fase=id_fase, id_tipo_item=id_tipo_item,
-                                         id_item=id_item)}">&nbsp;</a>
+                                         id_item=id_item, version=version)}">&nbsp;</a>
 	    </p>
 
     </body>
