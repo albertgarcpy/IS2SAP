@@ -20,7 +20,7 @@ from sqlalchemy import func
 from is2sap.lib.base import BaseController
 from is2sap.model import DBSession, metadata
 
-from is2sap.model.model import TipoItem, Item, Proyecto, Usuario, Fase, Atributo, ItemDetalle, ItemHistorial, ItemDetalleHistorial, LineaBase, LineaBase_Item, LineaBaseHistorial
+from is2sap.model.model import TipoItem, Item, Proyecto, Usuario, Fase, Atributo, ItemDetalle, ItemHistorial, ItemDetalleHistorial, LineaBase, LineaBase_Item, LineaBaseHistorial, LineaBaseItemHistorial
 from is2sap import model
 from is2sap.controllers.secure import SecureController
 from is2sap.controllers.error import ErrorController
@@ -207,6 +207,7 @@ class LineaBaseController(BaseController):
 	#print fase.id_estado_fase
 	if fase.relacion_estado_fase.nombre_estado=='Con Lineas Bases':
 		fase.id_estado_fase='3'
+	
         linea_base = DBSession.query(LineaBase).get(id_linea_base)
 	
 	linea_base.estado = 'Desarrollo' 
@@ -218,13 +219,24 @@ class LineaBaseController(BaseController):
         linea_baseHistorial.estado = linea_base.estado
         linea_baseHistorial.id_fase = linea_base.id_fase
 	linea_baseHistorial.version = linea_base.version
+	DBSession.add(linea_baseHistorial)
+	DBSession.flush() 
+	linea_baseHistorial=DBSession.query(LineaBaseHistorial).filter_by(id_linea_base=linea_base.id_linea_base).filter_by(version=linea_base.version).first()
 	items = linea_base.items
         #Aqui se van agregando registros a la tabla Linea_Base_Item_Historial para que el 
 	#sistema guarde automáticamente el historial de los items que contiene la linea base
 	for item in items:
-        	item.linea_bases_historial.append(linea_baseHistorial)
-
-        DBSession.add(linea_baseHistorial) 
+        	#item.linea_bases_historial.append(linea_baseHistorial)
+		linea_base_item_historial=LineaBaseItemHistorial()
+		linea_base_item_historial.relacion=linea_baseHistorial
+		linea_base_item_historial.id_item=item.id_item
+		linea_base_item_historial.id_historial_linea_base=linea_baseHistorial.id_historial_linea_base
+		linea_base_item_historial.version=item.version
+		item.linea_bases_historial.append(linea_base_item_historial)
+		DBSession.add(linea_base_item_historial)
+		 
+	
+        #DBSession.add(linea_baseHistorial) 
 	version_aux = int(linea_base.version)+1
   	linea_base.version = str(version_aux)
 	DBSession.flush()
@@ -263,7 +275,7 @@ class LineaBaseController(BaseController):
         """Metodo para listar las Fases de un proyecto """
         proyecto = DBSession.query(Proyecto).get(id_proyecto)
         #fasesProyecto = proyecto.fases
-	fasesProyecto = DBSession.query(Fase).filter_by(id_proyecto=id_proyecto)
+	fasesProyecto = DBSession.query(Fase).filter_by(id_proyecto=id_proyecto).order_by(Fase.id_fase)
 	fases=[]
 	for fase in fasesProyecto:
 	   if fase.id_estado_fase <> 1:
@@ -285,9 +297,10 @@ class LineaBaseController(BaseController):
 
 
     @expose("is2sap.templates.linea_base.historial_linea_bases")
-    def historial_linea_bases(self, id_proyecto, id_fase, id_linea_base, page=1):
+    def historial_linea_bases(self, id_fase, id_linea_base, page=1):
         """Metodo para listar el historial de una linea base"""
 	fase = DBSession.query(Fase).get(id_fase)
+	id_proyecto=fase.id_proyecto
         linea_base = DBSession.query(LineaBase).get(id_linea_base)
         linea_bases = linea_base.linea_base_historial
 	if linea_bases==[]:
@@ -377,7 +390,23 @@ class LineaBaseController(BaseController):
     def listadoItemsPorLineaBaseHistorial(self, id_proyecto, id_fase, id_linea_base, version, page=1):
         """Metodo para listar todos los items de la base de datos que pertenecen al historial de la linea base"""
 	linea_base_historial=DBSession.query(LineaBaseHistorial).filter_by(id_linea_base=id_linea_base).filter_by(version=version).first()
-	items = linea_base_historial.items_historial
+	items=DBSession.query(LineaBaseItemHistorial).filter_by(id_historial_linea_base=linea_base_historial.id_historial_linea_base)
+	
+	items_historial_linea_base=[]
+	
+	for item in items:
+		print item.id_item
+		id_item=item.id_item
+		version_buscar=item.version
+		item_historial=DBSession.query(Item).filter_by(id_item=id_item).filter_by(version=version_buscar).first()
+		if item_historial==None:
+			item_historial=DBSession.query(ItemHistorial).filter_by(id_item=id_item).filter_by(version=version_buscar).first()
+		if item_historial<>None:	
+			items_historial_linea_base.append(item_historial)
+		 
+	items=items_historial_linea_base	
+	#items = linea_base_historial.items_historial_assocs
+	#items = linea_base_item_historial.item_historial
         currentPage = paginate.Page(items, page)
         return dict(items=currentPage.items, page='listadoItemsPorLineaBaseHistorial', id_proyecto=id_proyecto, 
                     id_fase=id_fase, id_linea_base=id_linea_base, currentPage=currentPage)
@@ -386,8 +415,12 @@ class LineaBaseController(BaseController):
     @expose("is2sap.templates.linea_base.listado_detalles_items_linea_base_historial")
     def listado_detalles_items_linea_base_historial(self, id_proyecto, id_fase, id_linea_base, id_item, version, page=1):
         """Metodo para listar todos los detalles de los items que pertenecen a la linea base"""
-        detalles = DBSession.query(ItemDetalle).filter_by(id_item=id_item).filter_by(version=version).order_by(ItemDetalle.id_item_detalle)
-	if detalles == []:
+	item=DBSession.query(Item).get(id_item)
+	version_actual=item.version
+	detalles=[]
+	if version==version_actual:
+        	detalles = DBSession.query(ItemDetalle).filter_by(id_item=id_item).order_by(ItemDetalle.id_item_detalle)
+	if version<version_actual:
 		detalles = DBSession.query(ItemDetalleHistorial).filter_by(id_item=id_item).filter_by(version=version).order_by(ItemDetalleHistorial.id_historial_item_detalle)
         currentPage = paginate.Page(detalles, page)
         return dict(detalles=currentPage.items, page='listado_detalles_items_linea_base_historial', id_proyecto=id_proyecto, 

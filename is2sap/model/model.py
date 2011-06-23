@@ -67,13 +67,7 @@ LineaBase_Item = Table('LineaBase_Item', metadata,
         onupdate="CASCADE", ondelete="CASCADE" ), primary_key=True, nullable=False),
 )
 
-##----------------------------- Tabla de Asociacion "LineaBase_Item_Historial"-----------------------------------
-LineaBase_Item_Historial = Table('LineaBase_Item_Historial', metadata,
-    Column('id_historial_linea_base', INTEGER(), ForeignKey('Linea_Base_Historial.id_historial_linea_base', 
-        onupdate="CASCADE", ondelete="CASCADE"), primary_key=True, nullable=False),
-    Column('id_item', INTEGER(), ForeignKey('Item.id_item', 
-        onupdate="CASCADE", ondelete="CASCADE" ), primary_key=True, nullable=False),
-)
+
 
 ##----------------------------- Tabla de Asociacion "Proyecto_Rol"-----------------------------------
 Proyecto_Rol = Table('Proyecto_Rol', metadata,
@@ -350,7 +344,8 @@ class Item(DeclarativeBase):
     #relation definitions
     #linea_base = relationship('LineaBase', backref='items')
     linea_bases = relationship('LineaBase', secondary=LineaBase_Item, backref='items')
-    linea_bases_historial = relationship('LineaBaseHistorial', secondary=LineaBase_Item_Historial, backref='items_historial')
+    #linea_bases_historial = relationship('LineaBaseHistorial', secondary=LineaBase_Item_Historial, backref='items_historial')
+    linea_bases_historial = relationship('LineaBaseItemHistorial', backref="item_historial")
 
 
 
@@ -388,6 +383,7 @@ class ItemHistorial(DeclarativeBase):
 
     #relation definitions
     item = relationship('Item', backref='item_historial')
+    
 
 ##----------------------------- Clase "ItemDetalleHistorial"-----------------------------------
 class ItemDetalleHistorial(DeclarativeBase):
@@ -417,3 +413,15 @@ class RelacionItem(DeclarativeBase):
     id_item2 = Column('id_item2', INTEGER(), nullable=False)
 
     #relation definitions
+
+##----------------------------- Clase de Asociacion "LineaBase_Item_Historial"-----------------------------------
+class LineaBaseItemHistorial(DeclarativeBase):
+    __tablename__ = 'LineaBase_Item_Historial'
+	
+    id_historial_linea_base = Column('id_historial_linea_base', INTEGER(), ForeignKey('Linea_Base_Historial.id_historial_linea_base', onupdate="CASCADE", ondelete="CASCADE"), primary_key=True, nullable=False)
+    id_item = Column('id_item', INTEGER(), ForeignKey('Item.id_item', onupdate="CASCADE", ondelete="CASCADE" ), primary_key=True, nullable=False)
+    version = Column('version', VARCHAR(length=None, convert_unicode=False, assert_unicode=None, unicode_error=None, _warn_on_bytestring=False),nullable=False)
+
+    relacion = relationship("LineaBaseHistorial", backref="items_historial_assocs")
+
+

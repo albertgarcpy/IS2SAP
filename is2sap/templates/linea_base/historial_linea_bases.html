@@ -15,23 +15,26 @@
 <body>
 	<h1>Historial de la Línea Base: ${nombre_linea_base} </h1>
 ${menu_superior_historial_linea_base(id_proyecto,id_fase)}
-    <table border="1">
+    <table border="1" width="100%">
 		  <tr style="color: purple; font-size: 11pt" align="center" >
-          <th>ID</th>
+          
+	  <th>Nombre</th>
           <th>Descripcion</th>
           <th>Estado</th>
           <th>Fase</th>
           <th>Version</th>
+	  <th>Items</th>
 	</tr>
 
         <py:for each="linea_base in linea_bases">
         <tr>
-            <td>${linea_base.id_linea_base}</td>
+            
+	    <td>${linea_base.nombre}</td>
             <td>${linea_base.descripcion}</td>
-            <td>${linea_base.estado}</td>
-            <td>${linea_base.fase.numero_fase}</td>
-            <td>${linea_base.version}</td>
-            <td>
+            <td width="70" align="center">${linea_base.estado}</td>
+            <td width="50" align="center">${linea_base.fase.numero_fase}</td>
+            <td width="50" align="center">${linea_base.version}</td>
+            <td width="50">
 		<a href="${tg.url('/admin/linea_base/listadoItemsPorLineaBaseHistorial', id_proyecto=id_proyecto, id_fase=id_fase, id_linea_base=linea_base.id_linea_base, version=linea_base.version)}">
                               <input class="alignlistarItems" name="listaritems" type="button" value="" />
                 </a>
@@ -44,9 +47,10 @@ ${menu_superior_historial_linea_base(id_proyecto,id_fase)}
     </table>
 
 	<p class="pagelist">
-		<a class="prevPage" href="/list?page=${currentPage.previous_page}">&nbsp;</a>
+		<a class="prevPage" href="${tg.url('/admin/linea_base/historial_linea_bases', page=currentPage.previous_page, id_fase=id_fase, id_linea_base=id_linea_base)}">&nbsp;</a>
 		${currentPage.pager(format='~3~', page_param='page', show_if_single_page=True)}
-		<a class="nextPage" href="/list?page=${currentPage.next_page}">&nbsp;</a>
+		<a class="nextPage" href="${tg.url('/admin/linea_base/historial_linea_bases', page=currentPage.next_page,
+                                       id_fase=id_fase, id_linea_base=id_linea_base)}">&nbsp;</a>
 	</p>
 
 </body>

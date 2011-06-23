@@ -24,8 +24,10 @@
                      <th>Tipo</th>
                      <th>LB</th>
 -->
+                     <th>Id</th>
                      <th>Descripcion</th>
-                     <th>Complejidad</th>
+		     <th>Complejidad</th>
+		     <th>Version</th>
 	             
                      <th>Acciones</th>
                   </tr>
@@ -37,8 +39,10 @@
                          <td>${item.id_tipo_item}</td>
 		         <td>${item.id_linea_base}</td>
 -->
-		         <td>${item.descripcion}</td>
-		         <td>${item.complejidad}</td>
+			 <td>${item.id_item}</td>
+			 <td>${item.relacion.descripcion}</td>
+		         <td>${item.relacion.complejidad}</td>
+			 <td>${item.version}</td>
 <!--
 		         <td>${item.archivo_externo}</td>
 -->
@@ -47,8 +51,8 @@
 		         <td>${item.fecha_modificacion}</td>
 -->
                          <td> 
-				 <a href="${tg.url('/item/listado_detalles_items_linea_base', 
-                                         id_proyecto=id_proyecto, id_fase=id_fase, id_linea_base=id_linea_base, id_item=item.id_item)}">
+				 <a href="${tg.url('/admin/linea_base/listado_detalles_items_linea_base_historial', 
+                                         id_proyecto=id_proyecto, id_fase=id_fase, id_linea_base=id_linea_base, id_item=item.id_item, version=item.version)}">
 				    <input class="alignlistarItems" name="listardetalles" type="button" value=""/>
 				 </a>
 				
