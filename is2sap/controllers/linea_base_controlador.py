@@ -192,8 +192,7 @@ class LineaBaseController(BaseController):
 	if fase.numero_fase < maxnumerofase:
 		numero_fase_siguiente = fase.numero_fase+1 
 		fase_siguiente=DBSession.query(Fase).filter_by(id_proyecto=id_proyecto).filter_by(numero_fase=numero_fase_siguiente).first()
-		fase_siguiente.id_estado_fase = '2'	
-        
+		fase_siguiente.id_estado_fase = '2'	        
         DBSession.flush()
 	flash("Linea Base Aprobada")
         redirect("/admin/linea_base/listado_linea_bases",id_proyecto=id_proyecto, id_fase=id_fase)

@@ -10,12 +10,12 @@
 
     <head>
            <meta content="text/html; charset=UTF-8" http-equiv="content-type" py:replace="''"/>
-           <title>Versiones Revertibles</title>
+           <title>Versiones Revertibles de ${nombre_fase}</title>
     </head>
 
     <body>
-            <h2>Versiones <div style="color:green">Revertibles</div></h2>
-            ${menu_superior_revertir(id_proyecto, id_fase, id_tipo_item, id_item)}
+            <h2>Versiones Revertibles de <div style="color:green">${nombre_fase}</div></h2>
+            ${menu_superior_revertir_desde_fase(id_proyecto)}
 
             <table border="1" width="100%">
 		  <tr style="color: purple; font-size: 11pt" align="center" >
@@ -40,7 +40,7 @@
                      <th align="center">Acciones</th>
                   </tr>
 
-                  <py:for each="item in item_historial">
+                  <py:for each="item in items_historial">
                      <tr>
 <!--
                          <td>${item.id_item}</td>
@@ -66,13 +66,14 @@
                                    <a href="#" class="top_link"><span>ACCIONES</span></a>
 				      <ul class="sub">
 					 <li>
-                                             <a href="${tg.url('/item/revertir_item', id_proyecto=id_proyecto, id_fase=id_fase,
-                                                     id_tipo_item=id_tipo_item, id_historial_item=item.id_historial_item)}">Revertir
+                                             <a href="${tg.url('/item/revertir_item_desde_fase', id_proyecto=id_proyecto, 
+                                                     id_fase=id_fase, id_tipo_item=item.id_tipo_item,        
+                                                     id_historial_item=item.id_historial_item)}">Revertir
 					     </a>
                                          </li>
 			                 <li>
-                                             <a href="${tg.url('/item/listado_detalles_revertir', id_proyecto=id_proyecto, 
-                                                     id_fase=id_fase, id_tipo_item=id_tipo_item, 
+                                             <a href="${tg.url('/item/detalles_revertir_desde_fase', id_proyecto=id_proyecto, 
+                                                     id_fase=id_fase, id_tipo_item=item.id_tipo_item, 
                                                      id_item=item.id_item, version=item.version)}">Detalles		                    
 				             </a>
                                          </li>
@@ -98,13 +99,11 @@
              </table>
 
 	     <p class="pagelist">
-	       <a class="prevPage" href="${tg.url('/item/listado_revertir',page=currentPage.previous_page,
-                                         id_proyecto=id_proyecto, id_fase=id_fase, id_tipo_item=id_tipo_item,
-                                         id_item=id_item)}">&nbsp;</a>
+	       <a class="prevPage" href="${tg.url('/item/revertir_desde_fase',page=currentPage.previous_page,
+                                         id_proyecto=id_proyecto, id_fase=id_fase)}">&nbsp;</a>
 		 ${currentPage.pager(format='~3~', page_param='page', show_if_single_page=True)}
-	       <a class="nextPage" href="${tg.url('/item/listado_revertir',page=currentPage.next_page,
-                                         id_proyecto=id_proyecto, id_fase=id_fase, id_tipo_item=id_tipo_item,
-                                         id_item=id_item)}">&nbsp;</a>
+	       <a class="nextPage" href="${tg.url('/item/revertir_desde_fase',page=currentPage.next_page,
+                                         id_proyecto=id_proyecto, id_fase=id_fase)}">&nbsp;</a>
 	    </p>
 
     </body>

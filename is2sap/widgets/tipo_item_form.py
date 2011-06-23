@@ -17,7 +17,10 @@ class TipoItemForm(TableForm):
         HiddenField('id_fase', label_text='Id de Fase',
             help_text='Introduzca un id de fase'),
         TextField('nombre', validator=NotEmpty, label_text='Nombre', size=38,
-            help_text='Introduzca el nombre del tipo de Item correcto'),
+            help_text='Introduzca el nombre del Tipo de Item correcto'),
+        Spacer(),
+        TextField('codigo', validator=NotEmpty, label_text='Codigo', size=38,
+            help_text='Introduzca el codigo del Tipo de Item correcto'),
         Spacer(),
         TextArea('descripcion', attrs=dict(rows=10, cols=50), label_text='Descripcion'),        
         Spacer()]
@@ -36,6 +39,9 @@ class EditTipoItemForm(TableForm):
             help_text='Introduzca un id de fase'),
         TextField('nombre', validator=NotEmpty, label_text='Nombre', size=38,
             help_text='Introduzca el nombre del tipo de Item correcto'),
+        Spacer(),
+        TextField('codigo', validator=NotEmpty, label_text='Codigo', size=38,
+            help_text='Introduzca el codigo del Tipo de Item correcto'),
         Spacer(),
         TextArea('descripcion', attrs=dict(rows=10, cols=50), label_text='Descripcion'),        
         Spacer()]

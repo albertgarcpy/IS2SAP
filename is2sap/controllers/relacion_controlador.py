@@ -50,13 +50,14 @@ class RelacionController(BaseController):
         
         # Comment: Esto trae los items de la fase adyacente anterior para las relaciones del itemActual        
         proyecto=DBSession.query(Proyecto).join(Fase).join(TipoItem).join(Item).filter(Item.id_item==idItemActual).one()
-        proyecto.fases.sort()
+        faseDeProyecto=DBSession.query(Fase).join(Proyecto).filter(Proyecto.id_proyecto==proyecto.id_proyecto).order_by(Fase.id_fase)
+        for fa in faseDeProyecto:
+            print "FASE:", fa.id_fase
         posicion=0        
-        itemsDeFaseAdyacente=""
-        for fase in proyecto.fases:
-            print "ID DE LA FASE:", fase.id_fase
+        itemsDeFaseAdyacente=[]
+        for fase in faseDeProyecto:
             if fase.numero_fase==faseActual.numero_fase-1:
-                print "El numero de fase donde estoy es :", fase.numero_fase
+                print "El numero de fase anterior es :", fase.numero_fase
                 itemsDeFaseAdyacente = DBSession.query(Item).join(TipoItem).join(Fase).filter(Fase.id_fase==fase.id_fase).filter(Item.estado=="Aprobado").all()
         if faseActual.numero_fase == 1:
             itemsDeFaseAdyacente = DBSession.query(Item).join(TipoItem).join(Fase).filter(Item.complejidad=="100").all()

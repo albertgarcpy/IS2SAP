@@ -13,26 +13,26 @@
 
     <body>
           <h2>Eliminar Item <div style="color:green"> ${nombre_tipo_item}</div></h2>
-          <h3>Desea eliminar el registro?</h3>
 
-              <table border="1">        
+              <table border="1" width="100%">        
                     <tr style="color: purple; font-size: 11pt" >
 <!--
-                     <th>ID</th>
-                     <th>Tipo</th>
-                     <th>LB</th>
+                       <th>ID</th>
+                       <th>Tipo</th>
+                       <th>LB</th>
 -->
-                       <th>Descripcion</th>
-                       <th>Complejidad</th>
-	               <th>Prioridad</th>
-	               <th>Estado</th>
+                       <th align="center">Codigo</th>
+                       <th align="center">Descripcion</th>
+                       <th align="center">Complejidad</th>
+	               <th align="center">Prioridad</th>
+	               <th align="center">Estado</th>
 <!--
-	             <th>Archivo Externo</th>
+	               <th>Archivo Externo</th>
 -->
-	               <th>Version</th>
-	               <th>Observacion</th>
+	               <th align="center">Version</th>
+	               <th align="center">Observacion</th>
 <!--
-	             <th>Fecha de Modificacion</th>
+	               <th>Fecha de Modificacion</th>
 -->
                     </tr>
                     <tr>
@@ -41,21 +41,26 @@
                          <td>${item.id_tipo_item}</td>
 		         <td>${item.id_linea_base}</td>
 -->
-                       <td>${item.descripcion}</td>
-                       <td>${item.complejidad}</td>
-                       <td>${item.prioridad}</td>
-	               <td>${item.estado}</td>
+                         <td width="15%" align="left">${item.codigo}</td>
+		         <td width="30%" align="left">${item.descripcion}</td>
+		         <td width="9%" align="left">${item.complejidad}</td>
+		         <td width="8%" align="left">${item.prioridad}</td>
+		         <td width="8%" align="left">${item.estado}</td>
 <!--
 		         <td>${item.archivo_externo}</td>
 -->
-	               <td>${item.version}</td>
-    	               <td>${item.observacion}</td>
+		         <td width="5%" align="left">${item.version}</td>
+		         <td width="25%" align="left">${item.observacion}</td>
 <!--
 		         <td>${item.fecha_modificacion}</td>
--->
-	    
+-->	    
                     </tr>        
               </table>
+
+              <br>
+              </br>
+
+              <h3><div style="color:red">DESEA ELIMINAR EL REGISTRO?</div></h3>
 
               <div class="menu bubplastic horizontal aqua">
 	           <ul>

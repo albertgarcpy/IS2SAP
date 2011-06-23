@@ -137,7 +137,7 @@
                     <span class="menu_r">
                          <a href="${tg.url('/item/listado', id_proyecto=id_proyecto, id_fase=id_fase, id_tipo_item=id_tipo_item)}" 
                             class="${('', 'active')[defined('page') and page=='listado_item']}">
-                            <span class="menu_ar">Cancelar</span>
+                            <span class="menu_ar">Volver</span>
                          </a>
                     </span>
                 </li>
@@ -170,7 +170,7 @@
                     <span class="menu_r">
                          <a href="${tg.url('/item/listado', id_proyecto=id_proyecto, id_fase=id_fase, id_tipo_item=id_tipo_item)}" 
                             class="${('', 'active')[defined('page') and page=='listado_item']}">
-                            <span class="menu_ar">Cancelar</span>
+                            <span class="menu_ar">Volver</span>
                          </a>
                     </span>
                 </li>
@@ -186,7 +186,103 @@
                     <span class="menu_r">
                          <a href="${tg.url('/item/listado_revivir', id_proyecto=id_proyecto, id_fase=id_fase, 
                                     id_tipo_item=id_tipo_item)}" 
-                            class="${('', 'active')[defined('page') and page=='listado_item']}">
+                            class="${('', 'active')[defined('page') and page=='listado_revivir']}">
+                            <span class="menu_ar">Volver</span>
+                         </a>
+                    </span>
+                </li>
+	    </ul>
+	    <br class="clearit" />
+        </div>
+     </py:def>
+
+     <py:def function="menu_superior_items_fase(id_proyecto)">
+        <div class="menu bubplastic horizontal aqua">
+	    <ul>
+		<li>
+                    <span class="menu_r">
+                         <a href="${tg.url('/item/fases', id_proyecto=id_proyecto)}" 
+                            class="${('', 'active')[defined('page') and page=='listado_fases']}">
+                            <span class="menu_ar">Volver</span>
+                         </a>
+                    </span>
+                </li>
+	    </ul>
+	    <br class="clearit" />
+        </div>
+     </py:def>
+
+     <py:def function="menu_superior_listado_detalles_aprobar(id_proyecto, id_fase)">
+        <div class="menu bubplastic horizontal aqua">
+	    <ul>
+		<li>
+                    <span class="menu_r">
+                         <a href="${tg.url('/item/listado_aprobar', id_proyecto=id_proyecto, id_fase=id_fase)}" 
+                            class="${('', 'active')[defined('page') and page=='listado_aprobar']}">
+                            <span class="menu_ar">Volver</span>
+                         </a>
+                    </span>
+                </li>
+	    </ul>
+	    <br class="clearit" />
+        </div>
+     </py:def>
+
+     <py:def function="menu_superior_revertir_desde_fase(id_proyecto)">
+        <div class="menu bubplastic horizontal aqua">
+	    <ul>
+		<li>
+                    <span class="menu_r">
+                         <a href="${tg.url('/item/fases', id_proyecto=id_proyecto)}" 
+                            class="${('', 'active')[defined('page') and page=='listado_fases']}">
+                            <span class="menu_ar">Volver</span>
+                         </a>
+                    </span>
+                </li>
+	    </ul>
+	    <br class="clearit" />
+        </div>
+     </py:def>
+
+     <py:def function="menu_superior_listado_detalles_revertir_desde_fase(id_proyecto, id_fase)">
+        <div class="menu bubplastic horizontal aqua">
+	    <ul>
+		<li>
+                    <span class="menu_r">
+                         <a href="${tg.url('/item/revertir_desde_fase', id_proyecto=id_proyecto, id_fase=id_fase)}" 
+                            class="${('', 'active')[defined('page') and page=='revertir_desde_fase']}">
+                            <span class="menu_ar">Volver</span>
+                         </a>
+                    </span>
+                </li>
+	    </ul>
+	    <br class="clearit" />
+        </div>
+     </py:def>
+
+     <py:def function="menu_superior_revivir_desde_fase(id_proyecto)">
+        <div class="menu bubplastic horizontal aqua">
+	    <ul>
+		<li>
+                    <span class="menu_r">
+                         <a href="${tg.url('/item/fases', id_proyecto=id_proyecto)}" 
+                            class="${('', 'active')[defined('page') and page=='listado_fases']}">
+                            <span class="menu_ar">Volver</span>
+                         </a>
+                    </span>
+                </li>
+	    </ul>
+	    <br class="clearit" />
+        </div>
+     </py:def>
+
+     <py:def function="menu_superior_listado_detalles_revivir_desde_fase(id_proyecto, id_fase)">
+        <div class="menu bubplastic horizontal aqua">
+	    <ul>
+		<li>
+                    <span class="menu_r">
+                         <a href="${tg.url('/item/revivir_desde_fase', id_proyecto=id_proyecto, id_fase=id_fase)}" 
+                            class="${('', 'active')[defined('page') and page=='revivir_desde_fase']}">
                             <span class="menu_ar">Volver</span>
                          </a>
                     </span>

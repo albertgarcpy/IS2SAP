@@ -251,6 +251,7 @@ class TipoItem(DeclarativeBase):
     id_tipo_item = Column('id_tipo_item', INTEGER(), primary_key=True, nullable=False)
     id_fase = Column('id_fase', INTEGER(), ForeignKey('Fase.id_fase'), nullable=False)
     nombre = Column('nombre', VARCHAR(length=None, convert_unicode=False, assert_unicode=None, unicode_error=None, _warn_on_bytestring=False), nullable=False)
+    codigo = Column('codigo', VARCHAR(length=None, convert_unicode=False, assert_unicode=None, unicode_error=None, _warn_on_bytestring=False))
     descripcion = Column('descripcion', VARCHAR(length=None, convert_unicode=False, assert_unicode=None, unicode_error=None, _warn_on_bytestring=False))
 
     #relation definitions
@@ -263,10 +264,10 @@ class Atributo(DeclarativeBase):
     __tablename__ = 'Atributos'
 
     #column definitions
-    descripcion = Column('descripcion', VARCHAR(length=None, convert_unicode=False, assert_unicode=None, unicode_error=None, _warn_on_bytestring=False))
     id_atributo = Column('id_atributo', INTEGER(), primary_key=True, nullable=False)
     id_tipo_item = Column('id_tipo_item', INTEGER(), ForeignKey('Tipo_Item.id_tipo_item'), nullable=False)
     nombre = Column('nombre', VARCHAR(length=None, convert_unicode=False, assert_unicode=None, unicode_error=None, _warn_on_bytestring=False), nullable=False)
+    descripcion = Column('descripcion', VARCHAR(length=None, convert_unicode=False, assert_unicode=None, unicode_error=None, _warn_on_bytestring=False))
     tipo = Column('tipo', VARCHAR(length=None, convert_unicode=False, assert_unicode=None, unicode_error=None, _warn_on_bytestring=False), nullable=False)
 
     #relation definitions
@@ -331,6 +332,7 @@ class Item(DeclarativeBase):
     #column definitions
     id_item = Column(u'id_item', INTEGER(), primary_key=True, nullable=False)
     id_tipo_item = Column(u'id_tipo_item', INTEGER(), ForeignKey('Tipo_Item.id_tipo_item'), nullable=False)
+    codigo = Column(u'codigo', VARCHAR(length=None, convert_unicode=False, assert_unicode=None, unicode_error=None, _warn_on_bytestring=False), nullable=False)
     descripcion = Column(u'descripcion', VARCHAR(length=None, convert_unicode=False, assert_unicode=None, unicode_error=None, _warn_on_bytestring=False), nullable=False)
     complejidad = Column(u'complejidad', VARCHAR(length=None, convert_unicode=False, assert_unicode=None, unicode_error=None, _warn_on_bytestring=False), nullable=False)
     prioridad = Column(u'prioridad', VARCHAR(length=None, convert_unicode=False, assert_unicode=None, unicode_error=None, _warn_on_bytestring=False), nullable=False)
@@ -348,7 +350,6 @@ class Item(DeclarativeBase):
     linea_bases_historial = relationship('LineaBaseItemHistorial', backref="item_historial")
 
 
-
 ##----------------------------- Clase "ItemDetalle"-----------------------------------
 class ItemDetalle(DeclarativeBase):
 
@@ -357,11 +358,13 @@ class ItemDetalle(DeclarativeBase):
     #column definitions
     id_item_detalle = Column(u'id_item_detalle', INTEGER(), primary_key=True, nullable=False)
     id_item = Column(u'id_item', INTEGER(), ForeignKey('Item.id_item'), nullable=False)
+    id_atributo = Column(u'id_atributo', INTEGER(), ForeignKey('Atributos.id_atributo'), nullable=False)
     nombre_atributo = Column(u'nombre_atributo', VARCHAR(length=None, convert_unicode=False, assert_unicode=None, unicode_error=None, _warn_on_bytestring=False), nullable=False)
     valor = Column(u'valor', VARCHAR(length=None, convert_unicode=False, assert_unicode=None, unicode_error=None, _warn_on_bytestring=False), nullable=True)
 
     #relation definitions
     item = relationship('Item', backref='item_detalles')
+    atributo = relationship('Atributo', backref='item_detalles')
 
 ##----------------------------- Clase "ItemHistorial"-----------------------------------
 class ItemHistorial(DeclarativeBase):
@@ -372,6 +375,7 @@ class ItemHistorial(DeclarativeBase):
     id_historial_item = Column(u'id_historial_item', INTEGER(), primary_key=True, nullable=False)
     id_item = Column(u'id_item', INTEGER(), ForeignKey('Item.id_item'), nullable=False)
     id_tipo_item = Column(u'id_tipo_item', INTEGER(), ForeignKey('Tipo_Item.id_tipo_item'), nullable=False)
+    codigo = Column(u'codigo', VARCHAR(length=None, convert_unicode=False, assert_unicode=None, unicode_error=None, _warn_on_bytestring=False), nullable=False)
     descripcion = Column(u'descripcion', VARCHAR(length=None, convert_unicode=False, assert_unicode=None, unicode_error=None, _warn_on_bytestring=False), nullable=False)
     complejidad = Column(u'complejidad', VARCHAR(length=None, convert_unicode=False, assert_unicode=None, unicode_error=None, _warn_on_bytestring=False), nullable=False)
     prioridad = Column(u'prioridad', VARCHAR(length=None, convert_unicode=False, assert_unicode=None, unicode_error=None, _warn_on_bytestring=False), nullable=False)
@@ -394,6 +398,7 @@ class ItemDetalleHistorial(DeclarativeBase):
     id_historial_item_detalle = Column(u'id_historial_item_detalle', INTEGER(), primary_key=True, nullable=False)
     id_item = Column(u'id_item', INTEGER(), ForeignKey('Item.id_item'), nullable=False)
     id_item_detalle = Column(u'id_item_detalle', INTEGER(), ForeignKey('Item_Detalle.id_item_detalle'), nullable=False)
+    id_atributo = Column(u'id_atributo', INTEGER(), ForeignKey('Atributos.id_atributo'), nullable=False)
     nombre_atributo = Column(u'nombre_atributo', VARCHAR(length=None, convert_unicode=False, assert_unicode=None, unicode_error=None, _warn_on_bytestring=False), nullable=False)
     valor = Column(u'valor', VARCHAR(length=None, convert_unicode=False, assert_unicode=None, unicode_error=None, _warn_on_bytestring=False), nullable=True)
     version = Column(u'version', VARCHAR(length=None, convert_unicode=False, assert_unicode=None, unicode_error=None, _warn_on_bytestring=False), nullable=False)

@@ -34,7 +34,7 @@ class EditRolForm(TableForm):
         TextField('nombre_rol', validator=NotEmpty_PlainText, label_text='Nombre', size=38,
             help_text='Introduzca el nombre del Rol.'),
         Spacer(),
-        TextArea('descripcion', label_text='Descripcion', attrs=dict(rows=10, cols=49),
+        TextArea('descripcion', label_text='Descripcion', attrs=dict(rows=10, cols=50),
             help_text='Introduzca una descripcion del Rol'),
         Spacer()]
 
