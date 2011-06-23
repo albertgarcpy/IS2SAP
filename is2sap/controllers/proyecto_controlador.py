@@ -20,7 +20,6 @@ from is2sap.controllers.secure import SecureController
 from is2sap.controllers.error import ErrorController
 from is2sap.widgets.proyecto_form import crear_proyecto_form, editar_proyecto_form
 
-
 __all__ = ['ProyectoController']
 
 class ProyectoController(BaseController):
@@ -153,10 +152,10 @@ class ProyectoController(BaseController):
                flash(_("Proyecto ya iniciado. No puede eliminar!"), 'error')
                redirect("/admin/proyecto/listado")
         except SQLAlchemyError:
-            flash(_("No se pudo acceder a Proyectos! SQLAlchemyError..."), 'error')
+            flash(_("No se pudo acceder a Eliminacion de Proyecto! SQLAlchemyError..."), 'error')
             redirect("/admin/proyecto/listado")
         except (AttributeError, NameError):
-            flash(_("No se pudo acceder a Proyectos! Hay Problemas con el servidor..."), 'error')
+            flash(_("No se pudo acceder a Eliminacion de Proyecto! Hay Problemas con el servidor..."), 'error')
             redirect("/admin/proyecto/listado")
 
         return dict(nombre_modelo='Proyecto', page='eliminar_proyecto', value=proyecto)
@@ -184,13 +183,13 @@ class ProyectoController(BaseController):
             transaction.commit()
         except IntegrityError:
             transaction.abort()
-            flash(_("No se ha eliminado! Hay Problemas con el servidor..."), 'error')
+            flash(_("No se pudo eliminar! Hay Problemas con el servidor..."), 'error')
             redirect("/admin/proyecto/listado")
         except SQLAlchemyError:
-            flash(_("No se ha eliminado! SQLAlchemyError..."), 'error')
+            flash(_("No se pudo eliminar! SQLAlchemyError..."), 'error')
             redirect("/admin/proyecto/listado")
         except (AttributeError, NameError):
-            flash(_("No se ha eliminado! Hay Problemas con el servidor..."), 'error')
+            flash(_("No se pudo eliminar! Hay Problemas con el servidor..."), 'error')
             redirect("/admin/proyecto/listado")
         else:
             flash(_("Proyecto eliminado!"), 'ok')

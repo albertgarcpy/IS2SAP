@@ -24,19 +24,20 @@
                      <th>Tipo</th>
                      <th>LB</th>
 -->
-                     <th>Descripcion</th>
-                     <th>Complejidad</th>
-	             <th>Prioridad</th>
-	             <th>Estado</th>
+                     <th align="center">Codigo</th>
+                     <th align="center">Descripcion</th>
+                     <th align="center">Complejidad</th>
+	             <th align="center">Prioridad</th>
+	             <th align="center">Estado</th>
 <!--
 	             <th>Archivo Externo</th>
 -->
-	             <th>Version</th>
-	             <th>Observacion</th>
+	             <th align="center">Version</th>
+	             <th align="center">Observacion</th>
 <!--
 	             <th>Fecha de Modificacion</th>
 -->
-                     <th>Detalles</th>
+                     <th align="center">Acciones</th>
                   </tr>
 
                   <py:for each="item in items">
@@ -46,18 +47,40 @@
                          <td>${item.id_tipo_item}</td>
 		         <td>${item.id_linea_base}</td>
 -->
-		         <td>${item.descripcion}</td>
-		         <td>${item.complejidad}</td>
-		         <td>${item.prioridad}</td>
-		         <td>${item.estado}</td>
+                         <td width="15%" align="left">${item.codigo}</td>
+		         <td width="29%" align="left">${item.descripcion}</td>
+		         <td width="9%" align="left">${item.complejidad}</td>
+		         <td width="8%" align="left">${item.prioridad}</td>
+		         <td width="8%" align="left">${item.estado}</td>
 <!--
 		         <td>${item.archivo_externo}</td>
 -->
-		         <td>${item.version}</td>
-		         <td>${item.observacion}</td>
+		         <td width="5%" align="left">${item.version}</td>
+		         <td width="15%" align="left">${item.observacion}</td>
 <!--
 		         <td>${item.fecha_modificacion}</td>
 -->
+                         <td width="11%" align="left">		
+			     <ul class="menu acciones">
+				<li class="top">
+                                   <a href="#" class="top_link"><span>ACCIONES</span></a>
+				      <ul class="sub">
+					 <li>
+                                             <a href="${tg.url('/item/revivir_item', id_proyecto=id_proyecto, id_fase=id_fase,
+                                                     id_tipo_item=id_tipo_item, id_item=item.id_item)}">Revivir
+					     </a>
+                                         </li>
+			                 <li>
+                                             <a href="${tg.url('/item/listado_detalles_revivir', id_proyecto=id_proyecto, id_fase=id_fase,
+                                                     id_tipo_item=id_tipo_item,id_item=item.id_item)}">Detalles		                    
+				             </a>
+                                         </li>
+				       </ul>
+				 </li>	
+							
+                             </ul>
+                         </td>
+<!--
                          <td align="center">
                              <a href="${tg.url('/item/revivir_item', id_proyecto=id_proyecto, id_fase=id_fase,
                                         id_tipo_item=id_tipo_item, id_item=item.id_item)}"> 
@@ -68,17 +91,18 @@
                                 <input class="alignListarDetalleItemRevertible" name="detalles" type="button" value=""/>
                              </a>
                          </td>
-
+-->
                       </tr>
                   </py:for>
              </table>
 
 	     <p class="pagelist">
-		<a class="prevPage" href="/list?page=${currentPage.previous_page}">&nbsp;</a>
-		${currentPage.pager(format='~3~', page_param='page', show_if_single_page=True)}
-		<a class="nextPage" href="/list?page=${currentPage.next_page}">&nbsp;</a>
-	     </p>
-
+	       <a class="prevPage" href="${tg.url('/item/listado_revivir',page=currentPage.previous_page,
+                                         id_proyecto=id_proyecto, id_fase=id_fase, id_tipo_item=id_tipo_item)}">&nbsp;</a>
+		 ${currentPage.pager(format='~3~', page_param='page', show_if_single_page=True)}
+	       <a class="nextPage" href="${tg.url('/item/listado_revivir',page=currentPage.next_page,
+                                         id_proyecto=id_proyecto, id_fase=id_fase, id_tipo_item=id_tipo_item)}">&nbsp;</a>
+	    </p>
 
     </body>
 </html>
