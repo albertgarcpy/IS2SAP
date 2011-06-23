@@ -26,11 +26,15 @@ items_dirname = os.path.join(public_dirname, 'items')
 from is2sap.widgets.mi_validador.mi_validador import *
 from is2sap.lib.base import BaseController
 from is2sap.model import DBSession, metadata
-from is2sap.model.model import TipoItem, Item, Proyecto, Usuario, Fase, Atributo, ItemDetalle, ItemHistorial, ItemDetalleHistorial, LineaBase, LineaBase_Item, LineaBaseHistorial
+from is2sap.model.model import TipoItem, Item, Proyecto, Usuario, Fase, Atributo, ItemDetalle, ItemHistorial, ItemDetalleHistorial, LineaBase, LineaBase_Item, LineaBaseHistorial, RelacionItem
 from is2sap import model
 from is2sap.controllers.secure import SecureController
 from is2sap.controllers.error import ErrorController
 from is2sap.widgets.item_form import ItemForm, EditItemForm
+import pydot
+
+itemsAfectados=[]
+listaRelaciones = []
 
 __all__ = ['ItemController']
 
@@ -556,5 +560,86 @@ class ItemController(BaseController):
         return dict(tipoItems=currentPage.items,
            page='listado_tipo_items', nombre_fase=fase.nombre, id_proyecto=id_proyecto, id_fase=id_fase, currentPage=currentPage)
 
+
+
+
+
         
-    
+    def buscarRelaciones(self, idItemActual):
+        global itemsAfectados
+        global listaRelaciones
+        # En esta busqueda yo busco todos los que son hijos del item actual que esta revisando
+        hijos = DBSession.query(RelacionItem).filter_by(id_item1=idItemActual).filter_by(tipo="Padre-Hijo").order_by(RelacionItem.id_item2).all()
+        for hijo in hijos:
+            relacion = (hijo.id_item1, hijo.id_item2)
+            if listaRelaciones.count(relacion) == 0:
+                listaRelaciones.append(relacion)
+            if itemsAfectados.count(hijo.id_item2) == 0:
+                itemsAfectados.append(hijo.id_item2)
+
+        # Esto busca los padres del item actual que esta revisando
+        padres = DBSession.query(RelacionItem).filter_by(id_item2=idItemActual).filter_by(tipo="Padre-Hijo").order_by(RelacionItem.id_item1).all()
+        for padre in padres:
+            relacion = (padre.id_item1, padre.id_item2)
+            if listaRelaciones.count(relacion) == 0:
+                listaRelaciones.append(relacion)
+            if itemsAfectados.count(padre.id_item1) == 0:
+                itemsAfectados.append(padre.id_item1)
+
+        # Esto busca los antecesores del item actual que se esta revisando
+        antecesores = DBSession.query(RelacionItem).filter_by(id_item2=idItemActual).filter_by(tipo="Antecesor-Sucesor").order_by(RelacionItem.id_item1).all()
+        for antecesor in antecesores:
+            relacion = (antecesor.id_item1, antecesor.id_item2)
+            if listaRelaciones.count(relacion) == 0:
+                listaRelaciones.append(relacion)
+            if itemsAfectados.count(antecesor.id_item1) == 0:
+                itemsAfectados.append(antecesor.id_item1)
+
+        # Esto busca los sucesores del item actual que se esta revisando
+        sucesores = DBSession.query(RelacionItem).filter_by(id_item1=idItemActual).filter_by(tipo="Antecesor-Sucesor").order_by(RelacionItem.id_item2).all()
+        for sucesor in sucesores:
+            relacion = (sucesor.id_item1, sucesor.id_item2)
+            if listaRelaciones.count(relacion) == 0:
+                listaRelaciones.append(relacion)
+            if itemsAfectados.count(sucesor.id_item2) == 0:
+                itemsAfectados.append(sucesor.id_item2)
+
+    @expose("is2sap.templates.item.GraficoImpacto")
+    def calcularImpacto(self, id_proyecto, itemActual):
+        global itemsAfectados
+        global listaRelaciones
+        itemsAfectados = []
+        listaRelaciones = []
+        id_item_actual= int(itemActual)
+        itemsAfectados.append(id_item_actual) # este realiza la primera insercion del item para el cual se quiere calcular el impacto
+        impactoTotal=0
+        for item in itemsAfectados:
+            self.buscarRelaciones(item)
+        itemsAfectados.sort()
+        listaRelaciones.sort()
+        print "Lista de Items: ", itemsAfectados
+        print "Lista de Relaciones", listaRelaciones
+        ## traer las fases del proyecto y luego los items de las fases, sumar por fases, y luego un total
+        fases = DBSession.query(Fase).filter_by(id_proyecto=id_proyecto).order_by(Fase.id_fase)
+
+        graph = pydot.Dot(graph_type='digraph')
+        for fase in fases:
+            itemsDeFase = DBSession.query(Item).join(TipoItem).join(Fase).filter(Fase.id_fase==fase.id_fase).all()
+            impactoPorFase=0
+            for item in itemsDeFase:
+                if itemsAfectados.count(item.id_item) == 1:
+                    impactoPorFase = impactoPorFase + int(item.complejidad)
+            impactoTotal = impactoTotal + impactoPorFase
+            print "El impacto de la "+fase.nombre+" es :", impactoPorFase
+        print "El impacto total es :", impactoTotal
+
+        
+        
+        for i in itemsAfectados:
+            graph.add_node(pydot.Node(str(i)))
+        for x in listaRelaciones:
+            graph.add_edge(pydot.Edge(str(x[0]), str(x[1])))
+        graph.write_png('../IS2SAP/is2sap/public/images/example2_graph.png')
+
+
+        return dict(nombre_modelo="CalculoImpacto")

@@ -224,7 +224,7 @@ class LineaBaseController(BaseController):
 	maxnumerofase = DBSession.query(func.max(Fase.numero_fase)).filter_by(id_proyecto=id_proyecto).first()
 	#A continuación se verifica que: si existe una fase posterior, dicha fase cambia a estado de Desarrollo(Id=2)
 	if fase.numero_fase < maxnumerofase:
-		numero_fase_siguiente = fase.numero_fase+1 
+		numero_fase_siguiente = fase.numero_fase + 1 
 		fase_siguiente=DBSession.query(Fase).filter_by(id_proyecto=id_proyecto).filter_by(numero_fase=numero_fase_siguiente)
 		fase_siguiente.id_estado = 2	
         
