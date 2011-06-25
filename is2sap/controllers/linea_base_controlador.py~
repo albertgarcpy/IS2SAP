@@ -154,6 +154,17 @@ class LineaBaseController(BaseController):
     def aprobar(self, id_proyecto, id_fase, id_linea_base, **kw):     
         """Metodo que aprueba la linea base"""
 	linea_base = DBSession.query(LineaBase).get(id_linea_base)
+	#Se realiza comprobaciones si la linea base se encuentra en estado de Revision
+	if linea_base.estado=='Revision':
+		sw=0
+                items=linea_base.items
+		for item in items:
+			if item.estado=='Revision':
+				sw=1
+		if sw==1:
+			flash(_("No puede aprobar la Linea Base, contiene items en revision"), 'error')
+                	redirect("/admin/linea_base/listado_linea_bases",id_proyecto=id_proyecto, id_fase=id_fase)
+
 	if linea_base.estado=='Aprobado':
 		flash(_("La Linea Base ya se encuentra aprobada"), 'warning')
                 redirect("/admin/linea_base/listado_linea_bases",id_proyecto=id_proyecto, id_fase=id_fase)
@@ -231,7 +242,7 @@ class LineaBaseController(BaseController):
 				tipo_items=DBSession.query(TipoItem).filter_by(id_fase=fase_siguiente.id_fase)
 				itemsDeFaseActual = []
 				for tipo_item in tipo_items:
-					itemsTipoItem = DBSession.query(Item).filter_by(id_tipo_item=tipo_item.id_tipo_item).filter_by(vivo=True).filter_by(estado='Aprobado')
+					itemsTipoItem = DBSession.query(Item).filter_by(id_tipo_item=tipo_item.id_tipo_item).filter_by(vivo=True)
 					for itemTipoItem in itemsTipoItem:
 						itemsDeFaseActual.append(itemTipoItem)
 				contador_items_en_fase_siguiente = 0

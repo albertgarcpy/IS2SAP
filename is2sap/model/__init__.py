@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+# -*- coding: ISO-8859-1 
 """The application's model objects"""
 
 from zope.sqlalchemy import ZopeTransactionExtension

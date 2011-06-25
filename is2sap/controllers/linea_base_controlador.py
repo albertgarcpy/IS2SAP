@@ -154,6 +154,17 @@ class LineaBaseController(BaseController):
     def aprobar(self, id_proyecto, id_fase, id_linea_base, **kw):     
         """Metodo que aprueba la linea base"""
 	linea_base = DBSession.query(LineaBase).get(id_linea_base)
+	#Se realiza comprobaciones si la linea base se encuentra en estado de Revision
+	if linea_base.estado=='Revision':
+		sw=0
+                items=linea_base.items
+		for item in items:
+			if item.estado=='Revision':
+				sw=1
+		if sw==1:
+			flash(_("No puede aprobar la Linea Base, contiene items en revision"), 'error')
+                	redirect("/admin/linea_base/listado_linea_bases",id_proyecto=id_proyecto, id_fase=id_fase)
+
 	if linea_base.estado=='Aprobado':
 		flash(_("La Linea Base ya se encuentra aprobada"), 'warning')
                 redirect("/admin/linea_base/listado_linea_bases",id_proyecto=id_proyecto, id_fase=id_fase)
