@@ -38,18 +38,31 @@
                          <td width="50">${proyecto.fecha}</td>
                          <td width="50">${proyecto.iniciado}</td>            
                          <td width="50" align="center">
-                             <a href="${tg.url('/item/fases', id_proyecto=proyecto.id_proyecto)}">
+                             <a href="${tg.url('/admin/linea_base/fases', id_proyecto=proyecto.id_proyecto)}">
                                 <input class="alignMostrarFases" name="mostrarFases" type="button" value="" />
                              </a>
+                         </td>
+			<td width="7%" align="center">
+			    <ul class="menu fasesproyecto">
+			       <li class="top">
+                                  <a href="#" class="top_link"><span>FASES</span></a>
+				     <ul class="sub">
+				        <li>
+                                            <a href="${tg.url('/admin/linea_base/fases', id_proyecto=proyecto.id_proyecto)}">Fases
+                                            </a>
+                                        </li>
+				     </ul>
+			       </li>	
+			    </ul>
                          </td>
                     </tr>
                  </py:for>
             </table>
 
 	    <p class="pagelist">
-	       <a class="prevPage" href="/list?page=${currentPage.previous_page}">&nbsp;</a>
+	       <a class="prevPage" href="${tg.url('/admin/linea_base/proyectos', page=currentPage.previous_page)}">&nbsp;</a>
 		  ${currentPage.pager(format='~3~', page_param='page', show_if_single_page=True)}
-	       <a class="nextPage" href="/list?page=${currentPage.next_page}">&nbsp;</a>
+	       <a class="nextPage" href="${tg.url('/admin/linea_base/proyectos', page=currentPage.next_page)}">&nbsp;</a>
 	    </p>
 
     </body>

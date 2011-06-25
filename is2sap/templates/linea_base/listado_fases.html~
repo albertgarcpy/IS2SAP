@@ -24,7 +24,7 @@
                      <th>Nombre</th>
                      <th>Descripcion</th>
                      <th>Estado</th>
-		     <th>Acciones</th>
+		     <th>Líneas Bases</th>
                   </tr>
 
                  <py:for each="fase in fases">
@@ -34,19 +34,28 @@
                          <td width="150">${fase.nombre}</td>
                          <td>${fase.descripcion}</td>
                          <td width="70">${fase.relacion_estado_fase.nombre_estado}</td>
-		         <td width="50" align="center">
-			    <a href="${tg.url('/admin/linea_base/listado_linea_bases', id_proyecto=id_proyecto, id_fase=fase.id_fase)}"> 
-                               <input class="alignaddLineaBase" name="LineaBase" type="button" value=""/>
-                            </a>
-		         </td>
+		         
+			 <td width="12%" align="center">
+			    <ul class="menu acciones">
+			       <li class="top">
+                                  <a href="#" class="top_link"><span>Acciones</span></a>
+				     <ul class="sub">
+				        <li>
+                                            <a href="${tg.url('/admin/linea_base/listado_linea_bases', id_proyecto=id_proyecto, id_fase=fase.id_fase)}">Lineas Bases
+                                            </a>
+                                        </li>
+				     </ul>
+			       </li>	
+			    </ul>
+                          </td>
                     </tr>
                  </py:for>
              </table>
 
 	     <p class="pagelist">
-		<a class="prevPage" href="/list?page=${currentPage.previous_page}">&nbsp;</a>
+		<a class="prevPage" href="${tg.url('/admin/linea_base/fases', page=currentPage.previous_page, id_proyecto=id_proyecto)}">&nbsp;</a>
 		   ${currentPage.pager(format='~3~', page_param='page', show_if_single_page=True)}
-		<a class="nextPage" href="/list?page=${currentPage.next_page}">&nbsp;</a>
+		<a class="nextPage" href="${tg.url('/admin/linea_base/fases', page=currentPage.next_page, id_proyecto=id_proyecto)}">&nbsp;</a>
 	     </p>
 
     </body>

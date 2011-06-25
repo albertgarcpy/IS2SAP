@@ -13,19 +13,19 @@
 
 <body>
 <h1>Romper Linea Base</h1>
-<h3>Desea romper la linea base?</h3>
-<table border="1">        
+<h3><div style="color:red">DESEA ROMPER LA LINEA BASE?</div></h3>
+<table border="1" width="100%">        
 <tr style="color: purple; font-size: 11pt" >
-          <th>ID</th>
-          <th>Descripcion</th>
-          <th>Fase</th>
-          <th>Version</th>		 	  
+          <th align="center">ID</th>
+          <th align="center">Descripcion</th>
+          <th align="center">Fase</th>
+          <th align="center">Version</th>		 	  
           </tr>
         <tr>
-            <td>${value.id_linea_base}</td>
+            <td width="15%" align="left">${value.id_linea_base}</td>
             <td>${value.descripcion}</td>
-            <td>${value.fase.numero_fase}</td>
-            <td>${value.version}</td>
+            <td width="15%" align="center">${value.fase.numero_fase}</td>
+            <td width="15%" align="center">${value.version}</td>
         </tr>        
     </table>
 
