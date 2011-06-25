@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+# -*- coding: ISO-8859-1 
 """The application's model objects"""
 
 from zope.sqlalchemy import ZopeTransactionExtension
@@ -59,5 +59,5 @@ def init_model(engine):
 # Import your model modules here.
 from is2sap.model.model import Usuario, Rol, Permiso
 from is2sap.model.model import Proyecto, EstadoFase, Fase, TipoItem, Item, LineaBase, Atributo, ItemDetalle, LineaBaseHistorial
-from is2sap.model.model import ItemHistorial, ItemDetalleHistorial, RelacionItem
+from is2sap.model.model import ItemHistorial, ItemDetalleHistorial, RelacionItem, ItemArchivo, RelacionHistorial, LineaBaseHistorial
 

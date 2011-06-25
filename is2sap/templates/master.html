@@ -31,7 +31,14 @@
                  <li py:if="request.identity" id="login" class="loginlogout">
                     <a href="${tg.url('/logout_handler')}">Logout</a>
                  </li>
+<<<<<<< HEAD
                  <li py:if="tg.predicates.has_any_permission('administracion', 'lider_proyecto')" id="admin" class="first">
+=======
+                 <li py:if="request.identity" id="admin" class="menuprincipal">
+                    <a href="${tg.url('/index')}">Inicio</a>
+                 </li>
+                 <li py:if="tg.predicates.has_permission('administracion')" id="admin" class="first">
+>>>>>>> 354c2b8c907a509d93ca405bb8a83c1a2cccd465
                     <a href="${tg.url('/admin')}">Administracion</a>
                  </li>
 		 <li py:if="tg.predicates.has_any_permission('administracion', 'lider_proyecto')" id="admin" class="menuprincipal">

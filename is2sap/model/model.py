@@ -20,8 +20,9 @@ except ImportError:
              'Please install it. Example: easy_install hashlib')
 
 from sqlalchemy import Table, ForeignKey, Column
-from sqlalchemy.types import Unicode, Integer, DateTime
+from sqlalchemy.types import Unicode, Integer, DateTime, Binary
 from sqlalchemy.orm import relationship, synonym, mapper
+
 
 from is2sap.model import DeclarativeBase, metadata, DBSession
 
@@ -32,7 +33,9 @@ except ImportError:
     from sqlalchemy.databases.postgres import *
 
 __all__ = ['Usuario','Rol','Permiso','Proyecto', 'Fase', 'TipoItem', 'Atributo', 
-           'EstadoFase', 'Item', 'LineaBase', 'ItemDetalle', 'ItemHistorial', 'ItemDetalleHistorial','HistorialItem','RelacionItem']
+           'EstadoFase', 'Item', 'LineaBase', 'ItemDetalle', 'ItemHistorial', 
+           'ItemDetalleHistorial','HistorialItem','RelacionItem', 'ItemArchivo', 'RelacionHistorial',
+           'LineaBaseHistorial']
 
 
 ##----------------------------- Tabla de Asociacion "Rol_Fase"-----------------------------------
@@ -262,6 +265,7 @@ class Fase(DeclarativeBase):
 
 ##----------------------------- Clase "TipoItem"-----------------------------------
 class TipoItem(DeclarativeBase):
+
     __tablename__ = 'Tipo_Item'
 
     #column definitions
@@ -296,6 +300,7 @@ class Atributo(DeclarativeBase):
 
 ##----------------------------- Clase "EstadoFase"-----------------------------------
 class EstadoFase(DeclarativeBase):
+
     __tablename__ = 'Estado_Fase'
 
     #column definitions
@@ -354,17 +359,34 @@ class Item(DeclarativeBase):
     complejidad = Column(u'complejidad', VARCHAR(length=None, convert_unicode=False, assert_unicode=None, unicode_error=None, _warn_on_bytestring=False), nullable=False)
     prioridad = Column(u'prioridad', VARCHAR(length=None, convert_unicode=False, assert_unicode=None, unicode_error=None, _warn_on_bytestring=False), nullable=False)
     estado = Column(u'estado', VARCHAR(length=None, convert_unicode=False, assert_unicode=None, unicode_error=None, _warn_on_bytestring=False), nullable=False)
-    archivo_externo = Column(u'archivo_externo', VARCHAR(length=None, convert_unicode=False, assert_unicode=None, unicode_error=None, _warn_on_bytestring=False))
     version = Column(u'version', VARCHAR(length=None, convert_unicode=False, assert_unicode=None, unicode_error=None, _warn_on_bytestring=False), nullable=False)
     observacion = Column(u'observacion', VARCHAR(length=None, convert_unicode=False, assert_unicode=None, unicode_error=None, _warn_on_bytestring=False))
     fecha_modificacion = Column(u'fecha_modificacion', DATE(), nullable=False)
     vivo = Column(u'vivo', BOOLEAN(create_constraint=True, name=None), nullable=False)
 
     #relation definitions
-    #linea_base = relationship('LineaBase', backref='items')
     linea_bases = relationship('LineaBase', secondary=LineaBase_Item, backref='items')
     #linea_bases_historial = relationship('LineaBaseHistorial', secondary=LineaBase_Item_Historial, backref='items_historial')
     linea_bases_historial = relationship('LineaBaseItemHistorial', backref="item_historial")
+
+
+##----------------------------- Clase "ItemArchivo"-----------------------------------
+class ItemArchivo(DeclarativeBase):
+
+    __tablename__ = 'Item_Archivo'
+        
+    id_item_archivo = Column(u'id_item_archivo', Integer, primary_key=True)
+    id_item = Column(u'id_item', INTEGER(), ForeignKey('Item.id_item'), nullable=False)
+    version_item = Column(u'version_item', VARCHAR(length=None, convert_unicode=False, assert_unicode=None, unicode_error=None, _warn_on_bytestring=False), nullable=False)
+    nombre_archivo = Column(u'nombre_archivo', Unicode(255), nullable=False)
+    contenido_archivo = Column(u'contenido_archivo', Binary, nullable=False)
+
+    #relation definitions
+    item = relationship('Item', backref='item_archivos')
+    
+#    def __init__(self, nombre_archivo, contenido_archivo):
+#        self.nombre_archivo = nombre_archivo
+#        self.contenido_archivo = contenido_archivo
 
 
 ##----------------------------- Clase "ItemDetalle"-----------------------------------
@@ -397,7 +419,6 @@ class ItemHistorial(DeclarativeBase):
     complejidad = Column(u'complejidad', VARCHAR(length=None, convert_unicode=False, assert_unicode=None, unicode_error=None, _warn_on_bytestring=False), nullable=False)
     prioridad = Column(u'prioridad', VARCHAR(length=None, convert_unicode=False, assert_unicode=None, unicode_error=None, _warn_on_bytestring=False), nullable=False)
     estado = Column(u'estado', VARCHAR(length=None, convert_unicode=False, assert_unicode=None, unicode_error=None, _warn_on_bytestring=False), nullable=False)
-    archivo_externo = Column(u'archivo_externo', VARCHAR(length=None, convert_unicode=False, assert_unicode=None, unicode_error=None, _warn_on_bytestring=False))
     version = Column(u'version', VARCHAR(length=None, convert_unicode=False, assert_unicode=None, unicode_error=None, _warn_on_bytestring=False), nullable=False)
     observacion = Column(u'observacion', VARCHAR(length=None, convert_unicode=False, assert_unicode=None, unicode_error=None, _warn_on_bytestring=False))
     fecha_modificacion = Column(u'fecha_modificacion', DATE(), nullable=False)
@@ -426,6 +447,7 @@ class ItemDetalleHistorial(DeclarativeBase):
 
 
 class RelacionItem(DeclarativeBase):
+
     __tablename__ = 'Relacion'
 
     #column definitions
@@ -433,6 +455,20 @@ class RelacionItem(DeclarativeBase):
     tipo = Column('tipo', VARCHAR(length=None, convert_unicode=False, assert_unicode=None, unicode_error=None, _warn_on_bytestring=False), nullable=False)
     id_item1 = Column('id_item1', INTEGER(), nullable=False)
     id_item2 = Column('id_item2', INTEGER(), nullable=False)
+
+    #relation definitions
+
+class RelacionHistorial(DeclarativeBase):
+
+    __tablename__ = 'Relacion_Historial'
+
+    #column definitions
+    id_relacion_historial = Column('id_relacion_historial', INTEGER(), primary_key=True, nullable=False)
+    tipo = Column('tipo', VARCHAR(length=None, convert_unicode=False, assert_unicode=None, unicode_error=None, _warn_on_bytestring=False), nullable=False)
+    id_item1 = Column('id_item1', INTEGER(), nullable=False)
+    id_item2 = Column('id_item2', INTEGER(), nullable=False)
+    version_modif = Column(u'version_modif', VARCHAR(length=None, convert_unicode=False, assert_unicode=None, unicode_error=None, _warn_on_bytestring=False), nullable=False)
+
 
     #relation definitions
 
@@ -445,5 +481,4 @@ class LineaBaseItemHistorial(DeclarativeBase):
     version = Column('version', VARCHAR(length=None, convert_unicode=False, assert_unicode=None, unicode_error=None, _warn_on_bytestring=False),nullable=False)
 
     relacion = relationship("LineaBaseHistorial", backref="items_historial_assocs")
-
 
