@@ -6,10 +6,10 @@
        <div id="sb_top" class="sidebar">
            <h2>Menu de Gestión de Configuración</h2>
            <ul class="links">
-              <li> 
+              <li py:if="tg.predicates.has_any_permission('administracion', 'lider_proyecto')"> 
                   <a href="${tg.url('/admin/linea_base/proyectos')}">LINEAS BASES</a>
               </li>
-              <li> 
+              <li py:if="tg.predicates.has_any_permission('administracion', 'lider_proyecto')"> 
                   <a href="${tg.url('/admin/proyecto/listaProyectos_a_iniciar')}">INICIO DE PROYECTO</a>
               </li>
            </ul>

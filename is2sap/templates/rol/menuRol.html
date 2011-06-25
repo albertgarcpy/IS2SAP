@@ -5,9 +5,9 @@
      <py:def function="menu_superior">  
 	 <div class="menu bubplastic horizontal aqua">
 	     <ul>
-		 <li> 
+		 <li > 
                      <span class="menu_r">
-                           <a href="${tg.url('/admin/rol/nuevo')}" class="${('', 'active')[defined('page') and page=='nuevo_rol']}">
+                           <a py:if="tg.predicates.has_any_permission('administracion')" href="${tg.url('/admin/rol/nuevo')}" class="${('', 'active')[defined('page') and page=='nuevo_rol']}">
                               <span class="menu_ar">Nuevo</span>
                            </a>
                            <a href="${tg.url('/admin')}" class="${('', 'active')[defined('page') and page=='index']}">
@@ -23,7 +23,7 @@
      <py:def function="menu_superior_nuevo">  
 	 <div class="menu bubplastic horizontal aqua">
 	     <ul>
-		 <li> 
+		 <li py:if="tg.predicates.has_any_permission('administracion')"> 
                      <span class="menu_r">
                            <a href="${tg.url('/admin/rol/listado')}" class="${('', 'active')[defined('page') and page=='listado_rol']}">
                               <span class="menu_ar">Cancelar</span>
@@ -38,7 +38,7 @@
      <py:def function="menu_superior_editar">  
 	 <div class="menu bubplastic horizontal aqua">
 	     <ul>
-		 <li> 
+		 <li py:if="tg.predicates.has_any_permission('administracion')"> 
                      <span class="menu_r">
                            <a href="${tg.url('/admin/rol/listado')}" class="${('', 'active')[defined('page') and page=='listado_rol']}">
                               <span class="menu_ar">Cancelar</span>

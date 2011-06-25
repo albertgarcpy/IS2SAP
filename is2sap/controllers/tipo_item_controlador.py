@@ -33,6 +33,7 @@ class TipoItemController(BaseController):
         return dict(nombre_modelo='Tipo de Item', page='index_tipo_item')
 
     @expose('is2sap.templates.tipo_item.listadoImportar')
+    @require(predicates.has_any_permission('administracion',  'lider_proyecto'))
     def listadoImportar(self, id_proyecto, id_fase):
         """Metodo para listar los Tipos de Items que se pueden Importar"""
         try:
@@ -54,6 +55,7 @@ class TipoItemController(BaseController):
         return dict(listaProyectos=listaProyectos, id_proyecto=id_proyecto, id_fase=id_fase)
 
     @expose()
+    @require(predicates.has_any_permission('administracion',  'lider_proyecto'))
     def importar(self, id_proyecto, id_fase, id_tipo_item, nombre, descripcion, codigo):
         """Metodo que realiza la importacion del Tipo de Item con todos sus Atributos"""
         try:
@@ -94,6 +96,7 @@ class TipoItemController(BaseController):
         redirect("/admin/tipo_item/listadoTipoItemPorFase", id_proyecto=id_proyecto, id_fase=id_fase)
 
     @expose('is2sap.templates.tipo_item.nuevo')
+    @require(predicates.has_any_permission('administracion',  'lider_proyecto'))
     def nuevoDesdeFase(self, id_fase, **kw):
         """Despliega el formulario para añadir un Nuevo Tipo de Item a la fase de un proyecto."""
         try:
@@ -112,6 +115,7 @@ class TipoItemController(BaseController):
 
     @expose()
     @validate(crear_tipo_item_form, error_handler=nuevoDesdeFase)
+    @require(predicates.has_any_permission('administracion',  'lider_proyecto'))
     def add(self, **kw):
         """Metodo para agregar un registro a la base de datos """
         try:
@@ -142,6 +146,7 @@ class TipoItemController(BaseController):
         redirect("/admin/tipo_item/listadoTipoItemPorFase", id_proyecto=id_proyecto, id_fase=id_fase)
 
     @expose("is2sap.templates.tipo_item.listadoTipoItemPorFase")
+    @require(predicates.has_any_permission('administracion',  'lider_proyecto'))
     def listadoTipoItemPorFase(self, id_proyecto, id_fase, page=1):
         """Metodo para listar los Tipos de Items de una Fase """
         try:         
@@ -160,6 +165,7 @@ class TipoItemController(BaseController):
                     nombre_fase=nombreFase, id_proyecto=id_proyecto, id_fase=id_fase, currentPage=currentPage)
 
     @expose('is2sap.templates.tipo_item.editar')
+    @require(predicates.has_any_permission('administracion',  'lider_proyecto'))
     def editar(self, id_tipo_item, **kw):
         """Metodo que rellena el formulario para editar los datos de un usuario"""
         try:
@@ -191,6 +197,7 @@ class TipoItemController(BaseController):
 
     @validate(editar_tipo_item_form, error_handler=editar)
     @expose()
+    @require(predicates.has_any_permission('administracion',  'lider_proyecto'))
     def update(self, **kw):        
         """Metodo que actualiza la base de datos"""
         try:
@@ -220,6 +227,7 @@ class TipoItemController(BaseController):
         redirect("/admin/tipo_item/listadoTipoItemPorFase", id_proyecto=id_proyecto, id_fase=id_fase)
 
     @expose('is2sap.templates.tipo_item.confirmar_eliminar')
+    @require(predicates.has_any_permission('administracion',  'lider_proyecto'))
     def confirmar_eliminar(self, id_proyecto, id_fase, id_tipo_item, **kw):
         """Despliega confirmacion de eliminacion"""
         try:
@@ -239,6 +247,7 @@ class TipoItemController(BaseController):
         return dict(nombre_modelo='Tipo Item', page='editar', id_proyecto=id_proyecto, id_fase=id_fase, value=tipo_item)
 
     @expose()
+    @require(predicates.has_any_permission('administracion',  'lider_proyecto'))
     def delete(self, id_proyecto, id_fase, id_tipo_item, **kw):
         """Metodo que elimina un registro de la base de datos"""
         try:

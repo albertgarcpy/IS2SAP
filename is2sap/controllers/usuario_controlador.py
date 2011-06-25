@@ -30,6 +30,7 @@ class UsuarioController(BaseController):
         return dict(nombre_modelo='Usuario', page='index_usuario')        
 
     @expose('is2sap.templates.usuario.nuevo')
+    @require(predicates.has_permission('administracion',  msg=l_('Solo para el Administrador')))
     def nuevo(self, **kw):
         """Despliega el formulario para añadir un nuevo Usuario."""
         try:
@@ -45,6 +46,7 @@ class UsuarioController(BaseController):
 
     @validate(crear_usuario_form, error_handler=nuevo)
     @expose()
+    @require(predicates.has_permission('administracion',  msg=l_('Solo para el Administrador')))
     def add(self, **kw):
         """Metodo para agregar un registro a la base de datos """
         try:
@@ -75,10 +77,11 @@ class UsuarioController(BaseController):
         redirect("/admin/usuario/listado")
 
     @expose("is2sap.templates.usuario.listado")
+    @require(predicates.has_permission('administracion',  msg=l_('Solo para el Administrador')))
     def listado(self,page=1):
         """Metodo para listar todos los usuarios de la base de datos"""
         try:
-            usuarios = DBSession.query(Usuario).order_by(Usuario.apellido)
+            usuarios = DBSession.query(Usuario).order_by(Usuario.id_usuario)
             currentPage = paginate.Page(usuarios, page, items_per_page=10)
         except SQLAlchemyError:
             flash(_("No se pudo acceder a Usuarios! SQLAlchemyError..."), 'error')
@@ -90,6 +93,7 @@ class UsuarioController(BaseController):
         return dict(usuarios=currentPage.items, page='listado_usuario', currentPage=currentPage)
 
     @expose('is2sap.templates.usuario.editar')
+    @require(predicates.has_permission('administracion',  msg=l_('Solo para el Administrador')))
     def editar(self, id_usuario, **kw):
         """Metodo que rellena el formulario para editar los datos de un usuario"""
         try:
@@ -113,6 +117,7 @@ class UsuarioController(BaseController):
 
     @validate(editar_usuario_form, error_handler=editar)
     @expose()
+    @require(predicates.has_permission('administracion',  msg=l_('Solo para el Administrador')))
     def update(self, **kw):        
         """Metodo que actualiza la base de datos"""
         try:
@@ -141,6 +146,7 @@ class UsuarioController(BaseController):
         redirect("/admin/usuario/listado")
 
     @expose('is2sap.templates.usuario.confirmar_eliminar')
+    @require(predicates.has_permission('administracion',  msg=l_('Solo para el Administrador')))
     def confirmar_eliminar(self, id_usuario, **kw):
         """Despliega confirmacion de eliminacion"""
         try:
@@ -155,6 +161,7 @@ class UsuarioController(BaseController):
         return dict(nombre_modelo='Usuario', page='eliminar_usuario', value=usuario)
 
     @expose()
+    @require(predicates.has_permission('administracion',  msg=l_('Solo para el Administrador')))
     def delete(self, id_usuario, **kw):
         """Metodo que elimina un registro de la base de datos"""
         try:
@@ -177,6 +184,7 @@ class UsuarioController(BaseController):
         redirect("/admin/usuario/listado")
 
     @expose("is2sap.templates.usuario.listar_roles")
+    @require(predicates.has_permission('administracion',  msg=l_('Solo para el Administrador')))
     def roles(self,id_usuario, page=1):
         """Metodo para listar todos los roles que tiene el usuario seleccionado"""
         try:
@@ -193,6 +201,7 @@ class UsuarioController(BaseController):
         return dict(roles=currentPage.items, page='listar_roles', currentPage=currentPage, usuario=usuario)
 
     @expose()
+    @require(predicates.has_permission('administracion',  msg=l_('Solo para el Administrador')))
     def eliminar_rol_usuario(self, id_usuario, id_rol, **kw):
         """Metodo que elimina un rol al usuario seleccionado"""
         try:
@@ -216,7 +225,9 @@ class UsuarioController(BaseController):
 
         redirect("/admin/usuario/roles", id_usuario=id_usuario)
 
+
     @expose("is2sap.templates.usuario.agregar_roles")
+    @require(predicates.has_permission('administracion',  msg=l_('Solo para el Administrador')))
     def rolUsuario(self, id_usuario, page=1):
         """Metodo que permite listar los roles que se pueden agregar al usuario seleccionado"""
         try:
@@ -239,6 +250,7 @@ class UsuarioController(BaseController):
                     id_usuario=id_usuario, usuario=usuario)
 
     @expose()
+    @require(predicates.has_permission('administracion',  msg=l_('Solo para el Administrador')))
     def agregarRol(self, id_usuario, id_rol):
         """Metodo que realiza la agregacion de un rol al usuario selecccionado"""
         try:

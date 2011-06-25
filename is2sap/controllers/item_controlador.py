@@ -1026,7 +1026,7 @@ class ItemController(BaseController):
         return dict(proyectos=currentPage.items, page='listado_proyectos', currentPage=currentPage)
 
 
-#--------------------------- Listado de Fases por Proyecto----------------------
+#--------------------------- Listado de Fases por Proyecto ----------------------
     @expose("is2sap.templates.item.listado_fases")
     def fases(self,id_proyecto, page=1):
         """Metodo para listar las Fases de un proyecto """

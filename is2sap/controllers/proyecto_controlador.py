@@ -30,6 +30,7 @@ class ProyectoController(BaseController):
         return dict(nombre_modelo='Proyecto', page='index_proyecto')        
 
     @expose('is2sap.templates.proyecto.nuevo')
+    @require(predicates.has_any_permission('administracion'))
     def nuevo(self, **kw):
         """Despliega el formulario para añadir un nuevo Proyecto."""
         try:
@@ -47,6 +48,7 @@ class ProyectoController(BaseController):
 
     @validate(crear_proyecto_form, error_handler=nuevo)
     @expose()
+    @require(predicates.has_any_permission('administracion'))
     def add(self, **kw):
         """Metodo para agregar un registro a la base de datos """
         try:
@@ -75,6 +77,7 @@ class ProyectoController(BaseController):
         redirect("/admin/proyecto/listado")
 
     @expose("is2sap.templates.proyecto.listado")
+    @require(predicates.has_any_permission('administracion',  'lider_proyecto'))
     def listado(self,page=1):
         """Metodo para listar todos los Proyectos existentes de la base de datos"""
         try:
@@ -90,6 +93,7 @@ class ProyectoController(BaseController):
         return dict(proyectos=currentPage.items, page='listado_proyecto', currentPage=currentPage)
 
     @expose('is2sap.templates.proyecto.editar')
+    @require(predicates.has_any_permission('administracion'))
     def editar(self, id_proyecto, **kw):
         """Metodo que rellena el formulario para editar los datos de un Proyecto"""
         try:
@@ -117,6 +121,7 @@ class ProyectoController(BaseController):
 
     @validate(editar_proyecto_form, error_handler=editar)
     @expose()
+    @require(predicates.has_any_permission('administracion'))
     def update(self, **kw):        
         """Metodo que actualiza la base de datos"""
         try:
@@ -144,6 +149,7 @@ class ProyectoController(BaseController):
         redirect("/admin/proyecto/listado")
 
     @expose('is2sap.templates.proyecto.confirmar_eliminar')
+    @require(predicates.has_any_permission('administracion'))
     def confirmar_eliminar(self, id_proyecto, **kw):
         """Despliega confirmacion de eliminacion"""
         try:
@@ -161,6 +167,7 @@ class ProyectoController(BaseController):
         return dict(nombre_modelo='Proyecto', page='eliminar_proyecto', value=proyecto)
 
     @expose()
+    @require(predicates.has_any_permission('administracion'))
     def delete(self, id_proyecto, **kw):
         """Metodo que elimina un registro de la base de datos"""
         try:
@@ -197,6 +204,7 @@ class ProyectoController(BaseController):
         redirect("/admin/proyecto/listado")
 
     @expose("is2sap.templates.proyecto.listar_roles")
+    @require(predicates.has_any_permission('administracion',  'lider_proyecto'))
     def roles(self,id_proyecto, page=1):
         """Metodo para listar todos los roles que tiene el proyecto seleccionado"""
         try:
@@ -215,6 +223,7 @@ class ProyectoController(BaseController):
                     currentPage=currentPage, id_proyecto=id_proyecto, proyecto=proyecto)
 
     @expose()
+    @require(predicates.has_any_permission('administracion',  'lider_proyecto'))
     def eliminar_rol_proyecto(self, id_proyecto, id_rol, **kw):
         """Metodo que elimina un rol al proyecto seleccionado"""
         try:
@@ -239,6 +248,7 @@ class ProyectoController(BaseController):
         redirect("/admin/proyecto/roles",id_proyecto=id_proyecto)
 
     @expose("is2sap.templates.proyecto.agregar_roles")
+    @require(predicates.has_any_permission('administracion',  'lider_proyecto'))
     def rolProyecto(self, id_proyecto, page=1):
         """Metodo que permite listar los roles que se pueden agregar al proyecto seleccionado"""
         try:
@@ -263,6 +273,7 @@ class ProyectoController(BaseController):
            id_proyecto=id_proyecto, proyecto=proyecto)
 
     @expose()
+    @require(predicates.has_any_permission('administracion',  'lider_proyecto'))
     def agregarRol(self, id_proyecto, id_rol):
         """Metodo que realiza la agregacion de un rol al proyecto selecccionado"""
         try:
@@ -287,6 +298,7 @@ class ProyectoController(BaseController):
         redirect("/admin/proyecto/rolProyecto",id_proyecto=id_proyecto)
 
     @expose("is2sap.templates.proyecto.listar_usuarios")
+    @require(predicates.has_any_permission('administracion',  'lider_proyecto'))
     def usuarios(self,id_proyecto, page=1):
         """Metodo para listar todos los usuarios que tiene el proyecto seleccionado"""
         try:
@@ -305,6 +317,7 @@ class ProyectoController(BaseController):
            page='listar_usuarios', id_proyecto=id_proyecto, currentPage=currentPage, proyecto=proyecto)
 
     @expose()
+    @require(predicates.has_any_permission('administracion',  'lider_proyecto'))
     def eliminar_usuario_proyecto(self, id_proyecto, id_usuario, **kw):
         """Metodo que elimina un usuario al proyecto seleccionado"""
         try:
@@ -329,6 +342,7 @@ class ProyectoController(BaseController):
         redirect("/admin/proyecto/usuarios", id_proyecto=id_proyecto)
 
     @expose("is2sap.templates.proyecto.agregar_usuarios")
+    @require(predicates.has_any_permission('administracion',  'lider_proyecto'))
     def usuarioProyecto(self, id_proyecto, page=1):
         """Metodo que permite listar los usuarios que se pueden agregar al proyecto seleccionado"""
         try:
@@ -352,6 +366,7 @@ class ProyectoController(BaseController):
                     currentPage=currentPage, id_proyecto=id_proyecto, proyecto=proyecto)
 
     @expose()
+    @require(predicates.has_any_permission('administracion',  'lider_proyecto'))
     def agregarUsuario(self, id_proyecto, id_usuario):
         """Metodo que realiza la agregacion de un usuario al proyecto selecccionado"""
         try:
@@ -376,6 +391,7 @@ class ProyectoController(BaseController):
         redirect("/admin/proyecto/usuarioProyecto",id_proyecto=id_proyecto)
 
     @expose("is2sap.templates.proyecto.listaProyectos_a_iniciar")
+    @require(predicates.has_any_permission('administracion',  'lider_proyecto'))
     def listaProyectos_a_iniciar(self,page=1):
         """Metodo para listar todos los Proyectos a iniciar de la base de datos"""
         try:
@@ -391,6 +407,7 @@ class ProyectoController(BaseController):
         return dict(proyectos=currentPage.items, page='listaProyectos_a_iniciar', currentPage=currentPage)
 
     @expose()
+    @require(predicates.has_any_permission('administracion',  'lider_proyecto'))
     def iniciar(self, id_proyecto, **kw):     
         """Metodo que da inicio a un proyecto"""
         try:
@@ -424,4 +441,170 @@ class ProyectoController(BaseController):
             flash(_("Proyecto iniciado!"), 'ok')
 
         redirect("/admin/proyecto/listaProyectos_a_iniciar")
-   
+
+    @expose("is2sap.templates.proyecto.rolesProyectoUsuario")
+    @require(predicates.has_any_permission('administracion',  'lider_proyecto'))
+    def rolesProyectoUsuario(self,id_proyecto, id_usuario, page=1):
+        """Metodo para listar todos los roles que tiene el usuario seleccionado"""
+        try:
+            usuario = DBSession.query(Usuario).get(id_usuario)
+            rolesProyecto = DBSession.query(Rol).filter_by(tipo="Sistema").all()
+            roles = []
+            for rol in rolesProyecto:
+                if usuario.roles.count(rol) == 0:
+                    roles.append(rol)
+            
+             
+            currentPage = paginate.Page(roles, page, items_per_page=10)
+        except SQLAlchemyError:
+            flash(_("No se pudo acceder a Roles de Usuario! SQLAlchemyError..."), 'error')
+            redirect("/admin/proyecto/usuarios", id_proyecto=id_proyecto)
+        except (AttributeError, NameError, ValueError):
+            flash(_("No se pudo acceder a Roles de Usuario! Hay Problemas con el servidor..."), 'error')
+            redirect("/admin/proyecto/usuarios", id_proyecto = id_proyecto)
+        return dict(roles=currentPage.items, page='rolesProyectoUsuario', currentPage=currentPage, usuario=usuario, id_proyecto = id_proyecto)
+
+    @expose("is2sap.templates.proyecto.agregarRolUsuario")
+    @require(predicates.has_any_permission('administracion',  'lider_proyecto'))
+    def agregarRolUsuario(self, id_usuario, id_proyecto, page=1):
+        """Metodo que permite listar los roles que se pueden agregar al usuario seleccionado"""
+        try:
+            usuario = DBSession.query(Usuario).get(id_usuario)
+            rolesUsuario = usuario.roles
+            rolesDB = DBSession.query(Rol).filter_by(tipo="Proyecto").all()
+            roles = []
+            for rol in rolesDB:
+                if rolesUsuario.count(rol)==0:
+                    roles.append(rol)
+
+            currentPage = paginate.Page(roles, page, items_per_page=10)
+        except SQLAlchemyError:
+            flash(_("No se pudo acceder a Agregar Roles! SQLAlchemyError..."), 'error')
+            redirect("/admin/proyecto/agregarRolUsuario", id_usuario=id_usuario, id_proyecto=id_proyecto)
+        except (AttributeError, NameError, ValueError):
+            flash(_("No se pudo acceder a Agregar Roles! Hay Problemas con el servidor..."), 'error')
+            redirect("/admin/proyecto/agregarRolUsuario", id_usuario=id_usuario, id_proyecto=id_proyecto)
+
+        return dict(roles=currentPage.items, page='agregar_roles', currentPage=currentPage, 
+                    id_usuario=id_usuario, usuario=usuario, id_proyecto=id_proyecto)
+
+    @expose()
+    @require(predicates.has_any_permission('administracion',  'lider_proyecto'))
+    def agregarRolUser(self, id_usuario, id_rol, id_proyecto):
+        """Metodo que realiza la agregacion de un rol al usuario selecccionado"""
+        try:
+            rol = DBSession.query(Rol).get(id_rol)
+            usuario = DBSession.query(Usuario).get(id_usuario)
+            rol.usuarios.append(usuario)
+            DBSession.flush()
+            transaction.commit()
+        except IntegrityError:
+            transaction.abort()
+            flash(_("No se pudo Asignar Rol! Hay Problemas con el servidor..."), 'error')
+            redirect("/admin/proyecto/rolesProyectoUsuario", id_proyecto=id_proyecto, id_usuario=id_usuario)
+        except SQLAlchemyError:
+            flash(_("No se pudo Asignar Rol! SQLAlchemyError..."), 'error')
+            redirect("/admin/proyecto/rolesProyectoUsuario", id_proyecto=id_proyecto, id_usuario=id_usuario)
+        except (AttributeError, NameError):
+            flash(_("No se pudo Asignar Rol! Hay Problemas con el servidor..."), 'error')
+            redirect("/admin/proyecto/rolesProyectoUsuario", id_proyecto=id_proyecto, id_usuario=id_usuario)
+        else:
+            flash(_("Rol asignado!"), 'ok')
+
+        redirect("/admin/proyecto/rolesProyectoUsuario", id_proyecto=id_proyecto, id_usuario=id_usuario)
+
+    @expose()
+    @require(predicates.has_any_permission('administracion',  'lider_proyecto'))
+    def eliminar_rol_usuario(self, id_usuario, id_rol, id_proyecto, **kw):
+        """Metodo que elimina un rol al usuario seleccionado"""
+        try:
+            rol = DBSession.query(Rol).get(id_rol)
+            usuario = DBSession.query(Usuario).get(id_usuario)
+            rol.usuarios.remove(usuario)
+            DBSession.flush()
+            transaction.commit()
+        except IntegrityError:
+            transaction.abort()
+            flash(_("No se pudo Desasignar Rol! Hay Problemas con el servidor..."), 'error')
+            redirect("/admin/proyecto/rolesProyectoUsuario",id_proyecto=id_proyecto, id_usuario=id_usuario)
+        except SQLAlchemyError:
+            flash(_("No se pudo Desasignar Rol! SQLAlchemyError..."), 'error')
+            redirect("/admin/proyecto/rolesProyectoUsuario",id_proyecto=id_proyecto, id_usuario=id_usuario)
+        except (AttributeError, NameError):
+            flash(_("No se pudo Desasignar Rol! Hay Problemas con el servidor..."), 'error')
+            redirect("/admin/proyecto/rolesProyectoUsuario",id_proyecto=id_proyecto, id_usuario=id_usuario)
+        else:
+            flash(_("Rol desasignado!"), 'ok')
+
+        redirect("/admin/proyecto/rolesProyectoUsuario",id_proyecto=id_proyecto, id_usuario=id_usuario)
+
+    @expose("is2sap.templates.proyecto.listadoPermisoFase")
+    @require(predicates.has_any_permission('administracion',  'lider_proyecto'))
+    def listadoPermisoFase(self, id_usuario, id_rol, id_proyecto, page=1):
+        """Metodo que permite listar los roles que se pueden agregar al usuario seleccionado"""
+        try:
+            roles = DBSession.query(Rol).get(id_rol)
+            rolesFases = roles.fases
+            rolesFases1 = roles.fases
+            proyecto = DBSession.query(Proyecto).get(id_proyecto)
+            listaFases =[]
+            
+            for fase in rolesFases:
+                if proyecto.fases.count(fase) == 0:
+                    rolesFases.remove(rol)
+            
+
+            for fase in proyecto.fases:
+                if rolesFases1.count(fase) == 0:
+                    listaFases.append(fase)
+            currentPage = paginate.Page(rolesFases, page, items_per_page=10)
+        except SQLAlchemyError:
+            flash(_("No se pudo acceder a Listado Fases! SQLAlchemyError..."), 'error')
+            redirect("/admin/proyecto/rolesProyectoUsuario", id_proyecto=id_proyecto, id_usuario=id_usuario)
+        except (AttributeError, NameError):
+            flash(_("No se pudo acceder a Agregar Roles! Hay Problemas con el servidor..."), 'error')
+            redirect("/admin/proyecto/rolesProyectoUsuario", id_proyecto=id_proyecto, id_usuario=id_usuario)
+
+        return dict(rolesFases=currentPage.items, page='agregar_roles', currentPage=currentPage, 
+                    id_usuario=id_usuario, id_proyecto=id_proyecto, fasesRestantes=listaFases, id_rol=id_rol)
+
+    @expose()
+    @require(predicates.has_any_permission('administracion',  'lider_proyecto'))
+    def agregarPermisoFase(self, id_usuario, id_rol, id_proyecto, id_fase, page=1):
+        """Metodo que permite listar los roles que se pueden agregar al usuario seleccionado"""
+        try:
+            roles = DBSession.query(Rol).get(id_rol)
+            fase = DBSession.query(Fase).get(id_fase)
+            usuario = DBSession.query(Usuario).get(id_usuario)
+            roles.fases.append(fase)
+            usuario.fases.append(fase)
+            
+            
+        except SQLAlchemyError:
+            redirect("/admin/proyecto/listadoPermisoFase", id_proyecto=id_proyecto, id_usuario=id_usuario, id_rol=id_rol)
+        except (AttributeError, NameError):
+            flash(_("No se pudo acceder a Agregar Roles! Hay Problemas con el servidor..."), 'error')
+            redirect("/admin/proyecto/listadoPermisoFase", id_proyecto=id_proyecto, id_usuario=id_usuario, id_rol=id_rol)
+
+        redirect("/admin/proyecto/listadoPermisoFase", id_proyecto=id_proyecto, id_usuario=id_usuario, id_rol=id_rol)
+
+
+    @expose()
+    @require(predicates.has_any_permission('administracion',  'lider_proyecto'))
+    def eliminarPermisoFase(self, id_usuario, id_rol, id_proyecto, id_fase, page=1):
+        """Metodo que permite listar los roles que se pueden agregar al usuario seleccionado"""
+        try:
+            roles = DBSession.query(Rol).get(id_rol)
+            fase = DBSession.query(Fase).get(id_fase)
+            usuario = DBSession.query(Usuario).get(id_usuario)
+            roles.fases.remove(fase)
+            usuario.fases.remove(fase)
+            
+            
+        except SQLAlchemyError:
+            flash(_("No se pudo acceder a Listado Fases! SQLAlchemyError..."), 'error')
+            redirect("/admin/proyecto/listadoPermisoFase", id_proyecto=id_proyecto, id_usuario=id_usuario, id_rol=id_rol)
+        except (AttributeError, NameError, ValueError):
+            redirect("/admin/proyecto/listadoPermisoFase", id_proyecto=id_proyecto, id_usuario=id_usuario, id_rol=id_rol)
+
+        redirect("/admin/proyecto/listadoPermisoFase", id_proyecto=id_proyecto, id_usuario=id_usuario, id_rol=id_rol)

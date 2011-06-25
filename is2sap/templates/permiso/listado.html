@@ -38,10 +38,10 @@
 
                             <td width="11%" align="left">
 			       <ul class="menu acciones">
-			          <li class="top">
+			          <li py:if="tg.predicates.has_any_permission('administracion')" class="top">
                                      <a href="#" class="top_link"><span>ACCIONES</span></a>
 				       <ul class="sub">
-				          <li>
+				          <li >
                                               <a href="${tg.url('/admin/permiso/editar', 
                                                       id_permiso=permiso.id_permiso)}">Editar		                    
 				              </a>

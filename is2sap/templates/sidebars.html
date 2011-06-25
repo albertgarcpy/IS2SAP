@@ -6,16 +6,16 @@
 	<div id="sb_top" class="sidebar">
 	    <h2>Menu de Administracion</h2>
 	    <ul class="links">
-	       <li> 
+	       <li py:if="tg.predicates.has_any_permission('administracion')"> 
                    <a href="${tg.url('/admin/usuario/listado')}">USUARIOS</a>
                </li>
-	       <li> 
+	       <li py:if="tg.predicates.has_any_permission('administracion', 'lider_proyecto')"> 
                    <a href="${tg.url('/admin/rol/listado')}">ROLES</a>
                </li>
-               <li> 
+               <li py:if="tg.predicates.has_any_permission('administracion', 'lider_proyecto')"> 
                    <a href="${tg.url('/admin/permiso/listado')}">PERMISOS</a>
-               </li>
-	       <li> 
+               </li >
+	       <li py:if="tg.predicates.has_any_permission('administracion', 'lider_proyecto')"> 
                    <a href="${tg.url('/admin/proyecto/listado')}">PROYECTOS</a>
                </li>
 	    </ul>

@@ -30,6 +30,7 @@ class RolController(BaseController):
         return dict(nombre_modelo='Rol', page='index_rol')      
 
     @expose('is2sap.templates.rol.nuevo')
+    @require(predicates.has_permission('administracion',  msg=l_('Solo para el Administrador')))
     def nuevo(self, **kw):
         """Despliega el formulario para añadir un nuevo Rol."""
         try:
@@ -45,10 +46,12 @@ class RolController(BaseController):
 
     @validate(crear_rol_form, error_handler=nuevo)
     @expose()
+    @require(predicates.has_permission('administracion',  msg=l_('Solo para el Administrador')))
     def add(self, **kw):
         """Metodo para agregar un registro a la base de datos """
         try:
             rol = Rol()
+            rol.tipo = kw['tipo']
             rol.nombre_rol = kw['nombre_rol']
             rol.descripcion = kw['descripcion']
             DBSession.add(rol)
@@ -70,6 +73,7 @@ class RolController(BaseController):
         redirect("/admin/rol/listado")
 
     @expose("is2sap.templates.rol.listado")
+    @require(predicates.has_any_permission('administracion', 'lider_proyecto',))
     def listado(self,page=1):
         """Metodo para listar todos los Roles existentes de la base de datos"""
         try:
@@ -85,12 +89,14 @@ class RolController(BaseController):
         return dict(roles=currentPage.items, page='listado_rol', currentPage=currentPage)
 
     @expose('is2sap.templates.rol.editar')
+    @require(predicates.has_permission('administracion',  msg=l_('Solo para el Administrador')))
     def editar(self, id_rol, **kw):
         """Metodo que rellena el formulario para editar los datos de un Rol"""
         try:
             tmpl_context.form = editar_rol_form
             traerRol = DBSession.query(Rol).get(id_rol)
             kw['id_rol'] = traerRol.id_rol
+            kw['tipo'] = traerRol.tipo
             kw['nombre_rol'] = traerRol.nombre_rol
             kw['descripcion'] = traerRol.descripcion
         except SQLAlchemyError:
@@ -104,10 +110,12 @@ class RolController(BaseController):
 
     @validate(editar_rol_form, error_handler=editar)
     @expose()
+    @require(predicates.has_permission('administracion',  msg=l_('Solo para el Administrador')))
     def update(self, **kw):        
         """Metodo que actualizar la base de datos"""
         try:
             rol = DBSession.query(Rol).get(kw['id_rol'])   
+            rol.tipo=kw['tipo']
             rol.nombre_rol=kw['nombre_rol']
             rol.descripcion = kw['descripcion']
             DBSession.flush()
@@ -128,6 +136,7 @@ class RolController(BaseController):
         redirect("/admin/rol/listado")
 
     @expose('is2sap.templates.rol.confirmar_eliminar')
+    @require(predicates.has_permission('administracion',  msg=l_('Solo para el Administrador')))
     def confirmar_eliminar(self, id_rol, **kw):
         """Despliega confirmacion de eliminacion"""
         try:
@@ -142,6 +151,7 @@ class RolController(BaseController):
         return dict(nombre_modelo='Rol', page='eliminar_rol', value=rol)
 
     @expose()
+    @require(predicates.has_permission('administracion',  msg=l_('Solo para el Administrador')))
     def delete(self, id_rol, **kw):
         """Metodo que elimina un registro de la base de datos"""
         try:
@@ -164,6 +174,7 @@ class RolController(BaseController):
         redirect("/admin/rol/listado")
 
     @expose("is2sap.templates.rol.listar_permisos")
+    @require(predicates.has_permission('administracion',  msg=l_('Solo para el Administrador')))
     def permisos(self, id_rol, page=1):
         """Metodo para listar todos los permisos que tiene el rol seleccionado"""
         try:
@@ -180,6 +191,7 @@ class RolController(BaseController):
         return dict(permisos=currentPage.items, page='listar_permisos', currentPage=currentPage, rol=rol)
 
     @expose()
+    @require(predicates.has_permission('administracion',  msg=l_('Solo para el Administrador')))
     def eliminar_rol_permiso(self, id_rol, id_permiso, **kw):
         """Metodo que elimina un permiso al rol seleccionado"""
         try:
@@ -204,6 +216,7 @@ class RolController(BaseController):
         redirect("/admin/rol/permisos", id_rol=id_rol)
 
     @expose("is2sap.templates.rol.agregar_permisos")
+    @require(predicates.has_permission('administracion',  msg=l_('Solo para el Administrador')))
     def rolPermiso(self, id_rol, page=1):
         """Metodo que permite listar los permisos que se pueden agregar al rol seleccionado"""
         try:
@@ -226,6 +239,7 @@ class RolController(BaseController):
                     currentPage=currentPage, id_rol=id_rol, rol=rol)
 
     @expose()
+    @require(predicates.has_permission('administracion',  msg=l_('Solo para el Administrador')))
     def agregarPermiso(self, id_rol, id_permiso):
         """Metodo que realiza la agregacion de un permiso al rol selecccionado"""
         try:

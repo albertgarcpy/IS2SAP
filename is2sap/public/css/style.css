@@ -617,7 +617,7 @@ clear:both;
 .acciones :hover ul :hover ul :hover ul ul,
 .acciones :hover ul :hover ul :hover ul :hover ul ul {position:absolute; left:-9999px; top:-9999px; width:0; height:0; margin:0; padding:0; list-style:none;}
 
-.acciones :hover ul.sub {left:-29px; top:0; right:0px; background: #fff; padding:3px 0; border:1px solid #95d2ee; white-space:nowrap; width:110px; height:auto;}
+.acciones :hover ul.sub {left:-15px; top:0; right:0px; background: #fff; padding:3px 0; border:1px solid #95d2ee; white-space:nowrap; width:110px; height:auto;}
 .acciones :hover ul.sub li {display:block; height:20px; position:relative; float:left; width:100px;}
 .acciones :hover ul.sub li a {font-weight:normal;display:block; font-size:12px; height:20px; width:106px; line-height:20px; text-indent:5px; color:#000; text-decoration:none; border:3px solid #fff; border-width:0 0 0 3px;}
 .acciones :hover ul.sub li a.fly {background:#fff url(images/arrow.gif) 80px 7px no-repeat;}
@@ -659,7 +659,7 @@ clear:both;
 .fasesproyecto :hover ul :hover ul :hover ul ul,
 .fasesproyecto :hover ul :hover ul :hover ul :hover ul ul {position:absolute; left:-9999px; top:-9999px; width:0; height:0; margin:0; padding:0; list-style:none;}
 
-.fasesproyecto :hover ul.sub {left:0px; top:0; right:0px; background: #fff; padding:3px 0; border:1px solid #95d2ee; white-space:nowrap; width:65px; height:auto;}
+.fasesproyecto :hover ul.sub {left:-5px; top:0; right:0px; background: #fff; padding:3px 0; border:1px solid #95d2ee; white-space:nowrap; width:65px; height:auto;}
 .fasesproyecto :hover ul.sub li {display:block; height:20px; position:relative; float:left; width:60px;}
 .fasesproyecto :hover ul.sub li a {font-weight:normal;display:block; font-size:12px; height:20px; width:60px; line-height:20px; text-indent:5px; color:#000; text-decoration:none; border:3px solid #fff; border-width:0 0 0 3px;}
 .fasesproyecto :hover ul.sub li a.fly {background:#fff url(images/arrow.gif) 80px 7px no-repeat;}

@@ -1,0 +1,58 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:py="http://genshi.edgewall.org/"
+      xmlns:xi="http://www.w3.org/2001/XInclude">
+
+      <xi:include href="master.html"/>
+      <xi:include href="menuProyecto.html"/>
+
+    <head>
+          <meta content="text/html; charset=UTF-8" http-equiv="content-type" py:replace="''"/>
+          <title>Opciones de Roles para ${usuario.nombre_usuario}</title>
+    </head>
+
+    <body>
+
+            <h2>Opciones de Roles para <div style="color:green"> ${usuario.nombre_usuario}</div></h2>	
+            ${menu_rol_usuario_agregar(usuario.id_usuario, id_proyecto)}
+
+	    <table border="1" width="100%">
+		<tr style="color: purple; font-size: 11pt" align="center" >
+<!--
+		    <th>ID</th>
+-->
+		    <th align="center">Nombre</th>
+		    <th align="center">Descripcion</th>
+		    <th align="center">Asignar</th>				
+		</tr>
+
+		<py:for each="rol in roles">
+			<tr>
+<!--
+			    <td>${rol.id_rol}</td>
+-->
+			    <td width="40%" align="left">${rol.nombre_rol}</td>
+			    <td width="50%" align="left">${rol.descripcion}</td>
+			    <td width="10%" align="center"> 
+				 <a href="${tg.url('/admin/proyecto/agregarRolUser', 
+                                          id_usuario=id_usuario, id_rol=rol.id_rol, id_proyecto=id_proyecto)}">
+				    <input class="alignAgregarRolesUsuario" name="agregarRol" type="button" value=""/>
+				 </a>
+			    </td>
+
+			</tr>
+		</py:for>
+	    </table>
+
+	    <p class="pagelist">
+		<a class="prevPage" href="${tg.url('/admin/usuario/rolUsuario',page=currentPage.previous_page,
+                                          id_usuario=usuario.id_usuario)}">&nbsp;</a>
+		${currentPage.pager(format='~3~', page_param='page', show_if_single_page=True)}
+		<a class="nextPage" href="${tg.url('/admin/usuario/rolUsuario',page=currentPage.next_page,
+                                          id_usuario=usuario.id_usuario)}">&nbsp;</a>
+	    </p>
+
+    </body>
+</html>

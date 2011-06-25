@@ -31,6 +31,7 @@ class FaseController(BaseController):
         return dict(nombre_modelo='Fase', page='index_fase')     
 
     @expose('is2sap.templates.fase.nuevo')
+    @require(predicates.has_any_permission('administracion',  'lider_proyecto'))
     def nuevoDesdeProyecto(self, id_proyecto, **kw):
         """Despliega el formulario para añadir una fase al proyecto."""
         try:
@@ -61,6 +62,7 @@ class FaseController(BaseController):
 
     @validate(crear_fase_form, error_handler=nuevoDesdeProyecto)
     @expose()
+    @require(predicates.has_any_permission('administracion',  'lider_proyecto'))
     def add(self, **kw):
         """Metodo para agregar un registro a la base de datos """
         try:
@@ -89,6 +91,7 @@ class FaseController(BaseController):
         redirect("/admin/fase/listadoFasesPorProyecto", id_proyecto=kw['id_proyecto'])
 
     @expose("is2sap.templates.fase.listadoFasesPorProyecto")
+    @require(predicates.has_any_permission('administracion',  'lider_proyecto'))
     def listadoFasesPorProyecto(self,id_proyecto, page=1):
         """Metodo para listar las Fases de un proyecto """
         try:         
@@ -107,6 +110,7 @@ class FaseController(BaseController):
                     nombre_proyecto=nombreProyecto, id_proyecto=id_proyecto, currentPage=currentPage)
 
     @expose('is2sap.templates.fase.editar')
+    @require(predicates.has_any_permission('administracion',  'lider_proyecto'))
     def editar(self, id_proyecto, id_fase, **kw):
         """Metodo que rellena el formulario para editar los datos de una Fase"""
         try:
@@ -135,6 +139,7 @@ class FaseController(BaseController):
 
     @validate(editar_fase_form, error_handler=editar)
     @expose()
+    @require(predicates.has_any_permission('administracion',  'lider_proyecto'))
     def update(self, **kw):        
         """Metodo que actualiza la fase en la base de datos"""
         try:
@@ -160,6 +165,7 @@ class FaseController(BaseController):
         redirect("/admin/fase/listadoFasesPorProyecto", id_proyecto=kw['id_proyecto'])
 
     @expose('is2sap.templates.fase.confirmar_eliminar')
+    @require(predicates.has_any_permission('administracion',  'lider_proyecto'))
     def confirmar_eliminar(self, id_proyecto, id_fase, **kw):
         """Despliega confirmacion de eliminacion"""
         try:
@@ -180,6 +186,7 @@ class FaseController(BaseController):
         return dict(nombre_modelo='Fase', page='eliminar_fase', value=fase)
 
     @expose()
+    @require(predicates.has_any_permission('administracion',  'lider_proyecto'))
     def delete(self, id_proyecto, id_fase, **kw):
         """ Metodo que elimina un registro de la base de datos 
             Parametros:

@@ -35,6 +35,20 @@ __all__ = ['Usuario','Rol','Permiso','Proyecto', 'Fase', 'TipoItem', 'Atributo',
            'EstadoFase', 'Item', 'LineaBase', 'ItemDetalle', 'ItemHistorial', 'ItemDetalleHistorial','HistorialItem','RelacionItem']
 
 
+##----------------------------- Tabla de Asociacion "Rol_Fase"-----------------------------------
+Rol_Fase = Table(u'Rol_Fase', metadata,
+    Column(u'id_rol', INTEGER(), ForeignKey('Rol.id_rol',
+        onupdate="CASCADE", ondelete="CASCADE"), primary_key=True, nullable=False),
+    Column(u'id_fase', INTEGER(), ForeignKey('Fase.id_fase',
+        onupdate="CASCADE", ondelete="CASCADE"), primary_key=True, nullable=False),
+)
+##----------------------------- Tabla de Asociacion "Usuario_Fase"-----------------------------------
+Usuario_Fase = Table(u'Usuario_Fase', metadata,
+    Column(u'id_usuario', INTEGER(), ForeignKey('Usuario.id_usuario',
+        onupdate="CASCADE", ondelete="CASCADE"), primary_key=True, nullable=False),
+    Column(u'id_fase', INTEGER(), ForeignKey('Fase.id_fase',
+        onupdate="CASCADE", ondelete="CASCADE"), primary_key=True, nullable=False),
+)
 ##----------------------------- Tabla de Asociacion "Rol_Permiso"-----------------------------------
 Rol_Permiso = Table(u'Rol_Permiso', metadata,
     Column(u'id_rol', INTEGER(), ForeignKey('Rol.id_rol',
@@ -112,6 +126,7 @@ unicode_error=None, _warn_on_bytestring=False), unique=True, nullable=False)
 
 
     proyectos = relationship('Proyecto', secondary=Proyecto_Usuario, backref='usuarios')
+    fases = relationship('Fase', secondary=Usuario_Fase, backref='usuarios') 
 
     #Special methods
     def __repr__(self):
@@ -191,10 +206,12 @@ class Rol(DeclarativeBase):
     id_rol = Column('id_rol', INTEGER(), primary_key=True, nullable=False)
     nombre_rol = Column('nombre', VARCHAR(length=None, convert_unicode=False, assert_unicode=None, unicode_error=None, _warn_on_bytestring=False), nullable=False)
     descripcion = Column('descripcion', VARCHAR(length=None, convert_unicode=False, assert_unicode=None, unicode_error=None, _warn_on_bytestring=False))
+    tipo = Column('tipo', VARCHAR(length=None, convert_unicode=False, assert_unicode=None, unicode_error=None, _warn_on_bytestring=False), nullable=False)
 
     #Relations
     usuarios = relationship('Usuario', secondary=Rol_Usuario, backref='roles')
     proyectos = relationship('Proyecto', secondary=Proyecto_Rol, backref='roles')
+    fases = relationship('Fase', secondary=Rol_Fase, backref='roles')
 
     #Special methods
     def __repr__(self):

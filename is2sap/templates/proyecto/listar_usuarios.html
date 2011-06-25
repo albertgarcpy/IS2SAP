@@ -24,7 +24,7 @@
 -->
 		    <th align="center">Nombre y Apellido</th>
 		    <th align="center">Nombre de Usuario</th>
-		    <th align="center">Desasignar</th>		
+		    <th align="center">Acciones</th>		
 		</tr>
 
 		<py:for each="usuario in usuarios">
@@ -35,11 +35,20 @@
 			    <td width="50%" align="left">${usuario.nombre + ' ' + usuario.apellido}</td>
 			    <td width="38%" align="left">${usuario.nombre_usuario}</td>
 
-			    <td width="12%" align="center"> 
-				 <a href="${tg.url('/admin/proyecto/eliminar_usuario_proyecto', 
-                                         id_proyecto=proyecto.id_proyecto, id_usuario=usuario.id_usuario)}">
-				    <input class="alignEliminar" name="eliminar" type="button" value=""/>
-				 </a>
+			    <td width="11%" align="center"> 
+                <ul class="menu acciones">
+			       <li class="top">
+                                  <a href="#" class="top_link"><span>ACCIONES</span></a>
+				    <ul class="sub">
+				       <li><a href="${tg.url('/admin/proyecto/eliminar_usuario_proyecto', 
+                                         id_proyecto=proyecto.id_proyecto, id_usuario=usuario.id_usuario)}">Desasignar		                    
+				           </a></li>					
+						<li><a href="${tg.url('/admin/proyecto/rolesProyectoUsuario',id_proyecto=proyecto.id_proyecto, id_usuario=usuario.id_usuario)}">Roles Usuario		                    
+				           </a></li>
+				    </ul>
+				    </li>	
+			     </ul>
+				
 			    </td>
 
 			</tr>

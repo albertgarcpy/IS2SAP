@@ -1,15 +1,15 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns:py="http://genshi.edgewall.org/"
       xmlns:xi="http://www.w3.org/2001/XInclude"
-      py:strip="">
+      py:strip="">   
 
      <py:def function="menu_superior">  
 	 <div class="menu bubplastic horizontal aqua">
 	     <ul>
-		 <li> 
+		 <li > 
                      <span class="menu_r">
-                           <a href="${tg.url('/admin/permiso/nuevo')}" class="${('', 'active')[defined('page') and page=='nuevo_permiso']}">
-                              <span class="menu_ar">Nuevo</span>
-                           </a>
+                           <a py:if="tg.predicates.has_any_permission('administracion')" href="${tg.url('/admin/permiso/nuevo')}" class="${('', 'active')[defined('page') and page=='nuevo_permiso']}"><span  class="menu_ar">Nuevo</span></a>
                            <a href="${tg.url('/admin')}" class="${('', 'active')[defined('page') and page=='index']}">
                               <span class="menu_ar">Volver</span>
                            </a>

@@ -6,7 +6,7 @@
 	<div id="sb_desa_top" class="sidebar">
 	    <h2>Menu Desarrollo</h2>
 	    <ul class="links">
-               <li>
+               <li py:if="tg.predicates.has_any_permission('administracion', 'lider_proyecto', 'desarrollo')">
                    <a href="${tg.url('/item/proyectos')}">PROYECTOS INICIADOS</a>
                </li>
 	    </ul>
