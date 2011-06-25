@@ -47,9 +47,9 @@
             </table>
 
 	    <p class="pagelist">
-	       <a class="prevPage" href="/list?page=${currentPage.previous_page}">&nbsp;</a>
+	       <a class="prevPage" href="${tg.url('/admin/linea_base/proyectos', page=currentPage.previous_page)}">&nbsp;</a>
 		  ${currentPage.pager(format='~3~', page_param='page', show_if_single_page=True)}
-	       <a class="nextPage" href="/list?page=${currentPage.next_page}">&nbsp;</a>
+	       <a class="nextPage" href="${tg.url('/admin/linea_base/proyectos', page=currentPage.next_page)}">&nbsp;</a>
 	    </p>
 
     </body>

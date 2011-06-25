@@ -32,9 +32,9 @@
              </table>
 
 	     <p class="pagelist">
-		<a class="prevPage" href="/list?page=${currentPage.previous_page}">&nbsp;</a>
+		<a class="prevPage" href="${tg.url('/admin/linea_base/listado_detalles_items_linea_base_historial', page=currentPage.previous_page, id_proyecto=id_proyecto, id_fase=id_fase, id_linea_base=id_linea_base, id_item=id_item, version=version)}">&nbsp;</a>
 		${currentPage.pager(format='~3~', page_param='page', show_if_single_page=True)}
-		<a class="nextPage" href="/list?page=${currentPage.next_page}">&nbsp;</a>
+		<a class="nextPage" href="${tg.url('/admin/linea_base/listado_detalles_items_linea_base_historial', page=currentPage.next_page, id_proyecto=id_proyecto, id_fase=id_fase, id_linea_base=id_linea_base, id_item=id_item, version=version)}">&nbsp;</a>
 	     </p>
     </body>
 </html>
