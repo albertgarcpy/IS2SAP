@@ -44,8 +44,6 @@ __all__ = ['ItemController']
 
 class ItemController(BaseController):
 
-    allow_only = has_permission('edicion',
-                                msg=l_('Solo para usuarios con permiso "edicion"'))
     
     @expose('is2sap.templates.item.index')
     def index(self):
@@ -1133,7 +1131,7 @@ class ItemController(BaseController):
         print "Lista de Relaciones", listaRelaciones
         ## traer las fases del proyecto y luego los items de las fases, sumar por fases, y luego un total
         fases = DBSession.query(Fase).filter_by(id_proyecto=id_proyecto).order_by(Fase.id_fase)
-
+        sumaImpactoPorFases=[]
         graph = pydot.Dot(graph_type='digraph')
         for fase in fases:
             itemsDeFase = DBSession.query(Item).join(TipoItem).join(Fase).filter(Fase.id_fase==fase.id_fase).all()
@@ -1141,6 +1139,7 @@ class ItemController(BaseController):
             for item in itemsDeFase:
                 if itemsAfectados.count(item.id_item) == 1:
                     impactoPorFase = impactoPorFase + int(item.complejidad)
+            sumaImpactoPorFases.append([fase,impactoPorFase])
             impactoTotal = impactoTotal + impactoPorFase
             print "El impacto de la "+fase.nombre+" es :", impactoPorFase
         print "El impacto total es :", impactoTotal   
@@ -1150,4 +1149,4 @@ class ItemController(BaseController):
         for x in listaRelaciones:
             graph.add_edge(pydot.Edge(str(x[0]), str(x[1])))
         graph.write_png('../IS2SAP/is2sap/public/images/example2_graph.png')
-        return dict(nombre_modelo="CalculoImpacto")
+        return dict(nombre_modelo="CalculoImpacto", impactoTotal=impactoTotal, sumaImpactoPorFases=sumaImpactoPorFases)

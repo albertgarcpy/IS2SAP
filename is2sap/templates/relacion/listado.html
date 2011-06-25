@@ -23,11 +23,14 @@
         <h3>Antecesores</h3>
         <table border="1">
           <tr style="color: purple; font-size: 11pt" >
-            <th>Items</th>		    
+            <th>Item</th>
+
+
           </tr>
           <py:for each="antecesor in antecesores">
             <tr>           
               <td>${antecesor.id_item1}</td>
+
               <td> <a href="${tg.url('/relacion/delete', id_relacion = antecesor.id_relacion, idItemActual = idItemActual, id_proyecto=id_proyecto, id_fase=id_fase, id_tipo_item=id_tipo_item)}"> 
                      <input class="alignEliminar" name="eliminar" type="button" value="" />
                    </a>				 
@@ -42,7 +45,8 @@
         <h3>Hijos</h3>
         <table border="1">
           <tr style="color: purple; font-size: 11pt">
-            <th>Items</th>		    
+            <th>Item</th>
+       
           </tr>
           <py:for each="hijo in hijos">
             <tr>           
