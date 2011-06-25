@@ -274,6 +274,10 @@ form.loginfields input#submit
 	background: #CCFFCC url('../images/delete.png') top center no-repeat;
 	width: 50px
 }
+.alignEliminarArchivo {
+	background: #CCFFCC url('../images/delete.png') top center no-repeat;
+	width: 132px
+}
 
 .alignListarDetalleItem {
 	background: #CCFFCC url('../images/listado_detalles.jpeg') top center no-repeat;

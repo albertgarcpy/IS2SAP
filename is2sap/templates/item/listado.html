@@ -92,9 +92,14 @@
 					 <li>
                                              <a href="${tg.url('/item/listado_revertir', id_proyecto=id_proyecto, id_fase=id_fase,
                                                       id_tipo_item=id_tipo_item, id_item=item.id_item)}">Revertibles
-					     </a></li>
+					     </a>
+                                         </li>
 					 <li>
                                              <a href="${tg.url('/relacion/listado', id_item=item.id_item, id_proyecto=id_proyecto, 							     id_fase=id_fase,id_tipo_item=id_tipo_item)}">Relaciones
+					     </a>
+                                         </li>
+					 <li>
+                                             <a href="${tg.url('/item/archivos_adjuntos', id_item=item.id_item, id_proyecto=id_proyecto, 							     id_fase=id_fase, id_tipo_item=id_tipo_item)}">Archivos
 					     </a>
                                          </li>
 				       </ul>

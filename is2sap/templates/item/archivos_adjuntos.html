@@ -1,0 +1,55 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+                      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:py="http://genshi.edgewall.org/"
+      xmlns:xi="http://www.w3.org/2001/XInclude">
+
+      <xi:include href="master.html"/>
+      <xi:include href="menuItems.html"/>
+
+     <head>
+	   <meta content="text/html; charset=UTF-8" http-equiv="content-type" py:replace="''"/>
+	   <title>Archivos Adjuntos de ${codigo_item}</title>
+     </head>
+
+     <body>
+	   <h2>Archivos Adjuntos de <div style="color:green"> ${codigo_item}</div></h2>
+	   ${menu_superior_archivos_adjuntos(id_proyecto, id_fase, id_tipo_item)}
+
+           <form method="post" action="save" enctype="multipart/form-data">
+                 <br />
+                 <br />
+                 Seleccionar Archivo:<br />
+                 <input type="file" name="userfile" /> <br/><br/>
+                 <input type="submit" value="Guardar Archivo" />
+           </form>
+
+           <table border="1" width="100%">
+                 <tr style="color: purple; font-size: 11pt" align="center" >
+                     <th align="center">Nombre del Archivo</th>
+                     <th align="center">Visualizar Archivo</th>
+                     <th align="center">Eliminar</th>
+                 </tr>
+
+                 <br/><br/>
+
+                 <py:for each="archivo in current_files">
+                     <tr>
+                         <td width="58%" align="left">${archivo.nombre_archivo}</td>
+                         <td width="27%" align="center"> 
+                            <a href="/item/view/${archivo.id_item_archivo}">CLICK PARA VISUALIZAR ARCHIVO</a>
+                         </td>
+                         <td width="15%" align="center"> 
+                            <a href="${tg.url('/item/eliminar_archivo', fileid=archivo.id_item_archivo)}">
+                              <input class="alignEliminarArchivo" name="eliminar" type="button" value=""/>
+                            </a>
+                         </td>
+                     </tr>
+                 </py:for>
+           </table>
+
+
+
+     </body>
+</html>

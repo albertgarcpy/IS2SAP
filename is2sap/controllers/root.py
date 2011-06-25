@@ -41,6 +41,11 @@ class RootController(BaseController):
         """Handle the front-page."""
         return dict(page='index')
 
+    @expose('is2sap.templates.despedida')
+    def despedida(self):
+        """Handle the front-page."""
+        return dict(page='despedida')
+
     @expose('is2sap.templates.configura')
     def configura(self):
         """Handle the 'about' page."""
@@ -100,4 +105,4 @@ class RootController(BaseController):
 
         """
         flash(_('Hasta luego!'))
-        redirect("/index")
+        redirect("/despedida")
