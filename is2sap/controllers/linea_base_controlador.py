@@ -101,7 +101,7 @@ class LineaBaseController(BaseController):
 
 
     @expose('is2sap.templates.linea_base.editar')
-    def editar(self, id_fase, id_linea_base, **kw):
+    def editar(self, id_proyecto, id_fase, id_linea_base, **kw):
         """Metodo que rellena el formulario para editar los datos de un Línea Base"""
 	traerLineaBase=DBSession.query(LineaBase).get(id_linea_base)
 	if traerLineaBase.estado=='Aprobado':

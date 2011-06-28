@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+          "DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>is2sap.controllers.otros_controlador</title>
+  <link rel="stylesheet" href="epydoc.css" type="text/css" />
+  <script type="text/javascript" src="epydoc.js"></script>
+</head>
+
+<body bgcolor="white" text="black" link="blue" vlink="#204080"
+      alink="#204080">
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+      <th class="navbar" width="100%"></th>
+  </tr>
+</table>
+<table width="100%" cellpadding="0" cellspacing="0">
+  <tr valign="top">
+    <td width="100%">
+      <span class="breadcrumbs">
+        Package&nbsp;is2sap ::
+        <a href="is2sap.controllers-module.html">Package&nbsp;controllers</a> ::
+        Module&nbsp;otros_controlador
+      </span>
+    </td>
+    <td>
+      <table cellpadding="0" cellspacing="0">
+        <!-- hide/show private -->
+        <tr><td align="right"><span class="options">[<a href="javascript:void(0);" class="privatelink"
+    onclick="toggle_private();">hide&nbsp;private</a>]</span></td></tr>
+        <tr><td align="right"><span class="options"
+            >[<a href="frames.html" target="_top">frames</a
+            >]&nbsp;|&nbsp;<a href="is2sap.controllers.otros_controlador-pysrc.html"
+            target="_top">no&nbsp;frames</a>]</span></td></tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<h1 class="epydoc">Source Code for <a href="is2sap.controllers.otros_controlador-module.html">Module is2sap.controllers.otros_controlador</a></h1>
+<pre class="py-src">
+<a name="L1"></a><tt class="py-lineno"> 1</tt>  <tt class="py-line"><tt class="py-comment"># -*- coding: utf-8 -*-</tt> </tt>
+<a name="L2"></a><tt class="py-lineno"> 2</tt>  <tt class="py-line"><tt class="py-docstring">"""Controlador de Otras Opciones para SAP"""</tt> </tt>
+<a name="L3"></a><tt class="py-lineno"> 3</tt>  <tt class="py-line"> </tt>
+<a name="L4"></a><tt class="py-lineno"> 4</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt class="py-name">tg</tt> <tt class="py-keyword">import</tt> <tt class="py-name">expose</tt><tt class="py-op">,</tt> <tt class="py-name">flash</tt><tt class="py-op">,</tt> <tt class="py-name">require</tt><tt class="py-op">,</tt> <tt class="py-name">url</tt><tt class="py-op">,</tt> <tt class="py-name">request</tt><tt class="py-op">,</tt> <tt class="py-name">redirect</tt> </tt>
+<a name="L5"></a><tt class="py-lineno"> 5</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt class="py-name">pylons</tt><tt class="py-op">.</tt><tt class="py-name">i18n</tt> <tt class="py-keyword">import</tt> <tt class="py-name">ugettext</tt> <tt class="py-keyword">as</tt> <tt class="py-name">_</tt><tt class="py-op">,</tt> <tt class="py-name">lazy_ugettext</tt> <tt class="py-keyword">as</tt> <tt class="py-name">l_</tt> </tt>
+<a name="L6"></a><tt class="py-lineno"> 6</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt class="py-name">tgext</tt><tt class="py-op">.</tt><tt id="link-0" class="py-name" targets="Variable is2sap.controllers.root.RootController.admin=is2sap.controllers.root.RootController-class.html#admin"><a title="is2sap.controllers.root.RootController.admin" class="py-name" href="#" onclick="return doclink('link-0', 'admin', 'link-0');">admin</a></tt><tt class="py-op">.</tt><tt class="py-name">tgadminconfig</tt> <tt class="py-keyword">import</tt> <tt class="py-name">TGAdminConfig</tt> </tt>
+<a name="L7"></a><tt class="py-lineno"> 7</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt class="py-name">tgext</tt><tt class="py-op">.</tt><tt id="link-1" class="py-name"><a title="is2sap.controllers.root.RootController.admin" class="py-name" href="#" onclick="return doclink('link-1', 'admin', 'link-0');">admin</a></tt><tt class="py-op">.</tt><tt class="py-name">controller</tt> <tt class="py-keyword">import</tt> <tt id="link-2" class="py-name" targets="Class is2sap.controllers.admin_controlador.AdminController=is2sap.controllers.admin_controlador.AdminController-class.html"><a title="is2sap.controllers.admin_controlador.AdminController" class="py-name" href="#" onclick="return doclink('link-2', 'AdminController', 'link-2');">AdminController</a></tt><tt class="py-op">,</tt> <tt class="py-name">AdminConfig</tt> </tt>
+<a name="L8"></a><tt class="py-lineno"> 8</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt class="py-name">repoze</tt><tt class="py-op">.</tt><tt class="py-name">what</tt> <tt class="py-keyword">import</tt> <tt class="py-name">predicates</tt> </tt>
+<a name="L9"></a><tt class="py-lineno"> 9</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt class="py-name">tg</tt> <tt class="py-keyword">import</tt> <tt class="py-name">tmpl_context</tt><tt class="py-op">,</tt> <tt class="py-name">validate</tt> </tt>
+<a name="L10"></a><tt class="py-lineno">10</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt class="py-name">webhelpers</tt> <tt class="py-keyword">import</tt> <tt class="py-name">paginate</tt> </tt>
+<a name="L11"></a><tt class="py-lineno">11</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt class="py-name">tg</tt><tt class="py-op">.</tt><tt id="link-3" class="py-name" targets="Package is2sap.controllers=is2sap.controllers-module.html"><a title="is2sap.controllers" class="py-name" href="#" onclick="return doclink('link-3', 'controllers', 'link-3');">controllers</a></tt> <tt class="py-keyword">import</tt> <tt class="py-name">RestController</tt><tt class="py-op">,</tt> <tt class="py-name">redirect</tt> </tt>
+<a name="L12"></a><tt class="py-lineno">12</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt class="py-name">repoze</tt><tt class="py-op">.</tt><tt class="py-name">what</tt><tt class="py-op">.</tt><tt class="py-name">predicates</tt> <tt class="py-keyword">import</tt> <tt class="py-name">has_permission</tt> </tt>
+<a name="L13"></a><tt class="py-lineno">13</tt>  <tt class="py-line"><tt class="py-keyword">import</tt> <tt class="py-name">formencode</tt> </tt>
+<a name="L14"></a><tt class="py-lineno">14</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt class="py-name">tw</tt> <tt class="py-keyword">import</tt> <tt class="py-name">forms</tt> </tt>
+<a name="L15"></a><tt class="py-lineno">15</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt class="py-name">tw</tt><tt class="py-op">.</tt><tt class="py-name">forms</tt> <tt class="py-keyword">import</tt> <tt class="py-name">TableForm</tt><tt class="py-op">,</tt> <tt class="py-name">Spacer</tt><tt class="py-op">,</tt> <tt class="py-name">TextField</tt><tt class="py-op">,</tt> <tt class="py-name">PasswordField</tt><tt class="py-op">,</tt> <tt class="py-name">CalendarDatePicker</tt><tt class="py-op">,</tt> <tt class="py-name">TextArea</tt><tt class="py-op">,</tt> <tt class="py-name">SingleSelectField</tt> </tt>
+<a name="L16"></a><tt class="py-lineno">16</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt class="py-name">tw</tt><tt class="py-op">.</tt><tt class="py-name">forms</tt><tt class="py-op">.</tt><tt class="py-name">fields</tt> <tt class="py-keyword">import</tt> <tt class="py-name">Button</tt><tt class="py-op">,</tt> <tt class="py-name">SubmitButton</tt><tt class="py-op">,</tt> <tt class="py-name">HiddenField</tt><tt class="py-op">,</tt> <tt class="py-name">CheckBox</tt><tt class="py-op">,</tt> <tt class="py-name">FileField</tt> </tt>
+<a name="L17"></a><tt class="py-lineno">17</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt class="py-name">tw</tt><tt class="py-op">.</tt><tt class="py-name">forms</tt><tt class="py-op">.</tt><tt class="py-name">validators</tt> <tt class="py-keyword">import</tt> <tt class="py-op">*</tt> </tt>
+<a name="L18"></a><tt class="py-lineno">18</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt class="py-name">sqlalchemy</tt><tt class="py-op">.</tt><tt class="py-name">orm</tt> <tt class="py-keyword">import</tt> <tt class="py-name">contains_eager</tt> </tt>
+<a name="L19"></a><tt class="py-lineno">19</tt>  <tt class="py-line"> </tt>
+<a name="L20"></a><tt class="py-lineno">20</tt>  <tt class="py-line"><tt class="py-keyword">import</tt> <tt class="py-name">os</tt> </tt>
+<a name="L21"></a><tt class="py-lineno">21</tt>  <tt class="py-line"><tt class="py-keyword">try</tt><tt class="py-op">:</tt> </tt>
+<a name="L22"></a><tt class="py-lineno">22</tt>  <tt class="py-line">    <tt class="py-keyword">from</tt> <tt class="py-name">hashlib</tt> <tt class="py-keyword">import</tt> <tt class="py-name">sha1</tt> </tt>
+<a name="L23"></a><tt class="py-lineno">23</tt>  <tt class="py-line"><tt class="py-keyword">except</tt> <tt class="py-name">ImportError</tt><tt class="py-op">:</tt> </tt>
+<a name="L24"></a><tt class="py-lineno">24</tt>  <tt class="py-line">    <tt class="py-name">sys</tt><tt class="py-op">.</tt><tt class="py-name">exit</tt><tt class="py-op">(</tt><tt class="py-string">'ImportError: No module named hashlib\n'</tt> </tt>
+<a name="L25"></a><tt class="py-lineno">25</tt>  <tt class="py-line">             <tt class="py-string">'If you are on python2.4 this library is not part of python. '</tt> </tt>
+<a name="L26"></a><tt class="py-lineno">26</tt>  <tt class="py-line">             <tt class="py-string">'Please install it. Example: easy_install hashlib'</tt><tt class="py-op">)</tt> </tt>
+<a name="L27"></a><tt class="py-lineno">27</tt>  <tt class="py-line"> </tt>
+<a name="L28"></a><tt class="py-lineno">28</tt>  <tt class="py-line"> </tt>
+<a name="L29"></a><tt class="py-lineno">29</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt class="py-name">is2sap</tt><tt class="py-op">.</tt><tt class="py-name">widgets</tt><tt class="py-op">.</tt><tt class="py-name">mi_validador</tt><tt class="py-op">.</tt><tt class="py-name">mi_validador</tt> <tt class="py-keyword">import</tt> <tt class="py-op">*</tt> </tt>
+<a name="L30"></a><tt class="py-lineno">30</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt class="py-name">is2sap</tt><tt class="py-op">.</tt><tt class="py-name">lib</tt><tt class="py-op">.</tt><tt class="py-name">base</tt> <tt class="py-keyword">import</tt> <tt class="py-name">BaseController</tt> </tt>
+<a name="L31"></a><tt class="py-lineno">31</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt class="py-name">is2sap</tt><tt class="py-op">.</tt><tt id="link-4" class="py-name" targets="Package is2sap.model=is2sap.model-module.html,Module is2sap.model.model=is2sap.model.model-module.html"><a title="is2sap.model
+is2sap.model.model" class="py-name" href="#" onclick="return doclink('link-4', 'model', 'link-4');">model</a></tt> <tt class="py-keyword">import</tt> <tt id="link-5" class="py-name" targets="Variable is2sap.model.DBSession=is2sap.model-module.html#DBSession"><a title="is2sap.model.DBSession" class="py-name" href="#" onclick="return doclink('link-5', 'DBSession', 'link-5');">DBSession</a></tt><tt class="py-op">,</tt> <tt id="link-6" class="py-name" targets="Variable is2sap.model.metadata=is2sap.model-module.html#metadata"><a title="is2sap.model.metadata" class="py-name" href="#" onclick="return doclink('link-6', 'metadata', 'link-6');">metadata</a></tt> </tt>
+<a name="L32"></a><tt class="py-lineno">32</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt class="py-name">is2sap</tt><tt class="py-op">.</tt><tt id="link-7" class="py-name"><a title="is2sap.model
+is2sap.model.model" class="py-name" href="#" onclick="return doclink('link-7', 'model', 'link-4');">model</a></tt><tt class="py-op">.</tt><tt id="link-8" class="py-name"><a title="is2sap.model
+is2sap.model.model" class="py-name" href="#" onclick="return doclink('link-8', 'model', 'link-4');">model</a></tt> <tt class="py-keyword">import</tt> <tt id="link-9" class="py-name" targets="Class is2sap.model.autogenerado_completo.Proyecto=is2sap.model.autogenerado_completo.Proyecto-class.html,Class is2sap.model.model.Proyecto=is2sap.model.model.Proyecto-class.html"><a title="is2sap.model.autogenerado_completo.Proyecto
+is2sap.model.model.Proyecto" class="py-name" href="#" onclick="return doclink('link-9', 'Proyecto', 'link-9');">Proyecto</a></tt><tt class="py-op">,</tt> <tt id="link-10" class="py-name" targets="Class is2sap.model.model.Usuario=is2sap.model.model.Usuario-class.html"><a title="is2sap.model.model.Usuario" class="py-name" href="#" onclick="return doclink('link-10', 'Usuario', 'link-10');">Usuario</a></tt> </tt>
+<a name="L33"></a><tt class="py-lineno">33</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt class="py-name">is2sap</tt> <tt class="py-keyword">import</tt> <tt id="link-11" class="py-name"><a title="is2sap.model
+is2sap.model.model" class="py-name" href="#" onclick="return doclink('link-11', 'model', 'link-4');">model</a></tt> </tt>
+<a name="L34"></a><tt class="py-lineno">34</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt class="py-name">is2sap</tt><tt class="py-op">.</tt><tt id="link-12" class="py-name"><a title="is2sap.controllers" class="py-name" href="#" onclick="return doclink('link-12', 'controllers', 'link-3');">controllers</a></tt><tt class="py-op">.</tt><tt id="link-13" class="py-name" targets="Module is2sap.controllers.secure=is2sap.controllers.secure-module.html"><a title="is2sap.controllers.secure" class="py-name" href="#" onclick="return doclink('link-13', 'secure', 'link-13');">secure</a></tt> <tt class="py-keyword">import</tt> <tt id="link-14" class="py-name" targets="Class is2sap.controllers.secure.SecureController=is2sap.controllers.secure.SecureController-class.html"><a title="is2sap.controllers.secure.SecureController" class="py-name" href="#" onclick="return doclink('link-14', 'SecureController', 'link-14');">SecureController</a></tt> </tt>
+<a name="L35"></a><tt class="py-lineno">35</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt class="py-name">is2sap</tt><tt class="py-op">.</tt><tt id="link-15" class="py-name"><a title="is2sap.controllers" class="py-name" href="#" onclick="return doclink('link-15', 'controllers', 'link-3');">controllers</a></tt><tt class="py-op">.</tt><tt id="link-16" class="py-name" targets="Module is2sap.controllers.error=is2sap.controllers.error-module.html,Variable is2sap.controllers.root.RootController.error=is2sap.controllers.root.RootController-class.html#error"><a title="is2sap.controllers.error
+is2sap.controllers.root.RootController.error" class="py-name" href="#" onclick="return doclink('link-16', 'error', 'link-16');">error</a></tt> <tt class="py-keyword">import</tt> <tt id="link-17" class="py-name" targets="Class is2sap.controllers.error.ErrorController=is2sap.controllers.error.ErrorController-class.html"><a title="is2sap.controllers.error.ErrorController" class="py-name" href="#" onclick="return doclink('link-17', 'ErrorController', 'link-17');">ErrorController</a></tt> </tt>
+<a name="L36"></a><tt class="py-lineno">36</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt class="py-name">is2sap</tt><tt class="py-op">.</tt><tt class="py-name">widgets</tt><tt class="py-op">.</tt><tt class="py-name">cambio_contrasenha_form</tt> <tt class="py-keyword">import</tt> <tt class="py-name">editar_contrasenha_form</tt> </tt>
+<a name="L37"></a><tt class="py-lineno">37</tt>  <tt class="py-line"> </tt>
+<a name="L38"></a><tt class="py-lineno">38</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt class="py-name">paste</tt><tt class="py-op">.</tt><tt class="py-name">request</tt> <tt class="py-keyword">import</tt> <tt class="py-name">construct_url</tt><tt class="py-op">,</tt> <tt class="py-name">parse_formvars</tt> </tt>
+<a name="L39"></a><tt class="py-lineno">39</tt>  <tt class="py-line"> </tt>
+<a name="L40"></a><tt class="py-lineno">40</tt>  <tt class="py-line"><tt class="py-name">__all__</tt> <tt class="py-op">=</tt> <tt class="py-op">[</tt><tt class="py-string">'OtrosController'</tt><tt class="py-op">]</tt> </tt>
+<a name="OtrosController"></a><div id="OtrosController-def"><a name="L41"></a><tt class="py-lineno">41</tt>  <tt class="py-line"> </tt>
+<a name="L42"></a><tt class="py-lineno">42</tt> <a class="py-toggle" href="#" id="OtrosController-toggle" onclick="return toggle('OtrosController');">-</a><tt class="py-line"><tt class="py-keyword">class</tt> <a class="py-def-name" href="is2sap.controllers.otros_controlador.OtrosController-class.html">OtrosController</a><tt class="py-op">(</tt><tt class="py-base-class">BaseController</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="OtrosController-collapsed" style="display:none;" pad="++" indent="++++"></div><div id="OtrosController-expanded"><a name="L43"></a><tt class="py-lineno">43</tt>  <tt class="py-line"> </tt>
+<a name="L44"></a><tt class="py-lineno">44</tt>  <tt class="py-line">    <tt class="py-comment">#allow_only = has_permission('edicion',</tt> </tt>
+<a name="L45"></a><tt class="py-lineno">45</tt>  <tt class="py-line">    <tt class="py-comment">#                            msg=l_('Solo para usuarios con permiso "edicion"'))</tt> </tt>
+<a name="L46"></a><tt class="py-lineno">46</tt>  <tt class="py-line">     </tt>
+<a name="L47"></a><tt class="py-lineno">47</tt>  <tt class="py-line">    <tt class="py-decorator">@</tt><tt class="py-decorator">expose</tt><tt class="py-op">(</tt><tt class="py-string">'is2sap.templates.otros.index'</tt><tt class="py-op">)</tt> </tt>
+<a name="OtrosController.index"></a><div id="OtrosController.index-def"><a name="L48"></a><tt class="py-lineno">48</tt> <a class="py-toggle" href="#" id="OtrosController.index-toggle" onclick="return toggle('OtrosController.index');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="is2sap.controllers.otros_controlador.OtrosController-class.html#index">index</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="OtrosController.index-collapsed" style="display:none;" pad="++" indent="++++++++"></div><div id="OtrosController.index-expanded"><a name="L49"></a><tt class="py-lineno">49</tt>  <tt class="py-line">        <tt class="py-docstring">"""Muestra la pantalla inicial"""</tt> </tt>
+<a name="L50"></a><tt class="py-lineno">50</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">dict</tt><tt class="py-op">(</tt><tt id="link-18" class="py-name" targets="Variable is2sap.model.autogenerado.Permiso.nombre=is2sap.model.autogenerado.Permiso-class.html#nombre,Variable is2sap.model.autogenerado_completo.Atributo.nombre=is2sap.model.autogenerado_completo.Atributo-class.html#nombre,Variable is2sap.model.autogenerado_completo.Permiso.nombre=is2sap.model.autogenerado_completo.Permiso-class.html#nombre,Variable is2sap.model.autogenerado_completo.Proyecto.nombre=is2sap.model.autogenerado_completo.Proyecto-class.html#nombre,Variable is2sap.model.autogenerado_completo.Rol.nombre=is2sap.model.autogenerado_completo.Rol-class.html#nombre,Variable is2sap.model.autogenerado_completo.TipoItem.nombre=is2sap.model.autogenerado_completo.TipoItem-class.html#nombre,Variable is2sap.model.model.Atributo.nombre=is2sap.model.model.Atributo-class.html#nombre,Variable is2sap.model.model.LineaBase.nombre=is2sap.model.model.LineaBase-class.html#nombre,Variable is2sap.model.model.LineaBaseHistorial.nombre=is2sap.model.model.LineaBaseHistorial-class.html#nombre,Variable is2sap.model.model.Proyecto.nombre=is2sap.model.model.Proyecto-class.html#nombre,Variable is2sap.model.model.TipoItem.nombre=is2sap.model.model.TipoItem-class.html#nombre,Variable is2sap.model.model.Usuario.nombre=is2sap.model.model.Usuario-class.html#nombre"><a title="is2sap.model.autogenerado.Permiso.nombre
+is2sap.model.autogenerado_completo.Atributo.nombre
+is2sap.model.autogenerado_completo.Permiso.nombre
+is2sap.model.autogenerado_completo.Proyecto.nombre
+is2sap.model.autogenerado_completo.Rol.nombre
+is2sap.model.autogenerado_completo.TipoItem.nombre
+is2sap.model.model.Atributo.nombre
+is2sap.model.model.LineaBase.nombre
+is2sap.model.model.LineaBaseHistorial.nombre
+is2sap.model.model.Proyecto.nombre
+is2sap.model.model.TipoItem.nombre
+is2sap.model.model.Usuario.nombre" class="py-name" href="#" onclick="return doclink('link-18', 'nombre', 'link-18');">nombre</a></tt><tt class="py-op">=</tt><tt class="py-string">'Opciones'</tt><tt class="py-op">,</tt> <tt class="py-name">page</tt><tt class="py-op">=</tt><tt class="py-string">'index_otros'</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L51"></a><tt class="py-lineno">51</tt>  <tt class="py-line"> </tt>
+<a name="L52"></a><tt class="py-lineno">52</tt>  <tt class="py-line">    <tt class="py-decorator">@</tt><tt class="py-decorator">expose</tt><tt class="py-op">(</tt><tt class="py-string">'is2sap.templates.otros.cambiar_contrasenha'</tt><tt class="py-op">)</tt> </tt>
+<a name="OtrosController.cambiar_contrasenha"></a><div id="OtrosController.cambiar_contrasenha-def"><a name="L53"></a><tt class="py-lineno">53</tt> <a class="py-toggle" href="#" id="OtrosController.cambiar_contrasenha-toggle" onclick="return toggle('OtrosController.cambiar_contrasenha');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="is2sap.controllers.otros_controlador.OtrosController-class.html#cambiar_contrasenha">cambiar_contrasenha</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-op">**</tt><tt class="py-param">kw</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="OtrosController.cambiar_contrasenha-collapsed" style="display:none;" pad="++" indent="++++++++"></div><div id="OtrosController.cambiar_contrasenha-expanded"><a name="L54"></a><tt class="py-lineno">54</tt>  <tt class="py-line">        <tt class="py-docstring">"""Metodo que rellena el formulario para editar los datos de un item"""</tt> </tt>
+<a name="L55"></a><tt class="py-lineno">55</tt>  <tt class="py-line">        <tt class="py-name">tmpl_context</tt><tt class="py-op">.</tt><tt class="py-name">form</tt> <tt class="py-op">=</tt> <tt class="py-name">editar_contrasenha_form</tt> </tt>
+<a name="L56"></a><tt class="py-lineno">56</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">dict</tt><tt class="py-op">(</tt><tt class="py-name">nombre_opcion</tt><tt class="py-op">=</tt><tt class="py-string">'Cambio de Password'</tt><tt class="py-op">,</tt> <tt class="py-name">page</tt><tt class="py-op">=</tt><tt class="py-string">'cambiar_contrasenha'</tt><tt class="py-op">,</tt> <tt class="py-name">value</tt><tt class="py-op">=</tt><tt class="py-name">kw</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L57"></a><tt class="py-lineno">57</tt>  <tt class="py-line"> </tt>
+<a name="L58"></a><tt class="py-lineno">58</tt>  <tt class="py-line">    <tt class="py-decorator">@</tt><tt class="py-decorator">validate</tt><tt class="py-op">(</tt><tt class="py-name">editar_contrasenha_form</tt><tt class="py-op">,</tt> <tt class="py-name">error_handler</tt><tt class="py-op">=</tt><tt id="link-19" class="py-name" targets="Method is2sap.controllers.otros_controlador.OtrosController.cambiar_contrasenha()=is2sap.controllers.otros_controlador.OtrosController-class.html#cambiar_contrasenha"><a title="is2sap.controllers.otros_controlador.OtrosController.cambiar_contrasenha" class="py-name" href="#" onclick="return doclink('link-19', 'cambiar_contrasenha', 'link-19');">cambiar_contrasenha</a></tt><tt class="py-op">)</tt> </tt>
+<a name="L59"></a><tt class="py-lineno">59</tt>  <tt class="py-line">    <tt class="py-decorator">@</tt><tt class="py-decorator">expose</tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="OtrosController.update"></a><div id="OtrosController.update-def"><a name="L60"></a><tt class="py-lineno">60</tt> <a class="py-toggle" href="#" id="OtrosController.update-toggle" onclick="return toggle('OtrosController.update');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="is2sap.controllers.otros_controlador.OtrosController-class.html#update">update</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-op">**</tt><tt class="py-param">kw</tt><tt class="py-op">)</tt><tt class="py-op">:</tt>         </tt>
+</div><a name="L61"></a><tt class="py-lineno">61</tt>  <tt class="py-line">        <tt class="py-docstring">"""Metodo que actualiza la base de datos"""</tt> </tt>
+<a name="L62"></a><tt class="py-lineno">62</tt>  <tt class="py-line">        <tt id="link-20" class="py-name" targets="Variable is2sap.model.model.Usuario.nombre_usuario=is2sap.model.model.Usuario-class.html#nombre_usuario"><a title="is2sap.model.model.Usuario.nombre_usuario" class="py-name" href="#" onclick="return doclink('link-20', 'nombre_usuario', 'link-20');">nombre_usuario</a></tt> <tt class="py-op">=</tt> <tt class="py-name">request</tt><tt class="py-op">.</tt><tt class="py-name">identity</tt><tt class="py-op">[</tt><tt class="py-string">'repoze.who.userid'</tt><tt class="py-op">]</tt> </tt>
+<a name="L63"></a><tt class="py-lineno">63</tt>  <tt class="py-line">        <tt id="link-21" class="py-name" targets="Variable is2sap.controllers.admin_controlador.AdminController.usuario=is2sap.controllers.admin_controlador.AdminController-class.html#usuario"><a title="is2sap.controllers.admin_controlador.AdminController.usuario" class="py-name" href="#" onclick="return doclink('link-21', 'usuario', 'link-21');">usuario</a></tt> <tt class="py-op">=</tt> <tt id="link-22" class="py-name"><a title="is2sap.model.DBSession" class="py-name" href="#" onclick="return doclink('link-22', 'DBSession', 'link-5');">DBSession</a></tt><tt class="py-op">.</tt><tt class="py-name">query</tt><tt class="py-op">(</tt><tt id="link-23" class="py-name"><a title="is2sap.model.model.Usuario" class="py-name" href="#" onclick="return doclink('link-23', 'Usuario', 'link-10');">Usuario</a></tt><tt class="py-op">)</tt><tt class="py-op">.</tt><tt class="py-name">filter_by</tt><tt class="py-op">(</tt><tt id="link-24" class="py-name"><a title="is2sap.model.model.Usuario.nombre_usuario" class="py-name" href="#" onclick="return doclink('link-24', 'nombre_usuario', 'link-20');">nombre_usuario</a></tt><tt class="py-op">=</tt><tt id="link-25" class="py-name"><a title="is2sap.model.model.Usuario.nombre_usuario" class="py-name" href="#" onclick="return doclink('link-25', 'nombre_usuario', 'link-20');">nombre_usuario</a></tt><tt class="py-op">)</tt><tt class="py-op">.</tt><tt class="py-name">first</tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L64"></a><tt class="py-lineno">64</tt>  <tt class="py-line">        <tt class="py-name">password_anterior</tt> <tt class="py-op">=</tt> <tt id="link-26" class="py-name"><a title="is2sap.controllers.admin_controlador.AdminController.usuario" class="py-name" href="#" onclick="return doclink('link-26', 'usuario', 'link-21');">usuario</a></tt><tt class="py-op">.</tt><tt id="link-27" class="py-name" targets="Variable is2sap.model.model.Usuario.password=is2sap.model.model.Usuario-class.html#password"><a title="is2sap.model.model.Usuario.password" class="py-name" href="#" onclick="return doclink('link-27', 'password', 'link-27');">password</a></tt> </tt>
+<a name="L65"></a><tt class="py-lineno">65</tt>  <tt class="py-line">        <tt class="py-name">password_anterior_form</tt> <tt class="py-op">=</tt> <tt class="py-name">kw</tt><tt class="py-op">[</tt><tt class="py-string">'password_anterior_form'</tt><tt class="py-op">]</tt> </tt>
+<a name="L66"></a><tt class="py-lineno">66</tt>  <tt class="py-line">        <tt class="py-name">password_nuevo</tt> <tt class="py-op">=</tt> <tt class="py-name">kw</tt><tt class="py-op">[</tt><tt class="py-string">'password_nuevo'</tt><tt class="py-op">]</tt> </tt>
+<a name="L67"></a><tt class="py-lineno">67</tt>  <tt class="py-line">        <tt class="py-name">password_nuevo_repeticion</tt> <tt class="py-op">=</tt> <tt class="py-name">kw</tt><tt class="py-op">[</tt><tt class="py-string">'password_nuevo_repeticion'</tt><tt class="py-op">]</tt> </tt>
+<a name="L68"></a><tt class="py-lineno">68</tt>  <tt class="py-line"> </tt>
+<a name="L69"></a><tt class="py-lineno">69</tt>  <tt class="py-line">        <tt class="py-comment">#identity = request.environ.get('repoze.who.identity')</tt> </tt>
+<a name="L70"></a><tt class="py-lineno">70</tt>  <tt class="py-line">        <tt class="py-comment">#print identity</tt> </tt>
+<a name="L71"></a><tt class="py-lineno">71</tt>  <tt class="py-line"> </tt>
+<a name="L72"></a><tt class="py-lineno">72</tt>  <tt class="py-line">        <tt class="py-name">hash</tt> <tt class="py-op">=</tt> <tt class="py-name">sha1</tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L73"></a><tt class="py-lineno">73</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-name">isinstance</tt><tt class="py-op">(</tt><tt class="py-name">password_anterior_form</tt><tt class="py-op">,</tt> <tt class="py-name">unicode</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L74"></a><tt class="py-lineno">74</tt>  <tt class="py-line">            <tt class="py-name">password_anterior_form</tt> <tt class="py-op">=</tt> <tt class="py-name">password_anterior_form</tt><tt class="py-op">.</tt><tt class="py-name">encode</tt><tt class="py-op">(</tt><tt class="py-string">'utf-8'</tt><tt class="py-op">)</tt> </tt>
+<a name="L75"></a><tt class="py-lineno">75</tt>  <tt class="py-line">        <tt class="py-name">hash</tt><tt class="py-op">.</tt><tt id="link-28" class="py-name" targets="Method is2sap.controllers.atributo_controlador.AtributoController.update()=is2sap.controllers.atributo_controlador.AtributoController-class.html#update,Method is2sap.controllers.fase_controlador.FaseController.update()=is2sap.controllers.fase_controlador.FaseController-class.html#update,Method is2sap.controllers.item_controlador.ItemController.update()=is2sap.controllers.item_controlador.ItemController-class.html#update,Method is2sap.controllers.linea_base_controlador.LineaBaseController.update()=is2sap.controllers.linea_base_controlador.LineaBaseController-class.html#update,Method is2sap.controllers.otros_controlador.OtrosController.update()=is2sap.controllers.otros_controlador.OtrosController-class.html#update,Method is2sap.controllers.permiso_controlador.PermisoController.update()=is2sap.controllers.permiso_controlador.PermisoController-class.html#update,Method is2sap.controllers.proyecto_controlador.ProyectoController.update()=is2sap.controllers.proyecto_controlador.ProyectoController-class.html#update,Method is2sap.controllers.rol_controlador.RolController.update()=is2sap.controllers.rol_controlador.RolController-class.html#update,Method is2sap.controllers.tipo_item_controlador.TipoItemController.update()=is2sap.controllers.tipo_item_controlador.TipoItemController-class.html#update,Method is2sap.controllers.usuario_controlador.UsuarioController.update()=is2sap.controllers.usuario_controlador.UsuarioController-class.html#update"><a title="is2sap.controllers.atributo_controlador.AtributoController.update
+is2sap.controllers.fase_controlador.FaseController.update
+is2sap.controllers.item_controlador.ItemController.update
+is2sap.controllers.linea_base_controlador.LineaBaseController.update
+is2sap.controllers.otros_controlador.OtrosController.update
+is2sap.controllers.permiso_controlador.PermisoController.update
+is2sap.controllers.proyecto_controlador.ProyectoController.update
+is2sap.controllers.rol_controlador.RolController.update
+is2sap.controllers.tipo_item_controlador.TipoItemController.update
+is2sap.controllers.usuario_controlador.UsuarioController.update" class="py-name" href="#" onclick="return doclink('link-28', 'update', 'link-28');">update</a></tt><tt class="py-op">(</tt><tt class="py-name">password_anterior_form</tt> <tt class="py-op">+</tt> <tt class="py-name">str</tt><tt class="py-op">(</tt><tt class="py-name">password_anterior</tt><tt class="py-op">[</tt><tt class="py-op">:</tt><tt class="py-number">40</tt><tt class="py-op">]</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L76"></a><tt class="py-lineno">76</tt>  <tt class="py-line">        <tt class="py-name">result</tt> <tt class="py-op">=</tt> <tt class="py-name">password_anterior</tt><tt class="py-op">[</tt><tt class="py-number">40</tt><tt class="py-op">:</tt><tt class="py-op">]</tt> <tt class="py-op">==</tt> <tt class="py-name">hash</tt><tt class="py-op">.</tt><tt class="py-name">hexdigest</tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L77"></a><tt class="py-lineno">77</tt>  <tt class="py-line"> </tt>
+<a name="L78"></a><tt class="py-lineno">78</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-name">result</tt> <tt class="py-op">==</tt> <tt class="py-name">True</tt> <tt class="py-keyword">and</tt> <tt class="py-name">password_nuevo</tt> <tt class="py-op">==</tt> <tt class="py-name">password_nuevo_repeticion</tt><tt class="py-op">:</tt> </tt>
+<a name="L79"></a><tt class="py-lineno">79</tt>  <tt class="py-line">           <tt id="link-29" class="py-name"><a title="is2sap.controllers.admin_controlador.AdminController.usuario" class="py-name" href="#" onclick="return doclink('link-29', 'usuario', 'link-21');">usuario</a></tt><tt class="py-op">.</tt><tt id="link-30" class="py-name"><a title="is2sap.model.model.Usuario.password" class="py-name" href="#" onclick="return doclink('link-30', 'password', 'link-27');">password</a></tt> <tt class="py-op">=</tt> <tt class="py-name">password_nuevo</tt> </tt>
+<a name="L80"></a><tt class="py-lineno">80</tt>  <tt class="py-line">        <tt class="py-keyword">else</tt><tt class="py-op">:</tt> </tt>
+<a name="L81"></a><tt class="py-lineno">81</tt>  <tt class="py-line">           <tt class="py-name">flash</tt><tt class="py-op">(</tt><tt class="py-name">_</tt><tt class="py-op">(</tt><tt class="py-string">'Datos incorrectos'</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> <tt class="py-string">'warning'</tt><tt class="py-op">)</tt> </tt>
+<a name="L82"></a><tt class="py-lineno">82</tt>  <tt class="py-line">           <tt class="py-name">redirect</tt><tt class="py-op">(</tt><tt class="py-string">"/otros/cambiar_contrasenha"</tt><tt class="py-op">)</tt> </tt>
+<a name="L83"></a><tt class="py-lineno">83</tt>  <tt class="py-line">          </tt>
+<a name="L84"></a><tt class="py-lineno">84</tt>  <tt class="py-line">        <tt class="py-name">flash</tt><tt class="py-op">(</tt><tt class="py-string">"Su password se cambio con exito!"</tt><tt class="py-op">)</tt> </tt>
+<a name="L85"></a><tt class="py-lineno">85</tt>  <tt class="py-line">        <tt class="py-name">redirect</tt><tt class="py-op">(</tt><tt class="py-string">"/otras_op"</tt><tt class="py-op">)</tt> </tt>
+</div></div><a name="L86"></a><tt class="py-lineno">86</tt>  <tt class="py-line"> </tt><script type="text/javascript">
+<!--
+expandto(location.href);
+// -->
+</script>
+</pre>
+<br />
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+      <th class="navbar" width="100%"></th>
+  </tr>
+</table>
+<table border="0" cellpadding="0" cellspacing="0" width="100%%">
+  <tr>
+    <td align="left" class="footer">
+    Generated by Epydoc 3.0.1 on Sat Jun 25 08:36:25 2011
+    </td>
+    <td align="right" class="footer">
+      <a target="mainFrame" href="http://epydoc.sourceforge.net"
+        >http://epydoc.sourceforge.net</a>
+    </td>
+  </tr>
+</table>
+
+<script type="text/javascript">
+  <!--
+  // Private objects are initially displayed (because if
+  // javascript is turned off then we want them to be
+  // visible); but by default, we want to hide them.  So hide
+  // them unless we have a cookie that says to show them.
+  checkCookie();
+  // -->
+</script>
+</body>
+</html>

@@ -55,6 +55,7 @@ class ItemController(BaseController):
 
 #--------------------------- Creacion de Items ---------------------------------
     @expose('is2sap.templates.item.nuevo')
+    @require(predicates.has_any_permission('administracion','crear_item', msg=l_('No posee los permisos de creacion de item')))
     def nuevo(self, id_proyecto, id_fase, id_tipo_item, **kw):
         """Despliega el formulario para añadir un nuevo Item."""
         try:
@@ -143,6 +144,7 @@ class ItemController(BaseController):
     
     #@validate(crear_item_form)#form=globals().get('crear_form'),error_handler=nuevo)
     @expose()
+    @require(predicates.has_any_permission('administracion','crear_item', msg=l_('No posee los permisos de creacion de item')))
     def add(self, **kw):
         """Metodo para agregar un nuevo item a la base de datos """
         try:
@@ -220,6 +222,7 @@ class ItemController(BaseController):
 #--------------------------- Adjuntar Archivos ---------------------------------
 
     @expose('is2sap.templates.item.archivos_adjuntos')
+    @require(predicates.has_any_permission('administracion','desarrollo', msg=l_('No posee permiso de visualizacion')))
     def archivos_adjuntos(self, id_proyecto, id_fase, id_tipo_item, id_item):
         """Despliega el formulario para añadir un nuevo Archivo o Eliminar de la BD"""
         global id_item_actual
@@ -234,6 +237,7 @@ class ItemController(BaseController):
                     id_fase=id_fase, id_tipo_item=id_tipo_item, id_item=id_item, current_files=current_files)
         
     @expose('is2sap.templates.item.archivos_adjuntos')
+    @require(predicates.has_any_permission('administracion','guardar_archivo', msg=l_('No posee los permisos de almacenamiento de archivos')))
     def save(self, userfile):
         """Metodo para agregar un nuevo archivo a la base de datos """
         try:
@@ -284,6 +288,7 @@ class ItemController(BaseController):
         redirect("/item/archivos_adjuntos", id_proyecto=id_proyecto, id_fase=id_fase, id_tipo_item=id_tipo_item, id_item=id_item)
     
     @expose(content_type=CUSTOM_CONTENT_TYPE)
+    @require(predicates.has_any_permission('administracion', 'crear_item', msg=l_('No posee los permisos de creacion de item')))
     def view(self, fileid):
         """Metodo que muestra el contenido de un archivo en pantalla"""
         try:
@@ -319,6 +324,7 @@ class ItemController(BaseController):
         return userfile.contenido_archivo
     
     @expose()
+    @require(predicates.has_any_permission('administracion','eliminar_archivo', msg=l_('No posee los permisos para eliminar de archivos')))
     def eliminar_archivo(self, fileid):
         """Metodo para eliminar un archivo de la base de datos """
         try:
@@ -353,6 +359,7 @@ class ItemController(BaseController):
 
 #--------------------------- Edicion de Items ----------------------------------
     @expose('is2sap.templates.item.editar')
+    @require(predicates.has_any_permission('administracion','editar_item', msg=l_('No posee los permisos para edicion de items')))
     def editar(self, id_proyecto, id_fase, id_tipo_item, id_item, **kw):
         """Metodo que rellena el formulario para editar los datos de un item"""
         item = DBSession.query(Item).get(id_item)
@@ -452,6 +459,7 @@ class ItemController(BaseController):
 
     @expose()
     #@validate(editar_item_form, error_handler=editar)
+    @require(predicates.has_any_permission('administracion','editar_item', msg=l_('No posee los permisos para edicion de items')))
     def update(self, **kw):        
         """Metodo que actualiza los datos de un item"""
         try:
@@ -634,6 +642,7 @@ class ItemController(BaseController):
 
 #--------------------------- Eliminacion de Items ------------------------------
     @expose('is2sap.templates.item.confirmar_eliminar')
+    @require(predicates.has_any_permission('administracion','eliminar_item', msg=l_('No posee los permisos para eliminar de items')))
     def confirmar_eliminar(self, id_proyecto, id_fase, id_tipo_item, id_item, **kw):
         """Despliega confirmacion de eliminacion"""
         try:
@@ -659,6 +668,7 @@ class ItemController(BaseController):
                     id_fase=id_fase, id_tipo_item=id_tipo_item, nombre_tipo_item=tipo_item.nombre, item=item)
 
     @expose()
+    @require(predicates.has_any_permission('administracion','eliminar_item', msg=l_('No posee los permisos para eliminar de items')))
     def delete(self, id_proyecto, id_fase, id_tipo_item, id_item, **kw):
         """Metodo que elimina un registro de la base de datos"""
         try:
@@ -736,6 +746,7 @@ class ItemController(BaseController):
 
 #--------------------------- Listado de Items ----------------------------------
     @expose("is2sap.templates.item.listado")
+    @require(predicates.has_any_permission('administracion','desarrollo', msg=l_('No posee los permisos para eliminar de items')))
     def listado(self, id_proyecto, id_fase, id_tipo_item, page=1):
         """Metodo para listar todos los items de la base de datos"""
         try:
@@ -754,6 +765,7 @@ class ItemController(BaseController):
                     currentPage=currentPage)
 
     @expose("is2sap.templates.item.listado_detalles")
+    @require(predicates.has_any_permission('administracion','desarrollo', msg=l_('No posee los permisos para visualizar')))
     def listado_detalles(self, id_proyecto, id_fase, id_tipo_item, id_item, page=1):
         """Metodo para listar todos los items de la base de datos"""
         try:
@@ -772,6 +784,7 @@ class ItemController(BaseController):
 
 #--------------------------- Revivir Items -------------------------------------
     @expose("is2sap.templates.item.listado_revivir")
+    @require(predicates.has_any_permission('administracion','desarrollo', msg=l_('No posee los permisos para visualizar')))
     def listado_revivir(self, id_proyecto, id_fase, id_tipo_item, page=1):
         """Metodo para listar los items del tipo correspondiente que pueden ser revividos"""
         try:
@@ -788,6 +801,7 @@ class ItemController(BaseController):
                     id_fase=id_fase, id_tipo_item=id_tipo_item, currentPage=currentPage)
 
     @expose("is2sap.templates.item.listado_detalles_revivir")
+    @require(predicates.has_any_permission('administracion','desarrollo', msg=l_('No posee los permisos para visualizar')))
     def listado_detalles_revivir(self, id_proyecto, id_fase, id_tipo_item, id_item, page=1):
         """Metodo para listar los detalles del item a ser revivido"""
         try:
@@ -804,6 +818,7 @@ class ItemController(BaseController):
                     id_fase=id_fase, id_tipo_item=id_tipo_item, id_item=id_item, currentPage=currentPage)
 
     @expose()
+    @require(predicates.has_any_permission('administracion','revivir_item', msg=l_('No posee los permisos para revivir Items')))
     def revivir_item(self, id_proyecto, id_fase, id_tipo_item, id_item, **kw):        
         """Metodo que revive un item que habia sido eliminado"""
         try:
@@ -828,6 +843,7 @@ class ItemController(BaseController):
         redirect("/item/listado_revivir", id_proyecto=id_proyecto, id_fase=id_fase, id_tipo_item=id_tipo_item)
 
     @expose("is2sap.templates.item.revivir_desde_fase")
+    @require(predicates.has_any_permission('administracion','desarrollo', msg=l_('No posee los permisos para visualizar')))
     def revivir_desde_fase(self, id_proyecto, id_fase, page=1):
         """Metodo para listar los items de la fase correspondiente que pueden ser revividos"""
         try:
@@ -854,6 +870,7 @@ class ItemController(BaseController):
                     id_fase=id_fase, nombre_fase=nombre_fase, currentPage=currentPage)
 
     @expose("is2sap.templates.item.detalles_revivir_desde_fase")
+    @require(predicates.has_any_permission('administracion','desarrollo', msg=l_('No posee los permisos para visualizar')))
     def detalles_revivir_desde_fase(self, id_proyecto, id_fase, id_tipo_item, id_item, page=1):
         """Metodo para listar los detalles del item a ser revivido"""
         try:
@@ -870,6 +887,7 @@ class ItemController(BaseController):
                     id_fase=id_fase, id_tipo_item=id_tipo_item, id_item=id_item, currentPage=currentPage)
 
     @expose()
+    @require(predicates.has_any_permission('administracion','revivir_item', msg=l_('No posee los permisos para revivir Items')))
     def revivir_item_desde_fase(self, id_proyecto, id_fase, id_tipo_item, id_item, **kw):        
         """Metodo que revive un item que habia sido eliminado"""
         try:
@@ -896,6 +914,7 @@ class ItemController(BaseController):
 
 #--------------------------- Aprobacion de Items -------------------------------
     @expose()
+    @require(predicates.has_any_permission('administracion','aprobar_item', msg=l_('No posee los permisos para aprobar!')))
     def aprobar(self, id_proyecto, id_fase, id_tipo_item, id_item, **kw):        
         """Metodo que cambia el estado de un item al de Aprobado"""
         try:
@@ -940,6 +959,7 @@ class ItemController(BaseController):
         redirect("/item/listado", id_proyecto=id_proyecto, id_fase=id_fase, id_tipo_item=id_tipo_item)
 
     @expose("is2sap.templates.item.listado_aprobar")
+    @require(predicates.has_any_permission('administracion','desarrollo', msg=l_('No posee los permisos para visualizar!')))
     def listado_aprobar(self, id_proyecto, id_fase, page=1):
         """Metodo para listar todos los items de una fase correspondiente y que aun no estan aprobados"""
         try:
@@ -967,6 +987,7 @@ class ItemController(BaseController):
                     id_fase=id_fase, nombre_fase=nombre_fase, currentPage=currentPage)
 
     @expose()
+    @require(predicates.has_any_permission('administracion','aprobar_item', msg=l_('No posee los permisos para aprobar!')))
     def aprobar_desde_fase(self, id_proyecto, id_fase, id_tipo_item, id_item, **kw):        
         """Metodo que cambia el estado de un item al de Aprobado"""
         try:
@@ -1011,6 +1032,7 @@ class ItemController(BaseController):
         redirect("/item/listado_aprobar", id_proyecto=id_proyecto, id_fase=id_fase)
 
     @expose("is2sap.templates.item.listado_detalles_aprobar")
+    @require(predicates.has_any_permission('administracion','desarrollo', msg=l_('No posee los permisos para visualizar!')))
     def listado_detalles_aprobar(self, id_proyecto, id_fase, id_tipo_item, id_item, page=1):
         """Metodo para listar los detalles de items a aprobar de una fase"""
         try:
@@ -1029,6 +1051,7 @@ class ItemController(BaseController):
 
 #--------------------------- Revertir versiones de Items -----------------------
     @expose("is2sap.templates.item.listado_revertir")
+    @require(predicates.has_any_permission('administracion','desarrollo', msg=l_('No posee los permisos para visualizar!')))
     def listado_revertir(self, id_proyecto, id_fase, id_tipo_item, id_item, page=1):
         """Metodo para listar las versiones revertibles de un item"""
         try:
@@ -1045,6 +1068,7 @@ class ItemController(BaseController):
                     id_fase=id_fase, id_tipo_item=id_tipo_item, id_item=id_item, currentPage=currentPage)
 
     @expose("is2sap.templates.item.listado_detalles_revertir")
+    @require(predicates.has_any_permission('administracion','desarrollo', msg=l_('No posee los permisos para visualizar!')))
     def listado_detalles_revertir(self, id_proyecto, id_fase, id_tipo_item, id_item, version, page=1):
         """Metodo para listar todos los items de la base de datos"""
         try:
@@ -1063,6 +1087,7 @@ class ItemController(BaseController):
                     id_fase=id_fase, id_tipo_item=id_tipo_item, id_item=id_item, version=version, currentPage=currentPage)
 
     @expose()
+    @require(predicates.has_any_permission('administracion','revertir_item', msg=l_('No posee los permisos para revertir!')))
     def revertir_item(self, id_proyecto, id_fase, id_tipo_item, id_historial_item, **kw):        
         """Metodo que actualiza la base de datos"""
         try:
@@ -1289,6 +1314,7 @@ class ItemController(BaseController):
                  id_tipo_item=id_tipo_item, id_item=id_item)
 
     @expose("is2sap.templates.item.revertir_desde_fase")
+    @require(predicates.has_any_permission('administracion','desarrollo', msg=l_('No posee los permisos para visualizar')))
     def revertir_desde_fase(self, id_proyecto, id_fase, page=1):
         """Metodo para listar todos los items revertibles de una determinada fase"""
         try:
@@ -1317,6 +1343,7 @@ class ItemController(BaseController):
                     id_fase=id_fase, nombre_fase=nombre_fase, currentPage=currentPage)
 
     @expose("is2sap.templates.item.detalles_revertir_desde_fase")
+    @require(predicates.has_any_permission('administracion','desarrollo', msg=l_('No posee los permisos para visualizar')))
     def detalles_revertir_desde_fase(self, id_proyecto, id_fase, id_tipo_item, id_item, version, page=1):
         """Metodo para listar todos los items de la base de datos"""
         try:
@@ -1333,6 +1360,7 @@ class ItemController(BaseController):
                     id_fase=id_fase, id_tipo_item=id_tipo_item, id_item=id_item, version=version, currentPage=currentPage)
 
     @expose()
+    @require(predicates.has_any_permission('administracion','revertir_item', msg=l_('No posee los permisos para revertir items!')))
     def revertir_item_desde_fase(self, id_proyecto, id_fase, id_tipo_item, id_historial_item, **kw):        
         """Metodo que actualiza la base de datos"""
         try:
@@ -1557,6 +1585,7 @@ class ItemController(BaseController):
 
 #--------------------------- Listado de Proyectos ------------------------------
     @expose("is2sap.templates.item.listado_proyectos")
+    @require(predicates.has_any_permission('administracion','desarrollo', msg=l_('No posee los permisos para visualizar')))
     def proyectos(self,page=1):
         """Metodo para listar todos los Proyectos existentes de la base de datos"""
         try:
@@ -1583,6 +1612,7 @@ class ItemController(BaseController):
 
 #--------------------------- Listado de Fases por Proyecto ----------------------
     @expose("is2sap.templates.item.listado_fases")
+    @require(predicates.has_any_permission('administracion','desarrollo', msg=l_('No posee los permisos para visualizar')))
     def fases(self,id_proyecto, page=1):
         """Metodo para listar las Fases de un proyecto """
         try:
@@ -1609,6 +1639,7 @@ class ItemController(BaseController):
 
 #--------------------------- Listado de Tipo de Items por Fase -----------------
     @expose("is2sap.templates.item.listado_tipo_items")
+    @require(predicates.has_any_permission('administracion','desarrollo', msg=l_('No posee los permisos para visualizar')))
     def tipoItems(self, id_proyecto, id_fase, page=1):
         """Metodo para listar los Tipos de Items de una Fase """
         try:
@@ -1666,6 +1697,7 @@ class ItemController(BaseController):
                 itemsAfectados.append(sucesor.id_item2)
 
     @expose("is2sap.templates.item.GraficoImpacto")
+    @require(predicates.has_any_permission('administracion','calcular_impacto', msg=l_('No posee los permisos para visualizar el Impacto')))
     def calcularImpacto(self, id_proyecto, itemActual):
         global itemsAfectados
         global listaRelaciones

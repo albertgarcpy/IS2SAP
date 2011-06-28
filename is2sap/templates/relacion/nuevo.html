@@ -30,7 +30,7 @@ ${menu_superior_nuevo(idItemActual, id_proyecto, id_fase, id_tipo_item)}
 			<tr>           
                 <td>${item.codigo}</td>
                 <td>${item.descripcion}</td>
-                <td> <a href="${tg.url('/relacion/addAncestro', id_item1 = item.id_item, id_item2=idItemActual, id_proyecto=id_proyecto, id_fase=id_fase, id_tipo_item=id_tipo_item)}"> 
+                <td> <a py:if="tg.predicates.has_any_permission('administracion', 'crear_item')" href="${tg.url('/relacion/addAncestro', id_item1 = item.id_item, id_item2=idItemActual, id_proyecto=id_proyecto, id_fase=id_fase, id_tipo_item=id_tipo_item)}"> 
 				       <input class="alignaddFase" name="agregarRelacion1" type="button" value=" " />
 				     </a>				 
 		        </td>
@@ -51,7 +51,7 @@ ${menu_superior_nuevo(idItemActual, id_proyecto, id_fase, id_tipo_item)}
 			<tr>           
                 <td>${item.codigo}</td>
                 <td>${item.descripcion}</td>
-                <td> <a href="${tg.url('/relacion/addHijo', id_item1 = idItemActual, id_item2=item.id_item, id_proyecto=id_proyecto, id_fase=id_fase, id_tipo_item=id_tipo_item)}"> 
+                <td> <a py:if="tg.predicates.has_any_permission('administracion', 'crear_relacion')" href="${tg.url('/relacion/addHijo', id_item1 = idItemActual, id_item2=item.id_item, id_proyecto=id_proyecto, id_fase=id_fase, id_tipo_item=id_tipo_item)}"> 
 				       <input class="alignaddFase" name="agregarRelacion2" type="button" value="" />
 				     </a>				 
 		        </td>

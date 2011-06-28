@@ -391,7 +391,7 @@ class ProyectoController(BaseController):
         redirect("/admin/proyecto/usuarioProyecto",id_proyecto=id_proyecto)
 
     @expose("is2sap.templates.proyecto.listaProyectos_a_iniciar")
-    @require(predicates.has_any_permission('administracion',  'lider_proyecto'))
+    @require(predicates.has_any_permission('administracion', 'lider_proyecto'))
     def listaProyectos_a_iniciar(self,page=1):
         """Metodo para listar todos los Proyectos a iniciar de la base de datos"""
         try:

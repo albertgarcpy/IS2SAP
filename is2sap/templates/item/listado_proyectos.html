@@ -46,7 +46,7 @@
                                   <a href="#" class="top_link"><span>FASES</span></a>
 				     <ul class="sub">
 				        <li>
-                                            <a href="${tg.url('/item/fases', id_proyecto=proyecto.id_proyecto)}">Fases
+                                            <a py:if="tg.predicates.has_any_permission('administracion', 'desarrollo')" href="${tg.url('/item/fases', id_proyecto=proyecto.id_proyecto)}">Fases
                                             </a>
                                         </li>
 				     </ul>
