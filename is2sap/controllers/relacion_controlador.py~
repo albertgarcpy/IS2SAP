@@ -132,7 +132,7 @@ class RelacionController(BaseController):
 	id_fase=kw['id_fase']
 	fase=DBSession.query(Fase).get(id_fase)
 	items_con_sucesores = 0
-	if fase.relacion_estado_fase.nombre_estado=='Con Lineas Bases':
+	if fase.relacion_estado_fase.nombre_estado=='Con Lineas Bases'
 		tipo_items=DBSession.query(TipoItem).filter_by(id_fase=id_fase)
 		itemsDeFaseActual = []
 		for tipo_item in tipo_items:

@@ -368,8 +368,8 @@ class ItemController(BaseController):
         #Comprobamos que no se encuentre en una Linea Base "Aprobada"
         if linea_bases_item != None:
            for linea_base_item in linea_bases_item:
-               if linea_base_item.estado == "Aprobado":
-                  flash(_("No puede Editar el Item! Se encuentra en una Linea Base aprobada..."), 'error')
+              # if linea_base_item.estado == "Aprobado":
+                  flash(_("No puede Editar el Item! Se encuentra en una Linea Base..."), 'error')
                   redirect("/item/listado", id_proyecto=id_proyecto, id_fase=id_fase, id_tipo_item=id_tipo_item)
 
         try:
@@ -576,13 +576,13 @@ class ItemController(BaseController):
 
             #Desasignamos automaticamente de la Linea Base en que se encuentra
             #si se encuentra en una Linea Base con estado distinto a "Aprobado"
-            if linea_bases_item != None:
-               for linea_base_item in linea_bases_item:
-                   if linea_base_item.estado != "Aprobado":
-                      id_linea_base = linea_base_item.id_linea_base 
-                      linea_base = DBSession.query(LineaBase).get(id_linea_base)
-                      item.linea_bases.remove(linea_base)
-                      DBSession.flush()
+            #if linea_bases_item != None:
+            #   for linea_base_item in linea_bases_item:
+            #       if linea_base_item.estado != "Aprobado":
+            #          id_linea_base = linea_base_item.id_linea_base 
+            #          linea_base = DBSession.query(LineaBase).get(id_linea_base)
+            #          item.linea_bases.remove(linea_base)
+            #          DBSession.flush()
 
             global itemsAfectados
             global listaRelaciones
@@ -653,8 +653,8 @@ class ItemController(BaseController):
             #Comprobamos que no se encuentre en una Linea Base "Aprobada"
             if linea_bases_item != None:
                for linea_base_item in linea_bases_item:
-                   if linea_base_item.estado == "Aprobado":
-                      flash(_("No puede Eliminar el Item! Se encuentra en una Linea Base aprobada..."), 'error')
+                  # if linea_base_item.estado == "Aprobado":
+                      flash(_("No puede Eliminar el Item! Se encuentra en una Linea Base..."), 'error')
                       redirect("/item/listado", id_proyecto=id_proyecto, id_fase=id_fase, id_tipo_item=id_tipo_item)
 
         except SQLAlchemyError:
@@ -720,13 +720,13 @@ class ItemController(BaseController):
 
             #Desasignamos automaticamente de la Linea Base en que se encuentra
             #si se encuentra en una Linea Base con estado distinto a "Aprobado"
-            if linea_bases_item != None:
-               for linea_base_item in linea_bases_item:
-                   if linea_base_item.estado != "Aprobado":
-                      id_linea_base = linea_base_item.id_linea_base 
-                      linea_base = DBSession.query(LineaBase).get(id_linea_base)
-                      item.linea_bases.remove(linea_base)
-                      DBSession.flush()
+            #if linea_bases_item != None:
+            #   for linea_base_item in linea_bases_item:
+            #       if linea_base_item.estado != "Aprobado":
+            #          id_linea_base = linea_base_item.id_linea_base 
+            #          linea_base = DBSession.query(LineaBase).get(id_linea_base)
+            #          item.linea_bases.remove(linea_base)
+            #          DBSession.flush()
 
             transaction.commit()
         except IntegrityError:
