@@ -7,7 +7,7 @@
 	     <ul>
 		 <li> 
                      <span class="menu_r">
-                           <a href="${tg.url('/relacion/nuevo',idItemActual=idItemActual, id_proyecto=id_proyecto, id_fase=id_fase, id_tipo_item=id_tipo_item)}" class="${('', 'active')[defined('page') and page=='nuevo_relacion']}">
+                           <a py:if="tg.predicates.has_any_permission('administracion', 'desarrollo')" href="${tg.url('/relacion/nuevo',idItemActual=idItemActual, id_proyecto=id_proyecto, id_fase=id_fase, id_tipo_item=id_tipo_item)}" class="${('', 'active')[defined('page') and page=='nuevo_relacion']}">
                               <span class="menu_ar">Nuevo</span>
                            </a>
 						   <a href="${tg.url('/item/listado', id_proyecto=id_proyecto, id_fase=id_fase, id_tipo_item=id_tipo_item)}"           class="${('', 'active')[defined('page') and page=='nuevo_relacion']}">

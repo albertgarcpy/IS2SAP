@@ -21,8 +21,8 @@
                  <br />
                  <br />
                  Seleccionar Archivo:<br />
-                 <input type="file" name="userfile" /> <br/><br/>
-                 <input type="submit" value="Guardar Archivo" />
+                 <input py:if="tg.predicates.has_any_permission('administracion', 'editar_item')" type="file" name="userfile" /> <br/><br/>
+                 <input py:if="tg.predicates.has_any_permission('administracion', 'editar_item')" type="submit" value="Guardar Archivo" />
            </form>
 
            <table border="1" width="100%">
@@ -38,10 +38,10 @@
                      <tr>
                          <td width="58%" align="left">${archivo.nombre_archivo}</td>
                          <td width="27%" align="center"> 
-                            <a href="/item/view/${archivo.id_item_archivo}">CLICK PARA VISUALIZAR ARCHIVO</a>
+                            <a py:if="tg.predicates.has_any_permission('administracion', 'desarrollo')" href="/item/view/${archivo.id_item_archivo}">CLICK PARA VISUALIZAR ARCHIVO</a>
                          </td>
                          <td width="15%" align="center"> 
-                            <a href="${tg.url('/item/eliminar_archivo', fileid=archivo.id_item_archivo)}">
+                            <a py:if="tg.predicates.has_any_permission('administracion', 'editar_item')" href="${tg.url('/item/eliminar_archivo', fileid=archivo.id_item_archivo)}">
                               <input class="alignEliminarArchivo" name="eliminar" type="button" value=""/>
                             </a>
                          </td>

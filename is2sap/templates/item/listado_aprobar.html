@@ -66,12 +66,12 @@
                                    <a href="#" class="top_link"><span>ACCIONES</span></a>
 				      <ul class="sub">
 					 <li>
-                                             <a href="${tg.url('/item/aprobar_desde_fase', id_proyecto=id_proyecto, id_fase=id_fase,
+                                             <a py:if="tg.predicates.has_any_permission('administracion', 'aprobar_item')" href="${tg.url('/item/aprobar_desde_fase', id_proyecto=id_proyecto, id_fase=id_fase,
                                                       id_tipo_item=item.id_tipo_item, id_item=item.id_item)}">Aprobar
 					     </a>
                                          </li>
 					 <li>
-                                             <a href="${tg.url('/item/listado_detalles_aprobar', id_proyecto=id_proyecto, id_fase=id_fase,
+                                             <a py:if="tg.predicates.has_any_permission('administracion', 'desarrollo')" href="${tg.url('/item/listado_detalles_aprobar', id_proyecto=id_proyecto, id_fase=id_fase,
                                                       id_tipo_item=item.id_tipo_item, id_item=item.id_item)}">Detalles
 					     </a>
                                          </li>

@@ -45,6 +45,7 @@ def bootstrap(command, conf, vars):
         model.DBSession.add(u)
 
         g = model.Rol()
+        g.tipo = u'Sistema'
         g.nombre_rol = u'administrador'
         g.descripcion = u'Grupo Administrador'
         g.usuarios.append(u)
@@ -53,8 +54,9 @@ def bootstrap(command, conf, vars):
         model.DBSession.add(g)
     
         h = model.Rol()
-        h.nombre_rol = u'editor'
-        h.descripcion = u'Grupo Edicion'
+        h.tipo = u'Sistema'
+        h.nombre_rol = u'lider_proyecto'
+        h.descripcion = u'Grupo Lider de Proyecto'
         h.usuarios.append(u)
         h.usuarios.append(v)
         h.usuarios.append(w)
@@ -67,8 +69,8 @@ def bootstrap(command, conf, vars):
         model.DBSession.add(p)
 
         q = model.Permiso()
-        q.nombre_permiso = u'edicion'
-        q.descripcion = u'Este permiso dara un derecho de edicion al portador'
+        q.nombre_permiso = u'lider_proyecto'
+        q.descripcion = u'Este permiso es para lider de proyecto'
         q.roles.append(h)
         model.DBSession.add(q)
 

@@ -22,25 +22,26 @@
     </head>
 
     <body py:match="body" py:attrs="select('@*')">
-         ${header()}
+         ${header()}         
          <ul id="mainmenu">
             <span py:if="tg.auth_stack_enabled" py:strip="True">
                  <li py:if="not request.identity" id="login" class="loginlogout">
                     <a href="${tg.url('/login')}">Login</a>
-                 </li>
+                 </li>                
                  <li py:if="request.identity" id="login" class="loginlogout">
                     <a href="${tg.url('/logout_handler')}">Logout</a>
                  </li>
+                 <!-- li py:if="tg.predicates.has_any_permission('administracion', 'lider_proyecto')" id="admin" class="first" -->
                  <li py:if="request.identity" id="admin" class="menuprincipal">
                     <a href="${tg.url('/index')}">Inicio</a>
                  </li>
-                 <li py:if="tg.predicates.has_permission('administracion')" id="admin" class="first">
+                 <li py:if="tg.predicates.has_any_permission('administracion', 'lider_proyecto')" id="admin" class="first">
                     <a href="${tg.url('/admin')}">Administracion</a>
                  </li>
-		 <li py:if="tg.predicates.has_permission('administracion')" id="admin" class="menuprincipal">
+		 <li py:if="tg.predicates.has_any_permission('administracion', 'lider_proyecto')" id="admin" class="menuprincipal">
                     <a href="${tg.url('/configura')}">Configuracion</a>
                  </li>
-		 <li py:if="tg.predicates.has_permission('edicion')" id="admin" class="menuprincipal">
+		 <li py:if="tg.predicates.has_any_permission('administracion', 'lider_proyecto', 'desarrollo')" id="admin" class="menuprincipal">
                     <a href="${tg.url('/desa')}">Desarrollo</a>
                  </li>
 		 <li py:if="request.identity" id="admin" class="menuprincipal">
@@ -49,9 +50,9 @@
             </span>
          </ul>
 
-
          <div id="content"> 
              <py:if test="defined('page')">
+
              </py:if>
              <py:with vars="flash=tg.flash_obj.render('flash', use_js=False)">
              <div py:if="flash" py:content="XML(flash)" />

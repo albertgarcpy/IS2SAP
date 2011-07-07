@@ -45,8 +45,6 @@ class AdminController(TGController):
     A basic controller that handles User Groups and Permissions for a TG application.
     """
     #allow_only = in_group('managers')
-    allow_only = has_permission('administracion',
-                                msg=l_('Solo para usuarios con permiso "administracion"'))
     default_index_template = "genshi:is2sap.templates.admin_principal"
 		
     #Administracion

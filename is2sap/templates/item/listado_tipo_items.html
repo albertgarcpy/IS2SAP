@@ -39,7 +39,7 @@
                        <td width="48%" align="left">${tipoItem.descripcion}</td>
 
 			<td width="12" align="center">
-                           <a href="${tg.url('/item/listado', id_proyecto=id_proyecto, 
+                           <a py:if="tg.predicates.has_any_permission('administracion', 'desarrollo')" href="${tg.url('/item/listado', id_proyecto=id_proyecto, 
                                    id_fase=id_fase, id_tipo_item=tipoItem.id_tipo_item)}">
                               <input class="alignaddAtributo" name="addAtributo" type="button" value="" />
                            </a>

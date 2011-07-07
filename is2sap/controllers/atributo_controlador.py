@@ -30,6 +30,7 @@ class AtributoController(BaseController):
         return dict(nombre_modelo='Atributo', page='index_atributo')        
 
     @expose('is2sap.templates.atributo.nuevoDesdeTipoItem')
+    @require(predicates.has_any_permission('administracion',  'lider_proyecto'))
     def nuevoDesdeTipoItem(self, id_tipo_item, **kw):
         """Despliega el formulario para añadir un nuevo atributo."""
         try:
@@ -52,6 +53,7 @@ class AtributoController(BaseController):
                     id_fase=id_fase, id_tipo_item=id_tipo_item, value=kw)
 
     @validate(crear_atributo_form, error_handler=nuevoDesdeTipoItem)
+    @require(predicates.has_any_permission('administracion',  'lider_proyecto'))
     @expose()
     def add(self, **kw):
         """Metodo para agregar un registro a la base de datos """
@@ -89,6 +91,7 @@ class AtributoController(BaseController):
                  id_fase=id_fase, id_tipo_item=id_tipo_item)
 
     @expose("is2sap.templates.atributo.listadoAtributosPorTipoItem")
+    @require(predicates.has_any_permission('administracion',  'lider_proyecto'))
     def listadoAtributosPorTipoItem(self, id_proyecto, id_fase, id_tipo_item, page=1):
         """Metodo para listar todos los atributos de la base de datos"""
         try:
@@ -106,6 +109,7 @@ class AtributoController(BaseController):
                     id_proyecto=id_proyecto, id_fase=id_fase, id_tipo_item=id_tipo_item, currentPage=currentPage)
 
     @expose('is2sap.templates.atributo.editar')
+    @require(predicates.has_any_permission('administracion',  'lider_proyecto'))
     def editar(self, id_atributo, **kw):
         """Metodo que rellena el formulario para editar los datos de un usuario"""
         try:
@@ -142,6 +146,7 @@ class AtributoController(BaseController):
 
     @validate(editar_atributo_form, error_handler=editar)
     @expose()
+    @require(predicates.has_any_permission('administracion',  'lider_proyecto'))
     def update(self, **kw):        
         """Metodo que actualiza la base de datos"""
         try:
@@ -177,6 +182,7 @@ class AtributoController(BaseController):
                  id_fase=fase.id_fase, id_tipo_item=id_tipo_item)
 
     @expose('is2sap.templates.atributo.confirmar_eliminar')
+    @require(predicates.has_any_permission('administracion',  'lider_proyecto'))
     def confirmar_eliminar(self, id_proyecto, id_fase, id_tipo_item, id_atributo, **kw):
         """Despliega confirmacion de eliminacion"""
         try:
@@ -201,6 +207,7 @@ class AtributoController(BaseController):
                     id_fase=id_fase, id_tipo_item=id_tipo_item, value=atributo)
 
     @expose()
+    @require(predicates.has_any_permission('administracion',  'lider_proyecto'))
     def delete(self, id_proyecto, id_fase, id_tipo_item, id_atributo, **kw):
         """ Metodo que elimina el registro de un atributo
             Parametros: - id_atributo: Para identificar el atributo a eliminar

@@ -8,7 +8,7 @@ from webhelpers import paginate
 
 from is2sap.lib.base import BaseController
 from is2sap.model import DBSession, metadata
-from is2sap.model.model import RelacionItem, Fase, TipoItem, Item, Proyecto
+from is2sap.model.model import RelacionItem, Fase, TipoItem, Item, Proyecto, LineaBase
 from is2sap import model
 from is2sap.controllers.grafo.grafo import Graph
 import transaction
@@ -73,7 +73,15 @@ class RelacionController(BaseController):
     def listado(self, id_item, id_proyecto, id_fase, id_tipo_item):
         """Metodo para listar todos los usuarios de la base de datos"""
         antecesores = DBSession.query(RelacionItem).filter_by(id_item2=id_item).filter_by(tipo="Antecesor-Sucesor").order_by(RelacionItem.id_item1)
+        listaAntecesores = []
+        #for antecesor in antecesores:
+        #    item = DBSession.query(Item).get(antecesor.id_item1)
+        #    listaAntecesores.append(item)
         hijos = DBSession.query(RelacionItem).filter_by(id_item1=id_item).filter_by(tipo="Padre-Hijo").order_by(RelacionItem.id_item2)
+        #listaHijos = []
+        #for hijo in hijos:
+        #    item = DBSession.query(Item).get(hijo.id_item2)
+        #    listaHijos.append(item)
         return dict(antecesores=antecesores, hijos=hijos, idItemActual=id_item, id_proyecto=id_proyecto, id_fase=id_fase, id_tipo_item=id_tipo_item)
 
     
@@ -117,6 +125,31 @@ class RelacionController(BaseController):
     @expose()
     def addHijo(self, **kw):
         self.insertarHijo(kw)
+	DBSession.flush() 
+	#Aqui comprobamos si todos los items de la fase actual  tienen sucesores, en ese caso
+	#el estado de la fase cambiamos a Finalizado
+	id_tipo_item=kw['id_tipo_item']
+	id_fase=kw['id_fase']
+	fase=DBSession.query(Fase).get(id_fase)
+	items_con_sucesores = 0
+	if fase.relacion_estado_fase.nombre_estado=='Con Lineas Bases':
+		tipo_items=DBSession.query(TipoItem).filter_by(id_fase=id_fase)
+		itemsDeFaseActual = []
+		for tipo_item in tipo_items:
+			itemsTipoItem = DBSession.query(Item).filter_by(id_tipo_item=tipo_item.id_tipo_item).filter_by(vivo=True).filter_by(estado='Aprobado')
+			for itemTipoItem in itemsTipoItem:
+				succs = DBSession.query(RelacionItem).filter_by(id_item1=itemTipoItem.id_item)
+				if succs != None:
+					items_con_sucesores = items_con_sucesores + 1
+				itemsDeFaseActual.append(itemTipoItem)
+	contador_items_en_fase_actual = 0
+	for item in itemsDeFaseActual:
+		contador_items_en_fase_actual = contador_items_en_fase_actual + 1
+	#Si contador_items_en_fase_actual es igual a items_con_sucesores entonces cumple la condicion
+	if contador_items_en_fase_actual == items_con_sucesores:
+		fase.id_estado_fase = '5'
+
+	
         redirect('listado', id_item=kw['id_item1'], id_proyecto=kw['id_proyecto'], id_fase=kw['id_fase'], id_tipo_item=kw['id_tipo_item'])
         
 

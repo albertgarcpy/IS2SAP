@@ -30,6 +30,7 @@ class PermisoController(BaseController):
         return dict(nombre_modelo='Permiso', page='index_permiso')      
 
     @expose('is2sap.templates.permiso.nuevo')
+    @require(predicates.has_permission('administracion',  msg=l_('Solo para el Administrador')))
     def nuevo(self, **kw):
         """Despliega el formulario para añadir un nuevo Permiso."""
         try:
@@ -45,6 +46,7 @@ class PermisoController(BaseController):
 
     @validate(crear_permiso_form, error_handler=nuevo)
     @expose()
+    @require(predicates.has_permission('administracion',  msg=l_('Solo para el Administrador')))
     def add(self, **kw):
         """Metodo para agregar un registro a la base de datos """
         try:
@@ -70,6 +72,7 @@ class PermisoController(BaseController):
         redirect("/admin/permiso/listado")
 
     @expose("is2sap.templates.permiso.listado")
+    @require(predicates.has_any_permission('administracion', 'lider_proyecto'))
     def listado(self,page=1):
         """Metodo para listar todos los Permisos existentes de la base de datos"""
         try:
@@ -84,6 +87,7 @@ class PermisoController(BaseController):
         return dict(permisos=currentPage.items, page='listado_permiso', currentPage=currentPage)
 
     @expose('is2sap.templates.permiso.editar')
+    @require(predicates.has_permission('administracion',  msg=l_('Solo para el Administrador')))
     def editar(self, id_permiso, **kw):
         """Metodo que rellena el formulario para editar los datos de un Permiso"""
         try:
@@ -103,6 +107,7 @@ class PermisoController(BaseController):
 
     @validate(editar_permiso_form, error_handler=editar)
     @expose()
+    @require(predicates.has_permission('administracion',  msg=l_('Solo para el Administrador')))
     def update(self, **kw):        
         """Metodo que actualizar la base de datos"""
         try:
@@ -127,6 +132,7 @@ class PermisoController(BaseController):
         redirect("/admin/permiso/listado")
 
     @expose('is2sap.templates.permiso.confirmar_eliminar')
+    @require(predicates.has_permission('administracion',  msg=l_('Solo para el Administrador')))
     def confirmar_eliminar(self, id_permiso, **kw):
         """Despliega confirmacion de eliminacion"""
         try:
@@ -141,6 +147,7 @@ class PermisoController(BaseController):
         return dict(nombre_modelo='Permiso', page='eliminar_permiso', value=permiso)
 
     @expose()
+    @require(predicates.has_permission('administracion',  msg=l_('Solo para el Administrador')))
     def delete(self, id_permiso, **kw):
         """Metodo que elimina un registro de la base de datos"""
         try:

@@ -23,6 +23,7 @@
 <!--
 		    <th>ID</th>
 -->
+		    <th align="center">Tipo</th>
 		    <th align="center">Nombre</th>
 		    <th align="center">Descripcion</th>
 		    <th align="center">Acciones</th>	
@@ -33,15 +34,16 @@
 <!--
 			    <td>${rol.id_rol}</td>
 -->
-			    <td width="41%" align="left">${rol.nombre_rol}</td>
+			    <td width="11%" align="left">${rol.tipo}</td>
+			    <td width="30%" align="left">${rol.nombre_rol}</td>
 			    <td width="48%" align="left">${rol.descripcion}</td>
 
                             <td width="11%" align="left">
-			       <ul class="menu acciones">
-			          <li class="top">
+			       <ul  class="menu acciones">
+			          <li py:if="tg.predicates.has_any_permission('administracion')" class="top">
                                      <a href="#" class="top_link"><span>ACCIONES</span></a>
 				       <ul class="sub">
-				          <li>
+				          <li >
                                               <a href="${tg.url('/admin/rol/editar', 
                                                        id_rol=rol.id_rol)}">Editar		                    
 				              </a>

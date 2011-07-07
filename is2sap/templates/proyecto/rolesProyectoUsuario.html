@@ -1,0 +1,67 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:py="http://genshi.edgewall.org/"
+      xmlns:xi="http://www.w3.org/2001/XInclude">
+
+      <xi:include href="master.html"/>
+      <xi:include href="menuProyecto.html"/>
+
+    <head>
+          <meta content="text/html; charset=UTF-8" http-equiv="content-type" py:replace="''"/>
+          <title>Lista de Roles de ${usuario.nombre_usuario}</title>
+    </head>
+
+    <body>
+            <h2>Roles de <div style="color:green"> ${usuario.nombre_usuario}</div></h2>
+            ${menu_rol_usuario(usuario.id_usuario, id_proyecto)}
+
+	    <table border="1" width="100%">
+		<tr style="color: purple; font-size: 11pt" align="center">
+<!--
+		    <th>ID</th>
+-->
+		    <th align="center">Nombre</th>
+		    <th align="center">Descripcion</th>
+		    <th align="center">Acciones</th>		
+		</tr>
+
+		<py:for each="rol in roles">
+			<tr>
+<!--
+			    <td>${rol.id_rol}</td>
+-->
+			    <td width="40%" align="left">${rol.nombre_rol}</td>
+			    <td width="48%" align="left">${rol.descripcion}</td>
+			    <td width="11%" align="center"> 
+			    <ul class="menu acciones">
+			       <li class="top">
+                                  <a href="#" class="top_link"><span>ACCIONES</span></a>
+				    <ul class="sub">
+				       <li><a href="${tg.url('/admin/proyecto/eliminar_rol_usuario', 
+                                      id_usuario=usuario.id_usuario, id_rol=rol.id_rol, id_proyecto=id_proyecto)}">Eliminar Rol		                    
+				           </a>
+                                       </li>
+                        <li><a href="${tg.url('/admin/proyecto/listadoPermisoFase', id_usuario=usuario.id_usuario, id_rol=rol.id_rol, id_proyecto=id_proyecto)}">Permiso de Fase		                    
+				           </a>
+                                       </li>					 															 										
+				    </ul>
+				</li>	
+			     </ul>
+
+			    </td>
+			</tr>
+		</py:for>
+	    </table>
+
+	    <p class="pagelist">
+		<a class="prevPage" href="${tg.url('/admin/usuario/roles',page=currentPage.previous_page,
+                                          id_usuario=usuario.id_usuario)}">&nbsp;</a>
+		${currentPage.pager(format='~3~', page_param='page', show_if_single_page=True)}
+		<a class="nextPage" href="${tg.url('/admin/usuario/roles',page=currentPage.next_page,
+                                          id_usuario=usuario.id_usuario)}">&nbsp;</a>
+	    </p>
+
+    </body>
+</html>

@@ -13,7 +13,11 @@
      </head>
 
      <body>
-	   <h2>CALCULO DE IMPACTO</h2>
+	   <h2>CALCULO DE IMPACTO</h2>       
+       <h2><py:for each="sumafase in sumaImpactoPorFases">
+			    <ul>${sumafase[0].nombre}: ${sumafase[1]}</ul>                
+       </py:for></h2>
+<h2>El impacto total del cambio del item es : ${impactoTotal}</h2>
 
        <img src='../images/example2_graph.png' alt="Smiley face"/>
        

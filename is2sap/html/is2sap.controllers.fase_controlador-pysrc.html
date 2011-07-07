@@ -1,0 +1,627 @@
+<?xml version="1.0" encoding="ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+          "DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>is2sap.controllers.fase_controlador</title>
+  <link rel="stylesheet" href="epydoc.css" type="text/css" />
+  <script type="text/javascript" src="epydoc.js"></script>
+</head>
+
+<body bgcolor="white" text="black" link="blue" vlink="#204080"
+      alink="#204080">
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+      <th class="navbar" width="100%"></th>
+  </tr>
+</table>
+<table width="100%" cellpadding="0" cellspacing="0">
+  <tr valign="top">
+    <td width="100%">
+      <span class="breadcrumbs">
+        Package&nbsp;is2sap ::
+        <a href="is2sap.controllers-module.html">Package&nbsp;controllers</a> ::
+        Module&nbsp;fase_controlador
+      </span>
+    </td>
+    <td>
+      <table cellpadding="0" cellspacing="0">
+        <!-- hide/show private -->
+        <tr><td align="right"><span class="options">[<a href="javascript:void(0);" class="privatelink"
+    onclick="toggle_private();">hide&nbsp;private</a>]</span></td></tr>
+        <tr><td align="right"><span class="options"
+            >[<a href="frames.html" target="_top">frames</a
+            >]&nbsp;|&nbsp;<a href="is2sap.controllers.fase_controlador-pysrc.html"
+            target="_top">no&nbsp;frames</a>]</span></td></tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<h1 class="epydoc">Source Code for <a href="is2sap.controllers.fase_controlador-module.html">Module is2sap.controllers.fase_controlador</a></h1>
+<pre class="py-src">
+<a name="L1"></a><tt class="py-lineno">  1</tt>  <tt class="py-line"><tt class="py-comment"># -*- coding: utf-8 -*-</tt> </tt>
+<a name="L2"></a><tt class="py-lineno">  2</tt>  <tt class="py-line"><tt class="py-docstring">"""Controlador de Fase"""</tt> </tt>
+<a name="L3"></a><tt class="py-lineno">  3</tt>  <tt class="py-line"> </tt>
+<a name="L4"></a><tt class="py-lineno">  4</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt class="py-name">tg</tt> <tt class="py-keyword">import</tt> <tt class="py-name">expose</tt><tt class="py-op">,</tt> <tt class="py-name">flash</tt><tt class="py-op">,</tt> <tt class="py-name">require</tt><tt class="py-op">,</tt> <tt class="py-name">url</tt><tt class="py-op">,</tt> <tt class="py-name">request</tt><tt class="py-op">,</tt> <tt class="py-name">redirect</tt> </tt>
+<a name="L5"></a><tt class="py-lineno">  5</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt class="py-name">pylons</tt><tt class="py-op">.</tt><tt class="py-name">i18n</tt> <tt class="py-keyword">import</tt> <tt class="py-name">ugettext</tt> <tt class="py-keyword">as</tt> <tt class="py-name">_</tt><tt class="py-op">,</tt> <tt class="py-name">lazy_ugettext</tt> <tt class="py-keyword">as</tt> <tt class="py-name">l_</tt> </tt>
+<a name="L6"></a><tt class="py-lineno">  6</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt class="py-name">tgext</tt><tt class="py-op">.</tt><tt id="link-0" class="py-name" targets="Variable is2sap.controllers.root.RootController.admin=is2sap.controllers.root.RootController-class.html#admin"><a title="is2sap.controllers.root.RootController.admin" class="py-name" href="#" onclick="return doclink('link-0', 'admin', 'link-0');">admin</a></tt><tt class="py-op">.</tt><tt class="py-name">tgadminconfig</tt> <tt class="py-keyword">import</tt> <tt class="py-name">TGAdminConfig</tt> </tt>
+<a name="L7"></a><tt class="py-lineno">  7</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt class="py-name">tgext</tt><tt class="py-op">.</tt><tt id="link-1" class="py-name"><a title="is2sap.controllers.root.RootController.admin" class="py-name" href="#" onclick="return doclink('link-1', 'admin', 'link-0');">admin</a></tt><tt class="py-op">.</tt><tt class="py-name">controller</tt> <tt class="py-keyword">import</tt> <tt id="link-2" class="py-name" targets="Class is2sap.controllers.admin_controlador.AdminController=is2sap.controllers.admin_controlador.AdminController-class.html"><a title="is2sap.controllers.admin_controlador.AdminController" class="py-name" href="#" onclick="return doclink('link-2', 'AdminController', 'link-2');">AdminController</a></tt><tt class="py-op">,</tt> <tt class="py-name">AdminConfig</tt> </tt>
+<a name="L8"></a><tt class="py-lineno">  8</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt class="py-name">repoze</tt><tt class="py-op">.</tt><tt class="py-name">what</tt> <tt class="py-keyword">import</tt> <tt class="py-name">predicates</tt> </tt>
+<a name="L9"></a><tt class="py-lineno">  9</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt class="py-name">tg</tt> <tt class="py-keyword">import</tt> <tt class="py-name">tmpl_context</tt><tt class="py-op">,</tt> <tt class="py-name">validate</tt> </tt>
+<a name="L10"></a><tt class="py-lineno"> 10</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt class="py-name">webhelpers</tt> <tt class="py-keyword">import</tt> <tt class="py-name">paginate</tt> </tt>
+<a name="L11"></a><tt class="py-lineno"> 11</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt class="py-name">sqlalchemy</tt><tt class="py-op">.</tt><tt class="py-name">orm</tt> <tt class="py-keyword">import</tt> <tt class="py-name">contains_eager</tt> </tt>
+<a name="L12"></a><tt class="py-lineno"> 12</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt class="py-name">sqlalchemy</tt> <tt class="py-keyword">import</tt> <tt class="py-name">func</tt> </tt>
+<a name="L13"></a><tt class="py-lineno"> 13</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt class="py-name">sqlalchemy</tt><tt class="py-op">.</tt><tt class="py-name">exc</tt> <tt class="py-keyword">import</tt> <tt class="py-name">IntegrityError</tt><tt class="py-op">,</tt> <tt class="py-name">SQLAlchemyError</tt> </tt>
+<a name="L14"></a><tt class="py-lineno"> 14</tt>  <tt class="py-line"><tt class="py-keyword">import</tt> <tt class="py-name">transaction</tt> </tt>
+<a name="L15"></a><tt class="py-lineno"> 15</tt>  <tt class="py-line"> </tt>
+<a name="L16"></a><tt class="py-lineno"> 16</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt class="py-name">is2sap</tt><tt class="py-op">.</tt><tt class="py-name">lib</tt><tt class="py-op">.</tt><tt class="py-name">base</tt> <tt class="py-keyword">import</tt> <tt class="py-name">BaseController</tt> </tt>
+<a name="L17"></a><tt class="py-lineno"> 17</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt class="py-name">is2sap</tt><tt class="py-op">.</tt><tt id="link-3" class="py-name" targets="Package is2sap.model=is2sap.model-module.html,Module is2sap.model.model=is2sap.model.model-module.html"><a title="is2sap.model
+is2sap.model.model" class="py-name" href="#" onclick="return doclink('link-3', 'model', 'link-3');">model</a></tt> <tt class="py-keyword">import</tt> <tt id="link-4" class="py-name" targets="Variable is2sap.model.DBSession=is2sap.model-module.html#DBSession"><a title="is2sap.model.DBSession" class="py-name" href="#" onclick="return doclink('link-4', 'DBSession', 'link-4');">DBSession</a></tt><tt class="py-op">,</tt> <tt id="link-5" class="py-name" targets="Variable is2sap.model.metadata=is2sap.model-module.html#metadata"><a title="is2sap.model.metadata" class="py-name" href="#" onclick="return doclink('link-5', 'metadata', 'link-5');">metadata</a></tt> </tt>
+<a name="L18"></a><tt class="py-lineno"> 18</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt class="py-name">is2sap</tt><tt class="py-op">.</tt><tt id="link-6" class="py-name"><a title="is2sap.model
+is2sap.model.model" class="py-name" href="#" onclick="return doclink('link-6', 'model', 'link-3');">model</a></tt><tt class="py-op">.</tt><tt id="link-7" class="py-name"><a title="is2sap.model
+is2sap.model.model" class="py-name" href="#" onclick="return doclink('link-7', 'model', 'link-3');">model</a></tt> <tt class="py-keyword">import</tt> <tt id="link-8" class="py-name" targets="Class is2sap.model.autogenerado_completo.Fase=is2sap.model.autogenerado_completo.Fase-class.html,Class is2sap.model.model.Fase=is2sap.model.model.Fase-class.html"><a title="is2sap.model.autogenerado_completo.Fase
+is2sap.model.model.Fase" class="py-name" href="#" onclick="return doclink('link-8', 'Fase', 'link-8');">Fase</a></tt><tt class="py-op">,</tt> <tt id="link-9" class="py-name" targets="Class is2sap.model.autogenerado_completo.Proyecto=is2sap.model.autogenerado_completo.Proyecto-class.html,Class is2sap.model.model.Proyecto=is2sap.model.model.Proyecto-class.html"><a title="is2sap.model.autogenerado_completo.Proyecto
+is2sap.model.model.Proyecto" class="py-name" href="#" onclick="return doclink('link-9', 'Proyecto', 'link-9');">Proyecto</a></tt><tt class="py-op">,</tt> <tt id="link-10" class="py-name" targets="Class is2sap.model.autogenerado_completo.EstadoFase=is2sap.model.autogenerado_completo.EstadoFase-class.html,Class is2sap.model.model.EstadoFase=is2sap.model.model.EstadoFase-class.html"><a title="is2sap.model.autogenerado_completo.EstadoFase
+is2sap.model.model.EstadoFase" class="py-name" href="#" onclick="return doclink('link-10', 'EstadoFase', 'link-10');">EstadoFase</a></tt><tt class="py-op">,</tt> <tt id="link-11" class="py-name" targets="Class is2sap.model.autogenerado_completo.TipoItem=is2sap.model.autogenerado_completo.TipoItem-class.html,Class is2sap.model.model.TipoItem=is2sap.model.model.TipoItem-class.html"><a title="is2sap.model.autogenerado_completo.TipoItem
+is2sap.model.model.TipoItem" class="py-name" href="#" onclick="return doclink('link-11', 'TipoItem', 'link-11');">TipoItem</a></tt><tt class="py-op">,</tt> <tt id="link-12" class="py-name" targets="Class is2sap.model.autogenerado_completo.Atributo=is2sap.model.autogenerado_completo.Atributo-class.html,Class is2sap.model.model.Atributo=is2sap.model.model.Atributo-class.html"><a title="is2sap.model.autogenerado_completo.Atributo
+is2sap.model.model.Atributo" class="py-name" href="#" onclick="return doclink('link-12', 'Atributo', 'link-12');">Atributo</a></tt> </tt>
+<a name="L19"></a><tt class="py-lineno"> 19</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt class="py-name">is2sap</tt> <tt class="py-keyword">import</tt> <tt id="link-13" class="py-name"><a title="is2sap.model
+is2sap.model.model" class="py-name" href="#" onclick="return doclink('link-13', 'model', 'link-3');">model</a></tt> </tt>
+<a name="L20"></a><tt class="py-lineno"> 20</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt class="py-name">is2sap</tt><tt class="py-op">.</tt><tt id="link-14" class="py-name" targets="Package is2sap.controllers=is2sap.controllers-module.html"><a title="is2sap.controllers" class="py-name" href="#" onclick="return doclink('link-14', 'controllers', 'link-14');">controllers</a></tt><tt class="py-op">.</tt><tt id="link-15" class="py-name" targets="Module is2sap.controllers.secure=is2sap.controllers.secure-module.html"><a title="is2sap.controllers.secure" class="py-name" href="#" onclick="return doclink('link-15', 'secure', 'link-15');">secure</a></tt> <tt class="py-keyword">import</tt> <tt id="link-16" class="py-name" targets="Class is2sap.controllers.secure.SecureController=is2sap.controllers.secure.SecureController-class.html"><a title="is2sap.controllers.secure.SecureController" class="py-name" href="#" onclick="return doclink('link-16', 'SecureController', 'link-16');">SecureController</a></tt> </tt>
+<a name="L21"></a><tt class="py-lineno"> 21</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt class="py-name">is2sap</tt><tt class="py-op">.</tt><tt id="link-17" class="py-name"><a title="is2sap.controllers" class="py-name" href="#" onclick="return doclink('link-17', 'controllers', 'link-14');">controllers</a></tt><tt class="py-op">.</tt><tt id="link-18" class="py-name" targets="Module is2sap.controllers.error=is2sap.controllers.error-module.html,Variable is2sap.controllers.root.RootController.error=is2sap.controllers.root.RootController-class.html#error"><a title="is2sap.controllers.error
+is2sap.controllers.root.RootController.error" class="py-name" href="#" onclick="return doclink('link-18', 'error', 'link-18');">error</a></tt> <tt class="py-keyword">import</tt> <tt id="link-19" class="py-name" targets="Class is2sap.controllers.error.ErrorController=is2sap.controllers.error.ErrorController-class.html"><a title="is2sap.controllers.error.ErrorController" class="py-name" href="#" onclick="return doclink('link-19', 'ErrorController', 'link-19');">ErrorController</a></tt> </tt>
+<a name="L22"></a><tt class="py-lineno"> 22</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt class="py-name">is2sap</tt><tt class="py-op">.</tt><tt class="py-name">widgets</tt><tt class="py-op">.</tt><tt class="py-name">fase_form</tt> <tt class="py-keyword">import</tt> <tt class="py-name">crear_fase_form</tt><tt class="py-op">,</tt> <tt class="py-name">editar_fase_form</tt> </tt>
+<a name="L23"></a><tt class="py-lineno"> 23</tt>  <tt class="py-line"> </tt>
+<a name="L24"></a><tt class="py-lineno"> 24</tt>  <tt class="py-line"><tt class="py-name">__all__</tt> <tt class="py-op">=</tt> <tt class="py-op">[</tt><tt class="py-string">'FaseController'</tt><tt class="py-op">]</tt> </tt>
+<a name="FaseController"></a><div id="FaseController-def"><a name="L25"></a><tt class="py-lineno"> 25</tt>  <tt class="py-line"> </tt>
+<a name="L26"></a><tt class="py-lineno"> 26</tt> <a class="py-toggle" href="#" id="FaseController-toggle" onclick="return toggle('FaseController');">-</a><tt class="py-line"><tt class="py-keyword">class</tt> <a class="py-def-name" href="is2sap.controllers.fase_controlador.FaseController-class.html">FaseController</a><tt class="py-op">(</tt><tt class="py-base-class">BaseController</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="FaseController-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="FaseController-expanded"><a name="L27"></a><tt class="py-lineno"> 27</tt>  <tt class="py-line"> </tt>
+<a name="L28"></a><tt class="py-lineno"> 28</tt>  <tt class="py-line">    <tt class="py-decorator">@</tt><tt class="py-decorator">expose</tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="FaseController.index"></a><div id="FaseController.index-def"><a name="L29"></a><tt class="py-lineno"> 29</tt> <a class="py-toggle" href="#" id="FaseController.index-toggle" onclick="return toggle('FaseController.index');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="is2sap.controllers.fase_controlador.FaseController-class.html#index">index</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="FaseController.index-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="FaseController.index-expanded"><a name="L30"></a><tt class="py-lineno"> 30</tt>  <tt class="py-line">        <tt class="py-docstring">"""Muestra la pantalla inicial"""</tt> </tt>
+<a name="L31"></a><tt class="py-lineno"> 31</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">dict</tt><tt class="py-op">(</tt><tt class="py-name">nombre_modelo</tt><tt class="py-op">=</tt><tt class="py-string">'Fase'</tt><tt class="py-op">,</tt> <tt class="py-name">page</tt><tt class="py-op">=</tt><tt class="py-string">'index_fase'</tt><tt class="py-op">)</tt>      </tt>
+</div><a name="L32"></a><tt class="py-lineno"> 32</tt>  <tt class="py-line"> </tt>
+<a name="L33"></a><tt class="py-lineno"> 33</tt>  <tt class="py-line">    <tt class="py-decorator">@</tt><tt class="py-decorator">expose</tt><tt class="py-op">(</tt><tt class="py-string">'is2sap.templates.fase.nuevo'</tt><tt class="py-op">)</tt> </tt>
+<a name="L34"></a><tt class="py-lineno"> 34</tt>  <tt class="py-line">    <tt class="py-decorator">@</tt><tt class="py-decorator">require</tt><tt class="py-op">(</tt><tt class="py-name">predicates</tt><tt class="py-op">.</tt><tt class="py-name">has_any_permission</tt><tt class="py-op">(</tt><tt class="py-string">'administracion'</tt><tt class="py-op">,</tt>  <tt class="py-string">'lider_proyecto'</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="FaseController.nuevoDesdeProyecto"></a><div id="FaseController.nuevoDesdeProyecto-def"><a name="L35"></a><tt class="py-lineno"> 35</tt> <a class="py-toggle" href="#" id="FaseController.nuevoDesdeProyecto-toggle" onclick="return toggle('FaseController.nuevoDesdeProyecto');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="is2sap.controllers.fase_controlador.FaseController-class.html#nuevoDesdeProyecto">nuevoDesdeProyecto</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">id_proyecto</tt><tt class="py-op">,</tt> <tt class="py-op">**</tt><tt class="py-param">kw</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="FaseController.nuevoDesdeProyecto-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="FaseController.nuevoDesdeProyecto-expanded"><a name="L36"></a><tt class="py-lineno"> 36</tt>  <tt class="py-line">        <tt class="py-docstring">"""Despliega el formulario para a&#241;adir una fase al proyecto."""</tt> </tt>
+<a name="L37"></a><tt class="py-lineno"> 37</tt>  <tt class="py-line">        <tt class="py-keyword">try</tt><tt class="py-op">:</tt> </tt>
+<a name="L38"></a><tt class="py-lineno"> 38</tt>  <tt class="py-line">            <tt class="py-name">tmpl_context</tt><tt class="py-op">.</tt><tt class="py-name">form</tt> <tt class="py-op">=</tt> <tt class="py-name">crear_fase_form</tt> </tt>
+<a name="L39"></a><tt class="py-lineno"> 39</tt>  <tt class="py-line">            <tt id="link-20" class="py-name" targets="Variable is2sap.controllers.admin_controlador.AdminController.proyecto=is2sap.controllers.admin_controlador.AdminController-class.html#proyecto"><a title="is2sap.controllers.admin_controlador.AdminController.proyecto" class="py-name" href="#" onclick="return doclink('link-20', 'proyecto', 'link-20');">proyecto</a></tt> <tt class="py-op">=</tt> <tt id="link-21" class="py-name"><a title="is2sap.model.DBSession" class="py-name" href="#" onclick="return doclink('link-21', 'DBSession', 'link-4');">DBSession</a></tt><tt class="py-op">.</tt><tt class="py-name">query</tt><tt class="py-op">(</tt><tt id="link-22" class="py-name"><a title="is2sap.model.autogenerado_completo.Proyecto
+is2sap.model.model.Proyecto" class="py-name" href="#" onclick="return doclink('link-22', 'Proyecto', 'link-9');">Proyecto</a></tt><tt class="py-op">)</tt><tt class="py-op">.</tt><tt class="py-name">get</tt><tt class="py-op">(</tt><tt id="link-23" class="py-name" targets="Variable is2sap.model.autogenerado_completo.Proyecto.id_proyecto=is2sap.model.autogenerado_completo.Proyecto-class.html#id_proyecto,Variable is2sap.model.model.Proyecto.id_proyecto=is2sap.model.model.Proyecto-class.html#id_proyecto"><a title="is2sap.model.autogenerado_completo.Proyecto.id_proyecto
+is2sap.model.model.Proyecto.id_proyecto" class="py-name" href="#" onclick="return doclink('link-23', 'id_proyecto', 'link-23');">id_proyecto</a></tt><tt class="py-op">)</tt> </tt>
+<a name="L40"></a><tt class="py-lineno"> 40</tt>  <tt class="py-line"> </tt>
+<a name="L41"></a><tt class="py-lineno"> 41</tt>  <tt class="py-line">            <tt class="py-keyword">if</tt> <tt id="link-24" class="py-name"><a title="is2sap.controllers.admin_controlador.AdminController.proyecto" class="py-name" href="#" onclick="return doclink('link-24', 'proyecto', 'link-20');">proyecto</a></tt><tt class="py-op">.</tt><tt id="link-25" class="py-name" targets="Variable is2sap.model.autogenerado_completo.Proyecto.iniciado=is2sap.model.autogenerado_completo.Proyecto-class.html#iniciado,Variable is2sap.model.model.Proyecto.iniciado=is2sap.model.model.Proyecto-class.html#iniciado"><a title="is2sap.model.autogenerado_completo.Proyecto.iniciado
+is2sap.model.model.Proyecto.iniciado" class="py-name" href="#" onclick="return doclink('link-25', 'iniciado', 'link-25');">iniciado</a></tt> <tt class="py-op">==</tt> <tt class="py-name">True</tt><tt class="py-op">:</tt> </tt>
+<a name="L42"></a><tt class="py-lineno"> 42</tt>  <tt class="py-line">               <tt class="py-name">flash</tt><tt class="py-op">(</tt><tt class="py-name">_</tt><tt class="py-op">(</tt><tt class="py-string">"Proyecto ya iniciado. No puede crear fases!"</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> <tt class="py-string">'error'</tt><tt class="py-op">)</tt> </tt>
+<a name="L43"></a><tt class="py-lineno"> 43</tt>  <tt class="py-line">               <tt class="py-name">redirect</tt><tt class="py-op">(</tt><tt class="py-string">"/admin/fase/listadoFasesPorProyecto"</tt><tt class="py-op">,</tt> <tt id="link-26" class="py-name"><a title="is2sap.model.autogenerado_completo.Proyecto.id_proyecto
+is2sap.model.model.Proyecto.id_proyecto" class="py-name" href="#" onclick="return doclink('link-26', 'id_proyecto', 'link-23');">id_proyecto</a></tt><tt class="py-op">=</tt><tt id="link-27" class="py-name"><a title="is2sap.model.autogenerado_completo.Proyecto.id_proyecto
+is2sap.model.model.Proyecto.id_proyecto" class="py-name" href="#" onclick="return doclink('link-27', 'id_proyecto', 'link-23');">id_proyecto</a></tt><tt class="py-op">)</tt> </tt>
+<a name="L44"></a><tt class="py-lineno"> 44</tt>  <tt class="py-line">          </tt>
+<a name="L45"></a><tt class="py-lineno"> 45</tt>  <tt class="py-line">            <tt class="py-name">maxnumerofase</tt> <tt class="py-op">=</tt> <tt id="link-28" class="py-name"><a title="is2sap.model.DBSession" class="py-name" href="#" onclick="return doclink('link-28', 'DBSession', 'link-4');">DBSession</a></tt><tt class="py-op">.</tt><tt class="py-name">query</tt><tt class="py-op">(</tt><tt class="py-name">func</tt><tt class="py-op">.</tt><tt class="py-name">max</tt><tt class="py-op">(</tt><tt id="link-29" class="py-name"><a title="is2sap.model.autogenerado_completo.Fase
+is2sap.model.model.Fase" class="py-name" href="#" onclick="return doclink('link-29', 'Fase', 'link-8');">Fase</a></tt><tt class="py-op">.</tt><tt class="py-name">numero_fase</tt><tt class="py-op">)</tt><tt class="py-op">)</tt><tt class="py-op">.</tt><tt class="py-name">filter_by</tt><tt class="py-op">(</tt><tt id="link-30" class="py-name"><a title="is2sap.model.autogenerado_completo.Proyecto.id_proyecto
+is2sap.model.model.Proyecto.id_proyecto" class="py-name" href="#" onclick="return doclink('link-30', 'id_proyecto', 'link-23');">id_proyecto</a></tt><tt class="py-op">=</tt><tt id="link-31" class="py-name"><a title="is2sap.model.autogenerado_completo.Proyecto.id_proyecto
+is2sap.model.model.Proyecto.id_proyecto" class="py-name" href="#" onclick="return doclink('link-31', 'id_proyecto', 'link-23');">id_proyecto</a></tt><tt class="py-op">)</tt><tt class="py-op">.</tt><tt class="py-name">first</tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L46"></a><tt class="py-lineno"> 46</tt>  <tt class="py-line">            <tt class="py-name">kw</tt><tt class="py-op">[</tt><tt class="py-string">'id_proyecto'</tt><tt class="py-op">]</tt><tt class="py-op">=</tt><tt id="link-32" class="py-name"><a title="is2sap.model.autogenerado_completo.Proyecto.id_proyecto
+is2sap.model.model.Proyecto.id_proyecto" class="py-name" href="#" onclick="return doclink('link-32', 'id_proyecto', 'link-23');">id_proyecto</a></tt> </tt>
+<a name="L47"></a><tt class="py-lineno"> 47</tt>  <tt class="py-line">            <tt class="py-name">kw</tt><tt class="py-op">[</tt><tt class="py-string">'id_estado_fase'</tt><tt class="py-op">]</tt><tt class="py-op">=</tt><tt class="py-number">1</tt> </tt>
+<a name="L48"></a><tt class="py-lineno"> 48</tt>  <tt class="py-line"> </tt>
+<a name="L49"></a><tt class="py-lineno"> 49</tt>  <tt class="py-line">            <tt class="py-keyword">if</tt> <tt class="py-name">maxnumerofase</tt><tt class="py-op">[</tt><tt class="py-number">0</tt><tt class="py-op">]</tt><tt class="py-op">==</tt><tt class="py-name">None</tt><tt class="py-op">:</tt> </tt>
+<a name="L50"></a><tt class="py-lineno"> 50</tt>  <tt class="py-line">               <tt class="py-name">kw</tt><tt class="py-op">[</tt><tt class="py-string">'numero_fase'</tt><tt class="py-op">]</tt><tt class="py-op">=</tt><tt class="py-number">1</tt> </tt>
+<a name="L51"></a><tt class="py-lineno"> 51</tt>  <tt class="py-line">            <tt class="py-keyword">else</tt><tt class="py-op">:</tt> </tt>
+<a name="L52"></a><tt class="py-lineno"> 52</tt>  <tt class="py-line">               <tt class="py-name">kw</tt><tt class="py-op">[</tt><tt class="py-string">'numero_fase'</tt><tt class="py-op">]</tt><tt class="py-op">=</tt><tt class="py-name">maxnumerofase</tt><tt class="py-op">[</tt><tt class="py-number">0</tt><tt class="py-op">]</tt> <tt class="py-op">+</tt> <tt class="py-number">1</tt> </tt>
+<a name="L53"></a><tt class="py-lineno"> 53</tt>  <tt class="py-line"> </tt>
+<a name="L54"></a><tt class="py-lineno"> 54</tt>  <tt class="py-line">        <tt class="py-keyword">except</tt> <tt class="py-name">SQLAlchemyError</tt><tt class="py-op">:</tt> </tt>
+<a name="L55"></a><tt class="py-lineno"> 55</tt>  <tt class="py-line">            <tt class="py-name">flash</tt><tt class="py-op">(</tt><tt class="py-name">_</tt><tt class="py-op">(</tt><tt class="py-string">"No se pudo acceder a Creacion de Fases! SQLAlchemyError..."</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> <tt class="py-string">'error'</tt><tt class="py-op">)</tt> </tt>
+<a name="L56"></a><tt class="py-lineno"> 56</tt>  <tt class="py-line">            <tt class="py-name">redirect</tt><tt class="py-op">(</tt><tt class="py-string">"/admin/fase/listadoFasesPorProyecto"</tt><tt class="py-op">,</tt> <tt id="link-33" class="py-name"><a title="is2sap.model.autogenerado_completo.Proyecto.id_proyecto
+is2sap.model.model.Proyecto.id_proyecto" class="py-name" href="#" onclick="return doclink('link-33', 'id_proyecto', 'link-23');">id_proyecto</a></tt><tt class="py-op">=</tt><tt id="link-34" class="py-name"><a title="is2sap.model.autogenerado_completo.Proyecto.id_proyecto
+is2sap.model.model.Proyecto.id_proyecto" class="py-name" href="#" onclick="return doclink('link-34', 'id_proyecto', 'link-23');">id_proyecto</a></tt><tt class="py-op">)</tt> </tt>
+<a name="L57"></a><tt class="py-lineno"> 57</tt>  <tt class="py-line">        <tt class="py-keyword">except</tt> <tt class="py-op">(</tt><tt class="py-name">AttributeError</tt><tt class="py-op">,</tt> <tt class="py-name">NameError</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L58"></a><tt class="py-lineno"> 58</tt>  <tt class="py-line">            <tt class="py-name">flash</tt><tt class="py-op">(</tt><tt class="py-name">_</tt><tt class="py-op">(</tt><tt class="py-string">"No se pudo acceder a Creacion de Fases! Hay Problemas con el servidor..."</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> <tt class="py-string">'error'</tt><tt class="py-op">)</tt> </tt>
+<a name="L59"></a><tt class="py-lineno"> 59</tt>  <tt class="py-line">            <tt class="py-name">redirect</tt><tt class="py-op">(</tt><tt class="py-string">"/admin/fase/listadoFasesPorProyecto"</tt><tt class="py-op">,</tt> <tt id="link-35" class="py-name"><a title="is2sap.model.autogenerado_completo.Proyecto.id_proyecto
+is2sap.model.model.Proyecto.id_proyecto" class="py-name" href="#" onclick="return doclink('link-35', 'id_proyecto', 'link-23');">id_proyecto</a></tt><tt class="py-op">=</tt><tt id="link-36" class="py-name"><a title="is2sap.model.autogenerado_completo.Proyecto.id_proyecto
+is2sap.model.model.Proyecto.id_proyecto" class="py-name" href="#" onclick="return doclink('link-36', 'id_proyecto', 'link-23');">id_proyecto</a></tt><tt class="py-op">)</tt> </tt>
+<a name="L60"></a><tt class="py-lineno"> 60</tt>  <tt class="py-line"> </tt>
+<a name="L61"></a><tt class="py-lineno"> 61</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">dict</tt><tt class="py-op">(</tt><tt class="py-name">nombre_modelo</tt><tt class="py-op">=</tt><tt class="py-string">'Fase'</tt><tt class="py-op">,</tt> <tt class="py-name">idProyecto</tt><tt class="py-op">=</tt><tt id="link-37" class="py-name"><a title="is2sap.model.autogenerado_completo.Proyecto.id_proyecto
+is2sap.model.model.Proyecto.id_proyecto" class="py-name" href="#" onclick="return doclink('link-37', 'id_proyecto', 'link-23');">id_proyecto</a></tt><tt class="py-op">,</tt> <tt class="py-name">page</tt><tt class="py-op">=</tt><tt class="py-string">'nuevo'</tt><tt class="py-op">,</tt> <tt class="py-name">value</tt><tt class="py-op">=</tt><tt class="py-name">kw</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L62"></a><tt class="py-lineno"> 62</tt>  <tt class="py-line"> </tt>
+<a name="L63"></a><tt class="py-lineno"> 63</tt>  <tt class="py-line">    <tt class="py-decorator">@</tt><tt class="py-decorator">validate</tt><tt class="py-op">(</tt><tt class="py-name">crear_fase_form</tt><tt class="py-op">,</tt> <tt class="py-name">error_handler</tt><tt class="py-op">=</tt><tt id="link-38" class="py-name" targets="Method is2sap.controllers.fase_controlador.FaseController.nuevoDesdeProyecto()=is2sap.controllers.fase_controlador.FaseController-class.html#nuevoDesdeProyecto"><a title="is2sap.controllers.fase_controlador.FaseController.nuevoDesdeProyecto" class="py-name" href="#" onclick="return doclink('link-38', 'nuevoDesdeProyecto', 'link-38');">nuevoDesdeProyecto</a></tt><tt class="py-op">)</tt> </tt>
+<a name="L64"></a><tt class="py-lineno"> 64</tt>  <tt class="py-line">    <tt class="py-decorator">@</tt><tt class="py-decorator">expose</tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L65"></a><tt class="py-lineno"> 65</tt>  <tt class="py-line">    <tt class="py-decorator">@</tt><tt class="py-decorator">require</tt><tt class="py-op">(</tt><tt class="py-name">predicates</tt><tt class="py-op">.</tt><tt class="py-name">has_any_permission</tt><tt class="py-op">(</tt><tt class="py-string">'administracion'</tt><tt class="py-op">,</tt>  <tt class="py-string">'lider_proyecto'</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="FaseController.add"></a><div id="FaseController.add-def"><a name="L66"></a><tt class="py-lineno"> 66</tt> <a class="py-toggle" href="#" id="FaseController.add-toggle" onclick="return toggle('FaseController.add');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="is2sap.controllers.fase_controlador.FaseController-class.html#add">add</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-op">**</tt><tt class="py-param">kw</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="FaseController.add-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="FaseController.add-expanded"><a name="L67"></a><tt class="py-lineno"> 67</tt>  <tt class="py-line">        <tt class="py-docstring">"""Metodo para agregar un registro a la base de datos """</tt> </tt>
+<a name="L68"></a><tt class="py-lineno"> 68</tt>  <tt class="py-line">        <tt class="py-keyword">try</tt><tt class="py-op">:</tt> </tt>
+<a name="L69"></a><tt class="py-lineno"> 69</tt>  <tt class="py-line">            <tt id="link-39" class="py-name" targets="Variable is2sap.controllers.admin_controlador.AdminController.fase=is2sap.controllers.admin_controlador.AdminController-class.html#fase,Variable is2sap.model.model.LineaBase.fase=is2sap.model.model.LineaBase-class.html#fase,Variable is2sap.model.model.LineaBaseHistorial.fase=is2sap.model.model.LineaBaseHistorial-class.html#fase"><a title="is2sap.controllers.admin_controlador.AdminController.fase
+is2sap.model.model.LineaBase.fase
+is2sap.model.model.LineaBaseHistorial.fase" class="py-name" href="#" onclick="return doclink('link-39', 'fase', 'link-39');">fase</a></tt> <tt class="py-op">=</tt> <tt id="link-40" class="py-name"><a title="is2sap.model.autogenerado_completo.Fase
+is2sap.model.model.Fase" class="py-name" href="#" onclick="return doclink('link-40', 'Fase', 'link-8');">Fase</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L70"></a><tt class="py-lineno"> 70</tt>  <tt class="py-line">            <tt id="link-41" class="py-name"><a title="is2sap.controllers.admin_controlador.AdminController.fase
+is2sap.model.model.LineaBase.fase
+is2sap.model.model.LineaBaseHistorial.fase" class="py-name" href="#" onclick="return doclink('link-41', 'fase', 'link-39');">fase</a></tt><tt class="py-op">.</tt><tt id="link-42" class="py-name" targets="Variable is2sap.model.autogenerado_completo.EstadoFase.id_estado_fase=is2sap.model.autogenerado_completo.EstadoFase-class.html#id_estado_fase,Variable is2sap.model.model.EstadoFase.id_estado_fase=is2sap.model.model.EstadoFase-class.html#id_estado_fase"><a title="is2sap.model.autogenerado_completo.EstadoFase.id_estado_fase
+is2sap.model.model.EstadoFase.id_estado_fase" class="py-name" href="#" onclick="return doclink('link-42', 'id_estado_fase', 'link-42');">id_estado_fase</a></tt><tt class="py-op">=</tt><tt class="py-name">kw</tt><tt class="py-op">[</tt><tt class="py-string">'id_estado_fase'</tt><tt class="py-op">]</tt> </tt>
+<a name="L71"></a><tt class="py-lineno"> 71</tt>  <tt class="py-line">            <tt id="link-43" class="py-name"><a title="is2sap.controllers.admin_controlador.AdminController.fase
+is2sap.model.model.LineaBase.fase
+is2sap.model.model.LineaBaseHistorial.fase" class="py-name" href="#" onclick="return doclink('link-43', 'fase', 'link-39');">fase</a></tt><tt class="py-op">.</tt><tt id="link-44" class="py-name"><a title="is2sap.model.autogenerado_completo.Proyecto.id_proyecto
+is2sap.model.model.Proyecto.id_proyecto" class="py-name" href="#" onclick="return doclink('link-44', 'id_proyecto', 'link-23');">id_proyecto</a></tt> <tt class="py-op">=</tt> <tt class="py-name">kw</tt><tt class="py-op">[</tt><tt class="py-string">'id_proyecto'</tt><tt class="py-op">]</tt> </tt>
+<a name="L72"></a><tt class="py-lineno"> 72</tt>  <tt class="py-line">            <tt id="link-45" class="py-name"><a title="is2sap.controllers.admin_controlador.AdminController.fase
+is2sap.model.model.LineaBase.fase
+is2sap.model.model.LineaBaseHistorial.fase" class="py-name" href="#" onclick="return doclink('link-45', 'fase', 'link-39');">fase</a></tt><tt class="py-op">.</tt><tt id="link-46" class="py-name" targets="Variable is2sap.model.autogenerado.Permiso.nombre=is2sap.model.autogenerado.Permiso-class.html#nombre,Variable is2sap.model.autogenerado_completo.Atributo.nombre=is2sap.model.autogenerado_completo.Atributo-class.html#nombre,Variable is2sap.model.autogenerado_completo.Permiso.nombre=is2sap.model.autogenerado_completo.Permiso-class.html#nombre,Variable is2sap.model.autogenerado_completo.Proyecto.nombre=is2sap.model.autogenerado_completo.Proyecto-class.html#nombre,Variable is2sap.model.autogenerado_completo.Rol.nombre=is2sap.model.autogenerado_completo.Rol-class.html#nombre,Variable is2sap.model.autogenerado_completo.TipoItem.nombre=is2sap.model.autogenerado_completo.TipoItem-class.html#nombre,Variable is2sap.model.model.Atributo.nombre=is2sap.model.model.Atributo-class.html#nombre,Variable is2sap.model.model.LineaBase.nombre=is2sap.model.model.LineaBase-class.html#nombre,Variable is2sap.model.model.LineaBaseHistorial.nombre=is2sap.model.model.LineaBaseHistorial-class.html#nombre,Variable is2sap.model.model.Proyecto.nombre=is2sap.model.model.Proyecto-class.html#nombre,Variable is2sap.model.model.TipoItem.nombre=is2sap.model.model.TipoItem-class.html#nombre,Variable is2sap.model.model.Usuario.nombre=is2sap.model.model.Usuario-class.html#nombre"><a title="is2sap.model.autogenerado.Permiso.nombre
+is2sap.model.autogenerado_completo.Atributo.nombre
+is2sap.model.autogenerado_completo.Permiso.nombre
+is2sap.model.autogenerado_completo.Proyecto.nombre
+is2sap.model.autogenerado_completo.Rol.nombre
+is2sap.model.autogenerado_completo.TipoItem.nombre
+is2sap.model.model.Atributo.nombre
+is2sap.model.model.LineaBase.nombre
+is2sap.model.model.LineaBaseHistorial.nombre
+is2sap.model.model.Proyecto.nombre
+is2sap.model.model.TipoItem.nombre
+is2sap.model.model.Usuario.nombre" class="py-name" href="#" onclick="return doclink('link-46', 'nombre', 'link-46');">nombre</a></tt> <tt class="py-op">=</tt> <tt class="py-name">kw</tt><tt class="py-op">[</tt><tt class="py-string">'nombre'</tt><tt class="py-op">]</tt> </tt>
+<a name="L73"></a><tt class="py-lineno"> 73</tt>  <tt class="py-line">            <tt id="link-47" class="py-name"><a title="is2sap.controllers.admin_controlador.AdminController.fase
+is2sap.model.model.LineaBase.fase
+is2sap.model.model.LineaBaseHistorial.fase" class="py-name" href="#" onclick="return doclink('link-47', 'fase', 'link-39');">fase</a></tt><tt class="py-op">.</tt><tt id="link-48" class="py-name" targets="Variable is2sap.model.autogenerado.LineaBase.descripcion=is2sap.model.autogenerado.LineaBase-class.html#descripcion,Variable is2sap.model.autogenerado.Permiso.descripcion=is2sap.model.autogenerado.Permiso-class.html#descripcion,Variable is2sap.model.autogenerado_completo.Atributo.descripcion=is2sap.model.autogenerado_completo.Atributo-class.html#descripcion,Variable is2sap.model.autogenerado_completo.LineaBase.descripcion=is2sap.model.autogenerado_completo.LineaBase-class.html#descripcion,Variable is2sap.model.autogenerado_completo.Permiso.descripcion=is2sap.model.autogenerado_completo.Permiso-class.html#descripcion,Variable is2sap.model.autogenerado_completo.Proyecto.descripcion=is2sap.model.autogenerado_completo.Proyecto-class.html#descripcion,Variable is2sap.model.autogenerado_completo.Rol.descripcion=is2sap.model.autogenerado_completo.Rol-class.html#descripcion,Variable is2sap.model.autogenerado_completo.TipoItem.descripcion=is2sap.model.autogenerado_completo.TipoItem-class.html#descripcion,Variable is2sap.model.model.Atributo.descripcion=is2sap.model.model.Atributo-class.html#descripcion,Variable is2sap.model.model.Item.descripcion=is2sap.model.model.Item-class.html#descripcion,Variable is2sap.model.model.ItemHistorial.descripcion=is2sap.model.model.ItemHistorial-class.html#descripcion,Variable is2sap.model.model.LineaBase.descripcion=is2sap.model.model.LineaBase-class.html#descripcion,Variable is2sap.model.model.LineaBaseHistorial.descripcion=is2sap.model.model.LineaBaseHistorial-class.html#descripcion,Variable is2sap.model.model.Permiso.descripcion=is2sap.model.model.Permiso-class.html#descripcion,Variable is2sap.model.model.Proyecto.descripcion=is2sap.model.model.Proyecto-class.html#descripcion,Variable is2sap.model.model.Rol.descripcion=is2sap.model.model.Rol-class.html#descripcion,Variable is2sap.model.model.TipoItem.descripcion=is2sap.model.model.TipoItem-class.html#descripcion"><a title="is2sap.model.autogenerado.LineaBase.descripcion
+is2sap.model.autogenerado.Permiso.descripcion
+is2sap.model.autogenerado_completo.Atributo.descripcion
+is2sap.model.autogenerado_completo.LineaBase.descripcion
+is2sap.model.autogenerado_completo.Permiso.descripcion
+is2sap.model.autogenerado_completo.Proyecto.descripcion
+is2sap.model.autogenerado_completo.Rol.descripcion
+is2sap.model.autogenerado_completo.TipoItem.descripcion
+is2sap.model.model.Atributo.descripcion
+is2sap.model.model.Item.descripcion
+is2sap.model.model.ItemHistorial.descripcion
+is2sap.model.model.LineaBase.descripcion
+is2sap.model.model.LineaBaseHistorial.descripcion
+is2sap.model.model.Permiso.descripcion
+is2sap.model.model.Proyecto.descripcion
+is2sap.model.model.Rol.descripcion
+is2sap.model.model.TipoItem.descripcion" class="py-name" href="#" onclick="return doclink('link-48', 'descripcion', 'link-48');">descripcion</a></tt> <tt class="py-op">=</tt> <tt class="py-name">kw</tt><tt class="py-op">[</tt><tt class="py-string">'descripcion'</tt><tt class="py-op">]</tt> </tt>
+<a name="L74"></a><tt class="py-lineno"> 74</tt>  <tt class="py-line">            <tt id="link-49" class="py-name"><a title="is2sap.controllers.admin_controlador.AdminController.fase
+is2sap.model.model.LineaBase.fase
+is2sap.model.model.LineaBaseHistorial.fase" class="py-name" href="#" onclick="return doclink('link-49', 'fase', 'link-39');">fase</a></tt><tt class="py-op">.</tt><tt class="py-name">numero_fase</tt> <tt class="py-op">=</tt> <tt class="py-name">kw</tt><tt class="py-op">[</tt><tt class="py-string">'numero_fase'</tt><tt class="py-op">]</tt> </tt>
+<a name="L75"></a><tt class="py-lineno"> 75</tt>  <tt class="py-line">            <tt id="link-50" class="py-name"><a title="is2sap.model.DBSession" class="py-name" href="#" onclick="return doclink('link-50', 'DBSession', 'link-4');">DBSession</a></tt><tt class="py-op">.</tt><tt id="link-51" class="py-name" targets="Method is2sap.controllers.atributo_controlador.AtributoController.add()=is2sap.controllers.atributo_controlador.AtributoController-class.html#add,Method is2sap.controllers.fase_controlador.FaseController.add()=is2sap.controllers.fase_controlador.FaseController-class.html#add,Method is2sap.controllers.item_controlador.ItemController.add()=is2sap.controllers.item_controlador.ItemController-class.html#add,Method is2sap.controllers.linea_base_controlador.LineaBaseController.add()=is2sap.controllers.linea_base_controlador.LineaBaseController-class.html#add,Method is2sap.controllers.permiso_controlador.PermisoController.add()=is2sap.controllers.permiso_controlador.PermisoController-class.html#add,Method is2sap.controllers.proyecto_controlador.ProyectoController.add()=is2sap.controllers.proyecto_controlador.ProyectoController-class.html#add,Method is2sap.controllers.rol_controlador.RolController.add()=is2sap.controllers.rol_controlador.RolController-class.html#add,Method is2sap.controllers.tipo_item_controlador.TipoItemController.add()=is2sap.controllers.tipo_item_controlador.TipoItemController-class.html#add,Method is2sap.controllers.usuario_controlador.UsuarioController.add()=is2sap.controllers.usuario_controlador.UsuarioController-class.html#add"><a title="is2sap.controllers.atributo_controlador.AtributoController.add
+is2sap.controllers.fase_controlador.FaseController.add
+is2sap.controllers.item_controlador.ItemController.add
+is2sap.controllers.linea_base_controlador.LineaBaseController.add
+is2sap.controllers.permiso_controlador.PermisoController.add
+is2sap.controllers.proyecto_controlador.ProyectoController.add
+is2sap.controllers.rol_controlador.RolController.add
+is2sap.controllers.tipo_item_controlador.TipoItemController.add
+is2sap.controllers.usuario_controlador.UsuarioController.add" class="py-name" href="#" onclick="return doclink('link-51', 'add', 'link-51');">add</a></tt><tt class="py-op">(</tt><tt id="link-52" class="py-name"><a title="is2sap.controllers.admin_controlador.AdminController.fase
+is2sap.model.model.LineaBase.fase
+is2sap.model.model.LineaBaseHistorial.fase" class="py-name" href="#" onclick="return doclink('link-52', 'fase', 'link-39');">fase</a></tt><tt class="py-op">)</tt> </tt>
+<a name="L76"></a><tt class="py-lineno"> 76</tt>  <tt class="py-line">            <tt id="link-53" class="py-name"><a title="is2sap.model.DBSession" class="py-name" href="#" onclick="return doclink('link-53', 'DBSession', 'link-4');">DBSession</a></tt><tt class="py-op">.</tt><tt class="py-name">flush</tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L77"></a><tt class="py-lineno"> 77</tt>  <tt class="py-line">            <tt class="py-name">transaction</tt><tt class="py-op">.</tt><tt class="py-name">commit</tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L78"></a><tt class="py-lineno"> 78</tt>  <tt class="py-line">        <tt class="py-keyword">except</tt> <tt class="py-name">IntegrityError</tt><tt class="py-op">:</tt> </tt>
+<a name="L79"></a><tt class="py-lineno"> 79</tt>  <tt class="py-line">            <tt class="py-name">transaction</tt><tt class="py-op">.</tt><tt class="py-name">abort</tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L80"></a><tt class="py-lineno"> 80</tt>  <tt class="py-line">            <tt class="py-name">flash</tt><tt class="py-op">(</tt><tt class="py-name">_</tt><tt class="py-op">(</tt><tt class="py-string">"No se ha guardado! Hay Problemas con el servidor..."</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> <tt class="py-string">'error'</tt><tt class="py-op">)</tt> </tt>
+<a name="L81"></a><tt class="py-lineno"> 81</tt>  <tt class="py-line">            <tt class="py-name">redirect</tt><tt class="py-op">(</tt><tt class="py-string">"/admin/fase/listadoFasesPorProyecto"</tt><tt class="py-op">,</tt> <tt id="link-54" class="py-name"><a title="is2sap.model.autogenerado_completo.Proyecto.id_proyecto
+is2sap.model.model.Proyecto.id_proyecto" class="py-name" href="#" onclick="return doclink('link-54', 'id_proyecto', 'link-23');">id_proyecto</a></tt><tt class="py-op">=</tt><tt class="py-name">kw</tt><tt class="py-op">[</tt><tt class="py-string">'id_proyecto'</tt><tt class="py-op">]</tt><tt class="py-op">)</tt> </tt>
+<a name="L82"></a><tt class="py-lineno"> 82</tt>  <tt class="py-line">        <tt class="py-keyword">except</tt> <tt class="py-name">SQLAlchemyError</tt><tt class="py-op">:</tt> </tt>
+<a name="L83"></a><tt class="py-lineno"> 83</tt>  <tt class="py-line">            <tt class="py-name">flash</tt><tt class="py-op">(</tt><tt class="py-name">_</tt><tt class="py-op">(</tt><tt class="py-string">"No se ha guardado! SQLAlchemyError..."</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> <tt class="py-string">'error'</tt><tt class="py-op">)</tt> </tt>
+<a name="L84"></a><tt class="py-lineno"> 84</tt>  <tt class="py-line">            <tt class="py-name">redirect</tt><tt class="py-op">(</tt><tt class="py-string">"/admin/fase/listadoFasesPorProyecto"</tt><tt class="py-op">,</tt> <tt id="link-55" class="py-name"><a title="is2sap.model.autogenerado_completo.Proyecto.id_proyecto
+is2sap.model.model.Proyecto.id_proyecto" class="py-name" href="#" onclick="return doclink('link-55', 'id_proyecto', 'link-23');">id_proyecto</a></tt><tt class="py-op">=</tt><tt class="py-name">kw</tt><tt class="py-op">[</tt><tt class="py-string">'id_proyecto'</tt><tt class="py-op">]</tt><tt class="py-op">)</tt> </tt>
+<a name="L85"></a><tt class="py-lineno"> 85</tt>  <tt class="py-line">        <tt class="py-keyword">except</tt> <tt class="py-op">(</tt><tt class="py-name">AttributeError</tt><tt class="py-op">,</tt> <tt class="py-name">NameError</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L86"></a><tt class="py-lineno"> 86</tt>  <tt class="py-line">            <tt class="py-name">flash</tt><tt class="py-op">(</tt><tt class="py-name">_</tt><tt class="py-op">(</tt><tt class="py-string">"No se ha guardado! Hay Problemas con el servidor..."</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> <tt class="py-string">'error'</tt><tt class="py-op">)</tt> </tt>
+<a name="L87"></a><tt class="py-lineno"> 87</tt>  <tt class="py-line">            <tt class="py-name">redirect</tt><tt class="py-op">(</tt><tt class="py-string">"/admin/fase/listadoFasesPorProyecto"</tt><tt class="py-op">,</tt> <tt id="link-56" class="py-name"><a title="is2sap.model.autogenerado_completo.Proyecto.id_proyecto
+is2sap.model.model.Proyecto.id_proyecto" class="py-name" href="#" onclick="return doclink('link-56', 'id_proyecto', 'link-23');">id_proyecto</a></tt><tt class="py-op">=</tt><tt class="py-name">kw</tt><tt class="py-op">[</tt><tt class="py-string">'id_proyecto'</tt><tt class="py-op">]</tt><tt class="py-op">)</tt> </tt>
+<a name="L88"></a><tt class="py-lineno"> 88</tt>  <tt class="py-line">        <tt class="py-keyword">else</tt><tt class="py-op">:</tt> </tt>
+<a name="L89"></a><tt class="py-lineno"> 89</tt>  <tt class="py-line">            <tt class="py-name">flash</tt><tt class="py-op">(</tt><tt class="py-name">_</tt><tt class="py-op">(</tt><tt class="py-string">"Fase creada!"</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> <tt class="py-string">'ok'</tt><tt class="py-op">)</tt> </tt>
+<a name="L90"></a><tt class="py-lineno"> 90</tt>  <tt class="py-line">     </tt>
+<a name="L91"></a><tt class="py-lineno"> 91</tt>  <tt class="py-line">        <tt class="py-name">redirect</tt><tt class="py-op">(</tt><tt class="py-string">"/admin/fase/listadoFasesPorProyecto"</tt><tt class="py-op">,</tt> <tt id="link-57" class="py-name"><a title="is2sap.model.autogenerado_completo.Proyecto.id_proyecto
+is2sap.model.model.Proyecto.id_proyecto" class="py-name" href="#" onclick="return doclink('link-57', 'id_proyecto', 'link-23');">id_proyecto</a></tt><tt class="py-op">=</tt><tt class="py-name">kw</tt><tt class="py-op">[</tt><tt class="py-string">'id_proyecto'</tt><tt class="py-op">]</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L92"></a><tt class="py-lineno"> 92</tt>  <tt class="py-line"> </tt>
+<a name="L93"></a><tt class="py-lineno"> 93</tt>  <tt class="py-line">    <tt class="py-decorator">@</tt><tt class="py-decorator">expose</tt><tt class="py-op">(</tt><tt class="py-string">"is2sap.templates.fase.listadoFasesPorProyecto"</tt><tt class="py-op">)</tt> </tt>
+<a name="L94"></a><tt class="py-lineno"> 94</tt>  <tt class="py-line">    <tt class="py-decorator">@</tt><tt class="py-decorator">require</tt><tt class="py-op">(</tt><tt class="py-name">predicates</tt><tt class="py-op">.</tt><tt class="py-name">has_any_permission</tt><tt class="py-op">(</tt><tt class="py-string">'administracion'</tt><tt class="py-op">,</tt>  <tt class="py-string">'lider_proyecto'</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="FaseController.listadoFasesPorProyecto"></a><div id="FaseController.listadoFasesPorProyecto-def"><a name="L95"></a><tt class="py-lineno"> 95</tt> <a class="py-toggle" href="#" id="FaseController.listadoFasesPorProyecto-toggle" onclick="return toggle('FaseController.listadoFasesPorProyecto');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="is2sap.controllers.fase_controlador.FaseController-class.html#listadoFasesPorProyecto">listadoFasesPorProyecto</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt><tt class="py-param">id_proyecto</tt><tt class="py-op">,</tt> <tt class="py-param">page</tt><tt class="py-op">=</tt><tt class="py-number">1</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="FaseController.listadoFasesPorProyecto-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="FaseController.listadoFasesPorProyecto-expanded"><a name="L96"></a><tt class="py-lineno"> 96</tt>  <tt class="py-line">        <tt class="py-docstring">"""Metodo para listar las Fases de un proyecto """</tt> </tt>
+<a name="L97"></a><tt class="py-lineno"> 97</tt>  <tt class="py-line">        <tt class="py-keyword">try</tt><tt class="py-op">:</tt>          </tt>
+<a name="L98"></a><tt class="py-lineno"> 98</tt>  <tt class="py-line">            <tt class="py-name">fasesPorProyecto</tt> <tt class="py-op">=</tt> <tt id="link-58" class="py-name"><a title="is2sap.model.DBSession" class="py-name" href="#" onclick="return doclink('link-58', 'DBSession', 'link-4');">DBSession</a></tt><tt class="py-op">.</tt><tt class="py-name">query</tt><tt class="py-op">(</tt><tt id="link-59" class="py-name"><a title="is2sap.model.autogenerado_completo.Fase
+is2sap.model.model.Fase" class="py-name" href="#" onclick="return doclink('link-59', 'Fase', 'link-8');">Fase</a></tt><tt class="py-op">)</tt><tt class="py-op">.</tt><tt class="py-name">join</tt><tt class="py-op">(</tt><tt id="link-60" class="py-name"><a title="is2sap.model.autogenerado_completo.Fase
+is2sap.model.model.Fase" class="py-name" href="#" onclick="return doclink('link-60', 'Fase', 'link-8');">Fase</a></tt><tt class="py-op">.</tt><tt id="link-61" class="py-name" targets="Variable is2sap.model.model.Fase.relacion_estado_fase=is2sap.model.model.Fase-class.html#relacion_estado_fase"><a title="is2sap.model.model.Fase.relacion_estado_fase" class="py-name" href="#" onclick="return doclink('link-61', 'relacion_estado_fase', 'link-61');">relacion_estado_fase</a></tt><tt class="py-op">)</tt><tt class="py-op">.</tt><tt class="py-name">filter</tt><tt class="py-op">(</tt><tt id="link-62" class="py-name"><a title="is2sap.model.autogenerado_completo.Fase
+is2sap.model.model.Fase" class="py-name" href="#" onclick="return doclink('link-62', 'Fase', 'link-8');">Fase</a></tt><tt class="py-op">.</tt><tt id="link-63" class="py-name"><a title="is2sap.model.autogenerado_completo.Proyecto.id_proyecto
+is2sap.model.model.Proyecto.id_proyecto" class="py-name" href="#" onclick="return doclink('link-63', 'id_proyecto', 'link-23');">id_proyecto</a></tt><tt class="py-op">==</tt><tt id="link-64" class="py-name"><a title="is2sap.model.autogenerado_completo.Proyecto.id_proyecto
+is2sap.model.model.Proyecto.id_proyecto" class="py-name" href="#" onclick="return doclink('link-64', 'id_proyecto', 'link-23');">id_proyecto</a></tt><tt class="py-op">)</tt><tt class="py-op">.</tt><tt class="py-name">options</tt><tt class="py-op">(</tt><tt class="py-name">contains_eager</tt><tt class="py-op">(</tt><tt id="link-65" class="py-name"><a title="is2sap.model.autogenerado_completo.Fase
+is2sap.model.model.Fase" class="py-name" href="#" onclick="return doclink('link-65', 'Fase', 'link-8');">Fase</a></tt><tt class="py-op">.</tt><tt id="link-66" class="py-name"><a title="is2sap.model.model.Fase.relacion_estado_fase" class="py-name" href="#" onclick="return doclink('link-66', 'relacion_estado_fase', 'link-61');">relacion_estado_fase</a></tt><tt class="py-op">)</tt><tt class="py-op">)</tt><tt class="py-op">.</tt><tt class="py-name">order_by</tt><tt class="py-op">(</tt><tt id="link-67" class="py-name"><a title="is2sap.model.autogenerado_completo.Fase
+is2sap.model.model.Fase" class="py-name" href="#" onclick="return doclink('link-67', 'Fase', 'link-8');">Fase</a></tt><tt class="py-op">.</tt><tt class="py-name">numero_fase</tt><tt class="py-op">)</tt> </tt>
+<a name="L99"></a><tt class="py-lineno"> 99</tt>  <tt class="py-line"><tt class="py-comment">#           fasesPorProyecto = DBSession.query(Fase).filter_by(id_proyecto=id_proyecto).order_by(Fase.numero_fase)</tt> </tt>
+<a name="L100"></a><tt class="py-lineno">100</tt>  <tt class="py-line">            <tt class="py-name">nombreProyecto</tt> <tt class="py-op">=</tt> <tt id="link-68" class="py-name"><a title="is2sap.model.DBSession" class="py-name" href="#" onclick="return doclink('link-68', 'DBSession', 'link-4');">DBSession</a></tt><tt class="py-op">.</tt><tt class="py-name">query</tt><tt class="py-op">(</tt><tt id="link-69" class="py-name"><a title="is2sap.model.autogenerado_completo.Proyecto
+is2sap.model.model.Proyecto" class="py-name" href="#" onclick="return doclink('link-69', 'Proyecto', 'link-9');">Proyecto</a></tt><tt class="py-op">.</tt><tt id="link-70" class="py-name"><a title="is2sap.model.autogenerado.Permiso.nombre
+is2sap.model.autogenerado_completo.Atributo.nombre
+is2sap.model.autogenerado_completo.Permiso.nombre
+is2sap.model.autogenerado_completo.Proyecto.nombre
+is2sap.model.autogenerado_completo.Rol.nombre
+is2sap.model.autogenerado_completo.TipoItem.nombre
+is2sap.model.model.Atributo.nombre
+is2sap.model.model.LineaBase.nombre
+is2sap.model.model.LineaBaseHistorial.nombre
+is2sap.model.model.Proyecto.nombre
+is2sap.model.model.TipoItem.nombre
+is2sap.model.model.Usuario.nombre" class="py-name" href="#" onclick="return doclink('link-70', 'nombre', 'link-46');">nombre</a></tt><tt class="py-op">)</tt><tt class="py-op">.</tt><tt class="py-name">filter_by</tt><tt class="py-op">(</tt><tt id="link-71" class="py-name"><a title="is2sap.model.autogenerado_completo.Proyecto.id_proyecto
+is2sap.model.model.Proyecto.id_proyecto" class="py-name" href="#" onclick="return doclink('link-71', 'id_proyecto', 'link-23');">id_proyecto</a></tt><tt class="py-op">=</tt><tt id="link-72" class="py-name"><a title="is2sap.model.autogenerado_completo.Proyecto.id_proyecto
+is2sap.model.model.Proyecto.id_proyecto" class="py-name" href="#" onclick="return doclink('link-72', 'id_proyecto', 'link-23');">id_proyecto</a></tt><tt class="py-op">)</tt><tt class="py-op">.</tt><tt class="py-name">first</tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L101"></a><tt class="py-lineno">101</tt>  <tt class="py-line">            <tt class="py-name">currentPage</tt> <tt class="py-op">=</tt> <tt class="py-name">paginate</tt><tt class="py-op">.</tt><tt class="py-name">Page</tt><tt class="py-op">(</tt><tt class="py-name">fasesPorProyecto</tt><tt class="py-op">,</tt> <tt class="py-name">page</tt><tt class="py-op">,</tt> <tt class="py-name">items_per_page</tt><tt class="py-op">=</tt><tt class="py-number">10</tt><tt class="py-op">)</tt> </tt>
+<a name="L102"></a><tt class="py-lineno">102</tt>  <tt class="py-line">        <tt class="py-keyword">except</tt> <tt class="py-name">SQLAlchemyError</tt><tt class="py-op">:</tt> </tt>
+<a name="L103"></a><tt class="py-lineno">103</tt>  <tt class="py-line">            <tt class="py-name">flash</tt><tt class="py-op">(</tt><tt class="py-name">_</tt><tt class="py-op">(</tt><tt class="py-string">"No se pudo acceder a Fases del Proyecto! SQLAlchemyError..."</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> <tt class="py-string">'error'</tt><tt class="py-op">)</tt> </tt>
+<a name="L104"></a><tt class="py-lineno">104</tt>  <tt class="py-line">            <tt class="py-name">redirect</tt><tt class="py-op">(</tt><tt class="py-string">"/admin/proyecto/listado"</tt><tt class="py-op">)</tt> </tt>
+<a name="L105"></a><tt class="py-lineno">105</tt>  <tt class="py-line">        <tt class="py-keyword">except</tt> <tt class="py-op">(</tt><tt class="py-name">AttributeError</tt><tt class="py-op">,</tt> <tt class="py-name">NameError</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L106"></a><tt class="py-lineno">106</tt>  <tt class="py-line">            <tt class="py-name">flash</tt><tt class="py-op">(</tt><tt class="py-name">_</tt><tt class="py-op">(</tt><tt class="py-string">"No se pudo acceder a Fases del Proyecto! Hay Problemas con el servidor..."</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> <tt class="py-string">'error'</tt><tt class="py-op">)</tt> </tt>
+<a name="L107"></a><tt class="py-lineno">107</tt>  <tt class="py-line">            <tt class="py-name">redirect</tt><tt class="py-op">(</tt><tt class="py-string">"/admin/proyecto/listado"</tt><tt class="py-op">)</tt> </tt>
+<a name="L108"></a><tt class="py-lineno">108</tt>  <tt class="py-line"> </tt>
+<a name="L109"></a><tt class="py-lineno">109</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">dict</tt><tt class="py-op">(</tt><tt class="py-name">fasesPorProyecto</tt><tt class="py-op">=</tt><tt class="py-name">currentPage</tt><tt class="py-op">.</tt><tt class="py-name">items</tt><tt class="py-op">,</tt> <tt class="py-name">page</tt><tt class="py-op">=</tt><tt class="py-string">'listado_fases'</tt><tt class="py-op">,</tt>  </tt>
+<a name="L110"></a><tt class="py-lineno">110</tt>  <tt class="py-line">                    <tt class="py-name">nombre_proyecto</tt><tt class="py-op">=</tt><tt class="py-name">nombreProyecto</tt><tt class="py-op">,</tt> <tt id="link-73" class="py-name"><a title="is2sap.model.autogenerado_completo.Proyecto.id_proyecto
+is2sap.model.model.Proyecto.id_proyecto" class="py-name" href="#" onclick="return doclink('link-73', 'id_proyecto', 'link-23');">id_proyecto</a></tt><tt class="py-op">=</tt><tt id="link-74" class="py-name"><a title="is2sap.model.autogenerado_completo.Proyecto.id_proyecto
+is2sap.model.model.Proyecto.id_proyecto" class="py-name" href="#" onclick="return doclink('link-74', 'id_proyecto', 'link-23');">id_proyecto</a></tt><tt class="py-op">,</tt> <tt class="py-name">currentPage</tt><tt class="py-op">=</tt><tt class="py-name">currentPage</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L111"></a><tt class="py-lineno">111</tt>  <tt class="py-line"> </tt>
+<a name="L112"></a><tt class="py-lineno">112</tt>  <tt class="py-line">    <tt class="py-decorator">@</tt><tt class="py-decorator">expose</tt><tt class="py-op">(</tt><tt class="py-string">'is2sap.templates.fase.editar'</tt><tt class="py-op">)</tt> </tt>
+<a name="L113"></a><tt class="py-lineno">113</tt>  <tt class="py-line">    <tt class="py-decorator">@</tt><tt class="py-decorator">require</tt><tt class="py-op">(</tt><tt class="py-name">predicates</tt><tt class="py-op">.</tt><tt class="py-name">has_any_permission</tt><tt class="py-op">(</tt><tt class="py-string">'administracion'</tt><tt class="py-op">,</tt>  <tt class="py-string">'lider_proyecto'</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="FaseController.editar"></a><div id="FaseController.editar-def"><a name="L114"></a><tt class="py-lineno">114</tt> <a class="py-toggle" href="#" id="FaseController.editar-toggle" onclick="return toggle('FaseController.editar');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="is2sap.controllers.fase_controlador.FaseController-class.html#editar">editar</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">id_proyecto</tt><tt class="py-op">,</tt> <tt class="py-param">id_fase</tt><tt class="py-op">,</tt> <tt class="py-op">**</tt><tt class="py-param">kw</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="FaseController.editar-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="FaseController.editar-expanded"><a name="L115"></a><tt class="py-lineno">115</tt>  <tt class="py-line">        <tt class="py-docstring">"""Metodo que rellena el formulario para editar los datos de una Fase"""</tt> </tt>
+<a name="L116"></a><tt class="py-lineno">116</tt>  <tt class="py-line">        <tt class="py-keyword">try</tt><tt class="py-op">:</tt> </tt>
+<a name="L117"></a><tt class="py-lineno">117</tt>  <tt class="py-line">            <tt class="py-name">tmpl_context</tt><tt class="py-op">.</tt><tt class="py-name">form</tt> <tt class="py-op">=</tt> <tt class="py-name">editar_fase_form</tt> </tt>
+<a name="L118"></a><tt class="py-lineno">118</tt>  <tt class="py-line">            <tt id="link-75" class="py-name"><a title="is2sap.controllers.admin_controlador.AdminController.proyecto" class="py-name" href="#" onclick="return doclink('link-75', 'proyecto', 'link-20');">proyecto</a></tt> <tt class="py-op">=</tt> <tt id="link-76" class="py-name"><a title="is2sap.model.DBSession" class="py-name" href="#" onclick="return doclink('link-76', 'DBSession', 'link-4');">DBSession</a></tt><tt class="py-op">.</tt><tt class="py-name">query</tt><tt class="py-op">(</tt><tt id="link-77" class="py-name"><a title="is2sap.model.autogenerado_completo.Proyecto
+is2sap.model.model.Proyecto" class="py-name" href="#" onclick="return doclink('link-77', 'Proyecto', 'link-9');">Proyecto</a></tt><tt class="py-op">)</tt><tt class="py-op">.</tt><tt class="py-name">get</tt><tt class="py-op">(</tt><tt id="link-78" class="py-name"><a title="is2sap.model.autogenerado_completo.Proyecto.id_proyecto
+is2sap.model.model.Proyecto.id_proyecto" class="py-name" href="#" onclick="return doclink('link-78', 'id_proyecto', 'link-23');">id_proyecto</a></tt><tt class="py-op">)</tt> </tt>
+<a name="L119"></a><tt class="py-lineno">119</tt>  <tt class="py-line"> </tt>
+<a name="L120"></a><tt class="py-lineno">120</tt>  <tt class="py-line">            <tt class="py-keyword">if</tt> <tt id="link-79" class="py-name"><a title="is2sap.controllers.admin_controlador.AdminController.proyecto" class="py-name" href="#" onclick="return doclink('link-79', 'proyecto', 'link-20');">proyecto</a></tt><tt class="py-op">.</tt><tt id="link-80" class="py-name"><a title="is2sap.model.autogenerado_completo.Proyecto.iniciado
+is2sap.model.model.Proyecto.iniciado" class="py-name" href="#" onclick="return doclink('link-80', 'iniciado', 'link-25');">iniciado</a></tt> <tt class="py-op">==</tt> <tt class="py-name">True</tt><tt class="py-op">:</tt> </tt>
+<a name="L121"></a><tt class="py-lineno">121</tt>  <tt class="py-line">               <tt class="py-name">flash</tt><tt class="py-op">(</tt><tt class="py-name">_</tt><tt class="py-op">(</tt><tt class="py-string">"Proyecto ya iniciado. No puede editar fases!"</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> <tt class="py-string">'error'</tt><tt class="py-op">)</tt> </tt>
+<a name="L122"></a><tt class="py-lineno">122</tt>  <tt class="py-line">               <tt class="py-name">redirect</tt><tt class="py-op">(</tt><tt class="py-string">"/admin/fase/listadoFasesPorProyecto"</tt><tt class="py-op">,</tt> <tt id="link-81" class="py-name"><a title="is2sap.model.autogenerado_completo.Proyecto.id_proyecto
+is2sap.model.model.Proyecto.id_proyecto" class="py-name" href="#" onclick="return doclink('link-81', 'id_proyecto', 'link-23');">id_proyecto</a></tt><tt class="py-op">=</tt><tt id="link-82" class="py-name"><a title="is2sap.model.autogenerado_completo.Proyecto.id_proyecto
+is2sap.model.model.Proyecto.id_proyecto" class="py-name" href="#" onclick="return doclink('link-82', 'id_proyecto', 'link-23');">id_proyecto</a></tt><tt class="py-op">)</tt> </tt>
+<a name="L123"></a><tt class="py-lineno">123</tt>  <tt class="py-line"> </tt>
+<a name="L124"></a><tt class="py-lineno">124</tt>  <tt class="py-line">            <tt class="py-name">traerFase</tt><tt class="py-op">=</tt><tt id="link-83" class="py-name"><a title="is2sap.model.DBSession" class="py-name" href="#" onclick="return doclink('link-83', 'DBSession', 'link-4');">DBSession</a></tt><tt class="py-op">.</tt><tt class="py-name">query</tt><tt class="py-op">(</tt><tt id="link-84" class="py-name"><a title="is2sap.model.autogenerado_completo.Fase
+is2sap.model.model.Fase" class="py-name" href="#" onclick="return doclink('link-84', 'Fase', 'link-8');">Fase</a></tt><tt class="py-op">)</tt><tt class="py-op">.</tt><tt class="py-name">get</tt><tt class="py-op">(</tt><tt id="link-85" class="py-name" targets="Variable is2sap.model.autogenerado.LineaBase.id_fase=is2sap.model.autogenerado.LineaBase-class.html#id_fase,Variable is2sap.model.autogenerado_completo.LineaBase.id_fase=is2sap.model.autogenerado_completo.LineaBase-class.html#id_fase,Variable is2sap.model.autogenerado_completo.TipoItem.id_fase=is2sap.model.autogenerado_completo.TipoItem-class.html#id_fase,Variable is2sap.model.model.LineaBase.id_fase=is2sap.model.model.LineaBase-class.html#id_fase,Variable is2sap.model.model.LineaBaseHistorial.id_fase=is2sap.model.model.LineaBaseHistorial-class.html#id_fase,Variable is2sap.model.model.TipoItem.id_fase=is2sap.model.model.TipoItem-class.html#id_fase"><a title="is2sap.model.autogenerado.LineaBase.id_fase
+is2sap.model.autogenerado_completo.LineaBase.id_fase
+is2sap.model.autogenerado_completo.TipoItem.id_fase
+is2sap.model.model.LineaBase.id_fase
+is2sap.model.model.LineaBaseHistorial.id_fase
+is2sap.model.model.TipoItem.id_fase" class="py-name" href="#" onclick="return doclink('link-85', 'id_fase', 'link-85');">id_fase</a></tt><tt class="py-op">)</tt> </tt>
+<a name="L125"></a><tt class="py-lineno">125</tt>  <tt class="py-line">            <tt class="py-name">kw</tt><tt class="py-op">[</tt><tt class="py-string">'id_fase'</tt><tt class="py-op">]</tt><tt class="py-op">=</tt><tt class="py-name">traerFase</tt><tt class="py-op">.</tt><tt id="link-86" class="py-name"><a title="is2sap.model.autogenerado.LineaBase.id_fase
+is2sap.model.autogenerado_completo.LineaBase.id_fase
+is2sap.model.autogenerado_completo.TipoItem.id_fase
+is2sap.model.model.LineaBase.id_fase
+is2sap.model.model.LineaBaseHistorial.id_fase
+is2sap.model.model.TipoItem.id_fase" class="py-name" href="#" onclick="return doclink('link-86', 'id_fase', 'link-85');">id_fase</a></tt> </tt>
+<a name="L126"></a><tt class="py-lineno">126</tt>  <tt class="py-line">            <tt class="py-name">kw</tt><tt class="py-op">[</tt><tt class="py-string">'id_estado_fase'</tt><tt class="py-op">]</tt><tt class="py-op">=</tt><tt class="py-name">traerFase</tt><tt class="py-op">.</tt><tt id="link-87" class="py-name"><a title="is2sap.model.autogenerado_completo.EstadoFase.id_estado_fase
+is2sap.model.model.EstadoFase.id_estado_fase" class="py-name" href="#" onclick="return doclink('link-87', 'id_estado_fase', 'link-42');">id_estado_fase</a></tt> </tt>
+<a name="L127"></a><tt class="py-lineno">127</tt>  <tt class="py-line">            <tt class="py-name">kw</tt><tt class="py-op">[</tt><tt class="py-string">'id_proyecto'</tt><tt class="py-op">]</tt><tt class="py-op">=</tt><tt class="py-name">traerFase</tt><tt class="py-op">.</tt><tt id="link-88" class="py-name"><a title="is2sap.model.autogenerado_completo.Proyecto.id_proyecto
+is2sap.model.model.Proyecto.id_proyecto" class="py-name" href="#" onclick="return doclink('link-88', 'id_proyecto', 'link-23');">id_proyecto</a></tt> </tt>
+<a name="L128"></a><tt class="py-lineno">128</tt>  <tt class="py-line">            <tt class="py-name">kw</tt><tt class="py-op">[</tt><tt class="py-string">'nombre'</tt><tt class="py-op">]</tt><tt class="py-op">=</tt><tt class="py-name">traerFase</tt><tt class="py-op">.</tt><tt id="link-89" class="py-name"><a title="is2sap.model.autogenerado.Permiso.nombre
+is2sap.model.autogenerado_completo.Atributo.nombre
+is2sap.model.autogenerado_completo.Permiso.nombre
+is2sap.model.autogenerado_completo.Proyecto.nombre
+is2sap.model.autogenerado_completo.Rol.nombre
+is2sap.model.autogenerado_completo.TipoItem.nombre
+is2sap.model.model.Atributo.nombre
+is2sap.model.model.LineaBase.nombre
+is2sap.model.model.LineaBaseHistorial.nombre
+is2sap.model.model.Proyecto.nombre
+is2sap.model.model.TipoItem.nombre
+is2sap.model.model.Usuario.nombre" class="py-name" href="#" onclick="return doclink('link-89', 'nombre', 'link-46');">nombre</a></tt> </tt>
+<a name="L129"></a><tt class="py-lineno">129</tt>  <tt class="py-line">            <tt class="py-name">kw</tt><tt class="py-op">[</tt><tt class="py-string">'descripcion'</tt><tt class="py-op">]</tt><tt class="py-op">=</tt><tt class="py-name">traerFase</tt><tt class="py-op">.</tt><tt id="link-90" class="py-name"><a title="is2sap.model.autogenerado.LineaBase.descripcion
+is2sap.model.autogenerado.Permiso.descripcion
+is2sap.model.autogenerado_completo.Atributo.descripcion
+is2sap.model.autogenerado_completo.LineaBase.descripcion
+is2sap.model.autogenerado_completo.Permiso.descripcion
+is2sap.model.autogenerado_completo.Proyecto.descripcion
+is2sap.model.autogenerado_completo.Rol.descripcion
+is2sap.model.autogenerado_completo.TipoItem.descripcion
+is2sap.model.model.Atributo.descripcion
+is2sap.model.model.Item.descripcion
+is2sap.model.model.ItemHistorial.descripcion
+is2sap.model.model.LineaBase.descripcion
+is2sap.model.model.LineaBaseHistorial.descripcion
+is2sap.model.model.Permiso.descripcion
+is2sap.model.model.Proyecto.descripcion
+is2sap.model.model.Rol.descripcion
+is2sap.model.model.TipoItem.descripcion" class="py-name" href="#" onclick="return doclink('link-90', 'descripcion', 'link-48');">descripcion</a></tt> </tt>
+<a name="L130"></a><tt class="py-lineno">130</tt>  <tt class="py-line">            <tt class="py-name">kw</tt><tt class="py-op">[</tt><tt class="py-string">'numero_fase'</tt><tt class="py-op">]</tt><tt class="py-op">=</tt><tt class="py-name">traerFase</tt><tt class="py-op">.</tt><tt class="py-name">numero_fase</tt> </tt>
+<a name="L131"></a><tt class="py-lineno">131</tt>  <tt class="py-line">        <tt class="py-keyword">except</tt> <tt class="py-name">SQLAlchemyError</tt><tt class="py-op">:</tt> </tt>
+<a name="L132"></a><tt class="py-lineno">132</tt>  <tt class="py-line">            <tt class="py-name">flash</tt><tt class="py-op">(</tt><tt class="py-name">_</tt><tt class="py-op">(</tt><tt class="py-string">"No se pudo acceder a Edicion de Fases! SQLAlchemyError..."</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> <tt class="py-string">'error'</tt><tt class="py-op">)</tt> </tt>
+<a name="L133"></a><tt class="py-lineno">133</tt>  <tt class="py-line">            <tt class="py-name">redirect</tt><tt class="py-op">(</tt><tt class="py-string">"/admin/fase/listadoFasesPorProyecto"</tt><tt class="py-op">,</tt> <tt id="link-91" class="py-name"><a title="is2sap.model.autogenerado_completo.Proyecto.id_proyecto
+is2sap.model.model.Proyecto.id_proyecto" class="py-name" href="#" onclick="return doclink('link-91', 'id_proyecto', 'link-23');">id_proyecto</a></tt><tt class="py-op">=</tt><tt id="link-92" class="py-name"><a title="is2sap.model.autogenerado_completo.Proyecto.id_proyecto
+is2sap.model.model.Proyecto.id_proyecto" class="py-name" href="#" onclick="return doclink('link-92', 'id_proyecto', 'link-23');">id_proyecto</a></tt><tt class="py-op">)</tt> </tt>
+<a name="L134"></a><tt class="py-lineno">134</tt>  <tt class="py-line">        <tt class="py-keyword">except</tt> <tt class="py-op">(</tt><tt class="py-name">AttributeError</tt><tt class="py-op">,</tt> <tt class="py-name">NameError</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L135"></a><tt class="py-lineno">135</tt>  <tt class="py-line">            <tt class="py-name">flash</tt><tt class="py-op">(</tt><tt class="py-name">_</tt><tt class="py-op">(</tt><tt class="py-string">"No se pudo acceder a Edicion de Fases! Hay Problemas con el servidor..."</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> <tt class="py-string">'error'</tt><tt class="py-op">)</tt> </tt>
+<a name="L136"></a><tt class="py-lineno">136</tt>  <tt class="py-line">            <tt class="py-name">redirect</tt><tt class="py-op">(</tt><tt class="py-string">"/admin/fase/listadoFasesPorProyecto"</tt><tt class="py-op">,</tt> <tt id="link-93" class="py-name"><a title="is2sap.model.autogenerado_completo.Proyecto.id_proyecto
+is2sap.model.model.Proyecto.id_proyecto" class="py-name" href="#" onclick="return doclink('link-93', 'id_proyecto', 'link-23');">id_proyecto</a></tt><tt class="py-op">=</tt><tt id="link-94" class="py-name"><a title="is2sap.model.autogenerado_completo.Proyecto.id_proyecto
+is2sap.model.model.Proyecto.id_proyecto" class="py-name" href="#" onclick="return doclink('link-94', 'id_proyecto', 'link-23');">id_proyecto</a></tt><tt class="py-op">)</tt> </tt>
+<a name="L137"></a><tt class="py-lineno">137</tt>  <tt class="py-line"> </tt>
+<a name="L138"></a><tt class="py-lineno">138</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">dict</tt><tt class="py-op">(</tt><tt class="py-name">nombre_modelo</tt><tt class="py-op">=</tt><tt class="py-string">'Fase'</tt><tt class="py-op">,</tt> <tt class="py-name">page</tt><tt class="py-op">=</tt><tt class="py-string">'editar_fase'</tt><tt class="py-op">,</tt> <tt class="py-name">value</tt><tt class="py-op">=</tt><tt class="py-name">kw</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L139"></a><tt class="py-lineno">139</tt>  <tt class="py-line"> </tt>
+<a name="L140"></a><tt class="py-lineno">140</tt>  <tt class="py-line">    <tt class="py-decorator">@</tt><tt class="py-decorator">validate</tt><tt class="py-op">(</tt><tt class="py-name">editar_fase_form</tt><tt class="py-op">,</tt> <tt class="py-name">error_handler</tt><tt class="py-op">=</tt><tt id="link-95" class="py-name" targets="Method is2sap.controllers.atributo_controlador.AtributoController.editar()=is2sap.controllers.atributo_controlador.AtributoController-class.html#editar,Method is2sap.controllers.fase_controlador.FaseController.editar()=is2sap.controllers.fase_controlador.FaseController-class.html#editar,Method is2sap.controllers.item_controlador.ItemController.editar()=is2sap.controllers.item_controlador.ItemController-class.html#editar,Method is2sap.controllers.linea_base_controlador.LineaBaseController.editar()=is2sap.controllers.linea_base_controlador.LineaBaseController-class.html#editar,Method is2sap.controllers.permiso_controlador.PermisoController.editar()=is2sap.controllers.permiso_controlador.PermisoController-class.html#editar,Method is2sap.controllers.proyecto_controlador.ProyectoController.editar()=is2sap.controllers.proyecto_controlador.ProyectoController-class.html#editar,Method is2sap.controllers.rol_controlador.RolController.editar()=is2sap.controllers.rol_controlador.RolController-class.html#editar,Method is2sap.controllers.tipo_item_controlador.TipoItemController.editar()=is2sap.controllers.tipo_item_controlador.TipoItemController-class.html#editar,Method is2sap.controllers.usuario_controlador.UsuarioController.editar()=is2sap.controllers.usuario_controlador.UsuarioController-class.html#editar"><a title="is2sap.controllers.atributo_controlador.AtributoController.editar
+is2sap.controllers.fase_controlador.FaseController.editar
+is2sap.controllers.item_controlador.ItemController.editar
+is2sap.controllers.linea_base_controlador.LineaBaseController.editar
+is2sap.controllers.permiso_controlador.PermisoController.editar
+is2sap.controllers.proyecto_controlador.ProyectoController.editar
+is2sap.controllers.rol_controlador.RolController.editar
+is2sap.controllers.tipo_item_controlador.TipoItemController.editar
+is2sap.controllers.usuario_controlador.UsuarioController.editar" class="py-name" href="#" onclick="return doclink('link-95', 'editar', 'link-95');">editar</a></tt><tt class="py-op">)</tt> </tt>
+<a name="L141"></a><tt class="py-lineno">141</tt>  <tt class="py-line">    <tt class="py-decorator">@</tt><tt class="py-decorator">expose</tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L142"></a><tt class="py-lineno">142</tt>  <tt class="py-line">    <tt class="py-decorator">@</tt><tt class="py-decorator">require</tt><tt class="py-op">(</tt><tt class="py-name">predicates</tt><tt class="py-op">.</tt><tt class="py-name">has_any_permission</tt><tt class="py-op">(</tt><tt class="py-string">'administracion'</tt><tt class="py-op">,</tt>  <tt class="py-string">'lider_proyecto'</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="FaseController.update"></a><div id="FaseController.update-def"><a name="L143"></a><tt class="py-lineno">143</tt> <a class="py-toggle" href="#" id="FaseController.update-toggle" onclick="return toggle('FaseController.update');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="is2sap.controllers.fase_controlador.FaseController-class.html#update">update</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-op">**</tt><tt class="py-param">kw</tt><tt class="py-op">)</tt><tt class="py-op">:</tt>         </tt>
+</div><a name="L144"></a><tt class="py-lineno">144</tt>  <tt class="py-line">        <tt class="py-docstring">"""Metodo que actualiza la fase en la base de datos"""</tt> </tt>
+<a name="L145"></a><tt class="py-lineno">145</tt>  <tt class="py-line">        <tt class="py-keyword">try</tt><tt class="py-op">:</tt> </tt>
+<a name="L146"></a><tt class="py-lineno">146</tt>  <tt class="py-line">            <tt id="link-96" class="py-name"><a title="is2sap.controllers.admin_controlador.AdminController.fase
+is2sap.model.model.LineaBase.fase
+is2sap.model.model.LineaBaseHistorial.fase" class="py-name" href="#" onclick="return doclink('link-96', 'fase', 'link-39');">fase</a></tt> <tt class="py-op">=</tt> <tt id="link-97" class="py-name"><a title="is2sap.model.DBSession" class="py-name" href="#" onclick="return doclink('link-97', 'DBSession', 'link-4');">DBSession</a></tt><tt class="py-op">.</tt><tt class="py-name">query</tt><tt class="py-op">(</tt><tt id="link-98" class="py-name"><a title="is2sap.model.autogenerado_completo.Fase
+is2sap.model.model.Fase" class="py-name" href="#" onclick="return doclink('link-98', 'Fase', 'link-8');">Fase</a></tt><tt class="py-op">)</tt><tt class="py-op">.</tt><tt class="py-name">get</tt><tt class="py-op">(</tt><tt class="py-name">kw</tt><tt class="py-op">[</tt><tt class="py-string">'id_fase'</tt><tt class="py-op">]</tt><tt class="py-op">)</tt> </tt>
+<a name="L147"></a><tt class="py-lineno">147</tt>  <tt class="py-line">            <tt id="link-99" class="py-name"><a title="is2sap.controllers.admin_controlador.AdminController.fase
+is2sap.model.model.LineaBase.fase
+is2sap.model.model.LineaBaseHistorial.fase" class="py-name" href="#" onclick="return doclink('link-99', 'fase', 'link-39');">fase</a></tt><tt class="py-op">.</tt><tt id="link-100" class="py-name"><a title="is2sap.model.autogenerado.Permiso.nombre
+is2sap.model.autogenerado_completo.Atributo.nombre
+is2sap.model.autogenerado_completo.Permiso.nombre
+is2sap.model.autogenerado_completo.Proyecto.nombre
+is2sap.model.autogenerado_completo.Rol.nombre
+is2sap.model.autogenerado_completo.TipoItem.nombre
+is2sap.model.model.Atributo.nombre
+is2sap.model.model.LineaBase.nombre
+is2sap.model.model.LineaBaseHistorial.nombre
+is2sap.model.model.Proyecto.nombre
+is2sap.model.model.TipoItem.nombre
+is2sap.model.model.Usuario.nombre" class="py-name" href="#" onclick="return doclink('link-100', 'nombre', 'link-46');">nombre</a></tt><tt class="py-op">=</tt><tt class="py-name">kw</tt><tt class="py-op">[</tt><tt class="py-string">'nombre'</tt><tt class="py-op">]</tt> </tt>
+<a name="L148"></a><tt class="py-lineno">148</tt>  <tt class="py-line">            <tt id="link-101" class="py-name"><a title="is2sap.controllers.admin_controlador.AdminController.fase
+is2sap.model.model.LineaBase.fase
+is2sap.model.model.LineaBaseHistorial.fase" class="py-name" href="#" onclick="return doclink('link-101', 'fase', 'link-39');">fase</a></tt><tt class="py-op">.</tt><tt class="py-name">numero_fase</tt><tt class="py-op">=</tt><tt class="py-name">kw</tt><tt class="py-op">[</tt><tt class="py-string">'numero_fase'</tt><tt class="py-op">]</tt> </tt>
+<a name="L149"></a><tt class="py-lineno">149</tt>  <tt class="py-line">            <tt id="link-102" class="py-name"><a title="is2sap.controllers.admin_controlador.AdminController.fase
+is2sap.model.model.LineaBase.fase
+is2sap.model.model.LineaBaseHistorial.fase" class="py-name" href="#" onclick="return doclink('link-102', 'fase', 'link-39');">fase</a></tt><tt class="py-op">.</tt><tt id="link-103" class="py-name"><a title="is2sap.model.autogenerado.LineaBase.descripcion
+is2sap.model.autogenerado.Permiso.descripcion
+is2sap.model.autogenerado_completo.Atributo.descripcion
+is2sap.model.autogenerado_completo.LineaBase.descripcion
+is2sap.model.autogenerado_completo.Permiso.descripcion
+is2sap.model.autogenerado_completo.Proyecto.descripcion
+is2sap.model.autogenerado_completo.Rol.descripcion
+is2sap.model.autogenerado_completo.TipoItem.descripcion
+is2sap.model.model.Atributo.descripcion
+is2sap.model.model.Item.descripcion
+is2sap.model.model.ItemHistorial.descripcion
+is2sap.model.model.LineaBase.descripcion
+is2sap.model.model.LineaBaseHistorial.descripcion
+is2sap.model.model.Permiso.descripcion
+is2sap.model.model.Proyecto.descripcion
+is2sap.model.model.Rol.descripcion
+is2sap.model.model.TipoItem.descripcion" class="py-name" href="#" onclick="return doclink('link-103', 'descripcion', 'link-48');">descripcion</a></tt> <tt class="py-op">=</tt> <tt class="py-name">kw</tt><tt class="py-op">[</tt><tt class="py-string">'descripcion'</tt><tt class="py-op">]</tt> </tt>
+<a name="L150"></a><tt class="py-lineno">150</tt>  <tt class="py-line">            <tt id="link-104" class="py-name"><a title="is2sap.model.DBSession" class="py-name" href="#" onclick="return doclink('link-104', 'DBSession', 'link-4');">DBSession</a></tt><tt class="py-op">.</tt><tt class="py-name">flush</tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L151"></a><tt class="py-lineno">151</tt>  <tt class="py-line">            <tt class="py-name">transaction</tt><tt class="py-op">.</tt><tt class="py-name">commit</tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L152"></a><tt class="py-lineno">152</tt>  <tt class="py-line">        <tt class="py-keyword">except</tt> <tt class="py-name">IntegrityError</tt><tt class="py-op">:</tt> </tt>
+<a name="L153"></a><tt class="py-lineno">153</tt>  <tt class="py-line">            <tt class="py-name">transaction</tt><tt class="py-op">.</tt><tt class="py-name">abort</tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L154"></a><tt class="py-lineno">154</tt>  <tt class="py-line">            <tt class="py-name">flash</tt><tt class="py-op">(</tt><tt class="py-name">_</tt><tt class="py-op">(</tt><tt class="py-string">"No se han guardado los cambios! Hay Problemas con el servidor..."</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> <tt class="py-string">'error'</tt><tt class="py-op">)</tt> </tt>
+<a name="L155"></a><tt class="py-lineno">155</tt>  <tt class="py-line">            <tt class="py-name">redirect</tt><tt class="py-op">(</tt><tt class="py-string">"/admin/fase/listadoFasesPorProyecto"</tt><tt class="py-op">,</tt> <tt id="link-105" class="py-name"><a title="is2sap.model.autogenerado_completo.Proyecto.id_proyecto
+is2sap.model.model.Proyecto.id_proyecto" class="py-name" href="#" onclick="return doclink('link-105', 'id_proyecto', 'link-23');">id_proyecto</a></tt><tt class="py-op">=</tt><tt class="py-name">kw</tt><tt class="py-op">[</tt><tt class="py-string">'id_proyecto'</tt><tt class="py-op">]</tt><tt class="py-op">)</tt> </tt>
+<a name="L156"></a><tt class="py-lineno">156</tt>  <tt class="py-line">        <tt class="py-keyword">except</tt> <tt class="py-name">SQLAlchemyError</tt><tt class="py-op">:</tt> </tt>
+<a name="L157"></a><tt class="py-lineno">157</tt>  <tt class="py-line">            <tt class="py-name">flash</tt><tt class="py-op">(</tt><tt class="py-name">_</tt><tt class="py-op">(</tt><tt class="py-string">"No se han guardado los cambios! SQLAlchemyError..."</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> <tt class="py-string">'error'</tt><tt class="py-op">)</tt> </tt>
+<a name="L158"></a><tt class="py-lineno">158</tt>  <tt class="py-line">            <tt class="py-name">redirect</tt><tt class="py-op">(</tt><tt class="py-string">"/admin/fase/listadoFasesPorProyecto"</tt><tt class="py-op">,</tt> <tt id="link-106" class="py-name"><a title="is2sap.model.autogenerado_completo.Proyecto.id_proyecto
+is2sap.model.model.Proyecto.id_proyecto" class="py-name" href="#" onclick="return doclink('link-106', 'id_proyecto', 'link-23');">id_proyecto</a></tt><tt class="py-op">=</tt><tt class="py-name">kw</tt><tt class="py-op">[</tt><tt class="py-string">'id_proyecto'</tt><tt class="py-op">]</tt><tt class="py-op">)</tt> </tt>
+<a name="L159"></a><tt class="py-lineno">159</tt>  <tt class="py-line">        <tt class="py-keyword">except</tt> <tt class="py-op">(</tt><tt class="py-name">AttributeError</tt><tt class="py-op">,</tt> <tt class="py-name">NameError</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L160"></a><tt class="py-lineno">160</tt>  <tt class="py-line">            <tt class="py-name">flash</tt><tt class="py-op">(</tt><tt class="py-name">_</tt><tt class="py-op">(</tt><tt class="py-string">"No se han guardado los cambios! Hay Problemas con el servidor..."</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> <tt class="py-string">'error'</tt><tt class="py-op">)</tt> </tt>
+<a name="L161"></a><tt class="py-lineno">161</tt>  <tt class="py-line">            <tt class="py-name">redirect</tt><tt class="py-op">(</tt><tt class="py-string">"/admin/fase/listadoFasesPorProyecto"</tt><tt class="py-op">,</tt> <tt id="link-107" class="py-name"><a title="is2sap.model.autogenerado_completo.Proyecto.id_proyecto
+is2sap.model.model.Proyecto.id_proyecto" class="py-name" href="#" onclick="return doclink('link-107', 'id_proyecto', 'link-23');">id_proyecto</a></tt><tt class="py-op">=</tt><tt class="py-name">kw</tt><tt class="py-op">[</tt><tt class="py-string">'id_proyecto'</tt><tt class="py-op">]</tt><tt class="py-op">)</tt> </tt>
+<a name="L162"></a><tt class="py-lineno">162</tt>  <tt class="py-line">        <tt class="py-keyword">else</tt><tt class="py-op">:</tt> </tt>
+<a name="L163"></a><tt class="py-lineno">163</tt>  <tt class="py-line">            <tt class="py-name">flash</tt><tt class="py-op">(</tt><tt class="py-name">_</tt><tt class="py-op">(</tt><tt class="py-string">"Se han guardado los cambios!"</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> <tt class="py-string">'ok'</tt><tt class="py-op">)</tt> </tt>
+<a name="L164"></a><tt class="py-lineno">164</tt>  <tt class="py-line"> </tt>
+<a name="L165"></a><tt class="py-lineno">165</tt>  <tt class="py-line">        <tt class="py-name">redirect</tt><tt class="py-op">(</tt><tt class="py-string">"/admin/fase/listadoFasesPorProyecto"</tt><tt class="py-op">,</tt> <tt id="link-108" class="py-name"><a title="is2sap.model.autogenerado_completo.Proyecto.id_proyecto
+is2sap.model.model.Proyecto.id_proyecto" class="py-name" href="#" onclick="return doclink('link-108', 'id_proyecto', 'link-23');">id_proyecto</a></tt><tt class="py-op">=</tt><tt class="py-name">kw</tt><tt class="py-op">[</tt><tt class="py-string">'id_proyecto'</tt><tt class="py-op">]</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L166"></a><tt class="py-lineno">166</tt>  <tt class="py-line"> </tt>
+<a name="L167"></a><tt class="py-lineno">167</tt>  <tt class="py-line">    <tt class="py-decorator">@</tt><tt class="py-decorator">expose</tt><tt class="py-op">(</tt><tt class="py-string">'is2sap.templates.fase.confirmar_eliminar'</tt><tt class="py-op">)</tt> </tt>
+<a name="L168"></a><tt class="py-lineno">168</tt>  <tt class="py-line">    <tt class="py-decorator">@</tt><tt class="py-decorator">require</tt><tt class="py-op">(</tt><tt class="py-name">predicates</tt><tt class="py-op">.</tt><tt class="py-name">has_any_permission</tt><tt class="py-op">(</tt><tt class="py-string">'administracion'</tt><tt class="py-op">,</tt>  <tt class="py-string">'lider_proyecto'</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="FaseController.confirmar_eliminar"></a><div id="FaseController.confirmar_eliminar-def"><a name="L169"></a><tt class="py-lineno">169</tt> <a class="py-toggle" href="#" id="FaseController.confirmar_eliminar-toggle" onclick="return toggle('FaseController.confirmar_eliminar');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="is2sap.controllers.fase_controlador.FaseController-class.html#confirmar_eliminar">confirmar_eliminar</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">id_proyecto</tt><tt class="py-op">,</tt> <tt class="py-param">id_fase</tt><tt class="py-op">,</tt> <tt class="py-op">**</tt><tt class="py-param">kw</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="FaseController.confirmar_eliminar-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="FaseController.confirmar_eliminar-expanded"><a name="L170"></a><tt class="py-lineno">170</tt>  <tt class="py-line">        <tt class="py-docstring">"""Despliega confirmacion de eliminacion"""</tt> </tt>
+<a name="L171"></a><tt class="py-lineno">171</tt>  <tt class="py-line">        <tt class="py-keyword">try</tt><tt class="py-op">:</tt> </tt>
+<a name="L172"></a><tt class="py-lineno">172</tt>  <tt class="py-line">            <tt id="link-109" class="py-name"><a title="is2sap.controllers.admin_controlador.AdminController.proyecto" class="py-name" href="#" onclick="return doclink('link-109', 'proyecto', 'link-20');">proyecto</a></tt> <tt class="py-op">=</tt> <tt id="link-110" class="py-name"><a title="is2sap.model.DBSession" class="py-name" href="#" onclick="return doclink('link-110', 'DBSession', 'link-4');">DBSession</a></tt><tt class="py-op">.</tt><tt class="py-name">query</tt><tt class="py-op">(</tt><tt id="link-111" class="py-name"><a title="is2sap.model.autogenerado_completo.Proyecto
+is2sap.model.model.Proyecto" class="py-name" href="#" onclick="return doclink('link-111', 'Proyecto', 'link-9');">Proyecto</a></tt><tt class="py-op">)</tt><tt class="py-op">.</tt><tt class="py-name">get</tt><tt class="py-op">(</tt><tt id="link-112" class="py-name"><a title="is2sap.model.autogenerado_completo.Proyecto.id_proyecto
+is2sap.model.model.Proyecto.id_proyecto" class="py-name" href="#" onclick="return doclink('link-112', 'id_proyecto', 'link-23');">id_proyecto</a></tt><tt class="py-op">)</tt> </tt>
+<a name="L173"></a><tt class="py-lineno">173</tt>  <tt class="py-line"> </tt>
+<a name="L174"></a><tt class="py-lineno">174</tt>  <tt class="py-line">            <tt class="py-keyword">if</tt> <tt id="link-113" class="py-name"><a title="is2sap.controllers.admin_controlador.AdminController.proyecto" class="py-name" href="#" onclick="return doclink('link-113', 'proyecto', 'link-20');">proyecto</a></tt><tt class="py-op">.</tt><tt id="link-114" class="py-name"><a title="is2sap.model.autogenerado_completo.Proyecto.iniciado
+is2sap.model.model.Proyecto.iniciado" class="py-name" href="#" onclick="return doclink('link-114', 'iniciado', 'link-25');">iniciado</a></tt> <tt class="py-op">==</tt> <tt class="py-name">True</tt><tt class="py-op">:</tt> </tt>
+<a name="L175"></a><tt class="py-lineno">175</tt>  <tt class="py-line">               <tt class="py-name">flash</tt><tt class="py-op">(</tt><tt class="py-name">_</tt><tt class="py-op">(</tt><tt class="py-string">"Proyecto ya iniciado. No puede eliminar fases!"</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> <tt class="py-string">'error'</tt><tt class="py-op">)</tt> </tt>
+<a name="L176"></a><tt class="py-lineno">176</tt>  <tt class="py-line">               <tt class="py-name">redirect</tt><tt class="py-op">(</tt><tt class="py-string">"/admin/fase/listadoFasesPorProyecto"</tt><tt class="py-op">,</tt> <tt id="link-115" class="py-name"><a title="is2sap.model.autogenerado_completo.Proyecto.id_proyecto
+is2sap.model.model.Proyecto.id_proyecto" class="py-name" href="#" onclick="return doclink('link-115', 'id_proyecto', 'link-23');">id_proyecto</a></tt><tt class="py-op">=</tt><tt id="link-116" class="py-name"><a title="is2sap.model.autogenerado_completo.Proyecto.id_proyecto
+is2sap.model.model.Proyecto.id_proyecto" class="py-name" href="#" onclick="return doclink('link-116', 'id_proyecto', 'link-23');">id_proyecto</a></tt><tt class="py-op">)</tt> </tt>
+<a name="L177"></a><tt class="py-lineno">177</tt>  <tt class="py-line"> </tt>
+<a name="L178"></a><tt class="py-lineno">178</tt>  <tt class="py-line">            <tt id="link-117" class="py-name"><a title="is2sap.controllers.admin_controlador.AdminController.fase
+is2sap.model.model.LineaBase.fase
+is2sap.model.model.LineaBaseHistorial.fase" class="py-name" href="#" onclick="return doclink('link-117', 'fase', 'link-39');">fase</a></tt> <tt class="py-op">=</tt> <tt id="link-118" class="py-name"><a title="is2sap.model.DBSession" class="py-name" href="#" onclick="return doclink('link-118', 'DBSession', 'link-4');">DBSession</a></tt><tt class="py-op">.</tt><tt class="py-name">query</tt><tt class="py-op">(</tt><tt id="link-119" class="py-name"><a title="is2sap.model.autogenerado_completo.Fase
+is2sap.model.model.Fase" class="py-name" href="#" onclick="return doclink('link-119', 'Fase', 'link-8');">Fase</a></tt><tt class="py-op">)</tt><tt class="py-op">.</tt><tt class="py-name">get</tt><tt class="py-op">(</tt><tt id="link-120" class="py-name"><a title="is2sap.model.autogenerado.LineaBase.id_fase
+is2sap.model.autogenerado_completo.LineaBase.id_fase
+is2sap.model.autogenerado_completo.TipoItem.id_fase
+is2sap.model.model.LineaBase.id_fase
+is2sap.model.model.LineaBaseHistorial.id_fase
+is2sap.model.model.TipoItem.id_fase" class="py-name" href="#" onclick="return doclink('link-120', 'id_fase', 'link-85');">id_fase</a></tt><tt class="py-op">)</tt> </tt>
+<a name="L179"></a><tt class="py-lineno">179</tt>  <tt class="py-line">        <tt class="py-keyword">except</tt> <tt class="py-name">SQLAlchemyError</tt><tt class="py-op">:</tt> </tt>
+<a name="L180"></a><tt class="py-lineno">180</tt>  <tt class="py-line">            <tt class="py-name">flash</tt><tt class="py-op">(</tt><tt class="py-name">_</tt><tt class="py-op">(</tt><tt class="py-string">"No se pudo acceder a Eliminacion de Fases! SQLAlchemyError..."</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> <tt class="py-string">'error'</tt><tt class="py-op">)</tt> </tt>
+<a name="L181"></a><tt class="py-lineno">181</tt>  <tt class="py-line">            <tt class="py-name">redirect</tt><tt class="py-op">(</tt><tt class="py-string">"/admin/fase/listadoFasesPorProyecto"</tt><tt class="py-op">,</tt> <tt id="link-121" class="py-name"><a title="is2sap.model.autogenerado_completo.Proyecto.id_proyecto
+is2sap.model.model.Proyecto.id_proyecto" class="py-name" href="#" onclick="return doclink('link-121', 'id_proyecto', 'link-23');">id_proyecto</a></tt><tt class="py-op">=</tt><tt id="link-122" class="py-name"><a title="is2sap.model.autogenerado_completo.Proyecto.id_proyecto
+is2sap.model.model.Proyecto.id_proyecto" class="py-name" href="#" onclick="return doclink('link-122', 'id_proyecto', 'link-23');">id_proyecto</a></tt><tt class="py-op">)</tt> </tt>
+<a name="L182"></a><tt class="py-lineno">182</tt>  <tt class="py-line">        <tt class="py-keyword">except</tt> <tt class="py-op">(</tt><tt class="py-name">AttributeError</tt><tt class="py-op">,</tt> <tt class="py-name">NameError</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L183"></a><tt class="py-lineno">183</tt>  <tt class="py-line">            <tt class="py-name">flash</tt><tt class="py-op">(</tt><tt class="py-name">_</tt><tt class="py-op">(</tt><tt class="py-string">"No se pudo acceder a Eliminacion de Fases! Hay Problemas con el servidor..."</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> <tt class="py-string">'error'</tt><tt class="py-op">)</tt> </tt>
+<a name="L184"></a><tt class="py-lineno">184</tt>  <tt class="py-line">            <tt class="py-name">redirect</tt><tt class="py-op">(</tt><tt class="py-string">"/admin/fase/listadoFasesPorProyecto"</tt><tt class="py-op">,</tt> <tt id="link-123" class="py-name"><a title="is2sap.model.autogenerado_completo.Proyecto.id_proyecto
+is2sap.model.model.Proyecto.id_proyecto" class="py-name" href="#" onclick="return doclink('link-123', 'id_proyecto', 'link-23');">id_proyecto</a></tt><tt class="py-op">=</tt><tt id="link-124" class="py-name"><a title="is2sap.model.autogenerado_completo.Proyecto.id_proyecto
+is2sap.model.model.Proyecto.id_proyecto" class="py-name" href="#" onclick="return doclink('link-124', 'id_proyecto', 'link-23');">id_proyecto</a></tt><tt class="py-op">)</tt> </tt>
+<a name="L185"></a><tt class="py-lineno">185</tt>  <tt class="py-line"> </tt>
+<a name="L186"></a><tt class="py-lineno">186</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">dict</tt><tt class="py-op">(</tt><tt class="py-name">nombre_modelo</tt><tt class="py-op">=</tt><tt class="py-string">'Fase'</tt><tt class="py-op">,</tt> <tt class="py-name">page</tt><tt class="py-op">=</tt><tt class="py-string">'eliminar_fase'</tt><tt class="py-op">,</tt> <tt class="py-name">value</tt><tt class="py-op">=</tt><tt id="link-125" class="py-name"><a title="is2sap.controllers.admin_controlador.AdminController.fase
+is2sap.model.model.LineaBase.fase
+is2sap.model.model.LineaBaseHistorial.fase" class="py-name" href="#" onclick="return doclink('link-125', 'fase', 'link-39');">fase</a></tt><tt class="py-op">)</tt> </tt>
+</div><a name="L187"></a><tt class="py-lineno">187</tt>  <tt class="py-line"> </tt>
+<a name="L188"></a><tt class="py-lineno">188</tt>  <tt class="py-line">    <tt class="py-decorator">@</tt><tt class="py-decorator">expose</tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L189"></a><tt class="py-lineno">189</tt>  <tt class="py-line">    <tt class="py-decorator">@</tt><tt class="py-decorator">require</tt><tt class="py-op">(</tt><tt class="py-name">predicates</tt><tt class="py-op">.</tt><tt class="py-name">has_any_permission</tt><tt class="py-op">(</tt><tt class="py-string">'administracion'</tt><tt class="py-op">,</tt>  <tt class="py-string">'lider_proyecto'</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="FaseController.delete"></a><div id="FaseController.delete-def"><a name="L190"></a><tt class="py-lineno">190</tt> <a class="py-toggle" href="#" id="FaseController.delete-toggle" onclick="return toggle('FaseController.delete');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="is2sap.controllers.fase_controlador.FaseController-class.html#delete">delete</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">id_proyecto</tt><tt class="py-op">,</tt> <tt class="py-param">id_fase</tt><tt class="py-op">,</tt> <tt class="py-op">**</tt><tt class="py-param">kw</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="FaseController.delete-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="FaseController.delete-expanded"><a name="L191"></a><tt class="py-lineno">191</tt>  <tt class="py-line">        <tt class="py-docstring">""" Metodo que elimina un registro de la base de datos </tt> </tt>
+<a name="L192"></a><tt class="py-lineno">192</tt>  <tt class="py-line"><tt class="py-docstring">            Parametros:</tt> </tt>
+<a name="L193"></a><tt class="py-lineno">193</tt>  <tt class="py-line"><tt class="py-docstring">                       -  id_fase: identificador de la fase</tt> </tt>
+<a name="L194"></a><tt class="py-lineno">194</tt>  <tt class="py-line"><tt class="py-docstring">        """</tt> </tt>
+<a name="L195"></a><tt class="py-lineno">195</tt>  <tt class="py-line">        <tt class="py-keyword">try</tt><tt class="py-op">:</tt> </tt>
+<a name="L196"></a><tt class="py-lineno">196</tt>  <tt class="py-line">            <tt class="py-name">tipo_items</tt> <tt class="py-op">=</tt> <tt id="link-126" class="py-name"><a title="is2sap.model.DBSession" class="py-name" href="#" onclick="return doclink('link-126', 'DBSession', 'link-4');">DBSession</a></tt><tt class="py-op">.</tt><tt class="py-name">query</tt><tt class="py-op">(</tt><tt id="link-127" class="py-name"><a title="is2sap.model.autogenerado_completo.TipoItem
+is2sap.model.model.TipoItem" class="py-name" href="#" onclick="return doclink('link-127', 'TipoItem', 'link-11');">TipoItem</a></tt><tt class="py-op">)</tt><tt class="py-op">.</tt><tt class="py-name">filter_by</tt><tt class="py-op">(</tt><tt id="link-128" class="py-name"><a title="is2sap.model.autogenerado.LineaBase.id_fase
+is2sap.model.autogenerado_completo.LineaBase.id_fase
+is2sap.model.autogenerado_completo.TipoItem.id_fase
+is2sap.model.model.LineaBase.id_fase
+is2sap.model.model.LineaBaseHistorial.id_fase
+is2sap.model.model.TipoItem.id_fase" class="py-name" href="#" onclick="return doclink('link-128', 'id_fase', 'link-85');">id_fase</a></tt><tt class="py-op">=</tt><tt id="link-129" class="py-name"><a title="is2sap.model.autogenerado.LineaBase.id_fase
+is2sap.model.autogenerado_completo.LineaBase.id_fase
+is2sap.model.autogenerado_completo.TipoItem.id_fase
+is2sap.model.model.LineaBase.id_fase
+is2sap.model.model.LineaBaseHistorial.id_fase
+is2sap.model.model.TipoItem.id_fase" class="py-name" href="#" onclick="return doclink('link-129', 'id_fase', 'link-85');">id_fase</a></tt><tt class="py-op">)</tt><tt class="py-op">.</tt><tt class="py-name">all</tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L197"></a><tt class="py-lineno">197</tt>  <tt class="py-line"> </tt>
+<a name="L198"></a><tt class="py-lineno">198</tt>  <tt class="py-line">            <tt class="py-keyword">for</tt> <tt id="link-130" class="py-name" targets="Variable is2sap.controllers.admin_controlador.AdminController.tipo_item=is2sap.controllers.admin_controlador.AdminController-class.html#tipo_item"><a title="is2sap.controllers.admin_controlador.AdminController.tipo_item" class="py-name" href="#" onclick="return doclink('link-130', 'tipo_item', 'link-130');">tipo_item</a></tt> <tt class="py-keyword">in</tt> <tt class="py-name">tipo_items</tt><tt class="py-op">:</tt> </tt>
+<a name="L199"></a><tt class="py-lineno">199</tt>  <tt class="py-line">                <tt id="link-131" class="py-name" targets="Variable is2sap.model.autogenerado_completo.Atributo.id_tipo_item=is2sap.model.autogenerado_completo.Atributo-class.html#id_tipo_item,Variable is2sap.model.autogenerado_completo.TipoItem.id_tipo_item=is2sap.model.autogenerado_completo.TipoItem-class.html#id_tipo_item,Variable is2sap.model.model.Atributo.id_tipo_item=is2sap.model.model.Atributo-class.html#id_tipo_item,Variable is2sap.model.model.Item.id_tipo_item=is2sap.model.model.Item-class.html#id_tipo_item,Variable is2sap.model.model.ItemHistorial.id_tipo_item=is2sap.model.model.ItemHistorial-class.html#id_tipo_item,Variable is2sap.model.model.TipoItem.id_tipo_item=is2sap.model.model.TipoItem-class.html#id_tipo_item"><a title="is2sap.model.autogenerado_completo.Atributo.id_tipo_item
+is2sap.model.autogenerado_completo.TipoItem.id_tipo_item
+is2sap.model.model.Atributo.id_tipo_item
+is2sap.model.model.Item.id_tipo_item
+is2sap.model.model.ItemHistorial.id_tipo_item
+is2sap.model.model.TipoItem.id_tipo_item" class="py-name" href="#" onclick="return doclink('link-131', 'id_tipo_item', 'link-131');">id_tipo_item</a></tt> <tt class="py-op">=</tt> <tt id="link-132" class="py-name"><a title="is2sap.controllers.admin_controlador.AdminController.tipo_item" class="py-name" href="#" onclick="return doclink('link-132', 'tipo_item', 'link-130');">tipo_item</a></tt><tt class="py-op">.</tt><tt id="link-133" class="py-name"><a title="is2sap.model.autogenerado_completo.Atributo.id_tipo_item
+is2sap.model.autogenerado_completo.TipoItem.id_tipo_item
+is2sap.model.model.Atributo.id_tipo_item
+is2sap.model.model.Item.id_tipo_item
+is2sap.model.model.ItemHistorial.id_tipo_item
+is2sap.model.model.TipoItem.id_tipo_item" class="py-name" href="#" onclick="return doclink('link-133', 'id_tipo_item', 'link-131');">id_tipo_item</a></tt> </tt>
+<a name="L200"></a><tt class="py-lineno">200</tt>  <tt class="py-line">                <tt class="py-name">atributos</tt> <tt class="py-op">=</tt> <tt id="link-134" class="py-name"><a title="is2sap.model.DBSession" class="py-name" href="#" onclick="return doclink('link-134', 'DBSession', 'link-4');">DBSession</a></tt><tt class="py-op">.</tt><tt class="py-name">query</tt><tt class="py-op">(</tt><tt id="link-135" class="py-name"><a title="is2sap.model.autogenerado_completo.Atributo
+is2sap.model.model.Atributo" class="py-name" href="#" onclick="return doclink('link-135', 'Atributo', 'link-12');">Atributo</a></tt><tt class="py-op">)</tt><tt class="py-op">.</tt><tt class="py-name">filter_by</tt><tt class="py-op">(</tt><tt id="link-136" class="py-name"><a title="is2sap.model.autogenerado_completo.Atributo.id_tipo_item
+is2sap.model.autogenerado_completo.TipoItem.id_tipo_item
+is2sap.model.model.Atributo.id_tipo_item
+is2sap.model.model.Item.id_tipo_item
+is2sap.model.model.ItemHistorial.id_tipo_item
+is2sap.model.model.TipoItem.id_tipo_item" class="py-name" href="#" onclick="return doclink('link-136', 'id_tipo_item', 'link-131');">id_tipo_item</a></tt><tt class="py-op">=</tt><tt id="link-137" class="py-name"><a title="is2sap.model.autogenerado_completo.Atributo.id_tipo_item
+is2sap.model.autogenerado_completo.TipoItem.id_tipo_item
+is2sap.model.model.Atributo.id_tipo_item
+is2sap.model.model.Item.id_tipo_item
+is2sap.model.model.ItemHistorial.id_tipo_item
+is2sap.model.model.TipoItem.id_tipo_item" class="py-name" href="#" onclick="return doclink('link-137', 'id_tipo_item', 'link-131');">id_tipo_item</a></tt><tt class="py-op">)</tt><tt class="py-op">.</tt><tt class="py-name">all</tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L201"></a><tt class="py-lineno">201</tt>  <tt class="py-line">                <tt class="py-keyword">for</tt> <tt id="link-138" class="py-name" targets="Variable is2sap.controllers.admin_controlador.AdminController.atributo=is2sap.controllers.admin_controlador.AdminController-class.html#atributo,Variable is2sap.model.model.ItemDetalle.atributo=is2sap.model.model.ItemDetalle-class.html#atributo"><a title="is2sap.controllers.admin_controlador.AdminController.atributo
+is2sap.model.model.ItemDetalle.atributo" class="py-name" href="#" onclick="return doclink('link-138', 'atributo', 'link-138');">atributo</a></tt> <tt class="py-keyword">in</tt> <tt class="py-name">atributos</tt><tt class="py-op">:</tt> </tt>
+<a name="L202"></a><tt class="py-lineno">202</tt>  <tt class="py-line">                    <tt id="link-139" class="py-name"><a title="is2sap.model.DBSession" class="py-name" href="#" onclick="return doclink('link-139', 'DBSession', 'link-4');">DBSession</a></tt><tt class="py-op">.</tt><tt id="link-140" class="py-name" targets="Method is2sap.controllers.atributo_controlador.AtributoController.delete()=is2sap.controllers.atributo_controlador.AtributoController-class.html#delete,Method is2sap.controllers.fase_controlador.FaseController.delete()=is2sap.controllers.fase_controlador.FaseController-class.html#delete,Method is2sap.controllers.item_controlador.ItemController.delete()=is2sap.controllers.item_controlador.ItemController-class.html#delete,Method is2sap.controllers.permiso_controlador.PermisoController.delete()=is2sap.controllers.permiso_controlador.PermisoController-class.html#delete,Method is2sap.controllers.proyecto_controlador.ProyectoController.delete()=is2sap.controllers.proyecto_controlador.ProyectoController-class.html#delete,Method is2sap.controllers.relacion_controlador.RelacionController.delete()=is2sap.controllers.relacion_controlador.RelacionController-class.html#delete,Method is2sap.controllers.rol_controlador.RolController.delete()=is2sap.controllers.rol_controlador.RolController-class.html#delete,Method is2sap.controllers.tipo_item_controlador.TipoItemController.delete()=is2sap.controllers.tipo_item_controlador.TipoItemController-class.html#delete,Method is2sap.controllers.usuario_controlador.UsuarioController.delete()=is2sap.controllers.usuario_controlador.UsuarioController-class.html#delete"><a title="is2sap.controllers.atributo_controlador.AtributoController.delete
+is2sap.controllers.fase_controlador.FaseController.delete
+is2sap.controllers.item_controlador.ItemController.delete
+is2sap.controllers.permiso_controlador.PermisoController.delete
+is2sap.controllers.proyecto_controlador.ProyectoController.delete
+is2sap.controllers.relacion_controlador.RelacionController.delete
+is2sap.controllers.rol_controlador.RolController.delete
+is2sap.controllers.tipo_item_controlador.TipoItemController.delete
+is2sap.controllers.usuario_controlador.UsuarioController.delete" class="py-name" href="#" onclick="return doclink('link-140', 'delete', 'link-140');">delete</a></tt><tt class="py-op">(</tt><tt id="link-141" class="py-name"><a title="is2sap.model.DBSession" class="py-name" href="#" onclick="return doclink('link-141', 'DBSession', 'link-4');">DBSession</a></tt><tt class="py-op">.</tt><tt class="py-name">query</tt><tt class="py-op">(</tt><tt id="link-142" class="py-name"><a title="is2sap.model.autogenerado_completo.Atributo
+is2sap.model.model.Atributo" class="py-name" href="#" onclick="return doclink('link-142', 'Atributo', 'link-12');">Atributo</a></tt><tt class="py-op">)</tt><tt class="py-op">.</tt><tt class="py-name">get</tt><tt class="py-op">(</tt><tt id="link-143" class="py-name"><a title="is2sap.controllers.admin_controlador.AdminController.atributo
+is2sap.model.model.ItemDetalle.atributo" class="py-name" href="#" onclick="return doclink('link-143', 'atributo', 'link-138');">atributo</a></tt><tt class="py-op">.</tt><tt id="link-144" class="py-name" targets="Variable is2sap.model.autogenerado_completo.Atributo.id_atributo=is2sap.model.autogenerado_completo.Atributo-class.html#id_atributo,Variable is2sap.model.model.Atributo.id_atributo=is2sap.model.model.Atributo-class.html#id_atributo,Variable is2sap.model.model.ItemDetalle.id_atributo=is2sap.model.model.ItemDetalle-class.html#id_atributo,Variable is2sap.model.model.ItemDetalleHistorial.id_atributo=is2sap.model.model.ItemDetalleHistorial-class.html#id_atributo"><a title="is2sap.model.autogenerado_completo.Atributo.id_atributo
+is2sap.model.model.Atributo.id_atributo
+is2sap.model.model.ItemDetalle.id_atributo
+is2sap.model.model.ItemDetalleHistorial.id_atributo" class="py-name" href="#" onclick="return doclink('link-144', 'id_atributo', 'link-144');">id_atributo</a></tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L203"></a><tt class="py-lineno">203</tt>  <tt class="py-line">                <tt id="link-145" class="py-name"><a title="is2sap.model.DBSession" class="py-name" href="#" onclick="return doclink('link-145', 'DBSession', 'link-4');">DBSession</a></tt><tt class="py-op">.</tt><tt id="link-146" class="py-name"><a title="is2sap.controllers.atributo_controlador.AtributoController.delete
+is2sap.controllers.fase_controlador.FaseController.delete
+is2sap.controllers.item_controlador.ItemController.delete
+is2sap.controllers.permiso_controlador.PermisoController.delete
+is2sap.controllers.proyecto_controlador.ProyectoController.delete
+is2sap.controllers.relacion_controlador.RelacionController.delete
+is2sap.controllers.rol_controlador.RolController.delete
+is2sap.controllers.tipo_item_controlador.TipoItemController.delete
+is2sap.controllers.usuario_controlador.UsuarioController.delete" class="py-name" href="#" onclick="return doclink('link-146', 'delete', 'link-140');">delete</a></tt><tt class="py-op">(</tt><tt id="link-147" class="py-name"><a title="is2sap.model.DBSession" class="py-name" href="#" onclick="return doclink('link-147', 'DBSession', 'link-4');">DBSession</a></tt><tt class="py-op">.</tt><tt class="py-name">query</tt><tt class="py-op">(</tt><tt id="link-148" class="py-name"><a title="is2sap.model.autogenerado_completo.TipoItem
+is2sap.model.model.TipoItem" class="py-name" href="#" onclick="return doclink('link-148', 'TipoItem', 'link-11');">TipoItem</a></tt><tt class="py-op">)</tt><tt class="py-op">.</tt><tt class="py-name">get</tt><tt class="py-op">(</tt><tt id="link-149" class="py-name"><a title="is2sap.model.autogenerado_completo.Atributo.id_tipo_item
+is2sap.model.autogenerado_completo.TipoItem.id_tipo_item
+is2sap.model.model.Atributo.id_tipo_item
+is2sap.model.model.Item.id_tipo_item
+is2sap.model.model.ItemHistorial.id_tipo_item
+is2sap.model.model.TipoItem.id_tipo_item" class="py-name" href="#" onclick="return doclink('link-149', 'id_tipo_item', 'link-131');">id_tipo_item</a></tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L204"></a><tt class="py-lineno">204</tt>  <tt class="py-line"> </tt>
+<a name="L205"></a><tt class="py-lineno">205</tt>  <tt class="py-line">            <tt id="link-150" class="py-name"><a title="is2sap.model.DBSession" class="py-name" href="#" onclick="return doclink('link-150', 'DBSession', 'link-4');">DBSession</a></tt><tt class="py-op">.</tt><tt id="link-151" class="py-name"><a title="is2sap.controllers.atributo_controlador.AtributoController.delete
+is2sap.controllers.fase_controlador.FaseController.delete
+is2sap.controllers.item_controlador.ItemController.delete
+is2sap.controllers.permiso_controlador.PermisoController.delete
+is2sap.controllers.proyecto_controlador.ProyectoController.delete
+is2sap.controllers.relacion_controlador.RelacionController.delete
+is2sap.controllers.rol_controlador.RolController.delete
+is2sap.controllers.tipo_item_controlador.TipoItemController.delete
+is2sap.controllers.usuario_controlador.UsuarioController.delete" class="py-name" href="#" onclick="return doclink('link-151', 'delete', 'link-140');">delete</a></tt><tt class="py-op">(</tt><tt id="link-152" class="py-name"><a title="is2sap.model.DBSession" class="py-name" href="#" onclick="return doclink('link-152', 'DBSession', 'link-4');">DBSession</a></tt><tt class="py-op">.</tt><tt class="py-name">query</tt><tt class="py-op">(</tt><tt id="link-153" class="py-name"><a title="is2sap.model.autogenerado_completo.Fase
+is2sap.model.model.Fase" class="py-name" href="#" onclick="return doclink('link-153', 'Fase', 'link-8');">Fase</a></tt><tt class="py-op">)</tt><tt class="py-op">.</tt><tt class="py-name">get</tt><tt class="py-op">(</tt><tt id="link-154" class="py-name"><a title="is2sap.model.autogenerado.LineaBase.id_fase
+is2sap.model.autogenerado_completo.LineaBase.id_fase
+is2sap.model.autogenerado_completo.TipoItem.id_fase
+is2sap.model.model.LineaBase.id_fase
+is2sap.model.model.LineaBaseHistorial.id_fase
+is2sap.model.model.TipoItem.id_fase" class="py-name" href="#" onclick="return doclink('link-154', 'id_fase', 'link-85');">id_fase</a></tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L206"></a><tt class="py-lineno">206</tt>  <tt class="py-line">            <tt class="py-name">transaction</tt><tt class="py-op">.</tt><tt class="py-name">commit</tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L207"></a><tt class="py-lineno">207</tt>  <tt class="py-line">        <tt class="py-keyword">except</tt> <tt class="py-name">IntegrityError</tt><tt class="py-op">:</tt> </tt>
+<a name="L208"></a><tt class="py-lineno">208</tt>  <tt class="py-line">            <tt class="py-name">transaction</tt><tt class="py-op">.</tt><tt class="py-name">abort</tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L209"></a><tt class="py-lineno">209</tt>  <tt class="py-line">            <tt class="py-name">flash</tt><tt class="py-op">(</tt><tt class="py-name">_</tt><tt class="py-op">(</tt><tt class="py-string">"No se ha eliminado! Hay Problemas con el servidor..."</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> <tt class="py-string">'error'</tt><tt class="py-op">)</tt> </tt>
+<a name="L210"></a><tt class="py-lineno">210</tt>  <tt class="py-line">            <tt class="py-name">redirect</tt><tt class="py-op">(</tt><tt class="py-string">"/admin/fase/listadoFasesPorProyecto"</tt><tt class="py-op">,</tt> <tt id="link-155" class="py-name"><a title="is2sap.model.autogenerado_completo.Proyecto.id_proyecto
+is2sap.model.model.Proyecto.id_proyecto" class="py-name" href="#" onclick="return doclink('link-155', 'id_proyecto', 'link-23');">id_proyecto</a></tt><tt class="py-op">=</tt><tt id="link-156" class="py-name"><a title="is2sap.model.autogenerado_completo.Proyecto.id_proyecto
+is2sap.model.model.Proyecto.id_proyecto" class="py-name" href="#" onclick="return doclink('link-156', 'id_proyecto', 'link-23');">id_proyecto</a></tt><tt class="py-op">)</tt> </tt>
+<a name="L211"></a><tt class="py-lineno">211</tt>  <tt class="py-line">        <tt class="py-keyword">except</tt> <tt class="py-name">SQLAlchemyError</tt><tt class="py-op">:</tt> </tt>
+<a name="L212"></a><tt class="py-lineno">212</tt>  <tt class="py-line">            <tt class="py-name">flash</tt><tt class="py-op">(</tt><tt class="py-name">_</tt><tt class="py-op">(</tt><tt class="py-string">"No se ha eliminado! SQLAlchemyError..."</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> <tt class="py-string">'error'</tt><tt class="py-op">)</tt> </tt>
+<a name="L213"></a><tt class="py-lineno">213</tt>  <tt class="py-line">            <tt class="py-name">redirect</tt><tt class="py-op">(</tt><tt class="py-string">"/admin/fase/listadoFasesPorProyecto"</tt><tt class="py-op">,</tt> <tt id="link-157" class="py-name"><a title="is2sap.model.autogenerado_completo.Proyecto.id_proyecto
+is2sap.model.model.Proyecto.id_proyecto" class="py-name" href="#" onclick="return doclink('link-157', 'id_proyecto', 'link-23');">id_proyecto</a></tt><tt class="py-op">=</tt><tt id="link-158" class="py-name"><a title="is2sap.model.autogenerado_completo.Proyecto.id_proyecto
+is2sap.model.model.Proyecto.id_proyecto" class="py-name" href="#" onclick="return doclink('link-158', 'id_proyecto', 'link-23');">id_proyecto</a></tt><tt class="py-op">)</tt> </tt>
+<a name="L214"></a><tt class="py-lineno">214</tt>  <tt class="py-line">        <tt class="py-keyword">except</tt> <tt class="py-op">(</tt><tt class="py-name">AttributeError</tt><tt class="py-op">,</tt> <tt class="py-name">NameError</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L215"></a><tt class="py-lineno">215</tt>  <tt class="py-line">            <tt class="py-name">flash</tt><tt class="py-op">(</tt><tt class="py-name">_</tt><tt class="py-op">(</tt><tt class="py-string">"No se ha eliminado! Hay Problemas con el servidor..."</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> <tt class="py-string">'error'</tt><tt class="py-op">)</tt> </tt>
+<a name="L216"></a><tt class="py-lineno">216</tt>  <tt class="py-line">            <tt class="py-name">redirect</tt><tt class="py-op">(</tt><tt class="py-string">"/admin/fase/listadoFasesPorProyecto"</tt><tt class="py-op">,</tt> <tt id="link-159" class="py-name"><a title="is2sap.model.autogenerado_completo.Proyecto.id_proyecto
+is2sap.model.model.Proyecto.id_proyecto" class="py-name" href="#" onclick="return doclink('link-159', 'id_proyecto', 'link-23');">id_proyecto</a></tt><tt class="py-op">=</tt><tt id="link-160" class="py-name"><a title="is2sap.model.autogenerado_completo.Proyecto.id_proyecto
+is2sap.model.model.Proyecto.id_proyecto" class="py-name" href="#" onclick="return doclink('link-160', 'id_proyecto', 'link-23');">id_proyecto</a></tt><tt class="py-op">)</tt> </tt>
+<a name="L217"></a><tt class="py-lineno">217</tt>  <tt class="py-line">        <tt class="py-keyword">else</tt><tt class="py-op">:</tt> </tt>
+<a name="L218"></a><tt class="py-lineno">218</tt>  <tt class="py-line">            <tt class="py-name">flash</tt><tt class="py-op">(</tt><tt class="py-name">_</tt><tt class="py-op">(</tt><tt class="py-string">"Fase eliminada!"</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> <tt class="py-string">'ok'</tt><tt class="py-op">)</tt> </tt>
+<a name="L219"></a><tt class="py-lineno">219</tt>  <tt class="py-line"> </tt>
+<a name="L220"></a><tt class="py-lineno">220</tt>  <tt class="py-line">        <tt class="py-name">redirect</tt><tt class="py-op">(</tt><tt class="py-string">"/admin/fase/listadoFasesPorProyecto"</tt><tt class="py-op">,</tt> <tt id="link-161" class="py-name"><a title="is2sap.model.autogenerado_completo.Proyecto.id_proyecto
+is2sap.model.model.Proyecto.id_proyecto" class="py-name" href="#" onclick="return doclink('link-161', 'id_proyecto', 'link-23');">id_proyecto</a></tt><tt class="py-op">=</tt><tt id="link-162" class="py-name"><a title="is2sap.model.autogenerado_completo.Proyecto.id_proyecto
+is2sap.model.model.Proyecto.id_proyecto" class="py-name" href="#" onclick="return doclink('link-162', 'id_proyecto', 'link-23');">id_proyecto</a></tt><tt class="py-op">)</tt> </tt>
+</div></div><a name="L221"></a><tt class="py-lineno">221</tt>  <tt class="py-line"> </tt><script type="text/javascript">
+<!--
+expandto(location.href);
+// -->
+</script>
+</pre>
+<br />
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+      <th class="navbar" width="100%"></th>
+  </tr>
+</table>
+<table border="0" cellpadding="0" cellspacing="0" width="100%%">
+  <tr>
+    <td align="left" class="footer">
+    Generated by Epydoc 3.0.1 on Sat Jun 25 08:36:26 2011
+    </td>
+    <td align="right" class="footer">
+      <a target="mainFrame" href="http://epydoc.sourceforge.net"
+        >http://epydoc.sourceforge.net</a>
+    </td>
+  </tr>
+</table>
+
+<script type="text/javascript">
+  <!--
+  // Private objects are initially displayed (because if
+  // javascript is turned off then we want them to be
+  // visible); but by default, we want to hide them.  So hide
+  // them unless we have a cookie that says to show them.
+  checkCookie();
+  // -->
+</script>
+</body>
+</html>
