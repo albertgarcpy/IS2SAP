@@ -20,7 +20,7 @@ from sqlalchemy import func
 from is2sap.lib.base import BaseController
 from is2sap.model import DBSession, metadata
 
-from is2sap.model.model import TipoItem, Item, Proyecto, Usuario, Fase, Atributo, ItemDetalle, ItemHistorial, ItemDetalleHistorial, LineaBase, LineaBase_Item, LineaBaseHistorial, LineaBaseItemHistorial
+from is2sap.model.model import TipoItem, Item, Proyecto, Usuario, Fase, Atributo, ItemDetalle, ItemHistorial, ItemDetalleHistorial, LineaBase, LineaBase_Item, LineaBaseHistorial, LineaBaseItemHistorial, RelacionItem
 from is2sap import model
 from is2sap.controllers.secure import SecureController
 from is2sap.controllers.error import ErrorController
@@ -216,24 +216,24 @@ class LineaBaseController(BaseController):
 	#Aqui comprobamos si todos los items de la fase actual  tienen sucesores, en ese caso
 	#el estado de la fase cambiamos a Finalizado
 	fase=DBSession.query(Fase).get(id_fase)
-	items_con_sucesores = 0
+	items_sin_sucesores = 0
 	if fase.relacion_estado_fase.nombre_estado=='Con Lineas Bases':
 		tipo_items=DBSession.query(TipoItem).filter_by(id_fase=id_fase)
-		itemsDeFaseActual = []
+		#itemsDeFaseActual = []
 		for tipo_item in tipo_items:
 			itemsTipoItem = DBSession.query(Item).filter_by(id_tipo_item=tipo_item.id_tipo_item).filter_by(vivo=True).filter_by(estado='Aprobado')
 			for itemTipoItem in itemsTipoItem:
 				succs = DBSession.query(RelacionItem).filter_by(id_item1=itemTipoItem.id_item)
-				if succs != None:
-					items_con_sucesores = items_con_sucesores + 1
-				itemsDeFaseActual.append(itemTipoItem)
-	contador_items_en_fase_actual = 0
-	for item in itemsDeFaseActual:
-		contador_items_en_fase_actual = contador_items_en_fase_actual + 1
-	#Si contador_items_en_fase_actual es igual a items_con_sucesores entonces cumple la condicion
-	if contador_items_en_fase_actual == items_con_sucesores:
-		fase.id_estado_fase = '5'
-	DBSession.flush()
+				sw=0
+				for suc in succs:
+					sw=1
+				if sw==0:
+					items_sin_sucesores = items_sin_sucesores + 1
+		
+		if contador_items_en_fase_actual == contador_items_en_fase_actual - items_sin_sucesores:
+			fase.id_estado_fase = '5'
+		
+		DBSession.flush()
 	#La condicion para que la ultima fase ya pase a Finalizado una vez que está Con Lineas Bases, debido
 	#a que no tendrá sucesores
 	if fase.numero_fase == maxnumerofase and fase.relacion_estado_fase.nombre_estado=='Con Lineas Bases':

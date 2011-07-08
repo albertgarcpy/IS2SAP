@@ -126,29 +126,7 @@ class RelacionController(BaseController):
     def addHijo(self, **kw):
         self.insertarHijo(kw)
 	DBSession.flush() 
-	#Aqui comprobamos si todos los items de la fase actual  tienen sucesores, en ese caso
-	#el estado de la fase cambiamos a Finalizado
-	id_tipo_item=kw['id_tipo_item']
-	id_fase=kw['id_fase']
-	fase=DBSession.query(Fase).get(id_fase)
-	items_con_sucesores = 0
-	if fase.relacion_estado_fase.nombre_estado=='Con Lineas Bases'
-		tipo_items=DBSession.query(TipoItem).filter_by(id_fase=id_fase)
-		itemsDeFaseActual = []
-		for tipo_item in tipo_items:
-			itemsTipoItem = DBSession.query(Item).filter_by(id_tipo_item=tipo_item.id_tipo_item).filter_by(vivo=True).filter_by(estado='Aprobado')
-			for itemTipoItem in itemsTipoItem:
-				succs = DBSession.query(RelacionItem).filter_by(id_item1=itemTipoItem.id_item)
-				if succs != None:
-					items_con_sucesores = items_con_sucesores + 1
-				itemsDeFaseActual.append(itemTipoItem)
-	contador_items_en_fase_actual = 0
-	for item in itemsDeFaseActual:
-		contador_items_en_fase_actual = contador_items_en_fase_actual + 1
-	#Si contador_items_en_fase_actual es igual a items_con_sucesores entonces cumple la condicion
-	if contador_items_en_fase_actual == items_con_sucesores:
-		fase.id_estado_fase = '5'
-
+	
 	
         redirect('listado', id_item=kw['id_item1'], id_proyecto=kw['id_proyecto'], id_fase=kw['id_fase'], id_tipo_item=kw['id_tipo_item'])
         
@@ -173,6 +151,35 @@ class RelacionController(BaseController):
     def addAncestro(self, **kw):
         """Metodo para agregar un registro a la base de datos """       
         self.insertarAncestro(kw)
+	DBSession.flush() 
+	#Aqui comprobamos si todos los items de la fase actual  tienen sucesores, en ese caso
+	#el estado de la fase cambiamos a Finalizado
+	id_tipo_item=kw['id_tipo_item']
+	id_fase=kw['id_fase']
+	fase_actual=DBSession.query(Fase).get(id_fase)
+	#Obtenemos la fase anterior
+	fase_anterior=DBSession.query(Fase).filter_by(numero_fase=fase_actual.numero_fase-1).filter_by(id_proyecto=fase_actual.id_proyecto).first()
+	fase=fase_anterior
+	items_sin_sucesores = 0
+	if fase.relacion_estado_fase.nombre_estado=='Con Lineas Bases':
+		tipo_items=DBSession.query(TipoItem).filter_by(id_fase=fase.id_fase)
+		itemsDeFaseActual = []
+		for tipo_item in tipo_items:
+			itemsTipoItem = DBSession.query(Item).filter_by(id_tipo_item=tipo_item.id_tipo_item).filter_by(vivo=True).filter_by(estado='Aprobado')
+			for itemTipoItem in itemsTipoItem:
+				succs = DBSession.query(RelacionItem).filter_by(id_item1=itemTipoItem.id_item)
+				sw=0
+				for suc in succs:
+					sw=1
+				if sw==0:
+					items_sin_sucesores = items_sin_sucesores + 1
+				itemsDeFaseActual.append(itemTipoItem)
+		contador_items_en_fase_actual = 0
+		for item in itemsDeFaseActual:
+			contador_items_en_fase_actual = contador_items_en_fase_actual + 1
+		#Si contador_items_en_fase_actual es igual a items_con_sucesores entonces cumple la condicion
+		if contador_items_en_fase_actual == contador_items_en_fase_actual-items_sin_sucesores:
+			fase.id_estado_fase = '5'
         redirect('listado', id_item=kw['id_item2'], id_proyecto=kw['id_proyecto'], id_fase=kw['id_fase'], id_tipo_item=kw['id_tipo_item'])
 
 

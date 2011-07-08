@@ -651,7 +651,7 @@ class ItemController(BaseController):
             linea_bases_item = item.linea_bases
 
             #Comprobamos que no se encuentre en una Linea Base "Aprobada"
-            if linea_bases_item != None:
+            if linea_bases_item != []:
                for linea_base_item in linea_bases_item:
                   # if linea_base_item.estado == "Aprobado":
                       flash(_("No puede Eliminar el Item! Se encuentra en una Linea Base..."), 'error')
@@ -687,7 +687,7 @@ class ItemController(BaseController):
                 item_cambio = DBSession.query(Item).get(item_afectado)
                 item_cambio.estado = "Revision"
                 linea_bases_item = item_cambio.linea_bases
-                if linea_bases_item != None:
+                if linea_bases_item != []:
                    for linea_base_item in linea_bases_item:
                        if linea_base_item.estado == "Aprobado":
                           id_linea_base = linea_base_item.id_linea_base 
@@ -697,15 +697,15 @@ class ItemController(BaseController):
                 DBSession.flush()
 
             #Eliminamos todas las Relaciones con sus Items inmediatos
-            if listaRelaciones != None:
+            if listaRelaciones != []:
                hijos = DBSession.query(RelacionItem).filter_by(id_item1=id_item)
                antecesores = DBSession.query(RelacionItem).filter_by(id_item2=id_item)
-               if hijos != None:
+               if hijos != []:
                   for hijo in hijos:
                       id_relacion = hijo.id_relacion
                       DBSession.delete(DBSession.query(RelacionItem).get(id_relacion))
                       DBSession.flush()
-               if antecesores != None:
+               if antecesores != []:
                   for antecesor in antecesores:
                       id_relacion = antecesor.id_relacion
                       DBSession.delete(DBSession.query(RelacionItem).get(id_relacion))
@@ -922,8 +922,29 @@ class ItemController(BaseController):
             antecesores = DBSession.query(RelacionItem).filter_by(id_item2=id_item).filter_by(tipo="Antecesor-Sucesor").order_by(RelacionItem.id_item1).all()
             item = DBSession.query(Item).get(id_item)
             fase = DBSession.query(Fase).get(id_fase)
+	    
+	    # Se emite un mensaje de error si el item no tiene antecesores(a excepción de la 1era. fase)	
+	    if antecesores == [] and fase.numero_fase != 1:
+			flash(_("El item no se puede aprobar. Requiere de un antecesor por lo menos..."), 'error')
+               		redirect("/item/listado", id_proyecto=id_proyecto, id_fase=id_fase, id_tipo_item=id_tipo_item)
 
-            if antecesores != None:
+	    # Se comprueba si todos sus antecesores(padres y antecesores juntos) están aprobados
+	    todos_antecesores = DBSession.query(RelacionItem).filter_by(id_item2=id_item).order_by(RelacionItem.id_item1)
+	    if todos_antecesores != []:
+		items_aprobados = 0
+		total_items = 0
+		for antecesor in todos_antecesores:
+			item_antecesor=DBSession.query(Item).get(antecesor.id_item1)
+			if item_antecesor.estado == 'Aprobado':
+				items_aprobados = items_aprobados + 1
+			total_items = total_items + 1
+		print total_items
+		print items_aprobados
+		if total_items > items_aprobados:
+			flash(_("El item no se puede aprobar. Requiere que todos sus padres y/o antecesores esten aprobados"), 'error')
+               		redirect("/item/listado", id_proyecto=id_proyecto, id_fase=id_fase, id_tipo_item=id_tipo_item)
+
+            if antecesores != []:
                if item.estado != "Aprobado": 
                   item.estado = "Aprobado"
                   DBSession.flush()
@@ -939,9 +960,8 @@ class ItemController(BaseController):
                else:
                   flash(_("El item ya esta aprobado..."), 'notice')
                   redirect("/item/listado", id_proyecto=id_proyecto, id_fase=id_fase, id_tipo_item=id_tipo_item)
-            else:
-               flash(_("El item no se puede aprobar. Requiere de un antecesor por lo menos..."), 'error')
-               redirect("/item/listado", id_proyecto=id_proyecto, id_fase=id_fase, id_tipo_item=id_tipo_item)
+            
+               
 
         except IntegrityError:
             transaction.abort()
@@ -1193,7 +1213,7 @@ class ItemController(BaseController):
             #Buscamos todos los Item con los que estaba relacionado en esas relaciones a revertir
             #Cargamos en una Lista todos los items que aun estan vivos
             relaciones_a_restablecer = []
-            if relaciones_revertir != None:
+            if relaciones_revertir != []:
                for relacion_revertir in relaciones_revertir:
                    id_item1 = relacion_revertir.id_item1
                    id_item2 = relacion_revertir.id_item2
@@ -1222,7 +1242,7 @@ class ItemController(BaseController):
                 item_cambio = DBSession.query(Item).get(item_afectado)
                 item_cambio.estado = "Revision"
                 linea_bases_item = item_cambio.linea_bases
-                if linea_bases_item != None:
+                if linea_bases_item != []:
                    for linea_base_item in linea_bases_item:
                        if linea_base_item.estado == "Aprobado":
                           id_linea_base = linea_base_item.id_linea_base 
@@ -1235,7 +1255,7 @@ class ItemController(BaseController):
             #esas relaciones al historial de relaciones. Se eliminan las relacines actuales del Item
             hijos = DBSession.query(RelacionItem).filter_by(id_item1=id_item)
             antecesores = DBSession.query(RelacionItem).filter_by(id_item2=id_item)
-            if hijos != None:
+            if hijos != []:
                for hijo in hijos:
                    id_relacion = hijo.id_relacion
                    relacion_historial = RelacionHistorial()
@@ -1246,7 +1266,7 @@ class ItemController(BaseController):
                    DBSession.add(relacion_historial)
                    DBSession.delete(DBSession.query(RelacionItem).get(id_relacion))
                    DBSession.flush()
-            if antecesores != None:
+            if antecesores != []:
                for antecesor in antecesores:
                    id_relacion = antecesor.id_relacion
                    relacion_historial = RelacionHistorial()
@@ -1259,7 +1279,7 @@ class ItemController(BaseController):
                    DBSession.flush()
 
             #Restablecer las relaciones revertibles
-            if relaciones_a_restablecer != None:
+            if relaciones_a_restablecer != []:
                for relacion_a_restablecer in relaciones_a_restablecer:
                    nueva_relacion = RelacionItem()
                    nueva_relacion.id_item1 = relacion_a_restablecer.id_item1
@@ -1284,7 +1304,7 @@ class ItemController(BaseController):
                 item_cambio = DBSession.query(Item).get(item_afectado)
                 item_cambio.estado = "Revision"
                 linea_bases_item = item_cambio.linea_bases
-                if linea_bases_item != None:
+                if linea_bases_item != []:
                    for linea_base_item in linea_bases_item:
                        if linea_base_item.estado == "Aprobado":
                           id_linea_base = linea_base_item.id_linea_base 
@@ -1304,7 +1324,7 @@ class ItemController(BaseController):
             redirect("/item/listado_revertir", id_proyecto=id_proyecto, id_fase=id_fase, 
                      id_tipo_item=id_tipo_item, id_item=id_item)
         except (AttributeError, NameError):
-            flash(_("No se pudo revertir el Item! Hay Problemas de Atributos o de Nombres con el sservidor..."), 'error')
+            flash(_("No se pudo revertir el Item! Hay Problemas de Atributos o de Nombres con el servidor..."), 'error')
             redirect("/item/listado_revertir", id_proyecto=id_proyecto, id_fase=id_fase, 
                      id_tipo_item=id_tipo_item, id_item=id_item)
         else:
