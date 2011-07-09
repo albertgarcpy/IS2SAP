@@ -148,36 +148,63 @@ class ItemController(BaseController):
     def add(self, **kw):
         """Metodo para agregar un nuevo item a la base de datos """
         try:
-            #Creamos una nueva instancia de Item
-            item = Item()
-            item.id_tipo_item = kw['id_tipo_item']
-            item.codigo = kw['codigo']
-            item.descripcion = kw['descripcion']
-            item.complejidad = kw['complejidad']
-            item.prioridad = kw['prioridad']
-            item.estado = "Desarrollo"
-            item.version = kw['version']
-            item.observacion = kw['observacion']
-            item.fecha_modificacion = kw['fecha_modificacion']
-            item.vivo = True
-
-            
+            #Datos necesarios para redireccionar
             id_tipo_item = kw['id_tipo_item']
             tipo_item = DBSession.query(TipoItem).get(id_tipo_item)
             id_fase = tipo_item.id_fase
             fase = DBSession.query(Fase).get(id_fase)
             id_proyecto = fase.id_proyecto
 
-            #Verificamos los campos obligatorios
-            if kw['descripcion'] == "" and kw['fecha_modificacion'] == "":
-               flash(_("Rellene los campos 'Descripcion' y 'Fecha de Modificacion'"), 'warning')
-               redirect("/item/nuevo", id_proyecto=id_proyecto, id_fase=id_fase, id_tipo_item=id_tipo_item)
-            elif kw['descripcion'] == "":
+            #Creamos una nueva instancia de Item
+            item = Item()
+            item.id_tipo_item = kw['id_tipo_item']
+            item.codigo = kw['codigo']
+
+            #Validamos el campo Descripcion, no puede estar vacio
+            if kw['descripcion'] == "":
                flash(_("Rellene el campo 'Descripcion'"), 'warning')
                redirect("/item/nuevo", id_proyecto=id_proyecto, id_fase=id_fase, id_tipo_item=id_tipo_item)
-            elif kw['fecha_modificacion'] == "":
-               flash(_("Rellene el campo 'Fecha de Modificacion'"), 'warning')
-               redirect("/item/nuevo", id_proyecto=id_proyecto, id_fase=id_fase, id_tipo_item=id_tipo_item)
+            else:
+               item.descripcion = kw['descripcion']
+
+            #Continuamos cargando el objeto
+            item.complejidad = kw['complejidad']
+            item.prioridad = kw['prioridad']
+            item.estado = "Desarrollo"
+            item.version = kw['version']
+            item.observacion = kw['observacion']
+
+            #Validamos el campo Fecha de Modificacion
+            try:
+                validador_fecha = validators.DateConverter()
+                validador_fecha.to_python(kw['fecha_modificacion'])
+
+                if kw['fecha_modificacion'] == "":
+                  flash(_("Rellene el campo 'Fecha de Modificacion'"), 'warning')
+                  redirect("/item/nuevo", id_proyecto=id_proyecto, id_fase=id_fase, id_tipo_item=id_tipo_item)
+
+            except formencode.Invalid, e:
+                flash(_("Formato incorrecto del campo 'Fecha de Modificacion'"), 'warning')
+                redirect("/item/nuevo", id_proyecto=id_proyecto, id_fase=id_fase, id_tipo_item=id_tipo_item)
+            else:
+                item.fecha_modificacion = kw['fecha_modificacion']
+
+            #Completamos la carga de atributos del objeto
+            item.vivo = True
+
+            #Validamos los campos de tipo Fecha que puedan existir entre los atributos especificos
+            #antes de insertar el objeto Item a la base de datos
+            atributos_nuevos = DBSession.query(Atributo).filter_by(id_tipo_item=id_tipo_item)
+
+            if atributos_nuevos != None:
+               for atributo_nuevo in atributos_nuevos:
+                   if atributo_nuevo.tipo == "Fecha":
+                      try:
+                          validador_fecha_atr = validators.DateConverter()
+                          validador_fecha_atr.to_python(kw[str(atributo_nuevo.id_atributo)])
+                      except formencode.Invalid, e:
+                          flash(_("Formato incorrecto del campo '" + atributo_nuevo.nombre + "'" ), 'warning')
+                          redirect("/item/nuevo", id_proyecto=id_proyecto, id_fase=id_fase, id_tipo_item=id_tipo_item)
 
             #Guardamos el nuevo Item en la base de datos
             DBSession.add(item)
@@ -188,7 +215,6 @@ class ItemController(BaseController):
             
             #Creamos los atributos especificos del Item e insertamos en la BD
             if atributos_nuevos != None:
-               
                for atributo_nuevo in atributos_nuevos:
                    itemDetalle = ItemDetalle()
                    itemDetalle.id_item = id_item
@@ -244,6 +270,8 @@ class ItemController(BaseController):
             global id_item_actual
             item = DBSession.query(Item).get(id_item_actual[0])
             id_item = item.id_item
+            version_anterior = item.version
+            version_nueva = int(item.version) + 1
             id_tipo_item = item.id_tipo_item
             tipo_item = DBSession.query(TipoItem).get(id_tipo_item)
             id_fase = tipo_item.id_fase
@@ -261,15 +289,82 @@ class ItemController(BaseController):
                    redirect("/item/archivos_adjuntos", id_proyecto=id_proyecto, id_fase=id_fase, 
                             id_tipo_item=id_tipo_item, id_item=id_item)
 
-            #Guardamos el archivo
+            #Guardamos el archivo nuevo
             nombre_archivo = userfile.filename
             contenido_archivo = userfile.file.read()
             nuevo_archivo = ItemArchivo()
             nuevo_archivo.id_item = item.id_item
-            nuevo_archivo.version_item = item.version
+            nuevo_archivo.version_item = version_nueva
             nuevo_archivo.nombre_archivo = nombre_archivo
             nuevo_archivo.contenido_archivo = contenido_archivo
             DBSession.add(nuevo_archivo)
+
+            #El item actual cambia de version a tener un nuevo archivo adjunto
+            itemHistorial = ItemHistorial()
+            itemHistorial.id_item = item.id_item
+            itemHistorial.id_tipo_item = item.id_tipo_item
+            itemHistorial.codigo = item.codigo
+            itemHistorial.descripcion = item.descripcion
+            itemHistorial.complejidad = item.complejidad
+            itemHistorial.prioridad = item.prioridad
+            itemHistorial.estado = "Desarrollo"
+            itemHistorial.version = version_anterior
+            itemHistorial.observacion = item.observacion
+            itemHistorial.fecha_modificacion = item.fecha_modificacion
+            item.version = version_nueva
+            DBSession.add(itemHistorial)
+            DBSession.flush()
+
+            #Consultamos los detalles que tiene el Item a ser editado y tambien
+            #los atributos actuales de su Tipo de Item correspondiente
+            detalles = DBSession.query(ItemDetalle).filter_by(id_item=id_item)
+            atributos = DBSession.query(Atributo).filter_by(id_tipo_item=id_tipo_item)
+            lista_id_atributo = []
+
+            if atributos != None:
+               for atributo in atributos:
+                   lista_id_atributo.append(atributo.id_atributo)
+
+            #Enviamos al historial los detalles del item a ser editado
+            if detalles != None:
+               for detalle in detalles:
+                   lista_id_atributo.remove(detalle.id_atributo)
+                   itemDetalleHistorial = ItemDetalleHistorial()
+                   itemDetalleHistorial.id_item = id_item
+                   itemDetalleHistorial.id_item_detalle = detalle.id_item_detalle
+                   itemDetalleHistorial.id_atributo = detalle.id_atributo
+                   itemDetalleHistorial.nombre_atributo = detalle.nombre_atributo
+                   itemDetalleHistorial.valor = detalle.valor
+                   itemDetalleHistorial.version = version_anterior
+                   DBSession.add(itemDetalleHistorial)
+                   DBSession.flush()
+
+            #Cargamos a vacio los atributos que no contemplaban los detalles actuales
+            if lista_id_atributo != None:
+               for id_atributo in lista_id_atributo:
+                   atributo = DBSession.query(Atributo).get(id_atributo)
+                   itemDetalle = ItemDetalle()
+                   itemDetalle.id_item = id_item
+                   itemDetalle.id_atributo = atributo.id_atributo
+                   itemDetalle.nombre_atributo = atributo.nombre
+                   itemDetalle.valor = ""
+                   DBSession.add(itemDetalle)
+                   DBSession.flush()
+
+            #Los archivos adjuntos del item a se editado, se copian
+            #para tener el registro de estos archivos con esa version de item
+            archivos_item_editado = DBSession.query(ItemArchivo).filter_by(id_item=id_item).filter_by(version_item=version_anterior)
+            if archivos_item_editado != None:
+               for archivo in archivos_item_editado:
+                   nuevo_archivo = ItemArchivo()
+                   nuevo_archivo.id_item = archivo.id_item
+                   nuevo_archivo.version_item = version_anterior
+                   nuevo_archivo.nombre_archivo = archivo.nombre_archivo
+                   nuevo_archivo.contenido_archivo = archivo.contenido_archivo
+                   archivo.version_item = version_nueva
+                   DBSession.add(nuevo_archivo)
+                   DBSession.flush()
+
             DBSession.flush()
             transaction.commit()
         except IntegrityError:
@@ -328,18 +423,88 @@ class ItemController(BaseController):
     def eliminar_archivo(self, fileid):
         """Metodo para eliminar un archivo de la base de datos """
         try:
-            #Buscamos el archivo en la base de datos y lo eliminamos
-            userfile = DBSession.query(ItemArchivo).filter_by(id_item_archivo=fileid).one()
-            DBSession.delete(userfile)
-            DBSession.flush()
             global id_item_actual
             item = DBSession.query(Item).get(id_item_actual[0])
             id_item = item.id_item
+            version_anterior = item.version
+            version_nueva = int(item.version) + 1
             id_tipo_item = item.id_tipo_item
             tipo_item = DBSession.query(TipoItem).get(id_tipo_item)
             id_fase = tipo_item.id_fase
             fase = DBSession.query(Fase).get(id_fase)
             id_proyecto = fase.id_proyecto
+
+            #El Item actual cambia de version al tener un archivo menos
+            itemHistorial = ItemHistorial()
+            itemHistorial.id_item = item.id_item
+            itemHistorial.id_tipo_item = item.id_tipo_item
+            itemHistorial.codigo = item.codigo
+            itemHistorial.descripcion = item.descripcion
+            itemHistorial.complejidad = item.complejidad
+            itemHistorial.prioridad = item.prioridad
+            itemHistorial.estado = "Desarrollo"
+            itemHistorial.version = version_anterior
+            itemHistorial.observacion = item.observacion
+            itemHistorial.fecha_modificacion = item.fecha_modificacion
+            item.version = version_nueva
+            DBSession.add(itemHistorial)
+            DBSession.flush()
+
+            #Consultamos los detalles que tiene el Item a ser editado y tambien
+            #los atributos actuales de su Tipo de Item correspondiente
+            detalles = DBSession.query(ItemDetalle).filter_by(id_item=id_item)
+            atributos = DBSession.query(Atributo).filter_by(id_tipo_item=id_tipo_item)
+            lista_id_atributo = []
+
+            if atributos != None:
+               for atributo in atributos:
+                   lista_id_atributo.append(atributo.id_atributo)
+
+            #Enviamos al historial los detalles del item a ser editado
+            if detalles != None:
+               for detalle in detalles:
+                   lista_id_atributo.remove(detalle.id_atributo)
+                   itemDetalleHistorial = ItemDetalleHistorial()
+                   itemDetalleHistorial.id_item = id_item
+                   itemDetalleHistorial.id_item_detalle = detalle.id_item_detalle
+                   itemDetalleHistorial.id_atributo = detalle.id_atributo
+                   itemDetalleHistorial.nombre_atributo = detalle.nombre_atributo
+                   itemDetalleHistorial.valor = detalle.valor
+                   itemDetalleHistorial.version = version_anterior
+                   DBSession.add(itemDetalleHistorial)
+                   DBSession.flush()
+
+            #Cargamos a vacio los atributos que no contemplaban los detalles actuales
+            if lista_id_atributo != None:
+               for id_atributo in lista_id_atributo:
+                   atributo = DBSession.query(Atributo).get(id_atributo)
+                   itemDetalle = ItemDetalle()
+                   itemDetalle.id_item = id_item
+                   itemDetalle.id_atributo = atributo.id_atributo
+                   itemDetalle.nombre_atributo = atributo.nombre
+                   itemDetalle.valor = ""
+                   DBSession.add(itemDetalle)
+                   DBSession.flush()
+
+            #Los archivos adjuntos del item a se editado, se copian
+            #para tener el registro de estos archivos con esa version de item
+            archivos_item_editado = DBSession.query(ItemArchivo).filter_by(id_item=id_item).filter_by(version_item=version_anterior)
+            userfile = DBSession.query(ItemArchivo).filter_by(id_item_archivo=fileid).one()
+            if archivos_item_editado != None:
+               for archivo in archivos_item_editado:
+                   nuevo_archivo = ItemArchivo()
+                   nuevo_archivo.id_item = archivo.id_item
+                   nuevo_archivo.version_item = version_anterior
+                   nuevo_archivo.nombre_archivo = archivo.nombre_archivo
+                   nuevo_archivo.contenido_archivo = archivo.contenido_archivo
+                   DBSession.add(nuevo_archivo)
+                   DBSession.flush()
+                   if archivo.id_item_archivo != userfile.id_item_archivo:
+                      archivo.version_item = version_nueva
+                      DBSession.flush()
+
+            DBSession.delete(userfile)
+            DBSession.flush()
             transaction.commit()
         except IntegrityError:
             transaction.abort()
@@ -365,7 +530,7 @@ class ItemController(BaseController):
         item = DBSession.query(Item).get(id_item)
         linea_bases_item = item.linea_bases
 
-        #Comprobamos que no se encuentre en una Linea Base "Aprobada"
+        #Comprobamos que no se encuentre en una Linea Base
         if linea_bases_item != None:
            for linea_base_item in linea_bases_item:
               # if linea_base_item.estado == "Aprobado":
@@ -472,16 +637,36 @@ class ItemController(BaseController):
             fase = DBSession.query(Fase).get(id_fase)
             id_proyecto = fase.id_proyecto
 
-            #Verificamos los campos obligatorios
-            if kw['descripcion'] == "" and kw['fecha_modificacion'] == "":
-               flash(_("Rellene los campos 'Descripcion' y 'Fecha de Modificacion'"), 'warning')
-               redirect("/item/editar", id_proyecto=id_proyecto, id_fase=id_fase, id_tipo_item=id_tipo_item, id_item=id_item)
-            elif kw['descripcion'] == "":
+            #Validamos el campo Descripcion, no puede estar vacio
+            if kw['descripcion'] == "":
                flash(_("Rellene el campo 'Descripcion'"), 'warning')
                redirect("/item/editar", id_proyecto=id_proyecto, id_fase=id_fase, id_tipo_item=id_tipo_item, id_item=id_item)
-            elif kw['fecha_modificacion'] == "":
-               flash(_("Rellene el campo 'Fecha de Modificacion'"), 'warning')
-               redirect("/item/editar", id_proyecto=id_proyecto, id_fase=id_fase, id_tipo_item=id_tipo_item, id_item=id_item)
+
+            #Validamos el campo Fecha de Modificacion
+            try:
+                validador_fecha = validators.DateConverter()
+                validador_fecha.to_python(kw['fecha_modificacion'])
+
+                if kw['fecha_modificacion'] == "":
+                  flash(_("Rellene el campo 'Fecha de Modificacion'"), 'warning')
+                  redirect("/item/editar", id_proyecto=id_proyecto, id_fase=id_fase, id_tipo_item=id_tipo_item, id_item=id_item)
+
+            except formencode.Invalid, e:
+                flash(_("Formato incorrecto del campo 'Fecha de Modificacion'"), 'warning')
+                redirect("/item/editar", id_proyecto=id_proyecto, id_fase=id_fase, id_tipo_item=id_tipo_item, id_item=id_item)
+
+            #Validamos los atributos especificos del tipo Fecha
+            atributos_especificos = DBSession.query(Atributo).filter_by(id_tipo_item=id_tipo_item)
+
+            if atributos_especificos != None:
+               for atributo_especifico in atributos_especificos:
+                   if atributo_especifico.tipo == "Fecha":
+                      try:
+                          validador_fecha_atr = validators.DateConverter()
+                          validador_fecha_atr.to_python(kw[str(atributo_especifico.id_atributo)])
+                      except formencode.Invalid, e:
+                          flash(_("Formato incorrecto del campo '" + atributo_especifico.nombre + "'" ), 'warning')
+                          redirect("/item/editar", id_proyecto=id_proyecto, id_fase=id_fase, id_tipo_item=id_tipo_item, id_item=id_item)
 
             #Llevamos al historial el item a ser editado
             version_a_editar = item.version   
@@ -961,8 +1146,6 @@ class ItemController(BaseController):
                   flash(_("El item ya esta aprobado..."), 'notice')
                   redirect("/item/listado", id_proyecto=id_proyecto, id_fase=id_fase, id_tipo_item=id_tipo_item)
             
-               
-
         except IntegrityError:
             transaction.abort()
             flash(_("No se pudo aprobar el Item! Hay Problemas con el servidor..."), 'error')

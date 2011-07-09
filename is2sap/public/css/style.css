@@ -495,7 +495,16 @@ font-weight:bolder;
 margin:0pt auto 0.5em;
 width:680px;
 }
+#flash, .bienvenida {
+font-size:120%;
+font-weight:bolder;
+margin:0pt auto 0.5em;
+width:680px;
+}
 #flash div, .notice {
+padding:20px 15px 20px 65px;
+}
+#flash div, .bienvenida {
 padding:20px 15px 20px 65px;
 }
 #flash .ok {
@@ -513,6 +522,9 @@ background:#EEEEFF url(../images/info.png) no-repeat scroll 10px center;
 }
 .notice {
 background:#EEEEFF url(../images/info.png) no-repeat scroll 10px center;
+}
+.bienvenida {
+background:#EEEEFF  no-repeat scroll 10px center;
 }
 .fielderror {
 color:red;
