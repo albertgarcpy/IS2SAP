@@ -37,6 +37,10 @@ from is2sap.controllers.error import ErrorController
 from is2sap.widgets.item_form import ItemForm, EditItemForm
 import pydot
 
+import networkx as nx
+import matplotlib.pyplot as plt
+import random
+
 itemsAfectados=[]
 listaRelaciones = []
 id_item_actual = []
@@ -1735,21 +1739,62 @@ class ItemController(BaseController):
         ## traer las fases del proyecto y luego los items de las fases, sumar por fases, y luego un total
         fases = DBSession.query(Fase).filter_by(id_proyecto=id_proyecto).order_by(Fase.id_fase)
         sumaImpactoPorFases=[]
-        graph = pydot.Dot(graph_type='digraph')
+
+
+        G=nx.DiGraph(weighted=False)
+        G.posicion={}
+        G.poslabels={}
+        G.labels={}
+        G.colores={}
+        G.posComp={}
+        G.complej={}
+        
+        posX=0
         for fase in fases:
+            y=30
             itemsDeFase = DBSession.query(Item).join(TipoItem).join(Fase).filter(Fase.id_fase==fase.id_fase).all()
             impactoPorFase=0
             for item in itemsDeFase:
                 if itemsAfectados.count(item.id_item) == 1:
+                    x=posX+random.random()
+                    y=y-1 
+                    G.add_node(item.id_item)
+                    G.posicion[item.id_item]=(x, y)
+                    G.colores[item.id_item]='coral'
+                    G.poslabels[item.id_item]=(x, y+0.30)                    
+                    G.labels[item.id_item]='Cod:'+item.codigo
+                    G.posComp[item.id_item]=(x, y+0.18)                    
+                    G.complej[item.id_item]='Comp:'+item.complejidad
                     impactoPorFase = impactoPorFase + int(item.complejidad)
+                else:
+                    x=posX+random.random()
+                    y=y-1 
+                    G.add_node(item.id_item)
+                    G.posicion[item.id_item]=(x, y)
+                    G.poslabels[item.id_item]=(x, y+0.30)
+                    G.colores[item.id_item]='grey'
+                    G.labels[item.id_item]='Cod:'+item.codigo
+                    G.posComp[item.id_item]=(x, y+0.18)                    
+                    G.complej[item.id_item]='Comp:'+item.complejidad
+            posX=posX+3
             sumaImpactoPorFases.append([fase,impactoPorFase])
             impactoTotal = impactoTotal + impactoPorFase
             print "El impacto de la "+fase.nombre+" es :", impactoPorFase
         print "El impacto total es :", impactoTotal   
+
         
-        for i in itemsAfectados:
-            graph.add_node(pydot.Node(str(i)))
+        #graph = pydot.Dot(graph_type='digraph')        
+        #for i in itemsAfectados:
+        #    graph.add_node(pydot.Node(str(i)))
         for x in listaRelaciones:
-            graph.add_edge(pydot.Edge(str(x[0]), str(x[1])))
-        graph.write_png('../IS2SAP/is2sap/public/images/example2_graph.png')
+            G.add_edge(x[0], x[1])
+            #graph.add_edge(pydot.Edge(str(x[0]), str(x[1])))
+        #graph.write_png('../IS2SAP/is2sap/public/images/example2_graph.png')
+        plt.clf()
+        nx.draw(G, G.posicion, node_color=[G.colores[v] for v in G], node_size=700)
+        nx.draw_networkx_labels(G, G.poslabels, G.labels, fontsize=14)
+        nx.draw_networkx_labels(G, G.posComp, G.complej, fontsize=14)
+        
+        plt.savefig("../IS2SAP/is2sap/public/images/example2_graph.png")
+        #plt.show()
         return dict(nombre_modelo="CalculoImpacto", impactoTotal=impactoTotal, sumaImpactoPorFases=sumaImpactoPorFases)
