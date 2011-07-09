@@ -277,6 +277,13 @@ class ItemController(BaseController):
             id_fase = tipo_item.id_fase
             fase = DBSession.query(Fase).get(id_fase)
             id_proyecto = fase.id_proyecto
+            linea_bases_item = item.linea_bases
+
+            #Comprobamos que el Item no se encuentre en una Linea Base
+            if linea_bases_item != []:
+               for linea_base_item in linea_bases_item:
+                   flash(_("No se puede agregar el archivo! El Item se encuentra en una Linea Base..."), 'error')
+                   redirect("/item/archivos_adjuntos", id_proyecto=id_proyecto, id_fase=id_fase, id_tipo_item=id_tipo_item, id_item=id_item)
 
             if userfile == "":
                flash(_("Introduzca una ruta de archivo!"), 'error')
@@ -312,6 +319,7 @@ class ItemController(BaseController):
             itemHistorial.observacion = item.observacion
             itemHistorial.fecha_modificacion = item.fecha_modificacion
             item.version = version_nueva
+            item.estado = "Desarrollo"
             DBSession.add(itemHistorial)
             DBSession.flush()
 
@@ -350,6 +358,56 @@ class ItemController(BaseController):
                    itemDetalle.valor = ""
                    DBSession.add(itemDetalle)
                    DBSession.flush()
+
+            #Enviamos sus relaciones actuales al historial de relaciones
+            hijos = DBSession.query(RelacionItem).filter_by(id_item1=id_item)
+            antecesores = DBSession.query(RelacionItem).filter_by(id_item2=id_item)
+            if hijos != None:
+               for hijo in hijos:
+                   relacion_historial = RelacionHistorial()
+                   relacion_historial.tipo = hijo.tipo
+                   relacion_historial.id_item1 = hijo.id_item1
+                   relacion_historial.id_item2 = hijo.id_item2
+                   relacion_historial.version_modif = version_anterior
+                   DBSession.add(relacion_historial)
+                   DBSession.flush()
+            if antecesores != None:
+               for antecesor in antecesores:
+                   relacion_historial = RelacionHistorial()
+                   relacion_historial.tipo = antecesor.tipo
+                   relacion_historial.id_item1 = antecesor.id_item1
+                   relacion_historial.id_item2 = antecesor.id_item2
+                   relacion_historial.version_modif = version_anterior
+                   DBSession.add(relacion_historial)
+                   DBSession.flush()
+
+            #Ponemos a revision todos los items afectados por el Item editado
+            #Tambien colocamos a "Revision" las Lineas Bases correspondientes
+            global itemsAfectados
+            global listaRelaciones
+            itemsAfectados = []
+            listaRelaciones = []
+            
+            itemsAfectados.append(id_item)
+
+            for item_afectado in itemsAfectados:
+                self.buscarRelaciones(item_afectado)
+
+            for item_afectado in itemsAfectados:
+                item_cambio = DBSession.query(Item).get(item_afectado)
+                item_cambio.estado = "Revision"
+                linea_bases_item = item_cambio.linea_bases
+                if linea_bases_item != None:
+                   for linea_base_item in linea_bases_item:
+                       if linea_base_item.estado == "Aprobado":
+                          id_linea_base = linea_base_item.id_linea_base 
+                          linea_base = DBSession.query(LineaBase).get(id_linea_base)
+                          linea_base.estado = "Revision"
+                          fase = DBSession.query(Fase).get(linea_base.id_fase)
+                          if fase.relacion_estado_fase.nombre == "Finalizado":
+                             fase.id_estado_fase = '4'
+                          DBSession.flush()
+                DBSession.flush() 
 
             #Los archivos adjuntos del item a se editado, se copian
             #para tener el registro de estos archivos con esa version de item
@@ -433,6 +491,13 @@ class ItemController(BaseController):
             id_fase = tipo_item.id_fase
             fase = DBSession.query(Fase).get(id_fase)
             id_proyecto = fase.id_proyecto
+            linea_bases_item = item.linea_bases
+
+            #Comprobamos que el Item no se encuentre en una Linea Base
+            if linea_bases_item != []:
+               for linea_base_item in linea_bases_item:
+                   flash(_("No se puede eliminar el archivo! El Item se encuentra en una Linea Base..."), 'error')
+                   redirect("/item/archivos_adjuntos", id_proyecto=id_proyecto, id_fase=id_fase, id_tipo_item=id_tipo_item, id_item=id_item)
 
             #El Item actual cambia de version al tener un archivo menos
             itemHistorial = ItemHistorial()
@@ -447,6 +512,7 @@ class ItemController(BaseController):
             itemHistorial.observacion = item.observacion
             itemHistorial.fecha_modificacion = item.fecha_modificacion
             item.version = version_nueva
+            item.estado = "Desarrollo"
             DBSession.add(itemHistorial)
             DBSession.flush()
 
@@ -485,6 +551,56 @@ class ItemController(BaseController):
                    itemDetalle.valor = ""
                    DBSession.add(itemDetalle)
                    DBSession.flush()
+
+            #Enviamos sus relaciones actuales al historial de relaciones
+            hijos = DBSession.query(RelacionItem).filter_by(id_item1=id_item)
+            antecesores = DBSession.query(RelacionItem).filter_by(id_item2=id_item)
+            if hijos != None:
+               for hijo in hijos:
+                   relacion_historial = RelacionHistorial()
+                   relacion_historial.tipo = hijo.tipo
+                   relacion_historial.id_item1 = hijo.id_item1
+                   relacion_historial.id_item2 = hijo.id_item2
+                   relacion_historial.version_modif = version_anterior
+                   DBSession.add(relacion_historial)
+                   DBSession.flush()
+            if antecesores != None:
+               for antecesor in antecesores:
+                   relacion_historial = RelacionHistorial()
+                   relacion_historial.tipo = antecesor.tipo
+                   relacion_historial.id_item1 = antecesor.id_item1
+                   relacion_historial.id_item2 = antecesor.id_item2
+                   relacion_historial.version_modif = version_anterior
+                   DBSession.add(relacion_historial)
+                   DBSession.flush()
+
+            #Ponemos a revision todos los items afectados por el Item editado
+            #Tambien colocamos a "Revision" las Lineas Bases correspondientes
+            global itemsAfectados
+            global listaRelaciones
+            itemsAfectados = []
+            listaRelaciones = []
+            
+            itemsAfectados.append(id_item)
+
+            for item_afectado in itemsAfectados:
+                self.buscarRelaciones(item_afectado)
+
+            for item_afectado in itemsAfectados:
+                item_cambio = DBSession.query(Item).get(item_afectado)
+                item_cambio.estado = "Revision"
+                linea_bases_item = item_cambio.linea_bases
+                if linea_bases_item != None:
+                   for linea_base_item in linea_bases_item:
+                       if linea_base_item.estado == "Aprobado":
+                          id_linea_base = linea_base_item.id_linea_base 
+                          linea_base = DBSession.query(LineaBase).get(id_linea_base)
+                          linea_base.estado = "Revision"
+                          fase = DBSession.query(Fase).get(linea_base.id_fase)
+                          if fase.relacion_estado_fase.nombre == "Finalizado":
+                             fase.id_estado_fase = '4'
+                          DBSession.flush()
+                DBSession.flush()
 
             #Los archivos adjuntos del item a se editado, se copian
             #para tener el registro de estos archivos con esa version de item
@@ -533,9 +649,8 @@ class ItemController(BaseController):
         #Comprobamos que no se encuentre en una Linea Base
         if linea_bases_item != None:
            for linea_base_item in linea_bases_item:
-              # if linea_base_item.estado == "Aprobado":
-                  flash(_("No puede Editar el Item! Se encuentra en una Linea Base..."), 'error')
-                  redirect("/item/listado", id_proyecto=id_proyecto, id_fase=id_fase, id_tipo_item=id_tipo_item)
+               flash(_("No puede Editar el Item! Se encuentra en una Linea Base..."), 'error')
+               redirect("/item/listado", id_proyecto=id_proyecto, id_fase=id_fase, id_tipo_item=id_tipo_item)
 
         try:
             complejidad_options = ['1','2','3','4','5','6','7','8','9','10']
@@ -791,11 +906,14 @@ class ItemController(BaseController):
                           id_linea_base = linea_base_item.id_linea_base 
                           linea_base = DBSession.query(LineaBase).get(id_linea_base)
                           linea_base.estado = "Revision"
+                          fase = DBSession.query(Fase).get(linea_base.id_fase)
+                          if fase.relacion_estado_fase.nombre == "Finalizado":
+                             fase.id_estado_fase = '4'
                           DBSession.flush()
 
                 DBSession.flush()
 
-            #Los archivos adjuntos del item a se editado, se copian
+            #Los archivos adjuntos del item a ser editado, se copian
             #para tener el registro de estos archivos con esa version de item
             archivos_item_editado = DBSession.query(ItemArchivo).filter_by(id_item=id_item).filter_by(version_item=version_a_editar)
             if archivos_item_editado != None:
@@ -835,12 +953,11 @@ class ItemController(BaseController):
             tipo_item = DBSession.query(TipoItem).get(item.id_tipo_item)
             linea_bases_item = item.linea_bases
 
-            #Comprobamos que no se encuentre en una Linea Base "Aprobada"
+            #Comprobamos que no se encuentre en una Linea Base
             if linea_bases_item != []:
                for linea_base_item in linea_bases_item:
-                  # if linea_base_item.estado == "Aprobado":
-                      flash(_("No puede Eliminar el Item! Se encuentra en una Linea Base..."), 'error')
-                      redirect("/item/listado", id_proyecto=id_proyecto, id_fase=id_fase, id_tipo_item=id_tipo_item)
+                   flash(_("No puede Eliminar el Item! Se encuentra en una Linea Base..."), 'error')
+                   redirect("/item/listado", id_proyecto=id_proyecto, id_fase=id_fase, id_tipo_item=id_tipo_item)
 
         except SQLAlchemyError:
             flash(_("No se pudo acceder a Eliminacion de Item! SQLAlchemyError..."), 'error')
@@ -878,6 +995,9 @@ class ItemController(BaseController):
                           id_linea_base = linea_base_item.id_linea_base 
                           linea_base = DBSession.query(LineaBase).get(id_linea_base)
                           linea_base.estado = "Revision"
+                          fase = DBSession.query(Fase).get(linea_base.id_fase)
+                          if fase.relacion_estado_fase.nombre == "Finalizado":
+                             fase.id_estado_fase = '4'
                           DBSession.flush()
                 DBSession.flush()
 
@@ -1299,7 +1419,15 @@ class ItemController(BaseController):
             version_a_revertir = item_a_revertir.version
             id_item = item_a_revertir.id_item
             item_actual = DBSession.query(Item).get(id_item)
-            version_actual = item_actual.version    
+            version_actual = item_actual.version
+            linea_bases_item = item_actual.linea_bases
+
+            #Comprobamos que el Item actual no se encuentre en una Linea Base
+            if linea_bases_item != []:
+               for linea_base_item in linea_bases_item:
+                   flash(_("No se puede revertir! El Item actual se encuentra en una Linea Base..."), 'error')
+                   redirect("/item/listado_revertir", id_proyecto=id_proyecto, id_fase=id_fase, 
+                            id_tipo_item=id_tipo_item, id_item=id_item)
 
             #Cargamos en el historial el item que esta con los datos actuales
             item_hist_nuevo = ItemHistorial()
@@ -1431,6 +1559,9 @@ class ItemController(BaseController):
                           id_linea_base = linea_base_item.id_linea_base 
                           linea_base = DBSession.query(LineaBase).get(id_linea_base)
                           linea_base.estado = "Revision"
+                          fase = DBSession.query(Fase).get(linea_base.id_fase)
+                          if fase.relacion_estado_fase.nombre == "Finalizado":
+                             fase.id_estado_fase = '4'
                           DBSession.flush()
                 DBSession.flush()
 
@@ -1493,6 +1624,9 @@ class ItemController(BaseController):
                           id_linea_base = linea_base_item.id_linea_base 
                           linea_base = DBSession.query(LineaBase).get(id_linea_base)
                           linea_base.estado = "Revision"
+                          fase = DBSession.query(Fase).get(linea_base.id_fase)
+                          if fase.relacion_estado_fase.nombre == "Finalizado":
+                             fase.id_estado_fase = '4'
                           DBSession.flush()
                 DBSession.flush()
 
@@ -1572,7 +1706,14 @@ class ItemController(BaseController):
             version_a_revertir = item_a_revertir.version
             id_item = item_a_revertir.id_item
             item_actual = DBSession.query(Item).get(id_item)
-            version_actual = item_actual.version    
+            version_actual = item_actual.version
+            linea_bases_item = item_actual.linea_bases
+
+            #Comprobamos que el Item actual no se encuentre en una Linea Base
+            if linea_bases_item != []:
+               for linea_base_item in linea_bases_item:
+                   flash(_("No se puede revertir! El Item actual se encuentra en una Linea Base..."), 'error')
+                   redirect("/item/revertir_desde_fase", id_proyecto=id_proyecto, id_fase=id_fase)
 
             #Cargamos en el historial el item que esta con los datos actuales
             item_hist_nuevo = ItemHistorial()
@@ -1704,6 +1845,9 @@ class ItemController(BaseController):
                           id_linea_base = linea_base_item.id_linea_base 
                           linea_base = DBSession.query(LineaBase).get(id_linea_base)
                           linea_base.estado = "Revision"
+                          fase = DBSession.query(Fase).get(linea_base.id_fase)
+                          if fase.relacion_estado_fase.nombre == "Finalizado":
+                             fase.id_estado_fase = '4'
                           DBSession.flush()
                 DBSession.flush()
 
@@ -1766,6 +1910,9 @@ class ItemController(BaseController):
                           id_linea_base = linea_base_item.id_linea_base 
                           linea_base = DBSession.query(LineaBase).get(id_linea_base)
                           linea_base.estado = "Revision"
+                          fase = DBSession.query(Fase).get(linea_base.id_fase)
+                          if fase.relacion_estado_fase.nombre == "Finalizado":
+                             fase.id_estado_fase = '4'
                           DBSession.flush()
                 DBSession.flush()
 
@@ -1859,7 +2006,7 @@ class ItemController(BaseController):
         return dict(tipoItems=currentPage.items, page='listado_tipo_items', 
                     nombre_fase=fase.nombre, id_proyecto=id_proyecto, id_fase=id_fase, currentPage=currentPage)
 
-        
+#------------ Busca todos los items relacionados a un item en particular--------        
     def buscarRelaciones(self, idItemActual):
         global itemsAfectados
         global listaRelaciones
@@ -1899,6 +2046,7 @@ class ItemController(BaseController):
             if itemsAfectados.count(sucesor.id_item2) == 0:
                 itemsAfectados.append(sucesor.id_item2)
 
+#------- Calcula el impacto que produce el cambio de un item en particular------
     @expose("is2sap.templates.item.GraficoImpacto")
     @require(predicates.has_any_permission('administracion','calcular_impacto', msg=l_('No posee los permisos para visualizar el Impacto')))
     def calcularImpacto(self, id_proyecto, itemActual):
