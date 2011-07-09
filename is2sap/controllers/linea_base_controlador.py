@@ -211,7 +211,8 @@ class LineaBaseController(BaseController):
 	if fase.numero_fase < maxnumerofase:
 		numero_fase_siguiente = fase.numero_fase+1 
 		fase_siguiente=DBSession.query(Fase).filter_by(id_proyecto=id_proyecto).filter_by(numero_fase=numero_fase_siguiente).first()
-		fase_siguiente.id_estado_fase = '2'	        
+		if fase_siguiente != None:		
+			fase_siguiente.id_estado_fase = '2'	        
         DBSession.flush()
 	#Aqui comprobamos si todos los items de la fase actual  tienen sucesores, en ese caso
 	#el estado de la fase cambiamos a Finalizado

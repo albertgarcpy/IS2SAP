@@ -104,5 +104,5 @@ class RootController(BaseController):
         goodbye as well.
 
         """
-        flash(_('Hasta luego!'))
+        #flash(_('Hasta luego!'))
         redirect("/despedida")
