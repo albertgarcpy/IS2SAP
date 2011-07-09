@@ -74,15 +74,17 @@ class RelacionController(BaseController):
         """Metodo para listar todos los usuarios de la base de datos"""
         antecesores = DBSession.query(RelacionItem).filter_by(id_item2=id_item).filter_by(tipo="Antecesor-Sucesor").order_by(RelacionItem.id_item1)
         listaAntecesores = []
-        #for antecesor in antecesores:
-        #    item = DBSession.query(Item).get(antecesor.id_item1)
-        #    listaAntecesores.append(item)
+        for antecesor in antecesores:
+            item = DBSession.query(Item).get(antecesor.id_item1)
+            ant = [antecesor, item]
+            listaAntecesores.append(ant)
         hijos = DBSession.query(RelacionItem).filter_by(id_item1=id_item).filter_by(tipo="Padre-Hijo").order_by(RelacionItem.id_item2)
-        #listaHijos = []
-        #for hijo in hijos:
-        #    item = DBSession.query(Item).get(hijo.id_item2)
-        #    listaHijos.append(item)
-        return dict(antecesores=antecesores, hijos=hijos, idItemActual=id_item, id_proyecto=id_proyecto, id_fase=id_fase, id_tipo_item=id_tipo_item)
+        listaHijos = []
+        for hijo in hijos:
+            item1 = DBSession.query(Item).get(hijo.id_item2)
+            hij = [hijo, item1]
+            listaHijos.append(hij)
+        return dict(antecesores=listaAntecesores, hijos=listaHijos, idItemActual=id_item, id_proyecto=id_proyecto, id_fase=id_fase, id_tipo_item=id_tipo_item)
 
     
     def buscarCiclos(self, item):    

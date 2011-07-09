@@ -56,18 +56,19 @@ class TipoItemController(BaseController):
 
     @expose()
     @require(predicates.has_any_permission('administracion',  'lider_proyecto'))
-    def importar(self, id_proyecto, id_fase, id_tipo_item, nombre, descripcion, codigo):
+    def importar(self, **kw):
+		#id_proyecto, id_fase, id_tipo_item, nombre, descripcion, codigo):
         """Metodo que realiza la importacion del Tipo de Item con todos sus Atributos"""
         try:
             tipo_item = TipoItem()
-            tipo_item.id_fase = id_fase
-            tipo_item.nombre = nombre
-            tipo_item.codigo = codigo
-            tipo_item.descripcion = descripcion
+            tipo_item.id_fase = kw['id_fase']
+            tipo_item.nombre = kw['nombre']
+            tipo_item.codigo = kw['codigo']
+            tipo_item.descripcion = kw['descripcion']
             DBSession.add(tipo_item)
             DBSession.flush()
 
-            listaAtributos = DBSession.query(Atributo).filter_by(id_tipo_item=id_tipo_item).all()
+            listaAtributos = DBSession.query(Atributo).filter_by(id_tipo_item=kw['id_tipo_item']).all()
 
             for unAtributo in listaAtributos:
                 print unAtributo.nombre
@@ -83,17 +84,17 @@ class TipoItemController(BaseController):
         except IntegrityError:
             transaction.abort()
             flash(_("No se ha realizado la importacion! Hay Problemas con el servidor..."), 'error')
-            redirect("/admin/tipo_item/listadoTipoItemPorFase", id_proyecto=id_proyecto, id_fase=id_fase)
+            redirect("/admin/tipo_item/listadoTipoItemPorFase", id_proyecto=kw['id_proyecto'], id_fase=kw['id_fase'])
         except SQLAlchemyError:
             flash(_("No se ha realizado la importacion! SQLAlchemyError..."), 'error')
-            redirect("/admin/tipo_item/listadoTipoItemPorFase", id_proyecto=id_proyecto, id_fase=id_fase)
+            redirect("/admin/tipo_item/listadoTipoItemPorFase", id_proyecto=kw['id_proyecto'], id_fase=kw['id_fase'])
         except (AttributeError, NameError):
             flash(_("No se ha realizado la importacion! Hay Problemas con el servidor..."), 'error')
-            redirect("/admin/tipo_item/listadoTipoItemPorFase", id_proyecto=id_proyecto, id_fase=id_fase)
+            redirect("/admin/tipo_item/listadoTipoItemPorFase", id_proyecto=kw['id_proyecto'], id_fase=kw['id_fase'])
         else:
             flash(_("Se ha importado correctamente!"), 'ok')
 
-        redirect("/admin/tipo_item/listadoTipoItemPorFase", id_proyecto=id_proyecto, id_fase=id_fase)
+        redirect("/admin/tipo_item/listadoTipoItemPorFase", id_proyecto=kw['id_proyecto'], id_fase=kw['id_fase'])
 
     @expose('is2sap.templates.tipo_item.nuevo')
     @require(predicates.has_any_permission('administracion',  'lider_proyecto'))
