@@ -210,6 +210,8 @@ class RolController(BaseController):
         except (AttributeError, NameError):
             flash(_("No se pudo desasignar el Permiso! Hay Problemas con el servidor..."), 'error')
             redirect("/admin/rol/permisos", id_rol=id_rol)
+        except (ValueError):
+            redirect("/admin/rol/permisos", id_rol=id_rol)
         else:
             flash(_("Permiso desasignado!"), 'ok')
 
@@ -248,9 +250,7 @@ class RolController(BaseController):
             permiso.roles.append(rol)
             DBSession.flush()
             transaction.commit()
-        except IntegrityError:
-            transaction.abort()
-            flash(_("No se pudo asignar el Permiso! Hay Problemas con el servidor..."), 'error')
+        except IntegrityError:            
             redirect("/admin/rol/rolPermiso",id_rol=id_rol)
         except SQLAlchemyError:
             flash(_("No se pudo asignar el Permiso! SQLAlchemyError..."), 'error')

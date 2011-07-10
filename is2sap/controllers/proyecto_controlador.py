@@ -255,10 +255,11 @@ class ProyectoController(BaseController):
             proyecto = DBSession.query(Proyecto).get(id_proyecto)
             id_proyecto = proyecto.id_proyecto
             rolesProyecto = proyecto.roles
-            roles = DBSession.query(Rol).order_by(Rol.id_rol).all()
+            roles = DBSession.query(Rol).filter_by(tipo="Proyecto").order_by(Rol.id_rol).all()
         
             for rol in rolesProyecto:
-               roles.remove(rol)
+                if roles.count(rol) == 1:               
+                    roles.remove(rol)
 
             currentPage = paginate.Page(roles, page, items_per_page=10)
         except SQLAlchemyError:
@@ -448,10 +449,10 @@ class ProyectoController(BaseController):
         """Metodo para listar todos los roles que tiene el usuario seleccionado"""
         try:
             usuario = DBSession.query(Usuario).get(id_usuario)
-            rolesProyecto = DBSession.query(Rol).filter_by(tipo="Sistema").all()
+            rolesProyecto = DBSession.query(Rol).filter_by(tipo="Proyecto").all()
             roles = []
             for rol in rolesProyecto:
-                if usuario.roles.count(rol) == 0:
+                if usuario.roles.count(rol) == 1:
                     roles.append(rol)
             
              

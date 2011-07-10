@@ -1061,6 +1061,11 @@ class ItemController(BaseController):
         try:
             items = DBSession.query(Item).filter_by(id_tipo_item=id_tipo_item).filter_by(vivo=True).order_by(Item.id_item)
             tipo_item = DBSession.query(TipoItem).get(id_tipo_item)
+            fase = DBSession.query(Fase).get(id_fase)
+            permisosFase=[]
+            for rol in fase.roles:
+                for permiso in rol.permisos:                     
+                    permisosFase.append(permiso.nombre_permiso)            
             currentPage = paginate.Page(items, page, items_per_page=10)
         except SQLAlchemyError:
             flash(_("No se pudo acceder a Listado de Items! SQLAlchemyError..."), 'error')
@@ -1071,7 +1076,7 @@ class ItemController(BaseController):
 
         return dict(items=currentPage.items, page='listado_item', id_proyecto=id_proyecto, 
                     id_fase=id_fase, id_tipo_item=id_tipo_item, nombre_tipo_item=tipo_item.nombre, 
-                    currentPage=currentPage)
+                    currentPage=currentPage, permisosFase=permisosFase)
 
     @expose("is2sap.templates.item.listado_detalles")
     @require(predicates.has_any_permission('administracion','desarrollo', msg=l_('No posee los permisos para visualizar')))
@@ -1972,12 +1977,14 @@ class ItemController(BaseController):
         try:
             fases_todas = DBSession.query(Fase).join(Fase.relacion_estado_fase).filter(Fase.id_proyecto==id_proyecto).options(contains_eager(Fase.relacion_estado_fase)).order_by(Fase.numero_fase)
             nombreProyecto = DBSession.query(Proyecto.nombre).filter_by(id_proyecto=id_proyecto).first()
-
+            usuario = DBSession.query(Usuario).filter_by(nombre_usuario=request.identity['repoze.who.userid']).first()
+			
             fases = []
 
             for fase in fases_todas:
                 if fase.relacion_estado_fase.nombre_estado != "Inicial":
-                   fases.append(fase)
+                   if usuario.fases.count(fase) >= 1:
+                       fases.append(fase)
 
             currentPage = paginate.Page(fases, page, items_per_page=10)
         except SQLAlchemyError:

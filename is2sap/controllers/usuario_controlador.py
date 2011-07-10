@@ -189,7 +189,13 @@ class UsuarioController(BaseController):
         """Metodo para listar todos los roles que tiene el usuario seleccionado"""
         try:
             usuario = DBSession.query(Usuario).get(id_usuario)
-            roles = usuario.roles
+            #roles = usuario.roles
+            roles=[]
+            rolesSistema = DBSession.query(Rol).filter_by(tipo="Sistema").all()
+            for rol in rolesSistema:
+                if usuario.roles.count(rol) == 1:
+                    roles.append(rol)
+             
             currentPage = paginate.Page(roles, page, items_per_page=10)
         except SQLAlchemyError:
             flash(_("No se pudo acceder a Roles de Usuario! SQLAlchemyError..."), 'error')
@@ -233,10 +239,11 @@ class UsuarioController(BaseController):
         try:
             usuario = DBSession.query(Usuario).get(id_usuario)
             rolesUsuario = usuario.roles
-            roles = DBSession.query(Rol).all()
+            roles = DBSession.query(Rol).filter_by(tipo="Sistema").all()
         
             for rol in rolesUsuario:
-                roles.remove(rol)
+                if roles.count(rol) == 1:
+                    roles.remove(rol)
 
             currentPage = paginate.Page(roles, page, items_per_page=10)
         except SQLAlchemyError:
