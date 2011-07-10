@@ -23,6 +23,10 @@ from sqlalchemy import func
 from sqlalchemy.exc import IntegrityError, SQLAlchemyError
 import transaction
 from tg.controllers import CUSTOM_CONTENT_TYPE
+import pydot
+import networkx as nx
+import matplotlib.pyplot as plt
+import random
 
 public_dirname = os.path.join(os.path.abspath(resource_filename('is2sap', 'public')))
 items_dirname = os.path.join(public_dirname, 'items')
@@ -35,21 +39,18 @@ from is2sap import model
 from is2sap.controllers.secure import SecureController
 from is2sap.controllers.error import ErrorController
 from is2sap.widgets.item_form import ItemForm, EditItemForm
-import pydot
+from is2sap.controllers.mis_permisos.mis_permisos import permiso_en_fase
 
-import networkx as nx
-import matplotlib.pyplot as plt
-import random
 
 itemsAfectados=[]
 listaRelaciones = []
 id_item_actual = []
+dic_fases_permisos = []
 
 __all__ = ['ItemController']
 
 
 class ItemController(BaseController):
-
     
     @expose('is2sap.templates.item.index')
     def index(self):
@@ -60,6 +61,7 @@ class ItemController(BaseController):
 #--------------------------- Creacion de Items ---------------------------------
     @expose('is2sap.templates.item.nuevo')
     @require(predicates.has_any_permission('administracion','crear_item', msg=l_('No posee los permisos de creacion de item')))
+    @authorize.require(permiso_en_fase('crear_item',dic_fases_permisos))
     def nuevo(self, id_proyecto, id_fase, id_tipo_item, **kw):
         """Despliega el formulario para añadir un nuevo Item."""
         try:
