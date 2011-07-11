@@ -422,9 +422,11 @@ class LineaBaseController(BaseController):
 		itemsTipoItem = DBSession.query(Item).filter_by(id_tipo_item=tipo_item.id_tipo_item).filter_by(vivo=True).filter_by(estado='Aprobado').order_by(Item.id_item)
 		for itemTipoItem in itemsTipoItem:
 			itemsDeFaseActual.append(itemTipoItem)
-	items=itemsDeFaseActual 
-	for item in itemsenLineaBase:
-           items.remove(item)
+	items=itemsDeFaseActual
+        if itemsenLineaBase != None: 
+	   for item in itemsenLineaBase:
+               if items.count(item) == 1:
+                  items.remove(item)
         currentPage = paginate.Page(items, page)
         return dict(items=currentPage.items, page='listadoItemsParaAsignaraLineaBase', id_proyecto=id_proyecto, 
                     id_fase=id_fase, id_linea_base=id_linea_base, currentPage=currentPage)

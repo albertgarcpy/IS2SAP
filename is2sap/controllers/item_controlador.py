@@ -9,7 +9,7 @@ from repoze.what import predicates
 from tg import tmpl_context, validate
 from webhelpers import paginate
 from tg.controllers import RestController, redirect
-from repoze.what.predicates import has_permission
+from repoze.what.predicates import has_permission, has_any_permission, Predicate
 import formencode
 from tw import forms
 from tw.forms import TableForm, Spacer, TextField, PasswordField, CalendarDatePicker, TextArea, SingleSelectField
@@ -49,6 +49,21 @@ dic_fases_permisos = []
 
 __all__ = ['ItemController']
 
+"""
+class permiso_en_fase(Predicate):
+
+    message = 'No puede realizar la accion en esta fase!'
+
+    def __init__(self, permiso, **kwargs):
+        global dic_fases_permisos
+        self.permiso = permiso
+        self.dic_fases_permisos = dic_fases_permisos
+        super(permiso_en_fase, self).__init__(**kwargs)
+
+    def evaluate(self, environ, credentials):
+        if self.dic_fases_permisos.count(self.permiso) == 0:
+            self.unmet()
+"""
 
 class ItemController(BaseController):
     
@@ -60,8 +75,7 @@ class ItemController(BaseController):
 
 #--------------------------- Creacion de Items ---------------------------------
     @expose('is2sap.templates.item.nuevo')
-    @require(predicates.has_any_permission('administracion','crear_item', msg=l_('No posee los permisos de creacion de item')))
-    @authorize.require(permiso_en_fase('crear_item',dic_fases_permisos))
+    @require(predicates.All(has_any_permission('administracion','crear_item', msg=l_('No posee los permisos de creacion de item')), permiso_en_fase('crear_item',dic_fases_permisos)))
     def nuevo(self, id_proyecto, id_fase, id_tipo_item, **kw):
         """Despliega el formulario para añadir un nuevo Item."""
         try:
