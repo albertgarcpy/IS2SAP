@@ -229,8 +229,11 @@ class ProyectoController(BaseController):
         try:
             rol = DBSession.query(Rol).get(id_rol)
             proyecto = DBSession.query(Proyecto).get(id_proyecto)
-            rol.proyectos.remove(proyecto)
+
+            if rol.proyectos.count(proyecto) >= 1: 
+               rol.proyectos.remove(proyecto)
             DBSession.flush()
+
             transaction.commit()
         except IntegrityError:
             transaction.abort()
@@ -258,7 +261,7 @@ class ProyectoController(BaseController):
             roles = DBSession.query(Rol).filter_by(tipo="Proyecto").order_by(Rol.id_rol).all()
         
             for rol in rolesProyecto:
-                if roles.count(rol) == 1:               
+                if roles.count(rol) >= 1:               
                     roles.remove(rol)
 
             currentPage = paginate.Page(roles, page, items_per_page=10)
@@ -324,7 +327,10 @@ class ProyectoController(BaseController):
         try:
             usuario = DBSession.query(Usuario).get(id_usuario)
             proyecto = DBSession.query(Proyecto).get(id_proyecto)
-            usuario.proyectos.remove(proyecto)
+
+            if usuario.proyectos.count(proyecto) >= 1: 
+               usuario.proyectos.remove(proyecto)
+
             DBSession.flush()
             transaction.commit()
         except IntegrityError:
@@ -353,7 +359,8 @@ class ProyectoController(BaseController):
             usuarios = DBSession.query(Usuario).order_by(Usuario.id_usuario).all()
         
             for usuario in usuariosProyecto:
-               usuarios.remove(usuario)
+                if usuarios.count(usuario) >= 1: 
+                   usuarios.remove(usuario)
 
             currentPage = paginate.Page(usuarios, page, items_per_page=10)
         except SQLAlchemyError:
@@ -521,7 +528,8 @@ class ProyectoController(BaseController):
         try:
             rol = DBSession.query(Rol).get(id_rol)
             usuario = DBSession.query(Usuario).get(id_usuario)
-            rol.usuarios.remove(usuario)
+            if rol.usuarios.count(usuario) >= 1: 
+               rol.usuarios.remove(usuario)
             DBSession.flush()
             transaction.commit()
         except IntegrityError:
@@ -554,7 +562,6 @@ class ProyectoController(BaseController):
                 if proyecto.fases.count(fase) == 0:
                     rolesFases.remove(rol)
             
-
             for fase in proyecto.fases:
                 if rolesFases1.count(fase) == 0:
                     listaFases.append(fase)
@@ -598,9 +605,12 @@ class ProyectoController(BaseController):
             roles = DBSession.query(Rol).get(id_rol)
             fase = DBSession.query(Fase).get(id_fase)
             usuario = DBSession.query(Usuario).get(id_usuario)
-            roles.fases.remove(fase)
-            usuario.fases.remove(fase)
-            
+
+            if roles.fases.count(fase) >= 1: 
+               roles.fases.remove(fase)
+
+            if usuario.fases.count(fase) >= 1:  
+               usuario.fases.remove(fase)
             
         except SQLAlchemyError:
             flash(_("No se pudo acceder a Listado Fases! SQLAlchemyError..."), 'error')

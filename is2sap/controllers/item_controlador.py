@@ -356,7 +356,8 @@ class ItemController(BaseController):
             #Enviamos al historial los detalles del item a ser editado
             if detalles != None:
                for detalle in detalles:
-                   lista_id_atributo.remove(detalle.id_atributo)
+                   if lista_id_atributo.count(detalle.id_atributo) >= 1: 
+                      lista_id_atributo.remove(detalle.id_atributo)
                    itemDetalleHistorial = ItemDetalleHistorial()
                    itemDetalleHistorial.id_item = id_item
                    itemDetalleHistorial.id_item_detalle = detalle.id_item_detalle
@@ -549,7 +550,8 @@ class ItemController(BaseController):
             #Enviamos al historial los detalles del item a ser editado
             if detalles != None:
                for detalle in detalles:
-                   lista_id_atributo.remove(detalle.id_atributo)
+                   if lista_id_atributo.count(detalle.id_atributo) >= 1:
+                      lista_id_atributo.remove(detalle.id_atributo)
                    itemDetalleHistorial = ItemDetalleHistorial()
                    itemDetalleHistorial.id_item = id_item
                    itemDetalleHistorial.id_item_detalle = detalle.id_item_detalle
@@ -868,7 +870,8 @@ class ItemController(BaseController):
             #Enviamos al historial los detalles del item a ser editado
             if detalles != None:
                for detalle in detalles:
-                   lista_id_atributo.remove(detalle.id_atributo)
+                   if lista_id_atributo.count(detalle.id_atributo) >= 1: 
+                      lista_id_atributo.remove(detalle.id_atributo)
                    itemDetalleHistorial = ItemDetalleHistorial()
                    itemDetalleHistorial.id_item = id_item
                    itemDetalleHistorial.id_item_detalle = detalle.id_item_detalle
@@ -1075,13 +1078,17 @@ class ItemController(BaseController):
     def listado(self, id_proyecto, id_fase, id_tipo_item, page=1):
         """Metodo para listar todos los items de la base de datos"""
         try:
-            items = DBSession.query(Item).filter_by(id_tipo_item=id_tipo_item).filter_by(vivo=True).order_by(Item.id_item)
-            tipo_item = DBSession.query(TipoItem).get(id_tipo_item)
+            nombre_proyecto = DBSession.query(Proyecto.nombre).filter_by(id_proyecto=id_proyecto).first()
             fase = DBSession.query(Fase).get(id_fase)
+            nombre_fase = fase.nombre
+            tipo_item = DBSession.query(TipoItem).get(id_tipo_item)
+            items = DBSession.query(Item).filter_by(id_tipo_item=id_tipo_item).filter_by(vivo=True).order_by(Item.id_item)
             permisosFase=[]
+
             for rol in fase.roles:
                 for permiso in rol.permisos:                     
-                    permisosFase.append(permiso.nombre_permiso)            
+                    permisosFase.append(permiso.nombre_permiso)     
+       
             currentPage = paginate.Page(items, page, items_per_page=10)
         except SQLAlchemyError:
             flash(_("No se pudo acceder a Listado de Items! SQLAlchemyError..."), 'error')
@@ -1092,7 +1099,8 @@ class ItemController(BaseController):
 
         return dict(items=currentPage.items, page='listado_item', id_proyecto=id_proyecto, 
                     id_fase=id_fase, id_tipo_item=id_tipo_item, nombre_tipo_item=tipo_item.nombre, 
-                    currentPage=currentPage, permisosFase=permisosFase)
+                    currentPage=currentPage, permisosFase=permisosFase, nombre_proyecto=nombre_proyecto,
+                    nombre_fase=nombre_fase)
 
     @expose("is2sap.templates.item.listado_detalles")
     @require(predicates.has_any_permission('administracion','desarrollo', msg=l_('No posee los permisos para visualizar')))
@@ -1177,6 +1185,7 @@ class ItemController(BaseController):
     def revivir_desde_fase(self, id_proyecto, id_fase, page=1):
         """Metodo para listar los items de la fase correspondiente que pueden ser revividos"""
         try:
+            nombre_proyecto = DBSession.query(Proyecto.nombre).filter_by(id_proyecto=id_proyecto).first()
             fase = DBSession.query(Fase).get(id_fase)
             tipo_items = fase.tipoitems
             items = []
@@ -1197,7 +1206,7 @@ class ItemController(BaseController):
             redirect("/item/fases", id_proyecto=id_proyecto)
 
         return dict(items=currentPage.items, page='revivir_desde_fase', id_proyecto=id_proyecto, 
-                    id_fase=id_fase, nombre_fase=nombre_fase, currentPage=currentPage)
+                    id_fase=id_fase, nombre_fase=nombre_fase, nombre_proyecto=nombre_proyecto, currentPage=currentPage)
 
     @expose("is2sap.templates.item.detalles_revivir_desde_fase")
     @require(predicates.has_any_permission('administracion','desarrollo', msg=l_('No posee los permisos para visualizar')))
@@ -1311,6 +1320,7 @@ class ItemController(BaseController):
     def listado_aprobar(self, id_proyecto, id_fase, page=1):
         """Metodo para listar todos los items de una fase correspondiente y que aun no estan aprobados"""
         try:
+            nombre_proyecto = DBSession.query(Proyecto.nombre).filter_by(id_proyecto=id_proyecto).first()
             fase = DBSession.query(Fase).get(id_fase)
             tipo_items = fase.tipoitems
             items = []
@@ -1332,7 +1342,7 @@ class ItemController(BaseController):
             redirect("/item/fases", id_proyecto=id_proyecto)
 
         return dict(items=currentPage.items, page='listado_aprobar', id_proyecto=id_proyecto, 
-                    id_fase=id_fase, nombre_fase=nombre_fase, currentPage=currentPage)
+                    id_fase=id_fase, nombre_fase=nombre_fase, nombre_proyecto=nombre_proyecto, currentPage=currentPage)
 
     @expose()
     @require(predicates.has_any_permission('administracion','aprobar_item', msg=l_('No posee los permisos para aprobar!')))
@@ -1343,15 +1353,36 @@ class ItemController(BaseController):
             antecesores = DBSession.query(RelacionItem).filter_by(id_item2=id_item).filter_by(tipo="Antecesor-Sucesor").order_by(RelacionItem.id_item1).all()
             item = DBSession.query(Item).get(id_item)
             fase = DBSession.query(Fase).get(id_fase)
+	    
+	    # Se emite un mensaje de error si el item no tiene antecesores(a excepción de la 1era. fase)	
+	    if antecesores == [] and fase.numero_fase != 1:
+			flash(_("El item no se puede aprobar. Requiere de un antecesor por lo menos..."), 'error')
+               		redirect("/item/listado_aprobar", id_proyecto=id_proyecto, id_fase=id_fase)
 
-            if antecesores != None:
+	    # Se comprueba si todos sus antecesores(padres y antecesores juntos) están aprobados
+	    todos_antecesores = DBSession.query(RelacionItem).filter_by(id_item2=id_item).order_by(RelacionItem.id_item1)
+	    if todos_antecesores != []:
+		items_aprobados = 0
+		total_items = 0
+		for antecesor in todos_antecesores:
+			item_antecesor=DBSession.query(Item).get(antecesor.id_item1)
+			if item_antecesor.estado == 'Aprobado':
+				items_aprobados = items_aprobados + 1
+			total_items = total_items + 1
+		print total_items
+		print items_aprobados
+		if total_items > items_aprobados:
+			flash(_("El item no se puede aprobar. Requiere que todos sus padres y/o antecesores esten aprobados"), 'error')
+               		redirect("/item/listado_aprobar", id_proyecto=id_proyecto, id_fase=id_fase)
+
+            if antecesores != []:
                if item.estado != "Aprobado": 
                   item.estado = "Aprobado"
                   DBSession.flush()
                   transaction.commit()
                else:
                   flash(_("El item ya esta aprobado..."), 'notice')
-                  redirect("/item/listado", id_proyecto=id_proyecto, id_fase=id_fase, id_tipo_item=id_tipo_item)
+                  redirect("/item/listado_aprobar", id_proyecto=id_proyecto, id_fase=id_fase)
             elif fase.numero_fase == 1:
                if item.estado != "Aprobado": 
                   item.estado = "Aprobado"
@@ -1359,10 +1390,7 @@ class ItemController(BaseController):
                   transaction.commit()
                else:
                   flash(_("El item ya esta aprobado..."), 'notice')
-                  redirect("/item/listado", id_proyecto=id_proyecto, id_fase=id_fase, id_tipo_item=id_tipo_item)
-            else:
-               flash(_("El item no se puede aprobar. Requiere de un antecesor por lo menos..."), 'error')
-               redirect("/item/listado", id_proyecto=id_proyecto, id_fase=id_fase, id_tipo_item=id_tipo_item)
+                  redirect("/item/listado_aprobar", id_proyecto=id_proyecto, id_fase=id_fase)
 
         except IntegrityError:
             transaction.abort()
@@ -1491,7 +1519,8 @@ class ItemController(BaseController):
 
             #Cargamos en el historial los detalles actuales del item
             for detalle in detalles_actuales:
-                lista_id_atributo.remove(detalle.id_atributo)
+                if lista_id_atributo.count(detalle.id_atributo) >= 1: 
+                   lista_id_atributo.remove(detalle.id_atributo)
                 item_detalle_historial = ItemDetalleHistorial()
                 item_detalle_historial.id_item = detalle.id_item
                 item_detalle_historial.id_item_detalle = detalle.id_item_detalle
@@ -1680,6 +1709,7 @@ class ItemController(BaseController):
     def revertir_desde_fase(self, id_proyecto, id_fase, page=1):
         """Metodo para listar todos los items revertibles de una determinada fase"""
         try:
+            nombre_proyecto = DBSession.query(Proyecto.nombre).filter_by(id_proyecto=id_proyecto).first()
             fase = DBSession.query(Fase).get(id_fase)
             tipo_items = fase.tipoitems
             items_historial = []
@@ -1702,7 +1732,7 @@ class ItemController(BaseController):
             redirect("/item/fases", id_proyecto=id_proyecto)
 
         return dict(items_historial=currentPage.items, page='revertir_desde_fase', id_proyecto=id_proyecto, 
-                    id_fase=id_fase, nombre_fase=nombre_fase, currentPage=currentPage)
+                    id_fase=id_fase, nombre_fase=nombre_fase, nombre_proyecto=nombre_proyecto, currentPage=currentPage)
 
     @expose("is2sap.templates.item.detalles_revertir_desde_fase")
     @require(predicates.has_any_permission('administracion','desarrollo', msg=l_('No posee los permisos para visualizar')))
@@ -1777,7 +1807,8 @@ class ItemController(BaseController):
 
             #Cargamos en el historial los detalles actuales del item
             for detalle in detalles_actuales:
-                lista_id_atributo.remove(detalle.id_atributo)
+                if lista_id_atributo.count(detalle.id_atributo) >= 1: 
+                   lista_id_atributo.remove(detalle.id_atributo)
                 item_detalle_historial = ItemDetalleHistorial()
                 item_detalle_historial.id_item = detalle.id_item
                 item_detalle_historial.id_item_detalle = detalle.id_item_detalle
@@ -2020,6 +2051,7 @@ class ItemController(BaseController):
     def tipoItems(self, id_proyecto, id_fase, page=1):
         """Metodo para listar los Tipos de Items de una Fase """
         try:
+            nombre_proyecto = DBSession.query(Proyecto.nombre).filter_by(id_proyecto=id_proyecto).first()
             fase = DBSession.query(Fase).get(id_fase)
             tipoItems = fase.tipoitems
             currentPage = paginate.Page(tipoItems, page, items_per_page=10)
@@ -2030,7 +2062,7 @@ class ItemController(BaseController):
             flash(_("No se pudo acceder a Tipo de Items de Fase! Hay Problemas con el servidor..."), 'error')
             redirect("/item/fases", id_proyecto=id_proyecto)
 
-        return dict(tipoItems=currentPage.items, page='listado_tipo_items', 
+        return dict(tipoItems=currentPage.items, page='listado_tipo_items', nombre_proyecto=nombre_proyecto, 
                     nombre_fase=fase.nombre, id_proyecto=id_proyecto, id_fase=id_fase, currentPage=currentPage)
 
 #------------ Busca todos los items relacionados a un item en particular--------        
