@@ -6,7 +6,7 @@ class permiso_en_fase(Predicate):
 
     def __init__(self, permiso, dic_fases_permisos, **kwargs):
         self.permiso = permiso
-        self.dic_fases_permisos = dic_fases_permmisos
+        self.dic_fases_permisos = dic_fases_permisos
         super(permiso_en_fase, self).__init__(**kwargs)
 
     def evaluate(self, environ, credentials):
