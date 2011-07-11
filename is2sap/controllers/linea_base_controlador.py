@@ -19,18 +19,11 @@ from pkg_resources import resource_filename
 from sqlalchemy import func
 from is2sap.lib.base import BaseController
 from is2sap.model import DBSession, metadata
-
 from is2sap.model.model import TipoItem, Item, Proyecto, Usuario, Fase, Atributo, ItemDetalle, ItemHistorial, ItemDetalleHistorial, LineaBase, LineaBase_Item, LineaBaseHistorial, LineaBaseItemHistorial, RelacionItem
 from is2sap import model
 from is2sap.controllers.secure import SecureController
 from is2sap.controllers.error import ErrorController
-
-
 from is2sap.widgets.linea_base_form import crear_linea_base_form, editar_linea_base_form
-
-
-
-
 
 __all__ = ['LineaBaseController']
 
@@ -76,7 +69,6 @@ class LineaBaseController(BaseController):
     @expose()
     def add(self, **kw):
         """Metodo para agregar un registro a la base de datos """
-	
         linea_base = LineaBase()
 	linea_base.nombre = kw['nombre']
         linea_base.descripcion = kw['descripcion']
@@ -425,7 +417,7 @@ class LineaBaseController(BaseController):
 	items=itemsDeFaseActual
         if itemsenLineaBase != None: 
 	   for item in itemsenLineaBase:
-               if items.count(item) == 1:
+               if items.count(item) >= 1:
                   items.remove(item)
         currentPage = paginate.Page(items, page)
         return dict(items=currentPage.items, page='listadoItemsParaAsignaraLineaBase', id_proyecto=id_proyecto, 
@@ -455,7 +447,8 @@ class LineaBaseController(BaseController):
                 redirect("/admin/linea_base/listadoItemsPorLineaBase",id_proyecto=id_proyecto, id_fase=id_fase, id_linea_base=id_linea_base)
         item = DBSession.query(Item).get(id_item)
         linea_base = DBSession.query(LineaBase).get(id_linea_base)
-        item.linea_bases.remove(linea_base)
+        if item.linea_bases.count(linea_base) >= 1:
+           item.linea_bases.remove(linea_base)
 	flash("Item Desasignado de la Linea Base")
         redirect("/admin/linea_base/listadoItemsPorLineaBase", id_proyecto=id_proyecto, id_fase=id_fase, id_linea_base=id_linea_base)
 

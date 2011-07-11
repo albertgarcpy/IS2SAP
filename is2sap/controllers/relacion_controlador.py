@@ -45,7 +45,8 @@ class RelacionController(BaseController):
         for hijo in hijos:        
             for item1 in itemsDeFase:            
                 if item1.id_item == hijo.id_item2:
-                    itemsDeFase.remove(item1)
+                   if itemsDeFase.count(item1) >= 1: 
+                      itemsDeFase.remove(item1)
 
         
         # Comment: Esto trae los items de la fase adyacente anterior para las relaciones del itemActual        
@@ -65,7 +66,8 @@ class RelacionController(BaseController):
         for antec in antecesores:        
             for item2 in itemsDeFaseAdyacente:            
                 if item2.id_item == antec.id_item1:
-                    itemsDeFaseAdyacente.remove(item2)
+                   if itemsDeFaseAdyacente.count(item2) >= 1: 
+                      itemsDeFaseAdyacente.remove(item2)
         return dict(nombre_modelo='Relacion', page='relacion', idItemActual=idItemActual, itemsDeFase=itemsDeFase, itemsDeFaseAdyacente=itemsDeFaseAdyacente, id_proyecto=id_proyecto, id_fase=id_fase, id_tipo_item=id_tipo_item)
 
 
@@ -158,7 +160,8 @@ class RelacionController(BaseController):
                 #Enviamos al historial los detalles del Item a ser editado
                 if detalles != None:
                    for detalle in detalles:
-                       lista_id_atributo.remove(detalle.id_atributo)
+                       if lista_id_atributo.count(detalle.id_atributo) >= 1: 
+                          lista_id_atributo.remove(detalle.id_atributo)
                        itemDetalleHistorial = ItemDetalleHistorial()
                        itemDetalleHistorial.id_item = id_item
                        itemDetalleHistorial.id_item_detalle = detalle.id_item_detalle
@@ -309,7 +312,8 @@ class RelacionController(BaseController):
            #Enviamos al historial los detalles del Item a ser editado
            if detalles != None:
               for detalle in detalles:
-                  lista_id_atributo.remove(detalle.id_atributo)
+                  if lista_id_atributo.count(detalle.id_atributo) >= 1: 
+                     lista_id_atributo.remove(detalle.id_atributo)
                   itemDetalleHistorial = ItemDetalleHistorial()
                   itemDetalleHistorial.id_item = id_item
                   itemDetalleHistorial.id_item_detalle = detalle.id_item_detalle
@@ -490,7 +494,8 @@ class RelacionController(BaseController):
         #Enviamos al historial los detalles del Item a ser editado
         if detalles != None:
            for detalle in detalles:
-               lista_id_atributo.remove(detalle.id_atributo)
+               if lista_id_atributo.count(detalle.id_atributo) >= 1: 
+                  lista_id_atributo.remove(detalle.id_atributo)
                itemDetalleHistorial = ItemDetalleHistorial()
                itemDetalleHistorial.id_item = id_item
                itemDetalleHistorial.id_item_detalle = detalle.id_item_detalle

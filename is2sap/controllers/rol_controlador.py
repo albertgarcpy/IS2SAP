@@ -197,7 +197,10 @@ class RolController(BaseController):
         try:
             permiso = DBSession.query(Permiso).get(id_permiso)
             rol = DBSession.query(Rol).get(id_rol)
-            permiso.roles.remove(rol)
+
+            if permiso.roles.count(rol) >= 1: 
+               permiso.roles.remove(rol)
+
             DBSession.flush()
             transaction.commit()
         except IntegrityError:
@@ -227,7 +230,8 @@ class RolController(BaseController):
             permisos = DBSession.query(Permiso).all()
         
             for permiso in permisosRol:
-                permisos.remove(permiso)
+                if permisos.count(permiso) >= 1: 
+                   permisos.remove(permiso)
 
             currentPage = paginate.Page(permisos, page, items_per_page=10)
         except SQLAlchemyError:

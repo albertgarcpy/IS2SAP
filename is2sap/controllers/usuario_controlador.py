@@ -213,7 +213,10 @@ class UsuarioController(BaseController):
         try:
             rol = DBSession.query(Rol).get(id_rol)
             usuario = DBSession.query(Usuario).get(id_usuario)
-            rol.usuarios.remove(usuario)
+
+            if rol.usuarios.count(usuario) >= 1: 
+               rol.usuarios.remove(usuario)
+
             DBSession.flush()
             transaction.commit()
         except IntegrityError:
@@ -242,8 +245,8 @@ class UsuarioController(BaseController):
             roles = DBSession.query(Rol).filter_by(tipo="Sistema").all()
         
             for rol in rolesUsuario:
-                if roles.count(rol) == 1:
-                    roles.remove(rol)
+                if roles.count(rol) >= 1:
+                   roles.remove(rol)
 
             currentPage = paginate.Page(roles, page, items_per_page=10)
         except SQLAlchemyError:
