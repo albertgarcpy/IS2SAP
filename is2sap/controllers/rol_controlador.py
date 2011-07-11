@@ -73,7 +73,7 @@ class RolController(BaseController):
         redirect("/admin/rol/listado")
 
     @expose("is2sap.templates.rol.listado")
-    @require(predicates.has_any_permission('administracion', 'lider_proyecto',))
+    @require(predicates.has_any_permission('administracion'))
     def listado(self,page=1):
         """Metodo para listar todos los Roles existentes de la base de datos"""
         try:

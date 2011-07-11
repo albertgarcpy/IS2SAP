@@ -48,12 +48,12 @@
         </div>
      </py:def>
 
-     <py:def function="menu_superior_items(id_proyecto, id_fase, id_tipo_item)">
+     <py:def function="menu_superior_items(id_proyecto, id_fase, id_tipo_item, permisosFase)">
         <div  class="menu bubplastic horizontal aqua">
 	    <ul>
 		<li>
                     <span class="menu_r">
-                         <a py:if="tg.predicates.has_any_permission('administracion', 'crear_item')" href="${tg.url('/item/nuevo', id_proyecto=id_proyecto, id_fase=id_fase, id_tipo_item=id_tipo_item)}" 
+                         <a py:if="tg.predicates.has_any_permission('crear_item') and permisosFase.count('crear_item') >= 1" href="${tg.url('/item/nuevo', id_proyecto=id_proyecto, id_fase=id_fase, id_tipo_item=id_tipo_item)}" 
                             class="${('', 'active')[defined('page') and page=='nuevo_item']}">
                             <span class="menu_ar">Nuevo</span>
                          </a>
@@ -61,7 +61,7 @@
                 </li>
 		<li>
                     <span class="menu_r">
-                         <a py:if="tg.predicates.has_any_permission('administracion', 'desarrollo')" href="${tg.url('/item/listado_revivir', id_proyecto=id_proyecto, id_fase=id_fase, id_tipo_item=id_tipo_item)}" 
+                         <a py:if="tg.predicates.has_any_permission('revivir_item') and permisosFase.count('revivir_item') >= 1" href="${tg.url('/item/listado_revivir', id_proyecto=id_proyecto, id_fase=id_fase, id_tipo_item=id_tipo_item)}" 
                             class="${('', 'active')[defined('page') and page=='nuevo_item']}">
                             <span class="menu_ar">Revivir</span>
                          </a>

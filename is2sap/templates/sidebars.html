@@ -9,10 +9,10 @@
 	       <li py:if="tg.predicates.has_any_permission('administracion')"> 
                    <a href="${tg.url('/admin/usuario/listado')}">USUARIOS</a>
                </li>
-	       <li py:if="tg.predicates.has_any_permission('administracion', 'lider_proyecto')"> 
+	       <li py:if="tg.predicates.has_any_permission('administracion')"> 
                    <a href="${tg.url('/admin/rol/listado')}">ROLES</a>
                </li>
-               <li py:if="tg.predicates.has_any_permission('administracion', 'lider_proyecto')"> 
+               <li py:if="tg.predicates.has_any_permission('administracion')"> 
                    <a href="${tg.url('/admin/permiso/listado')}">PERMISOS</a>
                </li >
 	       <li py:if="tg.predicates.has_any_permission('administracion', 'lider_proyecto')"> 

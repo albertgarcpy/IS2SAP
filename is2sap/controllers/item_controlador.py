@@ -75,7 +75,8 @@ class ItemController(BaseController):
 
 #--------------------------- Creacion de Items ---------------------------------
     @expose('is2sap.templates.item.nuevo')
-    @require(predicates.All(has_any_permission('administracion','crear_item', msg=l_('No posee los permisos de creacion de item')), permiso_en_fase('crear_item',dic_fases_permisos)))
+    #@require(predicates.All(has_any_permission('administracion','crear_item', msg=l_('No posee los permisos de creacion de item')), permiso_en_fase('crear_item',dic_fases_permisos)))
+    @require(predicates.All(has_any_permission('administracion','crear_item', msg=l_('No posee los permisos de creacion de item'))))
     def nuevo(self, id_proyecto, id_fase, id_tipo_item, **kw):
         """Despliega el formulario para añadir un nuevo Item."""
         try:
@@ -1081,7 +1082,8 @@ class ItemController(BaseController):
             permisosFase=[]
             for rol in fase.roles:
                 for permiso in rol.permisos:                     
-                    permisosFase.append(permiso.nombre_permiso)            
+                    permisosFase.append(permiso.nombre_permiso)  
+                    print permiso.nombre_permiso          
             currentPage = paginate.Page(items, page, items_per_page=10)
         except SQLAlchemyError:
             flash(_("No se pudo acceder a Listado de Items! SQLAlchemyError..."), 'error')
@@ -1179,7 +1181,11 @@ class ItemController(BaseController):
         try:
             fase = DBSession.query(Fase).get(id_fase)
             tipo_items = fase.tipoitems
-            items = []
+            items = []            
+            permisosFase=[]
+            for rol in fase.roles:
+                for permiso in rol.permisos:                     
+                    permisosFase.append(permiso.nombre_permiso)
 
             for tipo_item in tipo_items:
                 id_tipo_item = tipo_item.id_tipo_item
@@ -1197,7 +1203,7 @@ class ItemController(BaseController):
             redirect("/item/fases", id_proyecto=id_proyecto)
 
         return dict(items=currentPage.items, page='revivir_desde_fase', id_proyecto=id_proyecto, 
-                    id_fase=id_fase, nombre_fase=nombre_fase, currentPage=currentPage)
+                    id_fase=id_fase, nombre_fase=nombre_fase, currentPage=currentPage, permisosFase=permisosFase)
 
     @expose("is2sap.templates.item.detalles_revivir_desde_fase")
     @require(predicates.has_any_permission('administracion','desarrollo', msg=l_('No posee los permisos para visualizar')))
@@ -1313,7 +1319,11 @@ class ItemController(BaseController):
         try:
             fase = DBSession.query(Fase).get(id_fase)
             tipo_items = fase.tipoitems
-            items = []
+            items = []            
+            permisosFase=[]
+            for rol in fase.roles:
+                for permiso in rol.permisos:                     
+                    permisosFase.append(permiso.nombre_permiso)
 
             for tipo_item in tipo_items:
                 id_tipo_item = tipo_item.id_tipo_item
@@ -1332,7 +1342,7 @@ class ItemController(BaseController):
             redirect("/item/fases", id_proyecto=id_proyecto)
 
         return dict(items=currentPage.items, page='listado_aprobar', id_proyecto=id_proyecto, 
-                    id_fase=id_fase, nombre_fase=nombre_fase, currentPage=currentPage)
+                    id_fase=id_fase, nombre_fase=nombre_fase, currentPage=currentPage, permisosFase=permisosFase)
 
     @expose()
     @require(predicates.has_any_permission('administracion','aprobar_item', msg=l_('No posee los permisos para aprobar!')))
@@ -1404,6 +1414,11 @@ class ItemController(BaseController):
         """Metodo para listar las versiones revertibles de un item"""
         try:
             item_historial = DBSession.query(ItemHistorial).filter_by(id_item=id_item).order_by(ItemHistorial.version)
+            fase = DBSession.query(Fase).get(id_fase)
+            permisosFase=[]
+            for rol in fase.roles:
+                for permiso in rol.permisos:                     
+                    permisosFase.append(permiso.nombre_permiso)
             currentPage = paginate.Page(item_historial, page, items_per_page=10)
         except SQLAlchemyError:
             flash(_("No se pudo acceder a Items revertibles! SQLAlchemyError..."), 'error')
@@ -1413,7 +1428,7 @@ class ItemController(BaseController):
             redirect("/item/listado", id_proyecto=id_proyecto, id_fase=id_fase, id_tipo_item=id_tipo_item)
 
         return dict(item_historial=currentPage.items, page='listado_revertir', id_proyecto=id_proyecto, 
-                    id_fase=id_fase, id_tipo_item=id_tipo_item, id_item=id_item, currentPage=currentPage)
+                    id_fase=id_fase, id_tipo_item=id_tipo_item, id_item=id_item, currentPage=currentPage, permisosFase=permisosFase)
 
     @expose("is2sap.templates.item.listado_detalles_revertir")
     @require(predicates.has_any_permission('administracion','desarrollo', msg=l_('No posee los permisos para visualizar!')))
@@ -1682,7 +1697,11 @@ class ItemController(BaseController):
         try:
             fase = DBSession.query(Fase).get(id_fase)
             tipo_items = fase.tipoitems
-            items_historial = []
+            items_historial = []            
+            permisosFase=[]
+            for rol in fase.roles:
+                for permiso in rol.permisos:                     
+                    permisosFase.append(permiso.nombre_permiso)
 
             for tipo_item in tipo_items:
                 id_tipo_item = tipo_item.id_tipo_item
@@ -1702,7 +1721,7 @@ class ItemController(BaseController):
             redirect("/item/fases", id_proyecto=id_proyecto)
 
         return dict(items_historial=currentPage.items, page='revertir_desde_fase', id_proyecto=id_proyecto, 
-                    id_fase=id_fase, nombre_fase=nombre_fase, currentPage=currentPage)
+                    id_fase=id_fase, nombre_fase=nombre_fase, currentPage=currentPage, permisosFase=permisosFase)
 
     @expose("is2sap.templates.item.detalles_revertir_desde_fase")
     @require(predicates.has_any_permission('administracion','desarrollo', msg=l_('No posee los permisos para visualizar')))
@@ -1960,7 +1979,7 @@ class ItemController(BaseController):
 
 #--------------------------- Listado de Proyectos ------------------------------
     @expose("is2sap.templates.item.listado_proyectos")
-    @require(predicates.has_any_permission('administracion','desarrollo', msg=l_('No posee los permisos para visualizar')))
+    @require(predicates.has_any_permission('desarrollo', msg=l_('No posee los permisos para visualizar')))
     def proyectos(self,page=1):
         """Metodo para listar todos los Proyectos existentes de la base de datos"""
         try:

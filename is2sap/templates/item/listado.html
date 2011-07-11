@@ -15,7 +15,7 @@
 
     <body>
             <h2>Items del Tipo <div style="color:green">${nombre_tipo_item}</div></h2>
-            ${menu_superior_items(id_proyecto, id_fase, id_tipo_item)}
+            ${menu_superior_items(id_proyecto, id_fase, id_tipo_item, permisosFase)}
 
             <table border="1" width="100%">
 		  <tr style="color: purple; font-size: 11pt" align="center" >
@@ -65,36 +65,36 @@
 				<li class="top">
                                    <a href="#" class="top_link"><span>ACCIONES</span></a>
 				      <ul class="sub">
- 					<li py:if="tg.predicates.has_any_permission('administracion', 'calcular_impacto') and permisosFase.count('calcular_impacto') == 1">
+ 					<li py:if="tg.predicates.has_any_permission('calcular_impacto') and permisosFase.count('calcular_impacto') >= 1">
                                              <a   href="${tg.url('/item/calcularImpacto', id_proyecto=id_proyecto, itemActual=item.id_item)}">Impacto
 					     </a>
                                          </li>
-					 <li py:if="tg.predicates.has_any_permission('administracion', 'aprobar_item') and permisosFase.count('aprobar_item') == 1">
+					 <li py:if="tg.predicates.has_any_permission('aprobar_item') and permisosFase.count('aprobar_item') >= 1">
                                              <a  href="${tg.url('/item/aprobar', id_proyecto=id_proyecto, id_fase=id_fase,
                                                       id_tipo_item=id_tipo_item, id_item=item.id_item)}">Aprobar
 					     </a>
                                          </li>
-			                 <li py:if="tg.predicates.has_any_permission('administracion', 'editar_item') and permisosFase.count('editar_item') == 1">
+			                 <li py:if="tg.predicates.has_any_permission('editar_item') and permisosFase.count('editar_item') >= 1">
                                              <a  href="${tg.url('/item/editar', id_proyecto=id_proyecto, id_fase=id_fase,
                                                       id_tipo_item=id_tipo_item, id_item=item.id_item)}">Editar		                    
 				             </a>
                                          </li>
-					 <li py:if="tg.predicates.has_any_permission('administracion', 'eliminar_item') and permisosFase.count('eliminar_item') == 1">
+					 <li py:if="tg.predicates.has_any_permission('eliminar_item') and permisosFase.count('eliminar_item') >= 1">
                                              <a  href="${tg.url('/item/confirmar_eliminar', id_proyecto=id_proyecto, id_fase=id_fase,
                                                       id_tipo_item=id_tipo_item, id_item=item.id_item)}">Eliminar
 				             </a>
                                          </li>
-					 <li py:if="tg.predicates.has_any_permission('administracion', 'desarrollo')">
+					 <li py:if="tg.predicates.has_any_permission('desarrollo')">
                                              <a  href="${tg.url('/item/listado_detalles', id_proyecto=id_proyecto, id_fase=id_fase,
                                                       id_tipo_item=id_tipo_item, id_item=item.id_item)}">Detalles
 					     </a>
                                          </li>
-					 <li py:if="tg.predicates.has_any_permission('administracion', 'desarrollo')">
+					 <li py:if="tg.predicates.has_any_permission('desarrollo')">
                                              <a  href="${tg.url('/item/listado_revertir', id_proyecto=id_proyecto, id_fase=id_fase,
                                                       id_tipo_item=id_tipo_item, id_item=item.id_item)}">Revertibles
 					     </a>
                                          </li>
-					 <li py:if="tg.predicates.has_any_permission('administracion', 'desarrollo')">
+					 <li py:if="tg.predicates.has_any_permission('desarrollo')">
                                              <a  href="${tg.url('/relacion/listado', id_item=item.id_item, id_proyecto=id_proyecto, 							     id_fase=id_fase,id_tipo_item=id_tipo_item)}">Relaciones
 					     </a>
                                          </li>

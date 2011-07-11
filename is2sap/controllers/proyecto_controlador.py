@@ -81,7 +81,12 @@ class ProyectoController(BaseController):
     def listado(self,page=1):
         """Metodo para listar todos los Proyectos existentes de la base de datos"""
         try:
-            proyectos = DBSession.query(Proyecto).order_by(Proyecto.id_proyecto)
+            proyectos=[]
+            if predicates.has_permission('administracion'):
+                proyectos = DBSession.query(Proyecto).order_by(Proyecto.id_proyecto)
+            elif predicates.has_permission('lider_proyecto'):
+                usuario = DBSession.query(Usuario).filter_by(nombre_usuario=request.identity['repoze.who.userid']).first()
+                proyectos = usuario.proyectos
             currentPage = paginate.Page(proyectos, page, items_per_page=10)
         except SQLAlchemyError:
             flash(_("No se pudo acceder a Proyectos! SQLAlchemyError..."), 'error')
@@ -204,7 +209,7 @@ class ProyectoController(BaseController):
         redirect("/admin/proyecto/listado")
 
     @expose("is2sap.templates.proyecto.listar_roles")
-    @require(predicates.has_any_permission('administracion',  'lider_proyecto'))
+    @require(predicates.has_any_permission('lider_proyecto'))
     def roles(self,id_proyecto, page=1):
         """Metodo para listar todos los roles que tiene el proyecto seleccionado"""
         try:
@@ -223,7 +228,7 @@ class ProyectoController(BaseController):
                     currentPage=currentPage, id_proyecto=id_proyecto, proyecto=proyecto)
 
     @expose()
-    @require(predicates.has_any_permission('administracion',  'lider_proyecto'))
+    @require(predicates.has_any_permission('lider_proyecto'))
     def eliminar_rol_proyecto(self, id_proyecto, id_rol, **kw):
         """Metodo que elimina un rol al proyecto seleccionado"""
         try:
@@ -248,7 +253,7 @@ class ProyectoController(BaseController):
         redirect("/admin/proyecto/roles",id_proyecto=id_proyecto)
 
     @expose("is2sap.templates.proyecto.agregar_roles")
-    @require(predicates.has_any_permission('administracion',  'lider_proyecto'))
+    @require(predicates.has_any_permission('lider_proyecto'))
     def rolProyecto(self, id_proyecto, page=1):
         """Metodo que permite listar los roles que se pueden agregar al proyecto seleccionado"""
         try:
@@ -274,7 +279,7 @@ class ProyectoController(BaseController):
            id_proyecto=id_proyecto, proyecto=proyecto)
 
     @expose()
-    @require(predicates.has_any_permission('administracion',  'lider_proyecto'))
+    @require(predicates.has_any_permission('lider_proyecto'))
     def agregarRol(self, id_proyecto, id_rol):
         """Metodo que realiza la agregacion de un rol al proyecto selecccionado"""
         try:
@@ -316,6 +321,7 @@ class ProyectoController(BaseController):
 
         return dict(usuarios=currentPage.items,
            page='listar_usuarios', id_proyecto=id_proyecto, currentPage=currentPage, proyecto=proyecto)
+
 
     @expose()
     @require(predicates.has_any_permission('administracion',  'lider_proyecto'))
@@ -392,11 +398,16 @@ class ProyectoController(BaseController):
         redirect("/admin/proyecto/usuarioProyecto",id_proyecto=id_proyecto)
 
     @expose("is2sap.templates.proyecto.listaProyectos_a_iniciar")
-    @require(predicates.has_any_permission('administracion', 'lider_proyecto'))
+    @require(predicates.has_any_permission('lider_proyecto'))
     def listaProyectos_a_iniciar(self,page=1):
         """Metodo para listar todos los Proyectos a iniciar de la base de datos"""
         try:
-            proyectos = DBSession.query(Proyecto).filter_by(iniciado=False).order_by(Proyecto.id_proyecto)
+            proy = DBSession.query(Proyecto).filter_by(iniciado=False).order_by(Proyecto.id_proyecto)
+            usuario = DBSession.query(Usuario).filter_by(nombre_usuario=request.identity['repoze.who.userid']).first()
+            proyectos=[]
+            for p in proy:
+                if usuario.proyectos.count(p)==1:
+                    proyectos.append(p)
             currentPage = paginate.Page(proyectos, page, items_per_page=10)
         except SQLAlchemyError:
             flash(_("No se pudo acceder a Proyectos! SQLAlchemyError..."), 'error')
@@ -408,7 +419,7 @@ class ProyectoController(BaseController):
         return dict(proyectos=currentPage.items, page='listaProyectos_a_iniciar', currentPage=currentPage)
 
     @expose()
-    @require(predicates.has_any_permission('administracion',  'lider_proyecto'))
+    @require(predicates.has_any_permission('lider_proyecto'))
     def iniciar(self, id_proyecto, **kw):     
         """Metodo que da inicio a un proyecto"""
         try:
@@ -444,7 +455,7 @@ class ProyectoController(BaseController):
         redirect("/admin/proyecto/listaProyectos_a_iniciar")
 
     @expose("is2sap.templates.proyecto.rolesProyectoUsuario")
-    @require(predicates.has_any_permission('administracion',  'lider_proyecto'))
+    @require(predicates.has_any_permission('lider_proyecto'))
     def rolesProyectoUsuario(self,id_proyecto, id_usuario, page=1):
         """Metodo para listar todos los roles que tiene el usuario seleccionado"""
         try:
@@ -540,7 +551,7 @@ class ProyectoController(BaseController):
         redirect("/admin/proyecto/rolesProyectoUsuario",id_proyecto=id_proyecto, id_usuario=id_usuario)
 
     @expose("is2sap.templates.proyecto.listadoPermisoFase")
-    @require(predicates.has_any_permission('administracion',  'lider_proyecto'))
+    @require(predicates.has_any_permission('administracion','lider_proyecto'))
     def listadoPermisoFase(self, id_usuario, id_rol, id_proyecto, page=1):
         """Metodo que permite listar los roles que se pueden agregar al usuario seleccionado"""
         try:
@@ -552,7 +563,7 @@ class ProyectoController(BaseController):
             
             for fase in rolesFases:
                 if proyecto.fases.count(fase) == 0:
-                    rolesFases.remove(rol)
+                    rolesFases.remove(fase)
             
 
             for fase in proyecto.fases:

@@ -65,13 +65,13 @@
 				<li class="top">
                                    <a href="#" class="top_link"><span>ACCIONES</span></a>
 				      <ul class="sub">
-					 <li>
-                                             <a py:if="tg.predicates.has_any_permission('administracion', 'revertir_item')" href="${tg.url('/item/revertir_item', id_proyecto=id_proyecto, id_fase=id_fase,
+					 <li py:if="tg.predicates.has_any_permission('revertir_item') and permisosFase.count('revertir_item') >= 1">
+                                             <a  href="${tg.url('/item/revertir_item', id_proyecto=id_proyecto, id_fase=id_fase,
                                                      id_tipo_item=id_tipo_item, id_historial_item=item.id_historial_item)}">Revertir
 					     </a>
                                          </li>
-			                 <li>
-                                             <a py:if="tg.predicates.has_any_permission('administracion', 'desarrollo')" href="${tg.url('/item/listado_detalles_revertir', id_proyecto=id_proyecto, 
+			                 <li py:if="tg.predicates.has_any_permission('desarrollo')">
+                                             <a  href="${tg.url('/item/listado_detalles_revertir', id_proyecto=id_proyecto, 
                                                      id_fase=id_fase, id_tipo_item=id_tipo_item, 
                                                      id_item=item.id_item, version=item.version)}">Detalles		                    
 				             </a>

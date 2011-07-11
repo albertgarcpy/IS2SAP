@@ -50,16 +50,16 @@
                                                     id_proyecto=proyecto.id_proyecto)}">Editar		                    
 				           </a>
                                        </li>					 
-                                       <li py:if="tg.predicates.has_any_permission('administracion')"><a href="${tg.url('/admin/proyecto/confirmar_eliminar',
-                                                    id_proyecto=proyecto.id_proyecto)}">Eliminar
+                                       <li py:if="tg.predicates.has_any_permission('administracion')"><a href="${tg.url('/admin/proyecto/confirmar_eliminar', id_proyecto=proyecto.id_proyecto)}">Eliminar
 				           </a>
                                        </li>
-				       <li>
+                                       
+				       <li py:if="tg.predicates.has_any_permission('administracion', 'lider_proyecto')">
                                            <a href="${tg.url('/admin/proyecto/usuarios', 
                                                     id_proyecto=proyecto.id_proyecto)}">Agregar Usuarios
 					   </a>
                                        </li>
-				       <li>
+				       <li py:if="tg.predicates.has_any_permission('lider_proyecto')">
                                            <a href="${tg.url('/admin/proyecto/roles', 
                                                     id_proyecto=proyecto.id_proyecto)}">Agregar Roles
 					   </a>
@@ -70,10 +70,10 @@
                          </td>
                          <td width="7%" align="center">
 			    <ul class="menu fasesproyecto">
-			       <li class="top">
+			       <li  class="top">
                                   <a href="#" class="top_link"><span>FASES</span></a>
 				     <ul class="sub">
-				        <li>
+				        <li py:if="tg.predicates.has_any_permission('lider_proyecto')">
                                             <a href="${tg.url('/admin/fase/listadoFasesPorProyecto',
                                                     id_proyecto=proyecto.id_proyecto)}">Fases
                                             </a>

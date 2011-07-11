@@ -84,7 +84,12 @@ class RelacionController(BaseController):
             item1 = DBSession.query(Item).get(hijo.id_item2)
             hij = [hijo, item1]
             listaHijos.append(hij)
-        return dict(antecesores=listaAntecesores, hijos=listaHijos, idItemActual=id_item, id_proyecto=id_proyecto, id_fase=id_fase, id_tipo_item=id_tipo_item)
+        fase = DBSession.query(Fase).get(id_fase)
+        permisosFase=[]
+        for rol in fase.roles:
+            for permiso in rol.permisos:                     
+                permisosFase.append(permiso.nombre_permiso)
+        return dict(antecesores=listaAntecesores, hijos=listaHijos, idItemActual=id_item, id_proyecto=id_proyecto, id_fase=id_fase, id_tipo_item=id_tipo_item, permisosFase=permisosFase)
 
     
     def buscarCiclos(self, item):    

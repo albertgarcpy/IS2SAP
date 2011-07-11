@@ -16,7 +16,7 @@
 <body>
 
   <h2>Lista de <div style="color:green">Relaciones</div></h2>
-  ${menu_superior(idItemActual, id_proyecto, id_fase, id_tipo_item)}
+  ${menu_superior(idItemActual, id_proyecto, id_fase, id_tipo_item, permisosFase)}
   <table align="center">
     <tr  valign="top" align="center">
       <td>
@@ -35,7 +35,7 @@
 			  <td>${antecesor[1].codigo}</td>
 			  <td>${antecesor[1].descripcion}</td>
 
-              <td> <a py:if="tg.predicates.has_any_permission('administracion', 'eliminar_relacion')" href="${tg.url('/relacion/delete', id_relacion = antecesor[0].id_relacion, idItemActual = idItemActual, id_proyecto=id_proyecto, id_fase=id_fase, id_tipo_item=id_tipo_item)}"> 
+              <td> <a py:if="tg.predicates.has_any_permission('eliminar_relacion') and permisosFase.count('eliminar_relacion') >= 1" href="${tg.url('/relacion/delete', id_relacion = antecesor[0].id_relacion, idItemActual = idItemActual, id_proyecto=id_proyecto, id_fase=id_fase, id_tipo_item=id_tipo_item)}"> 
                      <input class="alignEliminar" name="eliminar" type="button" value="" />
                    </a>				 
               </td>
@@ -60,7 +60,7 @@
               <td>${hijo[0].id_item2}</td>
 			  <td>${hijo[1].codigo}</td>
 			  <td>${hijo[1].descripcion}</td>
-              <td> <a py:if="tg.predicates.has_any_permission('administracion', 'eliminar_relacion')" href="${tg.url('/relacion/delete', id_relacion = hijo[0].id_relacion, idItemActual = idItemActual, id_proyecto=id_proyecto, id_fase=id_fase, id_tipo_item=id_tipo_item)}"> 
+              <td> <a py:if="tg.predicates.has_any_permission('eliminar_relacion') and permisosFase.count('eliminar_relacion') >= 1" href="${tg.url('/relacion/delete', id_relacion = hijo[0].id_relacion, idItemActual = idItemActual, id_proyecto=id_proyecto, id_fase=id_fase, id_tipo_item=id_tipo_item)}"> 
                      <input class="alignEliminar" name="eliminar" type="button" value="" />
                    </a>				 
               </td>
